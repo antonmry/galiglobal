@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Service and Network Evolution Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Service and Network Evolution Blog by Antón R. Yuste">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Service and Network Evolution Blog">
+<meta property="og:url" content="http://www.serviceandnetworkevolution.com/index.html">
+<meta property="og:site_name" content="Service and Network Evolution Blog">
+<meta property="og:description" content="Service and Network Evolution Blog by Antón R. Yuste">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Service and Network Evolution Blog">
+<meta name="twitter:description" content="Service and Network Evolution Blog by Antón R. Yuste">
+  
+    <link rel="alternative" href="/atom.xml" title="Service and Network Evolution Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Service and Network Evolution Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">by Antón R. Yuste</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://www.serviceandnetworkevolution.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/30/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1/" class="article-date">
+  <time datetime="2015-04-30T20:00:00.000Z" itemprop="datePublished">2015-04-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technical/">Technical</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/30/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1/">Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Oracle Communications <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html" target="_blank" rel="external">Services Gatekeeper 6</a>, the industry-leading API exposure platform, is Generally Available and with many new and interesting features. One of them is the simplified configuration and deployment with installation in 15 minutes, based on lightweight single tier deployment option. I really like the idea, it’s going to help with Proofs of Concept and Training. So in this article, I am going to review this feature: a fight against the clock to know how many time an OCSG student needs to deploy OCSG. </p>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/StandaloneOCSG6.png" alt="Services Gatekeeper Standalone System"></p>
+<p>Disclaimer: some steps shouldn’t be executed in production environments.</p>
+<h2 id="Preparations_Overview">Preparations Overview</h2><p>As good practice, the first step is always check the <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50756/ins_sysreq.htm#SGINS122" target="_blank" rel="external">Supported Platform Matrix</a>. For this installation, we have the following pre-requisites:</p>
+<ol>
+<li>Oracle Linux 6: in this case, it is version 6.6 x64, you can download it from <a href="https://edelivery.oracle.com/linux" target="_blank" rel="external">Oracle Software Delivery Cloud</a>. It may run hosted in an <a href="http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html" target="_blank" rel="external">Oracle Virtualbox environment</a>. </li>
+<li>JDK 1.7 installed: in this case, Java SE Development Kit 7u75 for Linux x64 (tgz). You can download it from <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html" target="_blank" rel="external">Oracle Java SE Development Kit 7 Downloads</a>.</li>
+<li>Access as root user and also as oracle user. </li>
+</ol>
+<h2 id="OCSG_installation">OCSG installation</h2><ol>
+<li><p>Login to <a href="https://edelivery.oracle.com/" target="_blank" rel="external">Oracle Software Delivery Cloud</a>, choose <em>Oracle Communications</em> in <strong>Select a Product Pack</strong> and <em>Linux x86-64</em> and click on <strong>Go</strong>.</p>
+</li>
+<li><p>Click on <em>Oracle Communications Services Gatekeeper 6.0</em>. Download Oracle Communications Services Gatekeeper 6.0 Software, V73995-01.zip and copy it into the VM.</p>
+</li>
+<li><p>Open a Terminal and execute:</p>
+</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /opt/ocsg6</span><br><span class="line">sudo chown oracle:oracle /opt/ocsg6</span><br></pre></td></tr></table></figure>
+<ol>
+<li>Unzip the file and execute the installer:</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip V73995-<span class="number">01</span>.zip</span><br><span class="line">java -jar ocsg_generic.jar</span><br></pre></td></tr></table></figure>
+<ol>
+<li>In the first window, accept the default Inventory Directory pressing <strong>OK</strong>.</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Inventory.png" alt="Inventory Screen"></p>
+<ol>
+<li>The Welcome screen appears, press <strong>Next</strong>.</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Welcome.png" alt="Welcome Screen"></p>
+<ol>
+<li>Introduce <em>/opt/ocsg6</em> in the Oracle Home field and press <strong>Next</strong>.</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Location.png" alt="Location Screen"></p>
+<ol>
+<li>Select <em>Custom Installation</em> and press <strong>Next</strong>. Check all the features and press <strong>Next</strong>.</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/AllFeatures.png" alt="Custom Installation"></p>
+<ol>
+<li><p>The Prerequisite Check should be OK. Press <strong>Next</strong>.</p>
+</li>
+<li><p>Note the IP in the first field. Introduce the password for the domain user and for the Partner and API Management Portal user. It’s <em>welcome1</em> in my case but you can use something different. Let the default value in others fields and press <strong>Next</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Credentials.png" alt="Credentials"></p>
+<ol>
+<li><p>Introduce the IP in /etc/hosts with <strong>ocsg</strong> as reference. If you ping <strong>ocsg</strong>, you should receive a response from the IP you’ve noted in the previous step.</p>
+</li>
+<li><p>Let <em>Java DB</em> selected and press <strong>Next</strong>.</p>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Javadb.png" alt="JavaDB"></p>
+<ol>
+<li>Review the Installation Summary and press <strong>Install</strong>. It may take a while.</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/IntallationEnd.png" alt="Installation End"></p>
+<ol>
+<li>Press <strong>Next</strong> when available and <strong>Finish</strong>.</li>
+</ol>
+<h2 id="Start_OCSG">Start OCSG</h2><ol>
+<li>Open a Terminal and execute:</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/ocsg6/user_projects/domains/services-gatekeeper-domain</span><br><span class="line">./startWebLogic.sh</span><br></pre></td></tr></table></figure>
+<p>When it asks for username and password, introduce <em>weblogic</em> and <em>welcome1</em>. After a while, a <em>The server started in RUNNING mode.</em> message should appear.</p>
+<ol>
+<li>Open a Terminal (or a tab in the previous one) and execute:</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/ocsg6/user_projects/domains/services-gatekeeper-domain/bin</span><br><span class="line">./startGatekeeper.sh</span><br></pre></td></tr></table></figure>
+<p>When it asks for username and password, introduce <em>weblogic</em> and <em>welcome1</em>. After a while, <em>The server started in RUNNING mode.</em> message should appear.</p>
+<h2 id="Account_configuration">Account configuration</h2><ol>
+<li>Open Firefox and go to <a href="http://ocsg:7001/console" target="_blank" rel="external">http://ocsg:7001/console</a> , login as <strong>weblogic</strong> with password <strong>welcome1</strong>. In the Domain Structure (left), go to <strong>OCSG</strong> -&gt; <strong>Server 1</strong>. In the Oracle Communications Services Gatekeeper box, click on <strong>Container Services</strong> and <strong>PluginManager</strong>.</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/ContainerServices.png" alt="Container Services"></p>
+<ol>
+<li>Click on <strong>Operations tab</strong> and choose <em>createPluginInstance</em> in the <strong>Select An Operation:</strong> combo. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>PluginServiceId</strong>: <em>Plugin_px21_short_messaging_smpp</em></li>
+<li><strong>PluginInstanceId</strong>: <em>Plugin_px21_short_messaging_smpp_instance</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/CreatePluginInstance.png" alt="Create Plugin Instance"></p>
+<ol>
+<li>Choose <em>Add Route</em> in the <strong>Select An Operation:</strong> combo. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>PluginInstanceId</strong>: <em>Plugin_px21_short_messaging_smpp_instance</em></li>
+<li><strong>AddressExpression</strong>: <em>.*</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/addRoute.png" alt="add Route"></p>
+<ol>
+<li>Go to <strong>Container Services -&gt; Application Groups -&gt; addServiceProviderGroup</strong>. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>ServiceProviderGroupIdentifier</strong>: <em>default_sp_group</em></li>
+<li><strong>Properties</strong>: <em>.*</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/serviceProviderGroup.png" alt="Service Provider Group"></p>
+<ol>
+<li>Go to <strong>Container Services -&gt; ApplicationGroups -&gt; addApplicationGroup</strong>. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>ApplicationGroupIdentifier</strong>: <em>default_app_group</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/ApplicationgGroup.png" alt="Application Group"></p>
+<ol>
+<li>Go to <strong>Container Services -&gt; ApplicationAccounts -&gt; addServiceProviderAccount</strong>. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>ServiceProviderIdentifier:</strong>: <em>default_sp</em></li>
+<li><strong>ServiceProviderGroupIdentifier</strong>: <em>default_sp_group</em></li>
+<li><strong>Reference</strong>: <em>default</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/serviceProviderAccount.png" alt="Service Provider Account"></p>
+<ol>
+<li>Go to <strong>Container Services -&gt; ApplicationAccounts -&gt; addApplicationAccount</strong>. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>ApplicationIdentifier:</strong>: <em>default_app</em></li>
+<li><strong>ServiceProviderIdentifier:</strong>: <em>default_sp</em></li>
+<li><strong>ApplicationGroupIdentifier</strong>: <em>default_sp_group</em></li>
+<li><strong>Reference</strong>: <em>default</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/ApplicationAccount.png" alt="Application Account"></p>
+<ol>
+<li>Go to <strong>Container Services -&gt; ApplicationInstances -&gt; addApplicationInstance</strong>. Fill the fields with the following values and click on <strong>Invoke</strong>. An <em>Operation invoked successfully</em> message should be returned.<ul>
+<li><strong>ApplicationInstanceName:</strong> <em>domain_user</em></li>
+<li><strong>Password:</strong> <em>domain_user</em></li>
+<li><strong>ApplicationIdentifier:</strong>: <em>default_app</em></li>
+<li><strong>ServiceProviderIdentifier:</strong>: <em>default_sp</em></li>
+<li><strong>Reference</strong>: <em>default</em></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/ApplicationInstance.png" alt="Application Instance"></p>
+<p><strong> I will update this with the link to the second part </strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/04/30/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1/" data-id="ci9o0obwa000k1me5s8z52vmx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Delivery/">Service Delivery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-TADHack-2015-Oracle-environment-ready-for-your-hack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/23/TADHack-2015-Oracle-environment-ready-for-your-hack/" class="article-date">
+  <time datetime="2015-04-23T20:00:00.000Z" itemprop="datePublished">2015-04-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Events/">Events</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/23/TADHack-2015-Oracle-environment-ready-for-your-hack/">TADHack 2015: Oracle environment ready for your hack</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I am very glad to be part of TADHack again. The last year it was a great experience but everything was new so, with my previous experience, and I am sure this year I am going to enjoy it even more.</p>
+<p>Furthermore, we continue <a href="http://blog.tadhack.com/2015/04/13/oracle-developer-resources/" target="_blank" rel="external">collaborating with Oracle Comms</a> providing the <a href="http://tadhack.optaresolutions.com/" target="_blank" rel="external">Oracle Sandbox</a>. It’s challenging and fun at the same time. Someone may think this year is easier because it’s the second time… No!. There are a lot of new things and, even most important, we’ve deployed the last versions of all the Oracle Comms products:</p>
+<ul>
+<li><a href="http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html" target="_blank" rel="external">Oracle Communications Converged Application Server 7.0</a></li>
+<li><a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html" target="_blank" rel="external">Oracle Communications Services Gatekeeper 6.0</a></li>
+<li><a href="http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html" target="_blank" rel="external">Oracle Communications WebRTC Session Controller 7.1</a> </li>
+</ul>
+<p>I am specially excited with OCCAS, there are a lot of new features and I’m looking forward to learn more and do something with it. It would be great to develop some hack and participate also as developer in the Hackathon.</p>
+<p>If you are a developer or you work with Oracle Comms and you want to check the last versions, don’t miss the opportunity. Visit <a href="http://tadhack.optaresolutions.com" target="_blank" rel="external">tadhack.optaresolutions.com</a> or check the following webinar with <a href="http://alanquayle.com/" target="_blank" rel="external">Alan Quayle</a>, <a href="https://twitter.com/Doug_Tait" target="_blank" rel="external">Doug Tait</a> and myself introducing the Oracle sandbox.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LDjzDVQucoM" frameborder="0" allowfullscreen></iframe>
+
+<p>Here you can find my slides, I am trying a more visual style so I recommend the webinar.</p>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/HMWqhusiViKKdK" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+
+<p>I hope see you in <a href="http://tadhack.com/2015/" target="_blank" rel="external">TADHack Lisbon</a>!!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/04/23/TADHack-2015-Oracle-environment-ready-for-your-hack/" data-id="ci9o0obw7000a1me51o333wh3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SIP/">SIP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Delivery/">Service Delivery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TADHack/">TADHack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebRTC/">WebRTC</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Oracle-s-demos-in-the-MWC2015-review" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/15/Oracle-s-demos-in-the-MWC2015-review/" class="article-date">
+  <time datetime="2015-04-15T20:00:00.000Z" itemprop="datePublished">2015-04-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Events/">Events</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/15/Oracle-s-demos-in-the-MWC2015-review/">Oracle&#39;s demos in the MWC2015 review</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>This March has been crazy. Starting with the Mobile World Congress and next week flying to Brazil for three weeks because of an Oracle Comms project… Impossible to find time to tweet, blog or whatever, and it’s a pity because there a lot of news!</p>
+<p>Let me start from the beginning: the Mobile World Congress. I always like to assist to this event. Everybody is there, so it’s very tired but also very productive. I’ve participated in more than 20 meetings, some conferences, the amazing <a href="http://www.meetup.com/WebRTC-Barcelona/" target="_blank" rel="external">WebRTC Meetup</a> organized by our friends Quobis (don’t miss the <a href="https://www.youtube.com/watch?v=B-81k_pDU24" target="_blank" rel="external">Stefano Gioia presentation</a>) and, this year for first time, I was able to find some time slot to see demos.</p>
+<p>When I’ve arrived to the Oracle booth, I quickly noticed the key topic of this year: Network Function Virtualization (NFV). So, it’s not strange most of the demos were related to this in some way. I’ve started with a demo using the <a href="http://www.oracle.com/us/products/applications/communications/diameter-signaling-router/index.html" target="_blank" rel="external">Diameter Signaling Router</a>, a Tekelec product. The demo was mainly showing how they are able to add new nodes to increase the processing capacity dynamically. They defined it as NFV compliant and well.. I was a bit disappointed with this. For me, NFV is not to be able to add new nodes to a cluster system.. it’s the capacity to increase the resources dynamically…. and always in the same way, a centralized way. And this should be the point. NFV shouldn’t be virtualization, clustering or geographic-redundancy… they were invented some time ago. The other thing I didn’t like: the solutions wasn’t based in Coherence or even Weblogic… which it should be pointless when you are in an Oracle booth. Anyway, the product looks very interesting, robust and well-designed.. and the people in the booth were really professional and skilled with diameter.</p>
+<p>I jumped to the next demo and I was very pleased to see <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html" target="_blank" rel="external">Services Gatekeeper</a> integrated with the Oracle Tekelec PCRF… very interesting use case. I’ve to try it but I don’t know the Tekelec PCRF and it’s not easy to find documentation about it (I mean, a simple how-to). There are good documentation in the OCSG side, <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e55395/ipl_pcrf.htm#SGIPL700" target="_blank" rel="external">Integrating Services Gatekeeper with a PCRF</a>, but it lacks the PCRF steps.</p>
+<p>I continued with a huge demo involving <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html" target="_blank" rel="external">Services Gatekeeper</a>, <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/converged-application-server-edition/overview/index.html" target="_blank" rel="external">Converged Application Server</a> and <a href="http://www.oracle.com/us/products/applications/siebel/overview/index.html" target="_blank" rel="external">Siebel</a>. The use case is very well designed: the subscriber can browse the Siebel front-end where he has a lot of information available and now, he has also an interface to watch movies (or whatever) in streaming.. something like Netflix but linked to the CSP account. The subscriber choose a movie to watch and he can choose between pay the total amount (using his billing account in the CSP) or save some money watching some advertisement sponsored by Service Providers/Third parties (very clever use of the OCSG PRM interface!). The demo is very visual and the <a href="https://twitter.com/SteveNorthridge" target="_blank" rel="external">@SteveNorthridge</a> explanations very clear to understand the use case and possibilities. I am sure we’ll speak a lot about this demo.</p>
+<p>The next demo it’s well know: the WebRTC Real state demo. I was in the event where it was showed the first time and I am never tired of it. Here it’s the video, I am sure <a href="https://twitter.com/Doug_Tait" target="_blank" rel="external">@Doug_Tait</a> explains it better than me :-)</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/t2CZxyR3ftw" frameborder="0" allowfullscreen></iframe>
+
+<p>There was also a demo showing <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/overview/index.html" target="_blank" rel="external">Oracle Communications Unified Communications Suite</a> enhanced with WebRTC capabilities. It makes sense combine <a href="http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html" target="_blank" rel="external">WebRTC Session Controller</a> with different Oracle products, and UCS is the logical first step. In the <a href="https://wikis.oracle.com/display/CommSuite/Overview+of+Convergence+with+WebRTC" target="_blank" rel="external">Oracle wiki</a> there a lot of good information about it.</p>
+<p>I spend some time in the Analytics demo. It’s not my area but the use case are pretty interesting, specially related to churn detection and some of the systems I work with are a good source of information. Furthermore the company where I work, Optare Solutions, is doing <a href="http://optaresolutions.com/innovacion/" target="_blank" rel="external">some interesting things</a> related to this and the guy in the stand was really kind and skilled in the subject.</p>
+<p>After that I jumped to the most interesting demo for me: the whole NFV solution. I didn’t have luck this time because the main analyst (someone I had previous meeting with) was busy all the time and I didn’t have the opportunity to have all my questions answered. Anyway, I found out some interesting points:</p>
+<ul>
+<li>The solutions look good, very complete and mature, using a mix of Oracle technologies including virtualization, Oracle OSS (an old friend of mine, UIM) and Oracle ACME products. Oracle has a huge portfolio so it makes sense to use them instead of reinvent the wheel.</li>
+<li>It’s very flexible and powerful but it has a cost: it’s complex because it involves some big products. Very good for carriers but no so good for small companies.</li>
+<li>Openstack as cloud computing platform software but it’s not mandatory, you can choose Oracle VM Server, for example.</li>
+</ul>
+<p>And for me the most important point, Oracle is starting to include Network functions. And it’s easy, because the Oracle technologies are based in Java / Weblogic and they have some interesting Network applications, as for example <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/converged-application-server-edition/overview/index.html" target="_blank" rel="external">Oracle Communications Converged Application Server (OCCAS)</a> or the <a href="http://www.oracle.com/us/products/applications/communications/application-session-controller/index.html" target="_blank" rel="external">Oracle Communications Application Session Controller</a>. I expect very interesting news in the next months related to this and it’s going to be big, because this is something only Oracle can provide so easily, so a good competitive advantage over their competitors in the NFV area. Also don’t miss <a href="Oracle Communications Advances Network Function Virtualization by Delivering Carrier-Grade Data Center Performance">the demo with Intel</a> announced some days ago.</p>
+<p>I ended the tour with a visit to Connected Vehicle demo. It’s not related to any Oracle Comms product but I worked in a similar project some months ago and Oracle solutions are always interesting. The demo isn’t very impressive but it’s amazing how they are using Java to build it. I thought a lot on it and how to use it for other use cases. Here it’s <a href="http://www.oracle.com/us/solutions/internetofthings/java-iot-connected-vehicle-wp-2401533.pdf" target="_blank" rel="external">the whitepaper with all the information about the Connected Vehicle</a>.</p>
+<p>In short, MWC2015 was a great event and I am not going anymore to miss the opportunity to review a demo .</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/04/15/Oracle-s-demos-in-the-MWC2015-review/" data-id="ci9o0obwg00111me5bdm5d99u" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NFV/">NFV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCCAS/">OCCAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle-Comms/">Oracle Comms</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebRTC/">WebRTC</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="blog-Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/" class="article-date">
+  <time datetime="2015-02-13T21:00:00.000Z" itemprop="datePublished">2015-02-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technical/">Technical</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/">Access OCSG EDR JMS Topic with Talend Open Studio</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I’ve been using <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14" target="_blank" rel="external">Talend Open Studio</a> for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.</p>
+<p>In this tutorial, I am going to show how to use it Talend Open Studio to access the JMS Topic where OCSG shows all the runtime information: the Event Data Records (EDRs). This is the main place for debugging so it’s really important. The article is based in the offical documentation <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627" target="_blank" rel="external">Creating EDR Listeners</a> but adapted to TOS.</p>
+<h2 id="Pre-requisites">Pre-requisites</h2><p>You will need an OCSG 6 or 5.1 running and also the <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download" target="_blank" rel="external">TOS Data Integration</a> installed in your computer.</p>
+<h2 id="Talend_Open_Studio_development">Talend Open Studio development</h2><p>Drop a tJMSInput component in the canvas and double click over it.</p>
+<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png" alt="tJMSInput component"></p>
+<p>Configure all the fields as you can see in the following picture:</p>
+<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png" alt="tJMSInput fields"></p>
+<p>Some important notes:</p>
+<ul>
+<li>You have to import the library <em>wlthint3client.jar</em> before to use the component. You can find it in <em><ocsg installation="" folder="">/wlserver/server/lib/wlthint3client.jar</ocsg></em>. To import it, there are several ways, for instance, the tLibraryLoad component.  </li>
+<li>Change the <strong>Server URL</strong> to your environment configuration. It must be a Node, not an Admin. In this case it’s an standalone configuration with Admin and Node in the same Weblogic instance. </li>
+<li>Change the <strong>Message from</strong> to your environment configuration. If you don’t know it, go to the Console,in the Domain Structure, <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.  </li>
+</ul>
+<h2 id="Weblogic_configuration">Weblogic configuration</h2><p>There is a missing point, and it’s the key. In the Weblogic console: </p>
+<ol>
+<li>Go to the Domain Structure and Select <strong>Services -&gt; Messaging -&gt; JMS-Modules</strong>.</li>
+<li>Click on <strong>WLNGJMSResource -&gt; EdrTopic -&gt; Advanced</strong>.</li>
+<li>Find <strong>Create Destination Identifier</strong> and introduce <em>com.bea.wlcp.wlng.edr.EdrTopic</em> and Save.</li>
+<li>Reboot the Weblogic.</li>
+</ol>
+<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png" alt="Weblogic JMS Configuration"></p>
+<p>This step is mandatory because of the tJMSInput component but it can be avoided if you are accessing the JMS Topic in another way.</p>
+<h2 id="The_end">The end</h2><p>That’s all. Click on Run in the Talend Open Studio and you should be subscribed to the Topic. Send an SMS from the PTE and you should start to generate EDRs. The next step would be create the Java classes to access the EDR information and start to work with it.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/" data-id="ci9o0obwy00211me5eocg559h" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Weblogic/">Weblogic</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/11/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap/" class="article-date">
+  <time datetime="2015-02-11T18:00:00.000Z" itemprop="datePublished">2015-02-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technical/">Technical</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/11/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap/">Ramblings about OCCAS and the Oracle Communications roadmap</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>This is going to be a different type of post. I usually write about technical things but today I am going to try something different. Well, maybe not so different, I have more questions than answers, but at least, I will try to explain as I see the Oracle Comms portfolio and its evolution. Just for the record, I don’t work inside Oracle, I don’t have privileged information and if you do any business decision based in this article, you are a fool.</p>
+<h2 id="Context">Context</h2><p>In 2006, <a href="http://www.oracle.com/us/corporate/acquisitions/metasolv/index.html" target="_blank" rel="external">Oracle acquired MetaSolv</a>, recognized leader in service fulfillment operations support system (OSS) solutions for next-generation communications service providers. Two years later, <a href="http://www.oracle.com/us/corporate/acquisitions/bea/index.html" target="_blank" rel="external">Bea Systems… and with it, Weblogic Server</a>, the Application Server leader of the market. After that, Oracle has build a strong position in the OSS market, no only from a business perspective, also from a technical point of view. All the products are similar (from the CRM to the Inventory) and they share the same architectural principles. As consequence, CSPs enjoy some advantages. For example, after the first deployment, they have the knowledge and experience to continue deploying the rest of the suite. </p>
+<p>In February 2013, <a href="http://www.oracle.com/us/corporate/press/1903221" target="_blank" rel="external">Oracle bought Acme Packet</a>, the leading global provider of session border control technology. One month later <a href="http://www.oracle.com/us/corporate/acquisitions/tekelec/index.html" target="_blank" rel="external">Oracle bought Tekelec</a>, a leading provider of network signaling, policy control, and subscriber data management solutions for communications networks. All the analysts saw this as a big movement to the Network market. Me too.</p>
+<h2 id="Oracle_Comms_Converged_Application_Server">Oracle Comms Converged Application Server</h2><p>Most of people didn’t realize Oracle had a previous portfolio of Networks Applications before the acquisition. Even if this suite is no so big as the OSS and BSS suites, it has importance and business share inside the firm… and something more important, a very intelligent roadmap based in OCCAS as network platform for everything. But…. what is OCCAS? The <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/converged-application-server-edition/overview/index.html" target="_blank" rel="external">Oracle Communications Converged Application Server</a> is a Weblogic with Telecom Network capabilities (mainly SIP and Diameter) and oriented to real-time applications. As product, it’s very small. It’s not easy to find a CSP asking for it, because the business case is not so clear. OCCAS is more like a Framework, something you are going to use to develop other things. And, in fact, most of the SDP portfolio is based in OCCAS, for instance, OCSG and the Unified Communications suite. </p>
+<p>The Converged Application Server <a href="https://docs.oracle.com/cd/E27702_01/doc.51/e27705/tpd_developing.htm#autoId1" target="_blank" rel="external">Service Creation Environment</a> (SCE) consists of a faceted framework that supplements the <a href="http://www.oracle.com/technetwork/developer-tools/eclipse/downloads/index.html" target="_blank" rel="external">Oracle Enterprise Pack for Eclipse</a> (OEPE). The SCE provides tools and resources you can use to develop converged applications, including wizards, simulators, and templates. And also it provides the <a href="https://docs.oracle.com/cd/E27702_01/doc.51/e27707/sip_sft_overview.htm" target="_blank" rel="external">Service Foundation Toolkit</a> (SFT), a converged application Java development framework. It provides APIs that abstract the details of the communication protocol for the application, enabling to focus on the service value provided by converged SIP and HTTP applications. The idea is simple: if you are a developer with Java and Eclipse knowledge, you can start to develop Telecom applications without knowledge about Telecom protocols. And those applications will run in the leader platform: Weblogic. So they will be carrier-grade with all the performance, security and scalability requirements.</p>
+<p><img src="https://docs.oracle.com/cd/E27702_01/doc.51/e27705/img/sce_overview.gif" alt="The Converged Application Server Service Creation Environment"></p>
+<h2 id="Oracle_Comms_Roadmap">Oracle Comms Roadmap</h2><p>A roadmap with all the Network products based in OCCAS makes sense for several reasons. Some of them are:</p>
+<ul>
+<li><strong>Contrasted technologies</strong>: Java, Weblogic, the Oracle Database, Linux, Eclipse and so on. You are not reinventing the wheel. All those technologies are familiar to the CSPs, they trust them. </li>
+<li><strong>Cloud and virtualization</strong>: CSPs want to be ready for the near future. They know about the advantages of virtualization and cloud strategies. And OCCAS is the perfect choice for that. You can run it in several platforms, deploy it, scale it and so on. It’s flexible and modern.</li>
+<li><strong>Learn one, use many</strong>: you start deploying one application, and after that, you will have the knowledge and resources to deploy the rest of the suite (if you want). You will save a lot of time learning complex systems or technologies so you will be more flexible and faster delivering new products to the market.</li>
+<li><strong>Easy support</strong>: the Operation team needs to know about basic technologies: no more, no less. As you need a DBA, you will need a Weblogic expert who can work with all the systems. In short, the daily support will be easier because the level of complexity is smaller.</li>
+<li><strong>Maintenance and upgrade</strong>: all the products are going to do it in the same way and it’s out-of-the-box in Weblogic. Converged Applications Server’s upgrade feature ensures that no calls are dropped while during the upgrade of a production application. The upgrade process also enables you to revert or rollback the process of upgrading an application. If, for example, you determine that there is a problem with the newer version of the deployed application, you can undeploy the newer version and activate the older version.</li>
+<li><strong>High availability and geographic redundancy</strong>: it’s provided out-of-the-box, so you don’t need worry about that.</li>
+<li><strong>The BSS/OSS suite</strong>: it’s based on the same technologies. Any CSP with some of those products installed has the experience and knowledge to start to work with OCCAS or any OCCAS-based product and the integration between BSS/OSS and Network would be easier.</li>
+</ul>
+<p>As we saw before in the OSS suite, this is a winner strategy. And it doesn’t end here. After have everything running in the same platform, Oracle can start to work in the integration between the products, something like the <a href="http://www.oracle.com/us/products/applications/application-integration-architecture/overview/index.html" target="_blank" rel="external">Oracle Application Integration Architecture (AIA)</a> but oriented to the network. Any network vendor in the market can compete with something like that.</p>
+<h2 id="The_future">The future</h2><p>The final question: is Oracle going to migrate the ACME and Tekelec products to the OCCAS platform?. We know the advantages but there are also problems. Migrate part of the portfolio to this platform requires a lot of resources and it’s very time-consuming. And of course, not all the products are valid (specific hardware systems doesn’t have sense in OCCAS) or they are not going to have enough Return of Investment. So, I don’t have an answer for that. After two years, I didn’t see movements in this direction but I also know the acquisitions take a lot of time and it’s soon yet. Oracle did a great job combining OCCAS and <a href="http://docs.oracle.com/cd/E50379_01/index.htm" target="_blank" rel="external">Application Session Controller</a> (ASC) to launch the <a href="http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html" target="_blank" rel="external">WebRTC Session Controller</a> (WSC). That is for sure <a href="https://blogs.oracle.com/COMMSINFODEV/entry/new_tech_new_challenges_the" target="_blank" rel="external">the path to follow</a> but they are just two products running independently and integrated using a REST interface and we are speaking about have the ASC capabilities running on OCCAS. </p>
+<p>On the other hand, Oracle has announced recently the <a href="http://www.oracle.com/us/corporate/press/2418407" target="_blank" rel="external">Oracle Communications Network Service Orchestration Solution</a>. This is the mainly Oracle NFV bet but it doesn’t look based in OCCAS or even Weblogic. And we know, Oracle can buy some specific NFV/SDN company, they don’t need to develop their own solution… but with more acquisitions the path to have only one platform will be even more complicated.</p>
+<p>This year we probably will see a new version release of OCCAS. That will be the moment to know about the future of this excellent platform. </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/02/11/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap/" data-id="ci9o0obwd000t1me5o0ctodum" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NFV/">NFV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCCAS/">OCCAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle-Comms/">Oracle Comms</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="blog-OCSG-6-0v1-generally-available-new-features-introduction" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/23/OCSG-6-0v1-generally-available-new-features-introduction/" class="article-date">
+  <time datetime="2015-01-23T21:00:00.000Z" itemprop="datePublished">2015-01-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technical/">Technical</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/23/OCSG-6-0v1-generally-available-new-features-introduction/">OCSG 6.0v1 generally available: new features introduction</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>The new OCSG version is available and there are a lot of new interesting things, starting with a Documentation reorganization.</p>
+<p><img src="/images/OCSG-doc-v6.png" alt="Service and Network Evolution"></p>
+<p>This is the press note (source <a href="https://community.oracle.com/docs/DOC-894950?sr=stream#comment-897214" target="_blank" rel="external">Oracle Community</a>):</p>
+<blockquote>
+<p>Oracle Communications is pleased to announce that as of Thursday, 22 January 2015, we ntroduced the most comprehensive API exposure platform in the industry with the release of Oracle Communications Services Gatekeeper 6.0 (OCSG 6.0).</p>
+<p>OCSG 6.0 introduces expansive API Management capabilities to manage the entire API lifecycle enabling enterprises and CSPs to accelerate internal development, engage with partners and monetize assets. OCSG 6.0 delivers this alongside industry leading SLA management, analytics and an extensive array of built-in communications services.</p>
+<p>As part of the OCSG 6.0 release, a new OCSG-based solution, called “Network Policy as a Service” (NPaaS), was launched by integrating the Oracle Communications Policy Management (OCPM) PCRF to provide out-of-the-box exposure of network policy for both telephony and cable networks. This allows CSPs and partners to align the data bandwidth with the digital service being delivered, ensuring a higher rate of customer satisfaction.<br>OCSG 6.0’s API Management, simplified configuration and lightweight deployment features enable new  API exposure use cases for enterprise IT integration, including:</p>
+<ul>
+<li>Contact center application enablement</li>
+<li>API exposure for Communications Enabled Business Processes (CEBP) and Unified Communications (UC)</li>
+</ul>
+<p><strong> KEY FEATURES OF THE OCSG 6.0 RELEASE </strong></p>
+<ul>
+<li>API Management made powerful and simple<ul>
+<li>Web Service API generation in the Portal allows APIs to be built in minutes</li>
+<li>API catalog and versioning</li>
+<li>Onboard and manage partners</li>
+<li>API Monitoring, analytics, metering and charging</li>
+<li>Management and partner portals</li>
+</ul>
+</li>
+<li>Simplified configuration and deployment with installation in 15 minutes</li>
+<li>Lightweight single tier deployment option</li>
+<li>Integration with the Oracle Communications Policy Management (OCPM) PCRF to safely and securely expose network policy through the Parlay X and Restful QoS APIs</li>
+<li>Enhanced Oauth integration simplifies integration with SSO and IDM</li>
+<li>Enterprise Manager Cloud Control integration facilitates cloud-based deployments</li>
+<li>Advanced API firewall provides protection against a multitude of security threats</li>
+<li>Integration with OCCAS Service Controller provides a broad array of SS7 interface options</li>
+</ul>
+<p>Product releases are available for download from the <a href="https://edelivery.oracle.com/" target="_blank" rel="external">Oracle Software Delivery Cloud</a>.</p>
+<p>More documentation can be found via Services <a href="http://docs.oracle.com/cd/E50778_01/index.htm" target="_blank" rel="external">Gatekeeper 6.0 Documentation</a></p>
+</blockquote>
+<p>It’s soon yet to write a detailed analysis but I would like to highlight some takeaways. This is not the typical release.. in fact, there isn’t an official  announcement as we’ve seen previously. There are a lot of small improvements to help operators and system integrators to work with OCSG which it’s great. Some of them:</p>
+<ol>
+<li><strong> <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e54151/toc.htm" target="_blank" rel="external">New Default Single-system Installation Option and Getting Started Guide</a>:</strong> everything in a single package (database included), it’s going to save us a lot of time and PoCs will be easier. Great point.</li>
+<li><strong> <a href="http://docs.oracle.com/cd/E50778_01/index.htm" target="_blank" rel="external">Documentation Improvements</a>:</strong> I’ve to check them yet but the new structure looks better and, for sure, some sections in the 5.1 documentation could be improved/corrected.</li>
+<li><strong> <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e55395/ipl_pcrf.htm#SGIPL700" target="_blank" rel="external">PCRF Integration Example</a>:</strong> This is something I really appreciate because I was working on that and it’s really hard because of the lack of information and references to the Tekelec product. I will do it very soon but after a first look, it lacks a bit more of detail in the Tekelec PCRF setup.</li>
+<li><strong> <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50764/prm_intro.htm#SGPRM106" target="_blank" rel="external">Extending the Portal User Interfaces and Portal Developer’s Guide</a>: </strong> I know there are a lot of improvements in this part. An easier installation and customization, for sure, one of the points everybody asked with the previous version.</li>
+<li><strong> <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e54898/toc.htm" target="_blank" rel="external">New API Management Features</a>: </strong> OCSG competes some times (but not always) with more general products as API gateways. Improvements in this part are warmly welcomed.</li>
+</ol>
+<p>I miss some things as more Geographic redundancy improvements and more debugging options but it’s soon yet to know if they’re or not in this release. Anyway, there are more interesting improvements, consult the <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50775/toc.htm" target="_blank" rel="external">Release Note</a> for detailed information.</p>
+<p>I will try to write some specific articles showing the new features. Just <a href="http://www.serviceandnetworkevolution.com/" target="_blank" rel="external">subscribe to the blog</a> to keep yourself informed.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/01/23/OCSG-6-0v1-generally-available-new-features-introduction/" data-id="ci9o0obwq001i1me55g9hsyhg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle-Comms/">Oracle Comms</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="blog-Accessing-Weblogic-Runtime-Information-with-WLST" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/19/Accessing-Weblogic-Runtime-Information-with-WLST/" class="article-date">
+  <time datetime="2015-01-19T21:00:00.000Z" itemprop="datePublished">2015-01-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technical/">Technical</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/19/Accessing-Weblogic-Runtime-Information-with-WLST/">Accessing Weblogic Runtime Information with WLST</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Deal with java.lang.OutOfMemoryError: PermGen space errors is always tricky. Most of the times it’s something related to the chosen JVM, probably not supported for the hosting OS (for example, using a 32bits JVM in a 64bits OS is a typical issue).</p>
+<p>Here I provide two interesting ways to check the JVM configuration:</p>
+<script src="https://gist.github.com/antonmry/efe307a587388c3ecdfb.js"></script>
+
+<p>For example, perhaps we could want to increase the PermSize, so we edit the  &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># USER_MEM_ARGS   - The variable to override the standard memory arguments</span></span><br><span class="line"><span class="comment">#                   passed to java.</span></span><br><span class="line"></span><br><span class="line">USER_MEM_ARGS=<span class="string">"-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=256m"</span></span><br><span class="line"><span class="built_in">export</span> USER_MEM_ARGS</span><br></pre></td></tr></table></figure>
+<p>Now it’s time to reboot the weblogic and check everything again using the same commands I showed previously.</p>
+<p>More info:</p>
+<ul>
+<li><a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/using_WLST.html#wp1093952" target="_blank" rel="external">Invoking WLST</a></li>
+<li><a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/monitoring.html" target="_blank" rel="external">Getting Runtime Information</a></li>
+<li><a href="https://blogs.oracle.com/practicalbpm/entry/wlst_scripting_to_get_weblogic" target="_blank" rel="external">WLST Scripting Introduction</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/01/19/Accessing-Weblogic-Runtime-Information-with-WLST/" data-id="ci9o0obww001t1me5w5fjncam" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Weblogic/">Weblogic</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Oracle-Preworkshop-TADSummit-2014" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/17/Oracle-Preworkshop-TADSummit-2014/" class="article-date">
+  <time datetime="2014-11-17T21:00:00.000Z" itemprop="datePublished">2014-11-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Events/">Events</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/17/Oracle-Preworkshop-TADSummit-2014/">Oracle Pre-conference TADSummit Workshop 2014</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I was invited recently to participate in the Pre-conference Oracle WebRTC Workshop of the <a href="http://tadsummit.com/2014/" target="_blank" rel="external">TADSummit 2014</a> (Istanbul). I should speak about the implementation and architecture details of a WebRTC deployment in a Communication Service Provider. It was a real challenge, I had a lot of work in the previous weeks and I know about the excellent quality of the other speakers: <a href="https://twitter.com/Doug_Tait" target="_blank" rel="external">Doug</a>, <a href="https://twitter.com/EPCarrera" target="_blank" rel="external">Elias</a> from Quobis or Stephano Gioia (who made a highly recommended presentation about <a href="http://www.slideshare.net/gioste/webrtc-workshop-what-i" target="_blank" rel="external">What is (and isn’t WebRTC)</a> ).</p>
+<p>Even without time and being a technical guy, I’ve tried to do something different, speaking about our experience in the TADHack 2014 (where we’ve deployed and supported the Oracle platform) and a combination of some previous experiences from the deployment in some LATAM operators. Here you can see the slides:</p>
+<p><iframe src="//www.slideshare.net/slideshow/embed_code/41656265" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/antonry/webrtc-preconference-oracle-workshop-v3" title="Oracle - WebRTC Pre-conference TADSummit Workshop" target="_blank">Oracle - WebRTC Pre-conference TADSummit Workshop</a> </strong> from <strong><a href="//www.slideshare.net/antonry" target="_blank">antonry</a></strong> </div></p>
+<p>And also a photo from Optare (Thanks!):</p>
+<p><blockquote class="twitter-tweet" lang="en"><p>SDPs team at <a href="https://twitter.com/TADSummit" target="_blank" rel="external">@TADSummit</a> present our experience with <a href="https://twitter.com/OracleComms" target="_blank" rel="external">@OracleComms</a> SDPs.Ask <a href="https://twitter.com/antonmry" target="_blank" rel="external">@antonmry</a> <a href="https://twitter.com/NachoGarmilla" target="_blank" rel="external">@NachoGarmilla</a> or <a href="https://twitter.com/ulsni" target="_blank" rel="external">@ulsni</a> for info <a href="http://t.co/IO7ASFxJgb" target="_blank" rel="external">pic.twitter.com/IO7ASFxJgb</a></p>&mdash; Optare Solutions (@optaresolutions) <a href="https://twitter.com/optaresolutions/status/532143459977920512" target="_blank" rel="external">November 11, 2014</a></blockquote></p>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>I really enjoyed the Pre-conference workshop. It was very constructive and some of the assistants were very interested in WebRTC and the business model behind it. In general, TADSummit was an excellent event, three days full of meetings and very interesting conversations about WebRTC and Telecom APIs.</p>
+<p>There is something I’ve particularly enjoyed this time: Istanbul. Amazing city.</p>
+<p><blockquote class="twitter-tweet" lang="en"><p>Great views of Asia &amp; Europe from rooftop <a href="https://twitter.com/360istanbul" target="_blank" rel="external">@360istanbul</a> cc <a href="https://twitter.com/optaresolutions" target="_blank" rel="external">@optaresolutions</a> <a href="https://twitter.com/Quobis" target="_blank" rel="external">@Quobis</a> <a href="http://t.co/agzylsMiCR" target="_blank" rel="external">pic.twitter.com/agzylsMiCR</a></p>&mdash; Elias Perez Carrera (@EPCarrera) <a href="https://twitter.com/EPCarrera/status/532657059213631488" target="_blank" rel="external">November 12, 2014</a></blockquote></p>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2014/11/17/Oracle-Preworkshop-TADSummit-2014/" data-id="ci9o0obwm001e1me5fzty7rwj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebRTC/">WebRTC</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="blog-WebRTC-as-key-part-of-Service-Exposure" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/10/01/WebRTC-as-key-part-of-Service-Exposure/" class="article-date">
+  <time datetime="2014-10-01T20:00:00.000Z" itemprop="datePublished">2014-10-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Publications/">Publications</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/10/01/WebRTC-as-key-part-of-Service-Exposure/">WebRTC as key part of Service Exposure</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Some weeks ago, Oracle has proposed us to write an article about WebRTC to be published in its blog: <a href="http://blog.webrtc-solutions.com" target="_blank" rel="external">http://blog.webrtc-solutions.com</a>. I was in charge of the main edition, with some colleges helping in the revision (thanks Sandra, Eva and Nacho!).  It was a good time to review why WebRTC is so important to us. There are a lot of companies involved today with WebRTC, different sectors, different sizes and types as you can see in the <a href="http://www.cio2cmo.com/webrtc-landscape-infographic-june-2014/" target="_blank" rel="external">The WebRTC Landscape Infographic</a> from Brad Bush.</p>
+<p><img src="http://www.cio2cmo.com/wp-content/uploads/2014/06/WebRTC-Landscape-Infographic-2014-06.png" alt="The WebRTC Landscape Infographic – June 2014"></p>
+<p>WebRTC is so exciting for us because very specific reasons… so  I’ve developed our motivations in the article: as expert in telecom service exposure, WebRTC is the perfect choice to expose one of the main telecom assets: voice, and with less importance yet, video. In fact, I see WebRTC as a key part of the Service Delivery Platforms of the near future.</p>
+<p>The article: <a href="http://blog.webrtc-solutions.com/webrtc-as-key-part-of-service-exposure/" target="_blank" rel="external">WebRTC as key part of Service Exposure</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2014/10/01/WebRTC-as-key-part-of-Service-Exposure/" data-id="ci9o0obw000011me5wlop85pm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Delivery/">Service Delivery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebRTC/">WebRTC</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Introduction-to-OCSG-SDK" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/26/Introduction-to-OCSG-SDK/" class="article-date">
+  <time datetime="2014-05-26T20:00:00.000Z" itemprop="datePublished">2014-05-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technical/">Technical</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/26/Introduction-to-OCSG-SDK/">Introduction to OCSG SDK</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>As part of the activities we did for the <a href="http://tadhack.com/2014/" target="_blank" rel="external">TADHack 2014</a>, I’ve recorded <a href="https://www.youtube.com/watch?v=6ap8OqgAHQQ&amp;feature=autoshare" target="_blank" rel="external">this short tutorial</a> about the Oracle Communications Services Gatekeeper SDK:</p>
+<iframe width="560" height="315" src="//www.youtube.com/embed/6ap8OqgAHQQ" frameborder="0" allowfullscreen></iframe>
+
+<p>This is a very interesting tool for developers, a lot of people asked us for it and Oracle allow us to distribute it between the TADHack participants… It can made a big different for a CSP trying to engage developers.</p>
+<p>More information is available in the <a href="http://docs.oracle.com/cd/E36135_01/doc.51/e37529/toc.htm" target="_blank" rel="external">Oracle® Communications Services Gatekeeper SDK User’s Guide Release 5.1</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.serviceandnetworkevolution.com/2014/05/26/Introduction-to-OCSG-SDK/" data-id="ci9o0obws001n1me58tkas7sg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Delivery/">Service Delivery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Events/">Events</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Publications/">Publications</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Technical/">Technical</a><span class="category-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFV/">NFV</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OCCAS/">OCCAS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OCSG/">OCSG</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/">Oracle</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle-Comms/">Oracle Comms</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIP/">SIP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Service-Delivery/">Service Delivery</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TADHack/">TADHack</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebRTC/">WebRTC</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Weblogic/">Weblogic</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java/" style="font-size: 12.5px;">Java</a><a href="/tags/NFV/" style="font-size: 12.5px;">NFV</a><a href="/tags/OCCAS/" style="font-size: 12.5px;">OCCAS</a><a href="/tags/OCSG/" style="font-size: 17.5px;">OCSG</a><a href="/tags/Oracle/" style="font-size: 20px;">Oracle</a><a href="/tags/Oracle-Comms/" style="font-size: 15px;">Oracle Comms</a><a href="/tags/SIP/" style="font-size: 10px;">SIP</a><a href="/tags/Service-Delivery/" style="font-size: 17.5px;">Service Delivery</a><a href="/tags/Services-Gatekeeper/" style="font-size: 17.5px;">Services Gatekeeper</a><a href="/tags/TADHack/" style="font-size: 12.5px;">TADHack</a><a href="/tags/WebRTC/" style="font-size: 17.5px;">WebRTC</a><a href="/tags/Weblogic/" style="font-size: 12.5px;">Weblogic</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/04/30/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1/">Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 1</a>
+          </li>
+        
+          <li>
+            <a href="/2015/04/23/TADHack-2015-Oracle-environment-ready-for-your-hack/">TADHack 2015: Oracle environment ready for your hack</a>
+          </li>
+        
+          <li>
+            <a href="/2015/04/15/Oracle-s-demos-in-the-MWC2015-review/">Oracle&#39;s demos in the MWC2015 review</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/">Access OCSG EDR JMS Topic with Talend Open Studio</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/11/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap/">Ramblings about OCCAS and the Oracle Communications roadmap</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Antón R. Yuste<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
