@@ -4,7 +4,7 @@
   <subtitle><![CDATA[by Antón R. Yuste]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.serviceandnetworkevolution.com/"/>
-  <updated>2015-05-14T09:55:19.000Z</updated>
+  <updated>2015-05-15T14:55:59.000Z</updated>
   <id>http://www.serviceandnetworkevolution.com/</id>
   
   <author>
@@ -13,6 +13,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[SpringIO 2015: a great event for a great community]]></title>
+    <link href="http://www.serviceandnetworkevolution.com/2015/05/14/SpringIO-2015-a-great-event-for-a-great-community/"/>
+    <id>http://www.serviceandnetworkevolution.com/2015/05/14/SpringIO-2015-a-great-event-for-a-great-community/</id>
+    <published>2015-05-14T20:00:00.000Z</published>
+    <updated>2015-05-15T14:55:59.000Z</updated>
+    <content type="html"><![CDATA[<p>I had the opportunity to participate in <a href="http://www.springio.net/using-groovy-to-empower-webrtc-network-systems/" target="_blank" rel="external">SpringIO as speaker</a> in April (Barcelona). It was quite scary to participate in a conference about Spring, I am not a web developer, and, in fact, when I have to develop or design any web system based in Java, I prefer just to use EJB3 and Servlet 3.2, avoiding any framework. But there is something more in this conference: <a href="http://en.wikipedia.org/wiki/Groovy_%28programming_language%29" target="_blank" rel="external">Groovy</a>. And we are using Groovy in a lot of cool things, specially in the WebRTC domain. So the idea was simple: introduce WebRTC and show an interesting Groovy use case.</p>
+<p>Unfortunately, Groovy is not in a good moment right now. Yes, there are a lot of people speaking about it… but after Strachan (Groovy’s creator) wrote on his blog, “I can honestly say if someone had shown me the Programming in Scala book by Martin Odersky, Lex Spoon &amp; Bill Venners back in 2003 I’d probably have never created Groovy.” and Pivotal is not hosting the project any more… well, uncertain future for Groovy… and it’s a pity. Because sometimes we need a scripting language and Groovy is a great choice if you are a Java developer, as I am. It’s dynamically compiled to Java Virtual Machine (JVM) bytecode, so the performance is good, even for network system. Also it can interoperate with other Java code and libraries.</p>
+<p>For all these reasons, I would like to see Oracle more involved in the Groovy project, for instance reviving the <a href="https://jcp.org/en/jsr/detail?id=241" target="_blank" rel="external">JSR-241</a> and ending with <a href="http://en.wikipedia.org/wiki/Jython" target="_blank" rel="external">jython</a>… If you are working with <a href="https://docs.oracle.com/cd/E29542_01/nav/wlst.htm" target="_blank" rel="external">Weblogic Scripting Tool (WLST)</a>, you probably hate Jython as much I do.  Other important point is <a href="https://gradle.org/" target="_blank" rel="external">gradle</a>, it looks a great tool even if I didn’t have opportunity to test it yet. Anyway, I am quite happy with Maven, specially now with the <a href="https://blogs.oracle.com/WebLogicServer/entry/weblogic_server_and_the_oracle" target="_blank" rel="external">new Maven Oracle Repository</a>. And I have also <a href="https://code.google.com/p/spock/" target="_blank" rel="external">Spock</a> in the “thing to review” list, a testing framework also based in Groovy. </p>
+<p>Even if my talk wasn’t successful and my interest in the Spring framework is limited, I’ve really enjoyed the event. First, because it was very well organized. Second, the quality of the speakers was awesome, the technical quality of some talks was superb. And not only because of the speakers, also because of the audience. I envy Spring having a so good community, it would we so great to have something similar with Telecom Application Developers. That’s one of the reasons because I’m so excited with the <a href="http://tadhack.com/2015/" target="_blank" rel="external">TADHack</a> and all the work <a href="http://alanquayle.com" target="_blank" rel="external">Alan Quayle</a> is doing. It is a long road yet but a good start. </p>
+<p>Here my slides. I’ve covered WebRTC, then Groovy and I’ve finished with some TADHack references.</p>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/bKBppeBAK8rQze" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+
+<p>There is also a project in GitHub with the source code if you are interested: <a href="https://github.com/antonmry/SpringIOWebRTCSampleApp" target="_blank" rel="external">SpringIOWebRTCSampleApp</a>.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>I had the opportunity to participate in <a href="http://www.springio.net/using-groovy-to-empower-webrtc-network-systems/" target="_blank"]]>
+    </summary>
+    
+      <category term="Groovy" scheme="http://www.serviceandnetworkevolution.com/tags/Groovy/"/>
+    
+      <category term="Service Delivery" scheme="http://www.serviceandnetworkevolution.com/tags/Service-Delivery/"/>
+    
+      <category term="SpringIO" scheme="http://www.serviceandnetworkevolution.com/tags/SpringIO/"/>
+    
+      <category term="WebRTC" scheme="http://www.serviceandnetworkevolution.com/tags/WebRTC/"/>
+    
+      <category term="Events" scheme="http://www.serviceandnetworkevolution.com/categories/Events/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 1]]></title>
@@ -531,7 +562,7 @@
     <link href="http://www.serviceandnetworkevolution.com/2014/05/15/Oracle-TADHack-Webinar/"/>
     <id>http://www.serviceandnetworkevolution.com/2014/05/15/Oracle-TADHack-Webinar/</id>
     <published>2014-05-15T20:00:00.000Z</published>
-    <updated>2015-05-14T09:55:19.000Z</updated>
+    <updated>2015-05-14T11:12:44.000Z</updated>
     <content type="html"><![CDATA[<p>In May 2014, Oracle propose us to deploy and manage its <a href="http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html" target="_blank" rel="external">SANE solution</a> for the <a href="http://tadhack.com/2014/" target="_blank" rel="external">TADHack event</a> and support the developers community. With only a few weeks, it was a big challenge. I’ve participated as technical responsible and it was a great experience because it was a very different type of project: any operator was involved so we were free to choose the platform. Also the requirements were very different: the main goal was engage the developers.</p>
 <p>This is the list of activities we did:</p>
 <ol>

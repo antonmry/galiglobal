@@ -3,20 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Access OCSG EDR JMS Topic with Talend Open Studio | Service and Network Evolution Blog</title>
+  <title>Archives: 2015/5 | Service and Network Evolution Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="I’ve been using Talend Open Studio for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is r">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Access OCSG EDR JMS Topic with Talend Open Studio">
-<meta property="og:url" content="http://www.serviceandnetworkevolution.com/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/index.html">
+  <meta name="description" content="Service and Network Evolution Blog by Antón R. Yuste">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Service and Network Evolution Blog">
+<meta property="og:url" content="http://www.serviceandnetworkevolution.com/archives/2015/05/index.html">
 <meta property="og:site_name" content="Service and Network Evolution Blog">
-<meta property="og:description" content="I’ve been using Talend Open Studio for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is r">
-<meta property="og:image" content="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png">
-<meta property="og:image" content="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png">
-<meta property="og:image" content="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png">
+<meta property="og:description" content="Service and Network Evolution Blog by Antón R. Yuste">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Access OCSG EDR JMS Topic with Talend Open Studio">
-<meta name="twitter:description" content="I’ve been using Talend Open Studio for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is r">
+<meta name="twitter:title" content="Service and Network Evolution Blog">
+<meta name="twitter:description" content="Service and Network Evolution Blog by Antón R. Yuste">
   
     <link rel="alternative" href="/atom.xml" title="Service and Network Evolution Blog" type="application/atom+xml">
   
@@ -66,90 +63,39 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="blog-Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio" class="article article-type-blog" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/" class="article-date">
-  <time datetime="2015-02-13T21:00:00.000Z" itemprop="datePublished">2015-02-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Technical/">Technical</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Access OCSG EDR JMS Topic with Talend Open Studio
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2015" class="archive-year">2015</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2015/05/14/SpringIO-2015-a-great-event-for-a-great-community/" class="archive-article-date">
+  <time datetime="2015-05-14T20:00:00.000Z" itemprop="datePublished">May 14</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2015/05/14/SpringIO-2015-a-great-event-for-a-great-community/">SpringIO 2015: a great event for a great community</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I’ve been using <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14" target="_blank" rel="external">Talend Open Studio</a> for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.</p>
-<p>In this tutorial, I am going to show how to use it Talend Open Studio to access the JMS Topic where OCSG shows all the runtime information: the Event Data Records (EDRs). This is the main place for debugging so it’s really important. The article is based in the offical documentation <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627" target="_blank" rel="external">Creating EDR Listeners</a> but adapted to TOS.</p>
-<h2 id="Pre-requisites">Pre-requisites</h2><p>You will need an OCSG 6 or 5.1 running and also the <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download" target="_blank" rel="external">TOS Data Integration</a> installed in your computer.</p>
-<h2 id="Talend_Open_Studio_development">Talend Open Studio development</h2><p>Drop a tJMSInput component in the canvas and double click over it.</p>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png" alt="tJMSInput component"></p>
-<p>Configure all the fields as you can see in the following picture:</p>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png" alt="tJMSInput fields"></p>
-<p>Some important notes:</p>
-<ul>
-<li>You have to import the library <em>wlthint3client.jar</em> before to use the component. You can find it in <em><ocsg installation="" folder="">/wlserver/server/lib/wlthint3client.jar</ocsg></em>. To import it, there are several ways, for instance, the tLibraryLoad component.  </li>
-<li>Change the <strong>Server URL</strong> to your environment configuration. It must be a Node, not an Admin. In this case it’s an standalone configuration with Admin and Node in the same Weblogic instance. </li>
-<li>Change the <strong>Message from</strong> to your environment configuration. If you don’t know it, go to the Console,in the Domain Structure, <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.  </li>
-</ul>
-<h2 id="Weblogic_configuration">Weblogic configuration</h2><p>There is a missing point, and it’s the key. In the Weblogic console: </p>
-<ol>
-<li>Go to the Domain Structure and Select <strong>Services -&gt; Messaging -&gt; JMS-Modules</strong>.</li>
-<li>Click on <strong>WLNGJMSResource -&gt; EdrTopic -&gt; Advanced</strong>.</li>
-<li>Find <strong>Create Destination Identifier</strong> and introduce <em>com.bea.wlcp.wlng.edr.EdrTopic</em> and Save.</li>
-<li>Reboot the Weblogic.</li>
-</ol>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png" alt="Weblogic JMS Configuration"></p>
-<p>This step is mandatory because of the tJMSInput component but it can be avoided if you are accessing the JMS Topic in another way.</p>
-<h2 id="The_end">The end</h2><p>That’s all. Click on Run in the Talend Open Studio and you should be subscribed to the Topic. Send an SMS from the PTE and you should start to generate EDRs. The next step would be create the Java classes to access the EDR information and start to work with it.</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.serviceandnetworkevolution.com/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/" data-id="ci9pq9mz600292re581x2neze" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Weblogic/">Weblogic</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2015/04/15/Oracle-s-demos-in-the-MWC2015-review/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Oracle&#39;s demos in the MWC2015 review
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2015/02/11/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Ramblings about OCCAS and the Oracle Communications roadmap</div>
-    </a>
-  
-</nav>
-
-  
 </article>
-
+  
+  
+    </div></section>
+  
 </section>
         
           <aside id="sidebar">
