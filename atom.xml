@@ -4,7 +4,7 @@
   <subtitle><![CDATA[by Antón R. Yuste]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.serviceandnetworkevolution.com/"/>
-  <updated>2015-05-15T14:55:59.000Z</updated>
+  <updated>2015-05-15T14:59:01.000Z</updated>
   <id>http://www.serviceandnetworkevolution.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.serviceandnetworkevolution.com/2015/05/14/SpringIO-2015-a-great-event-for-a-great-community/"/>
     <id>http://www.serviceandnetworkevolution.com/2015/05/14/SpringIO-2015-a-great-event-for-a-great-community/</id>
     <published>2015-05-14T20:00:00.000Z</published>
-    <updated>2015-05-15T14:55:59.000Z</updated>
+    <updated>2015-05-15T14:59:01.000Z</updated>
     <content type="html"><![CDATA[<p>I had the opportunity to participate in <a href="http://www.springio.net/using-groovy-to-empower-webrtc-network-systems/" target="_blank" rel="external">SpringIO as speaker</a> in April (Barcelona). It was quite scary to participate in a conference about Spring, I am not a web developer, and, in fact, when I have to develop or design any web system based in Java, I prefer just to use EJB3 and Servlet 3.2, avoiding any framework. But there is something more in this conference: <a href="http://en.wikipedia.org/wiki/Groovy_%28programming_language%29" target="_blank" rel="external">Groovy</a>. And we are using Groovy in a lot of cool things, specially in the WebRTC domain. So the idea was simple: introduce WebRTC and show an interesting Groovy use case.</p>
 <p>Unfortunately, Groovy is not in a good moment right now. Yes, there are a lot of people speaking about it… but after Strachan (Groovy’s creator) wrote on his blog, “I can honestly say if someone had shown me the Programming in Scala book by Martin Odersky, Lex Spoon &amp; Bill Venners back in 2003 I’d probably have never created Groovy.” and Pivotal is not hosting the project any more… well, uncertain future for Groovy… and it’s a pity. Because sometimes we need a scripting language and Groovy is a great choice if you are a Java developer, as I am. It’s dynamically compiled to Java Virtual Machine (JVM) bytecode, so the performance is good, even for network system. Also it can interoperate with other Java code and libraries.</p>
 <p>For all these reasons, I would like to see Oracle more involved in the Groovy project, for instance reviving the <a href="https://jcp.org/en/jsr/detail?id=241" target="_blank" rel="external">JSR-241</a> and ending with <a href="http://en.wikipedia.org/wiki/Jython" target="_blank" rel="external">jython</a>… If you are working with <a href="https://docs.oracle.com/cd/E29542_01/nav/wlst.htm" target="_blank" rel="external">Weblogic Scripting Tool (WLST)</a>, you probably hate Jython as much I do.  Other important point is <a href="https://gradle.org/" target="_blank" rel="external">gradle</a>, it looks a great tool even if I didn’t have opportunity to test it yet. Anyway, I am quite happy with Maven, specially now with the <a href="https://blogs.oracle.com/WebLogicServer/entry/weblogic_server_and_the_oracle" target="_blank" rel="external">new Maven Oracle Repository</a>. And I have also <a href="https://code.google.com/p/spock/" target="_blank" rel="external">Spock</a> in the “thing to review” list, a testing framework also based in Groovy. </p>
