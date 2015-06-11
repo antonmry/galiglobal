@@ -4,7 +4,7 @@
   <subtitle><![CDATA[by Antón R. Yuste]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.serviceandnetworkevolution.com/"/>
-  <updated>2015-05-21T09:42:11.000Z</updated>
+  <updated>2015-06-11T12:52:36.000Z</updated>
   <id>http://www.serviceandnetworkevolution.com/</id>
   
   <author>
@@ -13,6 +13,50 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Introductory videos to OCSG, OCCAS and OCWSC]]></title>
+    <link href="http://www.serviceandnetworkevolution.com/2015/06/11/Introductory-videos-to-OCSG-OCCAS-and-OCWSC/"/>
+    <id>http://www.serviceandnetworkevolution.com/2015/06/11/Introductory-videos-to-OCSG-OCCAS-and-OCWSC/</id>
+    <published>2015-06-11T20:00:00.000Z</published>
+    <updated>2015-06-11T12:52:36.000Z</updated>
+    <content type="html"><![CDATA[<p>Tomorrow I will be travelling to <a href="http://tadhack.com/2015/" target="_blank" rel="external">TADHack</a> in Lisbon and I am so excited! It’s going to be great! As part of the initiatives we’ve done to promote <a href="http://tadhack.optaresolutions.com/" target="_blank" rel="external">the Oracle sandbox</a> and help the developers, I’ve recorded three videos to introduce the three Oracle SDP applications. Even if they are oriented to the TADHack, they are a good resource for anyone interested in the products.</p>
+<h2 id="Oracle_Communications_WebRTC_Session_Controller">Oracle Communications WebRTC Session Controller</h2><p>In this video, we are going to introduce Oracle Communications WebRTC Session Controller and how to use it to add audio, video and data communications to web and mobile applications. It provides an introduction to a sample application, a good starting point to develop more complex services. It ends explaining how to add a widget which allows developers to add Real-time communication in a very easy way.</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/pKjHRvGVlXQ" frameborder="0" allowfullscreen></iframe>
+
+<p>Youtube link: <a href="https://www.youtube.com/watch?v=pKjHRvGVlXQ" target="_blank" rel="external">Using WebRTC services with OCWSC </a></p>
+<h2 id="Oracle_Communications_Service_Gatekeeper">Oracle Communications Service Gatekeeper</h2><p>In this video, we are going to introduce the Telecom APIs available in the Oracle Communications sandbox: Messaging, Payment and Location. Developers will learn how to start to work with those APIs and how to add them to their own applications and hacks.</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/uUqd0d2f8uQ" frameborder="0" allowfullscreen></iframe>
+
+<p>Youtube link: <a href="https://www.youtube.com/watch?v=uUqd0d2f8uQ" target="_blank" rel="external">Telecom APIs with OCSG </a></p>
+<h2 id="Oracle_Communications_Converged_Application_Server">Oracle Communications Converged Application Server</h2><p>In this video, we are going to introduce Oracle Communications Converged Application Server and how to design and build applications able to manage HTTP and SIP protocols at the same time. We’ll review also the new SIP Servlet 2.0 specification and the JSR-359 recently approved. We’ll end the video reviewing a B2BUA application and learning to modify it to build more complex applications.</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/9IqHiAcNl4k" frameborder="0" allowfullscreen></iframe>
+
+<p>Youtube link: <a href="https://www.youtube.com/watch?v=9IqHiAcNl4k" target="_blank" rel="external">Developing SIP Applications with OCCAS</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Tomorrow I will be travelling to <a href="http://tadhack.com/2015/" target="_blank" rel="external">TADHack</a> in Lisbon and I am so exci]]>
+    </summary>
+    
+      <category term="Converged Application Server" scheme="http://www.serviceandnetworkevolution.com/tags/Converged-Application-Server/"/>
+    
+      <category term="OCCAS" scheme="http://www.serviceandnetworkevolution.com/tags/OCCAS/"/>
+    
+      <category term="OCSG" scheme="http://www.serviceandnetworkevolution.com/tags/OCSG/"/>
+    
+      <category term="OCWSC" scheme="http://www.serviceandnetworkevolution.com/tags/OCWSC/"/>
+    
+      <category term="Oracle Comms" scheme="http://www.serviceandnetworkevolution.com/tags/Oracle-Comms/"/>
+    
+      <category term="Service Delivery" scheme="http://www.serviceandnetworkevolution.com/tags/Service-Delivery/"/>
+    
+      <category term="Services Gatekeeper" scheme="http://www.serviceandnetworkevolution.com/tags/Services-Gatekeeper/"/>
+    
+      <category term="WebRTC Session Controller" scheme="http://www.serviceandnetworkevolution.com/tags/WebRTC-Session-Controller/"/>
+    
+      <category term="Technical" scheme="http://www.serviceandnetworkevolution.com/categories/Technical/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Summary of the last news in the Oracle Communications Service Delivery Platform]]></title>

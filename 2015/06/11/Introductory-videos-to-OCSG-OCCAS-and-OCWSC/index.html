@@ -3,20 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Access OCSG EDR JMS Topic with Talend Open Studio | Service and Network Evolution Blog</title>
+  <title>Introductory videos to OCSG, OCCAS and OCWSC | Service and Network Evolution Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="I’ve been using Talend Open Studio for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is r">
+  <meta name="description" content="Tomorrow I will be travelling to TADHack in Lisbon and I am so excited! It’s going to be great! As part of the initiatives we’ve done to promote the Oracle sandbox and help the developers, I’ve record">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Access OCSG EDR JMS Topic with Talend Open Studio">
-<meta property="og:url" content="http://www.serviceandnetworkevolution.com/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/index.html">
+<meta property="og:title" content="Introductory videos to OCSG, OCCAS and OCWSC">
+<meta property="og:url" content="http://www.serviceandnetworkevolution.com/2015/06/11/Introductory-videos-to-OCSG-OCCAS-and-OCWSC/index.html">
 <meta property="og:site_name" content="Service and Network Evolution Blog">
-<meta property="og:description" content="I’ve been using Talend Open Studio for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is r">
-<meta property="og:image" content="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png">
-<meta property="og:image" content="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png">
-<meta property="og:image" content="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png">
+<meta property="og:description" content="Tomorrow I will be travelling to TADHack in Lisbon and I am so excited! It’s going to be great! As part of the initiatives we’ve done to promote the Oracle sandbox and help the developers, I’ve record">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Access OCSG EDR JMS Topic with Talend Open Studio">
-<meta name="twitter:description" content="I’ve been using Talend Open Studio for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is r">
+<meta name="twitter:title" content="Introductory videos to OCSG, OCCAS and OCWSC">
+<meta name="twitter:description" content="Tomorrow I will be travelling to TADHack in Lisbon and I am so excited! It’s going to be great! As part of the initiatives we’ve done to promote the Oracle sandbox and help the developers, I’ve record">
   
     <link rel="alternative" href="/atom.xml" title="Service and Network Evolution Blog" type="application/atom+xml">
   
@@ -79,10 +76,10 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="blog-Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio" class="article article-type-blog" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Introductory-videos-to-OCSG-OCCAS-and-OCWSC" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/" class="article-date">
-  <time datetime="2015-02-13T21:00:00.000Z" itemprop="datePublished">2015-02-13</time>
+    <a href="/2015/06/11/Introductory-videos-to-OCSG-OCCAS-and-OCWSC/" class="article-date">
+  <time datetime="2015-06-11T20:00:00.000Z" itemprop="datePublished">2015-06-11</time>
 </a>
     
   <div class="article-category">
@@ -97,7 +94,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      Access OCSG EDR JMS Topic with Talend Open Studio
+      Introductory videos to OCSG, OCCAS and OCWSC
     </h1>
   
 
@@ -105,37 +102,27 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>I’ve been using <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14" target="_blank" rel="external">Talend Open Studio</a> for a long time. It’s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.</p>
-<p>In this tutorial, I am going to show how to use it Talend Open Studio to access the JMS Topic where OCSG shows all the runtime information: the Event Data Records (EDRs). This is the main place for debugging so it’s really important. The article is based in the offical documentation <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627" target="_blank" rel="external">Creating EDR Listeners</a> but adapted to TOS.</p>
-<h2 id="Pre-requisites">Pre-requisites</h2><p>You will need an OCSG 6 or 5.1 running and also the <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download" target="_blank" rel="external">TOS Data Integration</a> installed in your computer.</p>
-<h2 id="Talend_Open_Studio_development">Talend Open Studio development</h2><p>Drop a tJMSInput component in the canvas and double click over it.</p>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png" alt="tJMSInput component"></p>
-<p>Configure all the fields as you can see in the following picture:</p>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png" alt="tJMSInput fields"></p>
-<p>Some important notes:</p>
-<ul>
-<li>You have to import the library <em>wlthint3client.jar</em> before to use the component. You can find it in <em><ocsg installation="" folder="">/wlserver/server/lib/wlthint3client.jar</ocsg></em>. To import it, there are several ways, for instance, the tLibraryLoad component.  </li>
-<li>Change the <strong>Server URL</strong> to your environment configuration. It must be a Node, not an Admin. In this case it’s an standalone configuration with Admin and Node in the same Weblogic instance. </li>
-<li>Change the <strong>Message from</strong> to your environment configuration. If you don’t know it, go to the Console,in the Domain Structure, <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.  </li>
-</ul>
-<h2 id="Weblogic_configuration">Weblogic configuration</h2><p>There is a missing point, and it’s the key. In the Weblogic console: </p>
-<ol>
-<li>Go to the Domain Structure and Select <strong>Services -&gt; Messaging -&gt; JMS-Modules</strong>.</li>
-<li>Click on <strong>WLNGJMSResource -&gt; EdrTopic -&gt; Advanced</strong>.</li>
-<li>Find <strong>Create Destination Identifier</strong> and introduce <em>com.bea.wlcp.wlng.edr.EdrTopic</em> and Save.</li>
-<li>Reboot the Weblogic.</li>
-</ol>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png" alt="Weblogic JMS Configuration"></p>
-<p>This step is mandatory because of the tJMSInput component but it can be avoided if you are accessing the JMS Topic in another way.</p>
-<h2 id="The_end">The end</h2><p>That’s all. Click on Run in the Talend Open Studio and you should be subscribed to the Topic. Send an SMS from the PTE and you should start to generate EDRs. The next step would be create the Java classes to access the EDR information and start to work with it.</p>
+        <p>Tomorrow I will be travelling to <a href="http://tadhack.com/2015/" target="_blank" rel="external">TADHack</a> in Lisbon and I am so excited! It’s going to be great! As part of the initiatives we’ve done to promote <a href="http://tadhack.optaresolutions.com/" target="_blank" rel="external">the Oracle sandbox</a> and help the developers, I’ve recorded three videos to introduce the three Oracle SDP applications. Even if they are oriented to the TADHack, they are a good resource for anyone interested in the products.</p>
+<h2 id="Oracle_Communications_WebRTC_Session_Controller">Oracle Communications WebRTC Session Controller</h2><p>In this video, we are going to introduce Oracle Communications WebRTC Session Controller and how to use it to add audio, video and data communications to web and mobile applications. It provides an introduction to a sample application, a good starting point to develop more complex services. It ends explaining how to add a widget which allows developers to add Real-time communication in a very easy way.</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/pKjHRvGVlXQ" frameborder="0" allowfullscreen></iframe>
+
+<p>Youtube link: <a href="https://www.youtube.com/watch?v=pKjHRvGVlXQ" target="_blank" rel="external">Using WebRTC services with OCWSC </a></p>
+<h2 id="Oracle_Communications_Service_Gatekeeper">Oracle Communications Service Gatekeeper</h2><p>In this video, we are going to introduce the Telecom APIs available in the Oracle Communications sandbox: Messaging, Payment and Location. Developers will learn how to start to work with those APIs and how to add them to their own applications and hacks.</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/uUqd0d2f8uQ" frameborder="0" allowfullscreen></iframe>
+
+<p>Youtube link: <a href="https://www.youtube.com/watch?v=uUqd0d2f8uQ" target="_blank" rel="external">Telecom APIs with OCSG </a></p>
+<h2 id="Oracle_Communications_Converged_Application_Server">Oracle Communications Converged Application Server</h2><p>In this video, we are going to introduce Oracle Communications Converged Application Server and how to design and build applications able to manage HTTP and SIP protocols at the same time. We’ll review also the new SIP Servlet 2.0 specification and the JSR-359 recently approved. We’ll end the video reviewing a B2BUA application and learning to modify it to build more complex applications.</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/9IqHiAcNl4k" frameborder="0" allowfullscreen></iframe>
+
+<p>Youtube link: <a href="https://www.youtube.com/watch?v=9IqHiAcNl4k" target="_blank" rel="external">Developing SIP Applications with OCCAS</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.serviceandnetworkevolution.com/2015/02/13/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/" data-id="cias845f70030nme5fux1dbhp" class="article-share-link">Share</a>
+      <a data-url="http://www.serviceandnetworkevolution.com/2015/06/11/Introductory-videos-to-OCSG-OCCAS-and-OCWSC/" data-id="cias845ey002cnme58juoe8pc" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Weblogic/">Weblogic</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Converged-Application-Server/">Converged Application Server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCCAS/">OCCAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCSG/">OCSG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OCWSC/">OCWSC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle-Comms/">Oracle Comms</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Delivery/">Service Delivery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Services-Gatekeeper/">Services Gatekeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebRTC-Session-Controller/">WebRTC Session Controller</a></li></ul>
 
     </footer>
   </div>
@@ -143,19 +130,10 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
-    <a href="/2015/04/15/Oracle-s-demos-in-the-MWC2015-review/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Oracle&#39;s demos in the MWC2015 review
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/02/11/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/05/21/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Ramblings about OCCAS and the Oracle Communications roadmap</div>
+      <div class="article-nav-title">Summary of the last news in the Oracle Communications Service Delivery Platform</div>
     </a>
   
 </nav>
