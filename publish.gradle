@@ -10,6 +10,8 @@ buildscript {
   }
 }
 
+//TODO: it only works for github-pages :-(
+
 apply plugin: 'github-pages'
 
 githubPages {
