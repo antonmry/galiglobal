@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/asciidoctor.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
+    <link rel="shortcut icon" href="../../favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+   
+
+	
+		<!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../">GaliGlobal</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../archive.html">Archive</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
+                <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a></li>
+                <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
+              </ul>
+            <li><a href="../../about.html">About</a></li>
+            <li><a href="../../Contact-Subscribe.html">Subscribe</a></li>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">
+
+	
+	<div class="page-header">
+		<h1>Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 2</h1>
+	</div>
+
+	<p><em>30 August 2015</em></p>
+
+	<p><p>This is the continuation of how to install and test OCSG, you can find the part 1 <a href="/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html">here</a>.</p><h2>Platform Test Environment (PTE) Installation</h2>
+<ol>
+  <li><p>Login to <a href="https://edelivery.oracle.com/">Oracle Software Delivery Cloud</a>, choose <em>Oracle Communications</em> in <strong>Select a Product Pack</strong> and <em>Linux x86-64</em> and click on <strong>Go</strong>. Click on <em>Oracle Communications Services Gatekeeper 6.0</em>.</p></li>
+  <li><p>Download Oracle Communications Services Gatekeeper 6.0 Platform Test Environment, V73999-01.zip and copy it into the VM.</p></li>
+  <li><p>Unzip the file and execute the installer:</p></li>
+</ol>
+<pre><code class="sh">unzip V73999-01.zip
+java -jar ocsg_pte_generic.jar
+</code></pre>
+<ol>
+  <li><p>In the first window, accept the default Inventory Directory pressing <strong>OK</strong>.</p></li>
+  <li><p>The Welcome screen appears, press <strong>Next</strong>.</p></li>
+  <li><p>Introduce <em>/opt/ocsg6</em> in the Oracle Home field and press <strong>Next</strong>.</p></li>
+  <li><p>Let <strong>PTE Installation</strong> selected and press <strong>Next</strong>.</p></li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTE.png" alt="PTE Installation""/></p>
+<ol>
+  <li>Review the Installation Summary and press <strong>Install</strong>. It may take a while. Press <strong>Next</strong> when available and <strong>Finish</strong>.</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTEDone.png" alt="PTE Installation Done""/></p><h2>Start the PTE</h2>
+<ol>
+  <li>Open a new Terminal and execute the following commands.</li>
+</ol>
+<pre><code class="sh">cd /opt/ocsg6/ocsg_pte/
+./run.sh
+</code></pre>
+<ol>
+  <li>The PTE should appear:</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/PTE.png" alt="The PTE""/></p>
+<ol>
+  <li>Go to <strong>Tools -&gt; Variables Manager</strong> or press <strong>Ctrl+3</strong>.</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/VariablesManagerMenu.png" alt="Variables Manager Menu""/></p>
+<ol>
+  <li>Change the following fields and press <strong>OK</strong>:</li>
+</ol>
+<ul>
+  <li><strong>at.host:</strong> <em>ocsg</em></li>
+  <li><strong>nt.host:</strong> <em>ocsg</em></li>
+</ul><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/VariablesManager.png" alt="Variables Manager Screen""/></p>
+<ol>
+  <li>Click on <strong>Server</strong> and change the following fields:</li>
+</ol>
+<ul>
+  <li><strong>Hostname:</strong> <em>ocsg</em></li>
+  <li><strong>Port:</strong> <em>8001</em></li>
+  <li><strong>Username:</strong> <em>weblogic</em></li>
+  <li><strong>Password:</strong> <em>welcome1</em></li>
+</ul><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/ServerCredentials.png" alt="Server Credentials""/></p>
+<ol>
+  <li>Go to <strong>Tools -&gt; SLA Manager</strong> or press <strong>Ctrl+1</strong>.</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/SLAManagerMenu.png" alt="SLA Manager Menu""/></p>
+<ol>
+  <li>Select <strong>default_app_group</strong> and click on the pencil icon.</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/default_app_group.png" alt="Default App Group SLA""/></p>
+<ol>
+  <li>Click on the globe icon with a green arrow pointing up and press <strong>Local</strong>. The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/default_app_group_done.png" alt="Default App Group SLA Done""/></p>
+<ol>
+  <li><p>Select <strong>default_sp_group</strong> and click on the pencil icon. Click on the globe icon with a up arrow and press <strong>Local</strong>. The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</p></li>
+  <li><p>Go to <strong>Simulators -&gt; SMPP</strong> and click on <strong>Start</strong>. The button will change to <strong>Stop</strong>.</p></li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/SMPPSimulator.png" alt="SMPP Simulator""/></p><h2>Final test: send SMS</h2>
+<ol>
+  <li>In the PTE, go to <strong>Clients -&gt; Login</strong> and press <strong>Login</strong> (green arrow). The button should change to <strong>Logout</strong> (red square).</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/login.png" alt="Client Login""/></p>
+<ol>
+  <li>Go to <strong>Messaging -&gt; Short Messaging -&gt; Application-initiated</strong> and change the message to <em>Hello SaNE!</em>. Click on <strong>Send</strong> (green arrow).</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/sendSMS.png" alt="Send SMS""/></p>
+<ol>
+  <li>Go to the <strong>Map</strong>, click on the second button over the phone <strong>1234</strong> and choose <em>Read messages</em>. Here it is!!</li>
+</ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/SMS.png" alt="SMS Sent""/></p><h2>Conclusion</h2><p>Probably you have spent more than fifteen minutes to arrive here... but it's also true most of the actions are part of the configuration, not the installation. The process is straightforward and it can be easily explained. Even if you don't have advanced knowledge of Weblogic or Linux, it's possible to do it. So, as we can see in this article, OCSG is very easy to install now and it has a lot of features deployed out-of-the-box. Because it's a so extensive application supporting a huge number of business possibilities (Service API Exposure, Direct Carrier Billing, Policy Gateway, etc. ), a basic fresh installation is a very powerful way to focus in the functionality and forget problems with databases, OS and other technical questions and now we can have it in only 15 minutes!</p></p>
+
+	<hr />
+	
+		</div>
+		<div id="push"></div>
+    </div>
+    
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2015 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake v2.4.0</a></p>
+      </div>
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../js/jquery-1.11.1.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/prettify.js"></script>
+    
+  </body>
+</html>
