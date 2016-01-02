@@ -43,3 +43,4 @@ fabric.properties
 
 ## Java
 /build/
+/.gradle/

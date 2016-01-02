@@ -16,7 +16,7 @@ apply plugin: 'me.champeau.jbake'
 
 jbake {
    input = file('src/jbake')
-   output = file('build/jbake')
+   output = file('../antonmry.github.io_master')
    clearCache = true
    configuration['render.tag'] = 'true'
 }
