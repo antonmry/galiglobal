@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>JBake</title>
+    <title>GaliGlobal</title>
     <link>http://www.galiglobal.com</link>
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
-    <description>JBake Bootstrap Template</description>
-    <language>en-gb</language>
-    <pubDate>Fri, 1 Jan 2016 23:13:22 +0100</pubDate>
-    <lastBuildDate>Fri, 1 Jan 2016 23:13:22 +0100</lastBuildDate>
+    <description>Antón R. Yuste Blog</description>
+    <language>en-us</language>
+    <pubDate>Sat, 2 Jan 2016 19:12:15 +0100</pubDate>
+    <lastBuildDate>Sat, 2 Jan 2016 19:12:15 +0100</lastBuildDate>
 
     
     <item>
