@@ -49,7 +49,7 @@
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../../archive.html">Archive</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
                 <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a></li>
@@ -71,7 +71,7 @@
 
 	<p><em>30 April 2015</em></p>
 
-	<p><p>Oracle Communications <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html">Services Gatekeeper 6</a>, the industry-leading API exposure platform, is Generally Available and with many new and interesting features. One of them is the simplified configuration and deployment with installation in 15 minutes, based on lightweight single tier deployment option. I really like the idea, it's going to help with Proofs of Concept and Training. So in this article, I am going to review this feature: a fight against the clock to know how many time an OCSG student needs to deploy OCSG. </p><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/StandaloneOCSG6.png" alt="Services Gatekeeper Standalone System""/></p><p>Disclaimer: some steps shouldn't be executed in production environments.</p><h2>Preparations Overview</h2><p>As good practice, the first step is always check the <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50756/ins_sysreq.htm#SGINS122">Supported Platform Matrix</a>. For this installation, we have the following pre-requisites:</p>
+	<p><p>Oracle Communications <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html">Services Gatekeeper 6</a>, the industry-leading API exposure platform, is Generally Available and with many new and interesting features. One of them is the simplified configuration and deployment with installation in 15 minutes, based on lightweight single tier deployment option. I really like the idea, it&rsquo;s going to help with Proofs of Concept and Training. So in this article, I am going to review this feature: a fight against the clock to know how many time an OCSG student needs to deploy OCSG. </p><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/StandaloneOCSG6.png" alt="Services Gatekeeper Standalone System""/></p><p>Disclaimer: some steps shouldn&rsquo;t be executed in production environments.</p><h2>Preparations Overview</h2><p>As good practice, the first step is always check the <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50756/ins_sysreq.htm#SGINS122">Supported Platform Matrix</a>. For this installation, we have the following pre-requisites:</p>
 <ol>
   <li>Oracle Linux 6: in this case, it is version 6.6 x64, you can download it from <a href="https://edelivery.oracle.com/linux">Oracle Software Delivery Cloud</a>. It may run hosted in an <a href="http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html">Oracle Virtualbox environment</a>.</li>
   <li>JDK 1.7 installed: in this case, Java SE Development Kit 7u75 for Linux x64 (tgz). You can download it from <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Oracle Java SE Development Kit 7 Downloads</a>.</li>
@@ -105,10 +105,10 @@ java -jar ocsg_generic.jar
 </ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/AllFeatures.png" alt="Custom Installation""/></p>
 <ol>
   <li><p>The Prerequisite Check should be OK. Press <strong>Next</strong>.</p></li>
-  <li><p>Note the IP in the first field. Introduce the password for the domain user and for the Partner and API Management Portal user. It's <em>welcome1</em> in my case but you can use something different. Let the default value in others fields and press <strong>Next</strong>.</p></li>
+  <li><p>Note the IP in the first field. Introduce the password for the domain user and for the Partner and API Management Portal user. It&rsquo;s <em>welcome1</em> in my case but you can use something different. Let the default value in others fields and press <strong>Next</strong>.</p></li>
 </ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Credentials.png" alt="Credentials""/></p>
 <ol>
-  <li><p>Introduce the IP in /etc/hosts with <strong>ocsg</strong> as reference. If you ping <strong>ocsg</strong>, you should receive a response from the IP you've noted in the previous step.</p></li>
+  <li><p>Introduce the IP in /etc/hosts with <strong>ocsg</strong> as reference. If you ping <strong>ocsg</strong>, you should receive a response from the IP you&rsquo;ve noted in the previous step.</p></li>
   <li><p>Let <em>Java DB</em> selected and press <strong>Next</strong>.</p></li>
 </ol><p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/Javadb.png" alt="JavaDB""/></p>
 <ol>
@@ -195,7 +195,7 @@ java -jar ocsg_generic.jar
     
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.3.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.4.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
     
