@@ -1,0 +1,19 @@
+language: java
+jdk: oraclejdk8
+
+branches:
+  only:
+  - master
+
+env:
+  global:
+  - secure: "wPU59obFzhr+E19SrD1fnK4UZj7WP9UaMI3dyF5ptxWctgum5P5KTVjM3p7TQvKABbMrd3Xs9bYqiOvhsJ3O9tb3JR6Q59M+HeEYXW6Kg5kYP8WF6eWzakPCPyXjGK78Cd082naAHo15xq1Nft4DdcnH5p7S8TbMKLKiSHNeDoe7elPGMXUYHVgBhd/U+WKhwzcaRHz0LHEbivFiHEdLv9hzgekex4EGqqbsUDg+EaLeS368nzW9GPbRCLDG2WygYb4HBqNwY/n45oAYdVN0WdgkX+JVOit9BrrMp8/T1Tz/bX5WcuglSOmZYNvtEtQ59E+BVROm+EStgo3ojAKMSJdNLwJ5MvomHM8rCSwHxWy/HzIGOuX0tnTjAdL8OAxVyU5l5MJOCVeA1sDXosk8K0KI2QZtfU7rVMbU6Ck10JGuwpRjf77QtnkBAJnGf7ZbTGFwrccSo6qFoEx93p64HiWkFOexEBpAufLg5SLiedtofijWW+tAOzqYP2/J2gWGcgRNa80WquvoMlG6Vdff8iJjqhB7vbTE3bPPzV4aj4SYo/Q1dcKnwXrO9zkAoWA3mv/mwavL2PbLYLt/V4WrlyH+RAOAIuTrQfjI9mBR0AVY86s30fpCFgEtyia4jvuCOIBU4MKMIO/lai6AmJH/3tbuFCfZtnEagskxj6q4oxU="
+
+install:
+  - export TRAVIS_COMMIT_DESCRIPTION=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
+
+script:
+  - gradle jbakeBuild
+
+after_script:
+  - gradle publish

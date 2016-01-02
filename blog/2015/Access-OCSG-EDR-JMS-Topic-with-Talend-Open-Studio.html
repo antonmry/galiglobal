@@ -49,7 +49,7 @@
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../../archive.html">Archive</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
                 <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a></li>
@@ -71,18 +71,18 @@
 
 	<p><em>13 February 2015</em></p>
 
-	<p><p>I've been using <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14">Talend Open Studio</a> for a long time. It's an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.</p><p>In this tutorial, I am going to show how to use it Talend Open Studio to access the JMS Topic where OCSG shows all the runtime information: the Event Data Records (EDRs). This is the main place for debugging so it's really important. The article is based in the offical documentation <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627">Creating EDR Listeners</a> but adapted to TOS.</p><h2>Pre-requisites</h2><p>You will need an OCSG 6 or 5.1 running and also the <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download">TOS Data Integration</a> installed in your computer.</p><h2>Talend Open Studio development</h2><p>Drop a tJMSInput component in the canvas and double click over it.</p><p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png" alt="tJMSInput component""/></p><p>Configure all the fields as you can see in the following picture:</p><p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png" alt="tJMSInput fields""/></p><p>Some important notes:</p>
+	<p><p>I&rsquo;ve been using <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14">Talend Open Studio</a> for a long time. It&rsquo;s an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.</p><p>In this tutorial, I am going to show how to use it Talend Open Studio to access the JMS Topic where OCSG shows all the runtime information: the Event Data Records (EDRs). This is the main place for debugging so it&rsquo;s really important. The article is based in the offical documentation <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627">Creating EDR Listeners</a> but adapted to TOS.</p><h2>Pre-requisites</h2><p>You will need an OCSG 6 or 5.1 running and also the <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download">TOS Data Integration</a> installed in your computer.</p><h2>Talend Open Studio development</h2><p>Drop a tJMSInput component in the canvas and double click over it.</p><p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png" alt="tJMSInput component""/></p><p>Configure all the fields as you can see in the following picture:</p><p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png" alt="tJMSInput fields""/></p><p>Some important notes:</p>
 <ul>
   <li>You have to import the library <em>wlthint3client.jar</em> before to use the component. You can find it in <em><OCSG Installation folder>/wlserver/server/lib/wlthint3client.jar</em>. To import it, there are several ways, for instance, the tLibraryLoad component.</li>
-  <li>Change the <strong>Server URL</strong> to your environment configuration. It must be a Node, not an Admin. In this case it's an standalone configuration with Admin and Node in the same Weblogic instance.</li>
-  <li>Change the <strong>Message from</strong> to your environment configuration. If you don't know it, go to the Console,in the Domain Structure, <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.</li>
-</ul><h2>Weblogic configuration</h2><p>There is a missing point, and it's the key. In the Weblogic console: </p>
+  <li>Change the <strong>Server URL</strong> to your environment configuration. It must be a Node, not an Admin. In this case it&rsquo;s an standalone configuration with Admin and Node in the same Weblogic instance.</li>
+  <li>Change the <strong>Message from</strong> to your environment configuration. If you don&rsquo;t know it, go to the Console,in the Domain Structure, <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.</li>
+</ul><h2>Weblogic configuration</h2><p>There is a missing point, and it&rsquo;s the key. In the Weblogic console: </p>
 <ol>
   <li>Go to the Domain Structure and Select <strong>Services -&gt; Messaging -&gt; JMS-Modules</strong>.</li>
   <li>Click on <strong>WLNGJMSResource -&gt; EdrTopic -&gt; Advanced</strong>.</li>
   <li>Find <strong>Create Destination Identifier</strong> and introduce <em>com.bea.wlcp.wlng.edr.EdrTopic</em> and Save.</li>
   <li>Reboot the Weblogic.</li>
-</ol><p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png" alt="Weblogic JMS Configuration""/></p><p>This step is mandatory because of the tJMSInput component but it can be avoided if you are accessing the JMS Topic in another way.</p><h2>The end</h2><p>That's all. Click on Run in the Talend Open Studio and you should be subscribed to the Topic. Send an SMS from the PTE and you should start to generate EDRs. The next step would be create the Java classes to access the EDR information and start to work with it.</p></p>
+</ol><p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png" alt="Weblogic JMS Configuration""/></p><p>This step is mandatory because of the tJMSInput component but it can be avoided if you are accessing the JMS Topic in another way.</p><h2>The end</h2><p>That&rsquo;s all. Click on Run in the Talend Open Studio and you should be subscribed to the Topic. Send an SMS from the PTE and you should start to generate EDRs. The next step would be create the Java classes to access the EDR information and start to work with it.</p></p>
 
 	<hr />
 	
@@ -92,7 +92,7 @@
     
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.3.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.4.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
     
