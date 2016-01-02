@@ -1,13 +1,9 @@
-layout: blog
-title: Orange Hackathon 2013
-date: 2013-06-26 22:00:00
-categories:
-- Events
-tags:
-- WebRTC
-- Service Delivery
-- Oracle
----
+title=Orange Hackathon 2013
+date=2013-06-26
+type=post
+tags=WebRTC, Service Delivery, Oracle
+status=draft
+~~~~~~
 
 https://github.com/antonmry/OrangeHackathon2013-Android
 
