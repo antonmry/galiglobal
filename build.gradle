@@ -17,12 +17,12 @@ apply plugin: 'me.champeau.jbake'
 
 jbake {
    input = file('src/jbake')
-   output = file('../antonmry.github.io_master')
+   output = file('build/jbake')
    clearCache = true
    configuration['render.tag'] = 'true'
 }
 
-ext.repo = org.ajoberstar.grgit.Grgit.open(project.file('../antonmry.github.io_master'))
+ext.repo = org.ajoberstar.grgit.Grgit.open(project.file('build/jbake'))
 
 task publish << {
     repo.add(patterns: ['.'])
