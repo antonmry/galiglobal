@@ -15,4 +15,4 @@ Another year is gone and as you can see in the look of the blog, I have a lot of
 * **Don't use the mouse**: yes, I'm a vim fan and a linux user. My goal is just stop to use the mouse for all the task I do. I feel quite confident with Intellij Idea and the [IdeaVim](https://plugins.jetbrains.com/plugin/164?pr=idea) plugin, [Firefox vimperator](https://addons.mozilla.org/en-US/firefox/addon/vimperator/) for browsing and the Linux console for most of the tasks. My main problems are with the email, calendar and some webs as Waffle and Feedly.... 
 * **A WebRTC pet project**: that's something I have been looking for some time without luck. I would like to build something using Java/Groovy and WebRTC, working with others in something not too complex to start with / greenfield. Well, I hope 2016 is the year for this.
 
-That's all! **Happy and prosperous 2016!!**
+That's all! **Happy and prosperous 2016!!**..

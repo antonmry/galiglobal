@@ -9,6 +9,7 @@ buildscript {
       classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
       classpath 'org.codehaus.groovy:groovy-all:2.3.0'
       classpath 'org.pegdown:pegdown:1.4.2'
+      classpath 'org.ajoberstar:grgit:1.1.0'
   }
 }
 
@@ -21,7 +22,10 @@ jbake {
    configuration['render.tag'] = 'true'
 }
 
-task publish(type: GradleBuild) {
-    buildFile = 'publish.gradle'
-    tasks = ['publishGhPages']
+ext.repo = org.ajoberstar.grgit.Grgit.open(project.file('../antonmry.github.io_master'))
+
+task publish << {
+    repo.add(patterns: ['.'])
+    repo.commit(message: 'Committing my code.', amend: true)
+    repo.push(force: true);
 }

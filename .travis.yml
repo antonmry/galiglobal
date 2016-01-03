@@ -22,8 +22,8 @@ script:
 #before_deploy:
 #  - true
 
-#deploy:
-#  - true
+deploy:
+  - gradle publish
 
 #after_deploy:
 #  - true
