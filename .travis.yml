@@ -1,15 +1,34 @@
 language: java
-script: gradle jbake
-jdk:
-- openjdk8
-matrix:
-  include:
-  - jdk: oraclejdk8
-    script: gradle publish
+jdk: openjdk8
 
 branches:
   only:
   - source
+
 notifications:
   email:
   - anton@galiglobal.com
+
+before_install:
+  - true
+
+install:
+  - true
+
+before script:
+  - true
+
+script:
+  - gradle jbake
+
+before_deploy:
+  - true
+
+deploy:
+  - true
+
+after_deploy:
+  - true
+
+after_script:
+  - true
