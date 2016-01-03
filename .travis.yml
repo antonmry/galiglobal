@@ -15,9 +15,6 @@ before_install:
 install:
   - true
 
-before script:
-  - true
-
 script:
   - gradle jbake
 
