@@ -11,14 +11,13 @@ branches:
 
 # before_install:
 
+# TODO: move to the gradle script
 install:
   - git clone --depth=50 --branch=master https://github.com/antonmry/antonmry.github.io.git build/jbake
 
 # before script:
 
 script:
-  - pwd
-  - ls
   - gradle jbake
 
 # before_deploy:
