@@ -19,11 +19,11 @@ install:
 script:
   - gradle jbake
 
-#before_deploy:
-#  - true
+before_deploy:
+  - gradle publish
 
 deploy:
-  - gradle publish
+  - true
 
 #after_deploy:
 #  - true
