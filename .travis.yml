@@ -17,6 +17,8 @@ install:
 # before script:
 
 script:
+  - pwd
+  - ls
   - gradle jbake
 
 # before_deploy:
