@@ -5,27 +5,28 @@ branches:
   only:
   - source
 
-notifications:
-  email:
-  - anton@galiglobal.com
+#notifications:
+#  email:
+#  - anton@galiglobal.com
 
-before_install:
-  - true
+# before_install:
 
 install:
   - true
 
+# before script:
+
 script:
   - gradle jbake
 
-before_deploy:
-  - true
+#before_deploy:
+#  - true
 
-deploy:
-  - true
+#deploy:
+#  - true
 
-after_deploy:
-  - true
+#after_deploy:
+#  - true
 
-after_script:
-  - true
+#after_script:
+#  - true
