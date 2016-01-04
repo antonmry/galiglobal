@@ -1,7 +1,7 @@
 title=Orange Hackathon 2013
 date=2013-06-26
 type=post
-tags=WebRTC, Service Delivery, Oracle
+tags=WebRTC,ServiceDelivery,Oracle
 status=draft
 ~~~~~~
 

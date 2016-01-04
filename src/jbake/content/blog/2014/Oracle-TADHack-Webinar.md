@@ -1,7 +1,7 @@
 title=Oracle TADHack Webinar
 date=2014-05-15
 type=post
-tags=WebRTC, Service Delivery, TADHack, Oracle
+tags=WebRTC,ServiceDelivery,TADHack,Oracle
 status=published
 ~~~~~~
 

@@ -1,7 +1,7 @@
 title=Access OCSG EDR JMS Topic with Talend Open Studio
 date=2015-02-13
 type=post
-tags=OCSG, Weblogic, Services Gatekeeper, Java
+tags=OCSG,Weblogic,ServicesGatekeeper,Java
 status=published
 ~~~~~~
 

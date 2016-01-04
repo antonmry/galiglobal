@@ -1,7 +1,7 @@
 title=SpringIO 2015: a great event for a great community
 date=2015-05-14
 type=post
-tags=WebRTC, Service Delivery, SpringIO, Groovy
+tags=WebRTC,ServiceDelivery,SpringIO,Groovy
 status=published
 ~~~~~~
 

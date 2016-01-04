@@ -1,7 +1,7 @@
 title=A look back to Geecon 2015
 date=2015-06-30
 type=post
-tags=WebRTC, Service Delivery, Geecon, Oracle Comms
+tags=WebRTC,ServiceDelivery,Geecon,OracleComms
 status=published
 ~~~~~~
 

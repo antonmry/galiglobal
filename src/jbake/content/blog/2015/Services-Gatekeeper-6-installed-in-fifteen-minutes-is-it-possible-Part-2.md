@@ -1,7 +1,7 @@
 title=Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 2
 date=2015-08-30
 type=post
-tags=OCSG, Services Gatekeeper, Service Delivery, Oracle
+tags=OCSG,ServicesGatekeeper,ServiceDelivery,Oracle
 status=published
 ~~~~~~
 

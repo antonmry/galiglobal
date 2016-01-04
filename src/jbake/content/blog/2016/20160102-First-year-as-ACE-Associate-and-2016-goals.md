@@ -1,7 +1,7 @@
 title=First year as ACE Associate and 2016 goals
 date=2016-01-02
 type=post
-tags=galiglobal, ACE, Oracle Comms, Optare Solutions, 2015, 2016
+tags=OracleACE,OracleComms,OptareSolutions,DevOps
 status=published
 ~~~~~~
 

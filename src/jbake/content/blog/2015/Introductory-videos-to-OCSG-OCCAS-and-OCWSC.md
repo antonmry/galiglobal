@@ -1,7 +1,7 @@
 title=Introductory videos to OCSG, OCCAS and OCWSC
 date=2015-06-11
 type=post
-tags=OCSG, Services Gatekeeper, Service Delivery, Oracle Comms, OCCAS, Converged Application Server, OCWSC, WebRTC Session Controller
+tags=OCSG,ServicesGatekeeper,ServiceDelivery,OracleComms,OCCAS,ConvergedApplicationServer,OCWSC,WebRTCSessionController
 status=published
 ~~~~~~
 

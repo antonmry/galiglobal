@@ -1,7 +1,7 @@
 title=OCSG 6.0v1 generally available: new features introduction
 date=2015-01-23
 type=post
-tags=OCSG, Oracle Comms, Services Gatekeeper
+tags=OCSG,OracleComms,ServicesGatekeeper
 status=published
 ~~~~~~
 

@@ -1,7 +1,7 @@
-title= Introduction to OCSG SDK
+title=Introduction to OCSG SDK
 date=2014-05-26
 type=post
-tags=OCSG, Services Gatekeeper, Service Delivery, Oracle
+tags=OCSG,ServicesGatekeeper,ServiceDelivery,Oracle
 status=published
 ~~~~~~
 

@@ -1,7 +1,7 @@
 title=Summary of the last news in the Oracle Communications Service Delivery Platform
 date=2015-05-21
 type=post
-tags=OCSG, OCCAS, OCWSC, OCECAS, Oracle Comms, Services Gatekeeper, Service Delivery, Converged Application Server, WebRTC Session Controller, Evolved Communications Server
+tags=OCSG,OCCAS,OCWSC,OCECAS,OracleComms,ServicesGatekeeper,ServiceDelivery,ConvergedApplicationServer,WebRTCSessionController,EvolvedCommunicationsServer
 status=published
 ~~~~~~
 

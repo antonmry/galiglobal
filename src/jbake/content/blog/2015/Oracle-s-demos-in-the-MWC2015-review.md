@@ -1,7 +1,7 @@
 title=Oracle's demos in the MWC2015 review
 date=2015-04-15
 type=post
-tags=WebRTC, Oracle, OCCAS, Oracle Comms, NFV
+tags=WebRTC,Oracle,OCCAS,OracleComms,NFV
 status=published
 ~~~~~~
 

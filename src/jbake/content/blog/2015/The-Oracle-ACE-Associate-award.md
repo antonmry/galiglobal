@@ -1,7 +1,7 @@
 title=The Oracle ACE Associate award
 date=2015-06-16
 type=post
-tags=ACE, Oracle Comms, Optare Solutions
+tags=OracleACE,OracleComms,OptareSolutions
 status=published
 ~~~~~~
 

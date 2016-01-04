@@ -1,7 +1,7 @@
 title=TMCnet Newsroom Interview with Anton R. Yuste
 date=2015-06-21
 type=post
-tags=WebRTC, Service Delivery, Optare Solutions, Oracle Comms
+tags=WebRTC,ServiceDelivery,OptareSolutions,OracleComms
 status=published
 ~~~~~~
 

@@ -1,7 +1,7 @@
 title=Time to Demo: A prepaid WebRTC Service
 date=2013-09-16
 type=post
-tags=WebRTC, Service Delivery, Oracle
+tags=WebRTC,ServiceDelivery,Oracle
 status=draft
 ~~~~~~
 

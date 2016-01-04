@@ -1,7 +1,7 @@
 title=WebRTC as key part of Service Exposure
 date=2014-10-01
 type=post
-tags=webRTC, Service Delivery, Oracle Comms
+tags=WebRTC,ServiceDelivery,OracleComms
 status=published
 ~~~~~~
 

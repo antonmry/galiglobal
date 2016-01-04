@@ -1,7 +1,7 @@
 title=We are TADHack 2015 winners :-)
 date=2015-07-31
 type=post
-tags=WebRTC, Service Delivery, TADHack, Oracle
+tags=WebRTC,ServiceDelivery,TADHack,Oracle
 status=published
 ~~~~~~
 

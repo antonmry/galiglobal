@@ -1,7 +1,7 @@
 title=Accessing Weblogic Runtime Information with WLST
 date=2015-01-19
 type=post
-tags=OCSG, Weblogic, Services Gatekeeper, Java
+tags=OCSG,Weblogic,ServicesGatekeeper,Java
 status=published
 ~~~~~~
 

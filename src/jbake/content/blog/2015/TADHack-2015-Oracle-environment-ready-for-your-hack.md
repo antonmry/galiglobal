@@ -1,7 +1,7 @@
 title=TADHack 2015: Oracle environment ready for your hack
 date=2015-04-23
 type=post
-tags=WebRTC, Service Delivery, TADHack, Oracle, SIP
+tags=WebRTC,Service Delivery,TADHack,Oracle,SIP
 status=published
 ~~~~~~
 
