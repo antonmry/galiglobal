@@ -28,6 +28,6 @@ ext.repo = org.ajoberstar.grgit.Grgit.open(
 
 task publish << {
     repo.add(patterns: ['.'])
-    repo.commit(message: 'Committing my code.', amend: true)
+    repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
     repo.push(force: true);
 }
