@@ -1,4 +1,4 @@
-﻿title=Ramblings about OCCAS and the Oracle Communications roadmap
+title=Ramblings about OCCAS and the Oracle Communications roadmap
 date=2015-02-11
 type=post
 tags=OCCAS, Oracle Comms, NFV
