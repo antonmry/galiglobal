@@ -11,9 +11,10 @@ env:
 
 # before_install:
 
-# TODO: move to the gradle script
+# TODO: move those steps to the gradle script
 install:
   - git clone --depth=50 --branch=master https://github.com/antonmry/antonmry.github.io.git build/jbake
+  - export TRAVIS_COMMIT_DESCRIPTION=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
 
 # before script:
 
@@ -27,8 +28,6 @@ script:
 
 #after_deploy:
 #  - true
-
-#TODO: specify the commit message using variable TRAVIS_COMMIT_DESCRIPTION
 
 after_script:
 - gradle publish

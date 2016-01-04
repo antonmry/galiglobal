@@ -27,8 +27,7 @@ ext.repo = org.ajoberstar.grgit.Grgit.open(
         new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
 
 task publish << {
-    println "testing"
-    println "Variable "+ System.getenv('TRAVIS_COMMIT_DESCRIPTION')
+    println "Commit message: "+ System.getenv('TRAVIS_COMMIT_DESCRIPTION')
     repo.add(patterns: ['.'])
     repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
     repo.push(force: true);
