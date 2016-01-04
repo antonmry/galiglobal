@@ -15,7 +15,7 @@
             <li><a href="<%if (content.rootpath) {%>${content.rootpath}<% } else { %><% }%>index.html">Home</a></li>
             <li><a href="<%if (content.rootpath) {%>${content.rootpath}<% } else { %><% }%>archive.html">Archive</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
                 <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a></li>
