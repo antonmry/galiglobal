@@ -1,34 +1,41 @@
 buildscript {
   repositories {
       mavenLocal()
-      mavenCentral()   
-      jcenter()
+      mavenCentral()
+      maven { url 'http://dl.bintray.com/antonmry/maven' }
+      //jcenter()
   }
 
   dependencies { 
-      classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
-      classpath 'org.codehaus.groovy:groovy-all:2.3.0'
-      classpath 'org.pegdown:pegdown:1.4.2'
+      classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3'
       classpath 'org.ajoberstar:grgit:1.1.0'
   }
 }
 
 apply plugin: 'me.champeau.jbake'
+apply plugin: 'idea'
 
 jbake {
-   input = file('src/jbake')
-   output = file('build/jbake')
-   clearCache = true
-   configuration['render.tag'] = 'true'
+    srcDirName  = 'src/jbake'
+    destDirName = 'jbake'
+    clearCache = true
+    configuration['render.tag'] = 'true'
 }
 
-ext.repo = org.ajoberstar.grgit.Grgit.open(
-        project.file('build/jbake'),
-        new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
+jbakeBuild.doFirst {
+    if (!project.file('build/jbake').exists()) {
+        ext.repo = org.ajoberstar.grgit.Grgit.clone(
+                dir: 'build/jbake',
+                uri: 'https://github.com/antonmry/antonmry.github.io.git')
+    }
+}
 
 task publish << {
-    println "Commit message: "+ System.getenv('TRAVIS_COMMIT_DESCRIPTION')
+    ext.repo = org.ajoberstar.grgit.Grgit.open(
+                project.file('build/jbake'),
+                new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
     repo.add(patterns: ['.'])
     repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
     repo.push(force: true);
 }
+
