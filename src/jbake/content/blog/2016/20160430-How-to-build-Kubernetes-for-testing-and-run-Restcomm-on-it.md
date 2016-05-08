@@ -1,7 +1,7 @@
 title=How to build Kubernetes for testing and run Restcomm on it
 date=2016-04-30
 type=post
-tags=Kubernetes, Go, Restcomm
+tags=Kubernetes, Go, RestComm
 status=published
 ~~~~~~
 
