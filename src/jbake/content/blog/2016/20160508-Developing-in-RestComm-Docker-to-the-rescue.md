@@ -73,6 +73,8 @@ tar -cvf /tmp/deployments.tar *
 exit
 ```
 
+REPLACE_WITH_READ_MORE
+
 We leave the container and extract the deployment folder in your system:
 
 ```sh

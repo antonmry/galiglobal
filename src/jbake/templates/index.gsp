@@ -41,11 +41,13 @@
                         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                         <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/${post.uri}"></div>
 
-                        <%if (post.body.length() > 300000000000000) {%>
+                        <%indexBody = post.body.indexOf("REPLACE_WITH_READ_MORE")
+                          if ( indexBody > 0) {%>
+
                         <div itemprop="blogPost">
-                            <p>${post.body.take(2500)}...</p>
+                            <p>${post.body.substring(0, indexBody)}</p>
+                            <p><a itemprop="readMore" href="${post.uri}">Read more</a></p>
                         </div>
-                        <p><a itemprop="readMore" href="${post.uri}">Read more</a></p>
                         <%}else{%>
                         <div itemprop="blogPost">
                             <p>${post.body}</p>
