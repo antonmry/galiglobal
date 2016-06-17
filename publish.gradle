@@ -1,26 +1,15 @@
 buildscript {
   repositories {
       mavenLocal()
-      mavenCentral()   
+      mavenCentral()
       jcenter()
   }
 
-  dependencies { 
-    classpath 'org.ajoberstar:gradle-git:0.6.3' 
+  dependencies {
+    classpath 'org.ajoberstar:gradle-git:0.6.3'
   }
 }
 
 //TODO: it only works for github-pages :-(
-
-apply plugin: 'github-pages'
-
-githubPages {
-  repoUri = 'git@github.com:antonmry/antonmry.github.io.git'
-  pages {
-     from(file('build/jbake')) {
-     	into '.'
-     }
-  }
-}
 
 

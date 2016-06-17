@@ -2,6 +2,7 @@ buildscript {
   repositories {
       mavenLocal()
       mavenCentral()
+      maven { url 'https://plugins.gradle.org/m2/' }
       maven { url 'http://dl.bintray.com/antonmry/maven' }
       //jcenter()
   }
@@ -9,11 +10,13 @@ buildscript {
   dependencies {
       classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3'
       classpath 'org.ajoberstar:grgit:1.1.0'
+      classpath "org.ajoberstar:gradle-git:1.5.0"
   }
 }
 
 apply plugin: 'me.champeau.jbake'
 apply plugin: 'idea'
+apply plugin: "org.ajoberstar.github-pages"
 
 jbake {
     srcDirName  = 'src/jbake'
@@ -22,6 +25,17 @@ jbake {
     configuration['render.tag'] = 'true'
 }
 
+// jbake in master, web published in gh-pages
+githubPages {
+    repoUri = 'git@github.com:antonmry/galiglobal.git'
+    pages {
+        from(file('build/jbake')) {
+            into '.'
+        }
+    }
+}
+
+// jbake in source, web published in master
 jbakeBuild.doFirst {
     if (!project.file('build/jbake').exists()) {
         ext.repo = org.ajoberstar.grgit.Grgit.clone(
@@ -30,13 +44,12 @@ jbakeBuild.doFirst {
     }
 }
 
+
 task publish << {
     ext.repo = org.ajoberstar.grgit.Grgit.open(
                 project.file('build/jbake'),
                 new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
-    repo.branch.change(name: 'master', startPoint: 'origin/gh-pages')
     //repo.add(patterns: ['.'])
     //repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
     //repo.push(force: true);
 }
-
