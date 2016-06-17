@@ -6,7 +6,7 @@ buildscript {
       //jcenter()
   }
 
-  dependencies { 
+  dependencies {
       classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3'
       classpath 'org.ajoberstar:grgit:1.1.0'
   }
@@ -26,7 +26,7 @@ jbakeBuild.doFirst {
     if (!project.file('build/jbake').exists()) {
         ext.repo = org.ajoberstar.grgit.Grgit.clone(
                 dir: 'build/jbake',
-                uri: 'https://github.com/antonmry/antonmry.github.io.git')
+                uri: 'https://github.com/antonmry/galiglobal.git')
     }
 }
 
@@ -34,6 +34,7 @@ task publish << {
     ext.repo = org.ajoberstar.grgit.Grgit.open(
                 project.file('build/jbake'),
                 new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
+    repo.branch.change(name: 'master', startPoint: 'origin/gh-pages')
     repo.add(patterns: ['.'])
     repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
     repo.push(force: true);

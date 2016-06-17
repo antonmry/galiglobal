@@ -1,11 +1,11 @@
 # IntelliJ Idea
 
 *.iml
-/.idea/
+.idea
 *.ipr
 *.iws
 
 ## Java
-/build/
-/.gradle/
-/jbake-gradle-plugin/
+build
+.gradle
+jbake-gradle-plugin
