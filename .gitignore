@@ -1,0 +1,11 @@
+# IntelliJ Idea
+
+*.iml
+.idea
+*.ipr
+*.iws
+
+## Java
+build
+.gradle
+jbake-gradle-plugin
