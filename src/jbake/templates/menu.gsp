@@ -22,7 +22,6 @@
                 <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
               </ul>
             <li><a href="<%if (content.rootpath) {%>${content.rootpath}<% } else { %><% }%>about.html">About</a></li>
-            <li><a href="<%if (content.rootpath) {%>${content.rootpath}<% } else { %><% }%>Contact-Subscribe.html">Subscribe</a></li>
             </li>
           </ul>
         </div><!--/.nav-collapse -->

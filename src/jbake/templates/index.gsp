@@ -65,12 +65,11 @@
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
                 <h4>Antón R. Yuste</h4>
-                <p>Passionate software engineer who specializes in the telecom domain</p>
+                <p>I am a passionate Software Development Manager who specializes in the telecom domain. My professional interests include new technologies in web and telecom products, team workflow management and DevOps practices. </p>
             </div>
 
             <div class="sidebar-module">
-                <a class="twitter-timeline"  href="https://twitter.com/antonmry" data-widget-id="684045213271199746">Tweets by @antonmry</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            <img src="images/duke.png">
             </div>
 
             <div class="sidebar-module">

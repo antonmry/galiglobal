@@ -5,16 +5,7 @@ tags=galiglobal
 status=published
 ~~~~~~
 
-I am a passionate software engineer who specializes in the telecom business domain. I'm an [Oracle ACE Associate](https://apex.oracle.com/pls/apex/f?p=19297:4:::NO:4:P4_ID:12240), Certified Implementation Specialist and a fan of Agile. I work as [Software Development Manager](http://bit.ly/antonmry-linkedin) with [Optare Solutions](http://www.optaresolutions.com). My professional interests include new technologies in web and telecom application development, design and integration patterns and DevOps practices.
-
-![Antón R. Yuste](/images/About-me/chimenea.png)
-
-My focus is in the following areas:
-
-* Control and monetize resources with signaling, policy, and subscriber data management solutions. 
-* Drive IP evolution with tools for service consolidation and asset exposure.
-* Seamlessly connect fixed and mobile users
-* Enable rich multimedia customer interactions and automate business processes for significant increases in productivity.
+I am a passionate software development manager who specializes in the telecom business domain. I'm an [Oracle ACE Associate](https://apex.oracle.com/pls/apex/f?p=19297:4:::NO:4:P4_ID:12240), Certified Implementation Specialist and a fan of Agile. I work as [Software Development Manager](http://bit.ly/antonmry-linkedin) with [Optare Solutions](http://www.optaresolutions.com). My professional interests include new technologies in web and telecom products, team workflow development and DevOps practices.
 
 As [Oracle Communications Service and Network Evolution (SaNE) Solution](http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html) expert I've earned a wide experience with Oracle technologies (Weblogic, JavaEE), network protocols (SIP, WebRTC, Diameter, SMPP, REST/SOAP) and Implementation Specialist certifications in several Oracle products:
 
@@ -23,9 +14,11 @@ As [Oracle Communications Service and Network Evolution (SaNE) Solution](http://
 * [Oracle Communications WebRTC Session Controller](http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html)
 * [Oracle Communication Evolved Application Server](https://www.oracle.com/industries/communications/evolved-application-server/index.html) 
 
-I am also interesting in some cool Open Source projects like [Mobicents](http://www.mobicents.org/) and I usually participate as speaker at developer conferences, such as SpringIO, Geecon or TADSummit. 
+I am also interesting in some cool Open Source projects and I like to participate as speaker at developer conferences, such as SpringIO, Geecon or TADSummit when I have the opportunity. 
 
-More information about me is available in [my Linkedin profile](http://bit.ly/antonmry-linkedin) or using the [contact page](/Contact-Subscribe.html).
+More information about me is available in [my Linkedin profile](http://bit.ly/antonmry-linkedin) or you can contact me at galiglobal@galiglobal.com.
+
+If you want to follow the blog, the easiest way is RSS using [this link](/feed.xml) and your favorite app, as for example, [feedly](http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fhttps%3A%2F%2Fantonmry.github.com%2Ffeed.xml).
 
 | Oracle ACE Associate | Oracle Certified Specialist | Oracle Partner Network Certified Specialist |
 | :------------ | :-------------: | -------------: |
