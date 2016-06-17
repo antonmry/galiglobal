@@ -35,8 +35,8 @@ task publish << {
                 project.file('build/jbake'),
                 new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
     repo.branch.change(name: 'master', startPoint: 'origin/gh-pages')
-    repo.add(patterns: ['.'])
-    repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
-    repo.push(force: true);
+    //repo.add(patterns: ['.'])
+    //repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
+    //repo.push(force: true);
 }
 
