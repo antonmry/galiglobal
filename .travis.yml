@@ -16,4 +16,4 @@ script:
   - gradle jbakeBuild
 
 after_script:
-  - gradle publish
+  - gradle publishGhPages

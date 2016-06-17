@@ -6,8 +6,8 @@
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Antón R. Yuste Blog</description>
     <language>en-us</language>
-    <pubDate>Sat, 18 Jun 2016 00:23:53 +0200</pubDate>
-    <lastBuildDate>Sat, 18 Jun 2016 00:23:53 +0200</lastBuildDate>
+    <pubDate>Sat, 18 Jun 2016 01:27:07 +0200</pubDate>
+    <lastBuildDate>Sat, 18 Jun 2016 01:27:07 +0200</lastBuildDate>
 
     
     <item>
@@ -112,87 +112,6 @@ git push
     </item>
     
     <item>
-      <title>How to build Kubernetes for testing and run Restcomm on it</title>
-      <link>http://www.galiglobal.com/blog/2016/20160430-How-to-build-Kubernetes-for-testing-and-run-Restcomm-on-it.html</link>
-      <pubDate>Sat, 30 Apr 2016 00:00:00 +0200</pubDate>
-      <guid isPermaLink="false">blog/2016/20160430-How-to-build-Kubernetes-for-testing-and-run-Restcomm-on-it.html</guid>
-      <description>
-      &lt;p&gt;In this post I&amp;rsquo;m going to show how to create a Kubernetes Development Environment and deploy Restcomm on it for testing. If you want just deploy RestComm, it&amp;rsquo;s better for you use the &lt;a href=&quot;http://kubernetes.io/docs/getting-started-guides/docker/&quot;&gt;Kubernetes Docker option&lt;/a&gt;, instead of doing all this process.&lt;/p&gt;&lt;h1&gt;Install Go Development Environment&lt;/h1&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
-tar -zxvf go1.6.linux-amd64.tar.gz
-mv go ~/Software/
-echo &amp;quot;GOROOT=~/Software/go&amp;quot; &amp;gt;&amp;gt; .bash_profile 
-echo &amp;quot;export GOROOT&amp;quot; &amp;gt;&amp;gt; .bash_profile 
-echo &amp;quot;PATH=\$GOROOT/bin:\$PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
-echo &amp;quot;export PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
-echo &amp;quot;GOPATH=~/Workspace/Telestax/go_kubernetes&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
-echo &amp;quot;export GOPATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
-source ~/.bash_profile
-mkdir -p $GOPATH
-&lt;/code&gt;&lt;/pre&gt;&lt;h1&gt;Basic Kubernetes installation&lt;/h1&gt;&lt;h2&gt;Clone and download&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;mkdir -p $GOPATH/src/k8s.io
-cd $GOPATH/src/k8s.io
-git clone https://github.com/antonmry/kubernetes.git
-cd kubernetes
-git remote add upstream &amp;#39;https://github.com/kubernetes/kubernetes.git&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Build and unit test&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;./hack/build-go.sh &amp;amp;&amp;amp; notify-send &amp;quot;Compilation done&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Note! Integration test take a long time.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;./hack/test-go.sh &amp;amp;&amp;amp; notify-send &amp;quot;Test done&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Integration test&lt;/h2&gt;&lt;p&gt;We need etcd to run the integration test, Docker to the rescue?&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;docker run -d --name etcd quay.io/coreos/etcd:v2.3.3
-alias etcdctl=&amp;quot;docker exec etcd /etcdctl&amp;quot;
-alias etcd=&amp;quot;docker exec etcd /etcd&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Nop, it fails because kubernetes look for it in the PATH :-(&lt;/p&gt;&lt;p&gt;So,&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;curl -O  https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz 
-tar xzvf etcd-v2.3.3-linux-amd64.tar.gz
-mv etcd-v2.3.3-linux-amd64/ ~/Software/
-echo &amp;quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
-echo &amp;quot;export PATH&amp;quot; &amp;gt;&amp;gt; ~./bash_profile
-source ~./bash_profile
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And now, time to test. Be careful, I think it uses your Google Cloud account :-S&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;go run hack/e2e.go -v --build --up --test --down &amp;amp;&amp;amp; notify-send &amp;quot;Integration test done&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;h1&gt;Running the Restcomm image&lt;/h1&gt;&lt;h2&gt;Creating and launching the cluster&lt;/h2&gt;&lt;p&gt;It will ask for sudo permission, you have to be quick, or relaunch.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;hack/local-up-cluster.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Let this terminal open and create a new one (tmux&amp;rsquo;s time?)&lt;/p&gt;&lt;h2&gt;Running the container&lt;/h2&gt;&lt;p&gt;We don&amp;rsquo;t have any container running:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;cluster/kubectl.sh get pods
-cluster/kubectl.sh get services
-cluster/kubectl.sh get deployments
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Time to launch RestComm:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml
-vim restcomm_rc.yml 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Change STATIC_ADDRESS to your own IP address.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;cluster/kubectl.sh create -f restcomm_rc.yml
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now we should be able to see our docker instance working, pods and so on.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;cluster/kubectl.sh get services
-cluster/kubectl.sh get deployments
-cluster/kubectl.sh get pods
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We have to wait the STATUS pod become running instead of ContainerCreating.&lt;/p&gt;&lt;p&gt;After that, we can see our RestComm containers running:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;docker images
-docker ps
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Once it&amp;rsquo;s running, we can expose the ports to access our instance:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml
-vim restcomm_service.yml
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Change externalIPs to your own IP address.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;cluster/kubectl.sh create -f restcomm_service.yml
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;With the following command we can check the status:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;./cluster/kubectl.sh get svc
-&lt;/code&gt;&lt;/pre&gt;&lt;h1&gt;Test Restcomm!&lt;/h1&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Login as alice, call +1234 and you should listen the message ;-)&lt;/p&gt;&lt;h1&gt;Stop all&lt;/h1&gt;
-&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;./cluster/kubectl.sh delete service restcomm-service
-./cluster/kubectl.sh delete rc restcomm-core-controller
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And Ctrl+C in the terminal running the cluster.&lt;/p&gt;&lt;h1&gt;Reference documentation&lt;/h1&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://kubernetes.io/docs/getting-started-guides/scratch/&quot;&gt;Creating a Custom Cluster from Scratch&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/kubernetes/kubernetes/blob/master/docs/devel/development.md&quot;&gt;Kubernetes Development Guide&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://kubernetes.io/docs/getting-started-guides/locally/&quot;&gt;Running Kubernetes Locally with No VM&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/adimania/Restcomm-Docker/blob/master/kubernetes/README.md&quot;&gt;Kubernetes and RestComm by adimania&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-	  </description>
-    </item>
-    
-    <item>
       <title>First year as ACE Associate and 2016 goals</title>
       <link>http://www.galiglobal.com/blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</link>
       <pubDate>Sat, 2 Jan 2016 00:00:00 +0100</pubDate>
@@ -200,13 +119,13 @@ vim restcomm_service.yml
       <description>
       &lt;p&gt;Another year is gone and as you can see in the look of the blog, I have a lot of new goals for this year :-). In short, 2015 has been a quite good year, with interesting projects in Brazil, business trips to cool cities as London, Paris, Krakow, Barcelona or Lisbon. Also time to mature the team, learn new technologies and evolve our solutions. But now it&amp;rsquo;s time to look to the future. Goals for 2016:&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;DevOps, DevOps, DevOps&lt;/strong&gt;: in some way, I have been involved in DevOps all my professional life. Jumping from development to project management to system administration depending of the needs of the moment&amp;hellip; the only things has been always there are Oracle Comms and how much I like to work with Linux, scripts, deployments and so on. I worked with Solaris Zones (precursor of Docker) and proposed to Vodafone in 2008&amp;hellip; 8 years ago! And because of this, I&amp;rsquo;m always more focused in development and/or product/project management: those areas are not so natural for me and there is more room for improvement. Well, this has to change. There are a lot of new stuff now related to that and I want to learn more. This will mean start to use &lt;a href=&quot;http://www.ansible.com/&quot;&gt;Ansible&lt;/a&gt; and Google Cloud, improve our Docker and Amazon AWS usage and, most important of all, integrate everything to work smoothly.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;DevOps, DevOps, DevOps&lt;/strong&gt;: in some way, I have been involved in DevOps all my professional life. Jumping from development to project management to system administration depending of the needs of the moment&amp;hellip; the only things has been always there are Oracle Comms and how much I like to work with Linux, scripts, deployments and so on. I worked with Solaris Zones (precursor of Docker) and proposed to Vodafone in 2008&amp;hellip; 8 years ago! And because of this, I&amp;rsquo;m always more focused in development and/or product/project management: those areas are not so natural for me and there is more room for improvement. Well, this has to change. There are a lot of new stuff now related to that and I want to learn more. This will mean start to use &lt;a href=&quot;https://github.com/aestasit/sshoogr&quot;&gt;sshoogr&lt;/a&gt; (Ansible-like but using Groovy), improve our Docker and Amazon AWS usage and, most important of all, integrate everything to work smoothly.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Groovy as center of our universe&lt;/strong&gt;: Groovy is becoming a very important part in Oracle Comms Services Gatekeeper and Oracle Comms WebRTC Session Controller. We&amp;rsquo;ve embraced this change, and now we are working with &lt;a href=&quot;http://www.gradle.org&quot;&gt;Gradle&lt;/a&gt; for deployments and with &lt;a href=&quot;https://github.com/spockframework/spock&quot;&gt;Spock&lt;/a&gt; for unit and integration testing. Also, as you can see, I have migrated the blog from Octopress to Hexo to &lt;a href=&quot;http://www.jbake.org&quot;&gt;JBake&lt;/a&gt;, a blogging framework based in Java and Groovy. It&amp;rsquo;s cool to publish your post using gradle :-)&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Became more fluent with Java&lt;/strong&gt;: I would like to pass the OCA and OCP exams and participate in some Java Open Source project. I have started to use Intellij Idea and learn the shortcuts, read some books as &lt;a href=&quot;https://www.manning.com/books/netty-in-action&quot;&gt;Netty in action&lt;/a&gt;, made &lt;a href=&quot;https://www.coursera.org/specializations/mobilecloudcomputing2&quot;&gt;three Android courses&lt;/a&gt; in Coursera and more activities. I have to continue focusing on this, it&amp;rsquo;s not easy because most of the development I&amp;rsquo;m able to do is out of the office in pet projects or training. Even if I have been working with Java since 2007, the only way to be really fluent in a language is practice, practice, practice&amp;hellip;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Oracle Comms and ACE&lt;/strong&gt;: Become ACE Associate has been a great achievement. Also the participation in different events with Oracle Comms, launch this blog, write some articles, videos and other stuff. I&amp;rsquo;m quite happy but there is still a long way to go.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Became even more fluent with Java&lt;/strong&gt;: I have started to use Intellij Idea and learn the shortcuts, read some books as &lt;a href=&quot;https://www.manning.com/books/netty-in-action&quot;&gt;Netty in action&lt;/a&gt;, made &lt;a href=&quot;https://www.coursera.org/specializations/mobilecloudcomputing2&quot;&gt;three Android courses&lt;/a&gt; in Coursera and more activities. I have to continue focusing on this, it&amp;rsquo;s not easy because most of the development I&amp;rsquo;m able to do is out of the office in pet projects, training or peer reviews. I have been working with Java since 2007 but the only way to continue being fluent in a language is practice, practice, practice&amp;hellip;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Oracle Comms and ACE&lt;/strong&gt;: Become ACE Associate has been a great achievement. Also the participation in different events with Oracle Comms, launch this blog, write some articles, videos and other stuff. I&amp;rsquo;m quite happy but there is still a long way&amp;hellip;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Improving the team&lt;/strong&gt;: our workflow is effective but there is a point we have to improve: it&amp;rsquo;s quite complex for newcomers. That&amp;rsquo;s the reason I&amp;rsquo;ve started a new book in &lt;a href=&quot;https://leanpub.com&quot;&gt;Leanpub&lt;/a&gt; titled &lt;a href=&quot;https://leanpub.com/developmentworkflowforagileteams&quot;&gt;Development workflow for agile teams&lt;/a&gt; focused in our workflow. This should help to solve the gap.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Don&amp;rsquo;t use the mouse&lt;/strong&gt;: yes, I&amp;rsquo;m a vim fan and a linux user. My goal is just stop to use the mouse for all the task I do. I feel quite confident with Intellij Idea and the &lt;a href=&quot;https://plugins.jetbrains.com/plugin/164?pr=idea&quot;&gt;IdeaVim&lt;/a&gt; plugin, &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/vimperator/&quot;&gt;Firefox vimperator&lt;/a&gt; for browsing and the Linux console for most of the tasks. My main problems are with the email, calendar and some webs as Waffle and Feedly&amp;hellip;.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;A WebRTC pet project&lt;/strong&gt;: that&amp;rsquo;s something I have been looking for some time without luck. I would like to build something using Java/Groovy and WebRTC, working with others in something not too complex to start with / greenfield. Well, I hope 2016 is the year for this.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Don&amp;rsquo;t use the mouse&lt;/strong&gt;: yes, I&amp;rsquo;m a vim fan and a linux user. My goal is just stop to use the mouse for all the task I do. I feel quite confident with Intellij Idea now and the &lt;a href=&quot;https://plugins.jetbrains.com/plugin/164?pr=idea&quot;&gt;IdeaVim&lt;/a&gt; plugin, &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/vimperator/&quot;&gt;Firefox vimperator&lt;/a&gt; for browsing and the Linux console for most of the tasks. My main problems are with the email, calendar and some webs as Waffle and Feedly&amp;hellip;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;A pet project&lt;/strong&gt;: that&amp;rsquo;s something I have been looking for some time without luck. I would like to build something using Java/Groovy and WebRTC, working with others in something not too complex to start with / greenfield. Well, I hope 2016 is the year for this.&lt;/li&gt;
 &lt;/ul&gt;&lt;p&gt;That&amp;rsquo;s all! &lt;strong&gt;Happy and prosperous 2016!!&lt;/strong&gt;.&lt;/p&gt;
 	  </description>
     </item>

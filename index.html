@@ -56,7 +56,6 @@
                 <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
               </ul>
             <li><a href="about.html">About</a></li>
-            <li><a href="Contact-Subscribe.html">Subscribe</a></li>
             </li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -206,109 +205,6 @@ git push
                             <meta itemprop="name" content="Yan Bonnel"/>
                         </div>
                         <meta itemprop="inLanguage" content="en-US"/>
-                        <a itemprop="url" href="blog/2016/20160430-How-to-build-Kubernetes-for-testing-and-run-Restcomm-on-it.html">
-                            <h1 itemprop="name">How to build Kubernetes for testing and run Restcomm on it</h1>
-                        </a>
-                        <p>
-                            <time itemprop="datePublished"
-                                  datetime="2016-04-30">
-                                30 April 2016
-                            </time>
-                             - Tags :
-                            <meta itemprop="keywords" content="Kubernetes,Go,RestComm"/>
-                            <a href="tags/Kubernetes.html">Kubernetes</a>, <a href="tags/Go.html">Go</a>, <a href="tags/RestComm.html">RestComm</a>
-                        </p>
-
-                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.galiglobal.com/blog/2016/20160430-How-to-build-Kubernetes-for-testing-and-run-Restcomm-on-it.html" data-text="How to build Kubernetes for testing and run Restcomm on it" data-via="antonmry" data-lang="en">Tweeter</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                        <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/blog/2016/20160430-How-to-build-Kubernetes-for-testing-and-run-Restcomm-on-it.html"></div>
-
-                        
-                        <div itemprop="blogPost">
-                            <p><p>In this post I&rsquo;m going to show how to create a Kubernetes Development Environment and deploy Restcomm on it for testing. If you want just deploy RestComm, it&rsquo;s better for you use the <a href="http://kubernetes.io/docs/getting-started-guides/docker/">Kubernetes Docker option</a>, instead of doing all this process.</p><h1>Install Go Development Environment</h1>
-<pre><code class="sh">curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
-tar -zxvf go1.6.linux-amd64.tar.gz
-mv go ~/Software/
-echo &quot;GOROOT=~/Software/go&quot; &gt;&gt; .bash_profile 
-echo &quot;export GOROOT&quot; &gt;&gt; .bash_profile 
-echo &quot;PATH=\$GOROOT/bin:\$PATH&quot; &gt;&gt; ~/.bash_profile
-echo &quot;export PATH&quot; &gt;&gt; ~/.bash_profile
-echo &quot;GOPATH=~/Workspace/Telestax/go_kubernetes&quot; &gt;&gt; ~/.bash_profile
-echo &quot;export GOPATH&quot; &gt;&gt; ~/.bash_profile
-source ~/.bash_profile
-mkdir -p $GOPATH
-</code></pre><h1>Basic Kubernetes installation</h1><h2>Clone and download</h2>
-<pre><code class="sh">mkdir -p $GOPATH/src/k8s.io
-cd $GOPATH/src/k8s.io
-git clone https://github.com/antonmry/kubernetes.git
-cd kubernetes
-git remote add upstream &#39;https://github.com/kubernetes/kubernetes.git&#39;
-</code></pre><h2>Build and unit test</h2>
-<pre><code class="sh">./hack/build-go.sh &amp;&amp; notify-send &quot;Compilation done&quot;
-</code></pre><p>Note! Integration test take a long time.</p>
-<pre><code class="sh">./hack/test-go.sh &amp;&amp; notify-send &quot;Test done&quot;
-</code></pre><h2>Integration test</h2><p>We need etcd to run the integration test, Docker to the rescue?</p>
-<pre><code class="sh">docker run -d --name etcd quay.io/coreos/etcd:v2.3.3
-alias etcdctl=&quot;docker exec etcd /etcdctl&quot;
-alias etcd=&quot;docker exec etcd /etcd&quot;
-</code></pre><p>Nop, it fails because kubernetes look for it in the PATH :-(</p><p>So,</p>
-<pre><code class="sh">curl -O  https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz 
-tar xzvf etcd-v2.3.3-linux-amd64.tar.gz
-mv etcd-v2.3.3-linux-amd64/ ~/Software/
-echo &quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&quot; &gt;&gt; ~/.bash_profile
-echo &quot;export PATH&quot; &gt;&gt; ~./bash_profile
-source ~./bash_profile
-</code></pre><p>And now, time to test. Be careful, I think it uses your Google Cloud account :-S</p>
-<pre><code class="sh">go run hack/e2e.go -v --build --up --test --down &amp;&amp; notify-send &quot;Integration test done&quot;
-</code></pre><h1>Running the Restcomm image</h1><h2>Creating and launching the cluster</h2><p>It will ask for sudo permission, you have to be quick, or relaunch.</p>
-<pre><code class="sh">hack/local-up-cluster.sh
-</code></pre><p>Let this terminal open and create a new one (tmux&rsquo;s time?)</p><h2>Running the container</h2><p>We don&rsquo;t have any container running:</p>
-<pre><code class="sh">cluster/kubectl.sh get pods
-cluster/kubectl.sh get services
-cluster/kubectl.sh get deployments
-</code></pre><p>Time to launch RestComm:</p>
-<pre><code class="sh">curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml
-vim restcomm_rc.yml 
-</code></pre><p>Change STATIC_ADDRESS to your own IP address.</p>
-<pre><code class="sh">cluster/kubectl.sh create -f restcomm_rc.yml
-</code></pre><p>Now we should be able to see our docker instance working, pods and so on.</p>
-<pre><code class="sh">cluster/kubectl.sh get services
-cluster/kubectl.sh get deployments
-cluster/kubectl.sh get pods
-</code></pre><p>We have to wait the STATUS pod become running instead of ContainerCreating.</p><p>After that, we can see our RestComm containers running:</p>
-<pre><code class="sh">docker images
-docker ps
-</code></pre><p>Once it&rsquo;s running, we can expose the ports to access our instance:</p>
-<pre><code class="sh">wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml
-vim restcomm_service.yml
-</code></pre><p>Change externalIPs to your own IP address.</p>
-<pre><code class="sh">cluster/kubectl.sh create -f restcomm_service.yml
-</code></pre><p>With the following command we can check the status:</p>
-<pre><code class="sh">./cluster/kubectl.sh get svc
-</code></pre><h1>Test Restcomm!</h1>
-<pre><code class="sh">chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
-</code></pre><p>Login as alice, call +1234 and you should listen the message ;-)</p><h1>Stop all</h1>
-<pre><code class="sh">./cluster/kubectl.sh delete service restcomm-service
-./cluster/kubectl.sh delete rc restcomm-core-controller
-</code></pre><p>And Ctrl+C in the terminal running the cluster.</p><h1>Reference documentation</h1>
-<ul>
-  <li><a href="http://kubernetes.io/docs/getting-started-guides/scratch/">Creating a Custom Cluster from Scratch</a></li>
-  <li><a href="https://github.com/kubernetes/kubernetes/blob/master/docs/devel/development.md">Kubernetes Development Guide</a></li>
-  <li><a href="http://kubernetes.io/docs/getting-started-guides/locally/">Running Kubernetes Locally with No VM</a></li>
-  <li><a href="https://github.com/adimania/Restcomm-Docker/blob/master/kubernetes/README.md">Kubernetes and RestComm by adimania</a></li>
-</ul></p>
-                        </div>
-                        
-                    </div>
-                
-
-            
-                
-                    <div  itemscope itemtype="http://schema.org/Blog">
-                        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
-                            <meta itemprop="name" content="Yan Bonnel"/>
-                        </div>
-                        <meta itemprop="inLanguage" content="en-US"/>
                         <a itemprop="url" href="blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html">
                             <h1 itemprop="name">First year as ACE Associate and 2016 goals</h1>
                         </a>
@@ -330,13 +226,13 @@ vim restcomm_service.yml
                         <div itemprop="blogPost">
                             <p><p>Another year is gone and as you can see in the look of the blog, I have a lot of new goals for this year :-). In short, 2015 has been a quite good year, with interesting projects in Brazil, business trips to cool cities as London, Paris, Krakow, Barcelona or Lisbon. Also time to mature the team, learn new technologies and evolve our solutions. But now it&rsquo;s time to look to the future. Goals for 2016:</p>
 <ul>
-  <li><strong>DevOps, DevOps, DevOps</strong>: in some way, I have been involved in DevOps all my professional life. Jumping from development to project management to system administration depending of the needs of the moment&hellip; the only things has been always there are Oracle Comms and how much I like to work with Linux, scripts, deployments and so on. I worked with Solaris Zones (precursor of Docker) and proposed to Vodafone in 2008&hellip; 8 years ago! And because of this, I&rsquo;m always more focused in development and/or product/project management: those areas are not so natural for me and there is more room for improvement. Well, this has to change. There are a lot of new stuff now related to that and I want to learn more. This will mean start to use <a href="http://www.ansible.com/">Ansible</a> and Google Cloud, improve our Docker and Amazon AWS usage and, most important of all, integrate everything to work smoothly.</li>
+  <li><strong>DevOps, DevOps, DevOps</strong>: in some way, I have been involved in DevOps all my professional life. Jumping from development to project management to system administration depending of the needs of the moment&hellip; the only things has been always there are Oracle Comms and how much I like to work with Linux, scripts, deployments and so on. I worked with Solaris Zones (precursor of Docker) and proposed to Vodafone in 2008&hellip; 8 years ago! And because of this, I&rsquo;m always more focused in development and/or product/project management: those areas are not so natural for me and there is more room for improvement. Well, this has to change. There are a lot of new stuff now related to that and I want to learn more. This will mean start to use <a href="https://github.com/aestasit/sshoogr">sshoogr</a> (Ansible-like but using Groovy), improve our Docker and Amazon AWS usage and, most important of all, integrate everything to work smoothly.</li>
   <li><strong>Groovy as center of our universe</strong>: Groovy is becoming a very important part in Oracle Comms Services Gatekeeper and Oracle Comms WebRTC Session Controller. We&rsquo;ve embraced this change, and now we are working with <a href="http://www.gradle.org">Gradle</a> for deployments and with <a href="https://github.com/spockframework/spock">Spock</a> for unit and integration testing. Also, as you can see, I have migrated the blog from Octopress to Hexo to <a href="http://www.jbake.org">JBake</a>, a blogging framework based in Java and Groovy. It&rsquo;s cool to publish your post using gradle :-)</li>
-  <li><strong>Became more fluent with Java</strong>: I would like to pass the OCA and OCP exams and participate in some Java Open Source project. I have started to use Intellij Idea and learn the shortcuts, read some books as <a href="https://www.manning.com/books/netty-in-action">Netty in action</a>, made <a href="https://www.coursera.org/specializations/mobilecloudcomputing2">three Android courses</a> in Coursera and more activities. I have to continue focusing on this, it&rsquo;s not easy because most of the development I&rsquo;m able to do is out of the office in pet projects or training. Even if I have been working with Java since 2007, the only way to be really fluent in a language is practice, practice, practice&hellip;</li>
-  <li><strong>Oracle Comms and ACE</strong>: Become ACE Associate has been a great achievement. Also the participation in different events with Oracle Comms, launch this blog, write some articles, videos and other stuff. I&rsquo;m quite happy but there is still a long way to go.</li>
+  <li><strong>Became even more fluent with Java</strong>: I have started to use Intellij Idea and learn the shortcuts, read some books as <a href="https://www.manning.com/books/netty-in-action">Netty in action</a>, made <a href="https://www.coursera.org/specializations/mobilecloudcomputing2">three Android courses</a> in Coursera and more activities. I have to continue focusing on this, it&rsquo;s not easy because most of the development I&rsquo;m able to do is out of the office in pet projects, training or peer reviews. I have been working with Java since 2007 but the only way to continue being fluent in a language is practice, practice, practice&hellip;</li>
+  <li><strong>Oracle Comms and ACE</strong>: Become ACE Associate has been a great achievement. Also the participation in different events with Oracle Comms, launch this blog, write some articles, videos and other stuff. I&rsquo;m quite happy but there is still a long way&hellip;</li>
   <li><strong>Improving the team</strong>: our workflow is effective but there is a point we have to improve: it&rsquo;s quite complex for newcomers. That&rsquo;s the reason I&rsquo;ve started a new book in <a href="https://leanpub.com">Leanpub</a> titled <a href="https://leanpub.com/developmentworkflowforagileteams">Development workflow for agile teams</a> focused in our workflow. This should help to solve the gap.</li>
-  <li><strong>Don&rsquo;t use the mouse</strong>: yes, I&rsquo;m a vim fan and a linux user. My goal is just stop to use the mouse for all the task I do. I feel quite confident with Intellij Idea and the <a href="https://plugins.jetbrains.com/plugin/164?pr=idea">IdeaVim</a> plugin, <a href="https://addons.mozilla.org/en-US/firefox/addon/vimperator/">Firefox vimperator</a> for browsing and the Linux console for most of the tasks. My main problems are with the email, calendar and some webs as Waffle and Feedly&hellip;.</li>
-  <li><strong>A WebRTC pet project</strong>: that&rsquo;s something I have been looking for some time without luck. I would like to build something using Java/Groovy and WebRTC, working with others in something not too complex to start with / greenfield. Well, I hope 2016 is the year for this.</li>
+  <li><strong>Don&rsquo;t use the mouse</strong>: yes, I&rsquo;m a vim fan and a linux user. My goal is just stop to use the mouse for all the task I do. I feel quite confident with Intellij Idea now and the <a href="https://plugins.jetbrains.com/plugin/164?pr=idea">IdeaVim</a> plugin, <a href="https://addons.mozilla.org/en-US/firefox/addon/vimperator/">Firefox vimperator</a> for browsing and the Linux console for most of the tasks. My main problems are with the email, calendar and some webs as Waffle and Feedly&hellip;</li>
+  <li><strong>A pet project</strong>: that&rsquo;s something I have been looking for some time without luck. I would like to build something using Java/Groovy and WebRTC, working with others in something not too complex to start with / greenfield. Well, I hope 2016 is the year for this.</li>
 </ul><p>That&rsquo;s all! <strong>Happy and prosperous 2016!!</strong>.</p></p>
                         </div>
                         
@@ -580,6 +476,38 @@ java -jar ocsg_pte_generic.jar
                 
 
             
+                
+                    <div  itemscope itemtype="http://schema.org/Blog">
+                        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
+                            <meta itemprop="name" content="Yan Bonnel"/>
+                        </div>
+                        <meta itemprop="inLanguage" content="en-US"/>
+                        <a itemprop="url" href="blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html">
+                            <h1 itemprop="name">Introductory videos to OCSG, OCCAS and OCWSC</h1>
+                        </a>
+                        <p>
+                            <time itemprop="datePublished"
+                                  datetime="2015-06-11">
+                                11 June 2015
+                            </time>
+                             - Tags :
+                            <meta itemprop="keywords" content="OCSG,ServicesGatekeeper,ServiceDelivery,OracleComms,OCCAS,ConvergedApplicationServer,OCWSC,WebRTCSessionController"/>
+                            <a href="tags/OCSG.html">OCSG</a>, <a href="tags/ServicesGatekeeper.html">ServicesGatekeeper</a>, <a href="tags/ServiceDelivery.html">ServiceDelivery</a>, <a href="tags/OracleComms.html">OracleComms</a>, <a href="tags/OCCAS.html">OCCAS</a>, <a href="tags/ConvergedApplicationServer.html">ConvergedApplicationServer</a>, <a href="tags/OCWSC.html">OCWSC</a>, <a href="tags/WebRTCSessionController.html">WebRTCSessionController</a>
+                        </p>
+
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.galiglobal.com/blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html" data-text="Introductory videos to OCSG, OCCAS and OCWSC" data-via="antonmry" data-lang="en">Tweeter</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                        <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html"></div>
+
+                        
+                        <div itemprop="blogPost">
+                            <p><p>Tomorrow I will be travelling to <a href="http://tadhack.com/2015/">TADHack</a> in Lisbon and I am so excited! It&rsquo;s going to be great! As part of the initiatives we&rsquo;ve done to promote <a href="http://tadhack.optaresolutions.com/">the Oracle sandbox</a> and help the developers, I&rsquo;ve recorded three videos to introduce the three Oracle SDP applications. Even if they are oriented to the TADHack, they are a good resource for anyone interested in the products.</p><h2>Oracle Communications WebRTC Session Controller</h2><p>In this video, we are going to introduce Oracle Communications WebRTC Session Controller and how to use it to add audio, video and data communications to web and mobile applications. It provides an introduction to a sample application, a good starting point to develop more complex services. It ends explaining how to add a widget which allows developers to add Real-time communication in a very easy way.</p><p><iframe width="420" height="315" src="https://www.youtube.com/embed/pKjHRvGVlXQ" frameborder="0" allowfullscreen></iframe></p><p>Youtube link: <a href="https://www.youtube.com/watch?v=pKjHRvGVlXQ">Using WebRTC services with OCWSC </a></p><h2>Oracle Communications Service Gatekeeper</h2><p>In this video, we are going to introduce the Telecom APIs available in the Oracle Communications sandbox: Messaging, Payment and Location. Developers will learn how to start to work with those APIs and how to add them to their own applications and hacks.</p><p><iframe width="420" height="315" src="https://www.youtube.com/embed/uUqd0d2f8uQ" frameborder="0" allowfullscreen></iframe></p><p>Youtube link: <a href="https://www.youtube.com/watch?v=uUqd0d2f8uQ">Telecom APIs with OCSG </a></p><h2>Oracle Communications Converged Application Server</h2><p>In this video, we are going to introduce Oracle Communications Converged Application Server and how to design and build applications able to manage HTTP and SIP protocols at the same time. We&rsquo;ll review also the new SIP Servlet 2.0 specification and the JSR-359 recently approved. We&rsquo;ll end the video reviewing a B2BUA application and learning to modify it to build more complex applications.</p><p><iframe width="420" height="315" src="https://www.youtube.com/embed/9IqHiAcNl4k" frameborder="0" allowfullscreen></iframe></p><p>Youtube link: <a href="https://www.youtube.com/watch?v=9IqHiAcNl4k">Developing SIP Applications with OCCAS</a></p></p>
+                        </div>
+                        
+                    </div>
+                
+
+            
 
             <hr />
 
@@ -590,12 +518,11 @@ java -jar ocsg_pte_generic.jar
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
                 <h4>Antón R. Yuste</h4>
-                <p>Passionate software engineer who specializes in the telecom domain</p>
+                <p>I am a passionate Software Development Manager who specializes in the telecom domain. My professional interests include new technologies in web and telecom products, team workflow management and DevOps practices. </p>
             </div>
 
             <div class="sidebar-module">
-                <a class="twitter-timeline"  href="https://twitter.com/antonmry" data-widget-id="684045213271199746">Tweets by @antonmry</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            <img src="images/duke.png">
             </div>
 
             <div class="sidebar-module">
@@ -630,8 +557,6 @@ java -jar ocsg_pte_generic.jar
                     
                         <li><a href="tags/OracleACE.html">OracleACE</a> (2)</li>
                     
-                        <li><a href="tags/RestComm.html">RestComm</a> (2)</li>
-                    
                         <li><a href="tags/Weblogic.html">Weblogic</a> (2)</li>
                     
                         <li><a href="tags/WebRTCSessionController.html">WebRTCSessionController</a> (2)</li>
@@ -646,13 +571,11 @@ java -jar ocsg_pte_generic.jar
                     
                         <li><a href="tags/github.html">github</a> (1)</li>
                     
-                        <li><a href="tags/Go.html">Go</a> (1)</li>
-                    
                         <li><a href="tags/Groovy.html">Groovy</a> (1)</li>
                     
-                        <li><a href="tags/Kubernetes.html">Kubernetes</a> (1)</li>
-                    
                         <li><a href="tags/OCECAS.html">OCECAS</a> (1)</li>
+                    
+                        <li><a href="tags/RestComm.html">RestComm</a> (1)</li>
                     
                         <li><a href="tags/Service Delivery.html">Service Delivery</a> (1)</li>
                     

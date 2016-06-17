@@ -2,11 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
     <url>
-    	<loc>http://www.galiglobal.com/Contact-Subscribe.html</loc>
-    	<lastmod>2015-01-01</lastmod>
-    </url>
-
-    <url>
     	<loc>http://www.galiglobal.com/about.html</loc>
     	<lastmod>2015-01-01</lastmod>
     </url>
@@ -14,11 +9,6 @@
     <url>
     	<loc>http://www.galiglobal.com/blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</loc>
     	<lastmod>2016-05-08</lastmod>
-    </url>
-
-    <url>
-    	<loc>http://www.galiglobal.com/blog/2016/20160430-How-to-build-Kubernetes-for-testing-and-run-Restcomm-on-it.html</loc>
-    	<lastmod>2016-04-30</lastmod>
     </url>
 
     <url>
