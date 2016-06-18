@@ -6,8 +6,8 @@
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Antón R. Yuste Blog</description>
     <language>en-us</language>
-    <pubDate>Sat, 18 Jun 2016 01:27:07 +0200</pubDate>
-    <lastBuildDate>Sat, 18 Jun 2016 01:27:07 +0200</lastBuildDate>
+    <pubDate>Sat, 18 Jun 2016 01:53:23 +0200</pubDate>
+    <lastBuildDate>Sat, 18 Jun 2016 01:53:23 +0200</lastBuildDate>
 
     
     <item>
@@ -48,7 +48,7 @@ docker exec -it bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933
 &lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;cd /opt/Restcomm-JBoss-AS7/standalone/deployments/
 tar -cvf /tmp/deployments.tar *
 exit
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We leave the container and extract the deployment folder in your system:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;REPLACE_WITH_READ_MORE&lt;/p&gt;&lt;p&gt;We leave the container and extract the deployment folder in your system:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;docker cp bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933:/tmp/deployments.tar .
 mkdir deployments 
 mv deployments.tar deployments
@@ -150,10 +150,7 @@ java -jar ocsg_pte_generic.jar
   &lt;li&gt;&lt;p&gt;The Welcome screen appears, press &lt;strong&gt;Next&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;p&gt;Introduce &lt;em&gt;/opt/ocsg6&lt;/em&gt; in the Oracle Home field and press &lt;strong&gt;Next&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;p&gt;Let &lt;strong&gt;PTE Installation&lt;/strong&gt; selected and press &lt;strong&gt;Next&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;p&gt;&lt;img src=&quot;/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTE.png&quot; alt=&quot;PTE Installation&quot;&quot;/&gt;&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Review the Installation Summary and press &lt;strong&gt;Install&lt;/strong&gt;. It may take a while. Press &lt;strong&gt;Next&lt;/strong&gt; when available and &lt;strong&gt;Finish&lt;/strong&gt;.&lt;/li&gt;
-&lt;/ol&gt;&lt;p&gt;&lt;img src=&quot;/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTEDone.png&quot; alt=&quot;PTE Installation Done&quot;&quot;/&gt;&lt;/p&gt;&lt;h2&gt;Start the PTE&lt;/h2&gt;
+&lt;/ol&gt;&lt;p&gt;&lt;img src=&quot;/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTE.png&quot; alt=&quot;PTE Installation&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;REPLACE_WITH_READ_MORE&lt;br/&gt;8. Review the Installation Summary and press &lt;strong&gt;Install&lt;/strong&gt;. It may take a while. Press &lt;strong&gt;Next&lt;/strong&gt; when available and &lt;strong&gt;Finish&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTEDone.png&quot; alt=&quot;PTE Installation Done&quot;&quot;/&gt;&lt;/p&gt;&lt;h2&gt;Start the PTE&lt;/h2&gt;
 &lt;ol&gt;
   &lt;li&gt;Open a new Terminal and execute the following commands.&lt;/li&gt;
 &lt;/ol&gt;
