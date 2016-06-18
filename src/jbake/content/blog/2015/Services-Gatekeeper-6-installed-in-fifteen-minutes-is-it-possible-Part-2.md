@@ -31,6 +31,7 @@ java -jar ocsg_pte_generic.jar
 
 ![PTE Installation](/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTE.png)
 
+REPLACE_WITH_READ_MORE
 8. Review the Installation Summary and press **Install**. It may take a while. Press **Next** when available and **Finish**.
 
 ![PTE Installation Done](/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTEDone.png)
