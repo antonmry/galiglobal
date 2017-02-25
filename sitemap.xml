@@ -12,8 +12,28 @@
     </url>
 
     <url>
+    	<loc>http://www.galiglobal.com/blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</loc>
+    	<lastmod>2017-01-09</lastmod>
+    </url>
+
+    <url>
+    	<loc>http://www.galiglobal.com/blog/2017/20170108-introduction-to-go-kit.html</loc>
+    	<lastmod>2017-01-08</lastmod>
+    </url>
+
+    <url>
+    	<loc>http://www.galiglobal.com/blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</loc>
+    	<lastmod>2017-01-06</lastmod>
+    </url>
+
+    <url>
     	<loc>http://www.galiglobal.com/blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</loc>
     	<lastmod>2016-05-08</lastmod>
+    </url>
+
+    <url>
+    	<loc>http://www.galiglobal.com/blog/2016/20160430-how-to-develop-in-Kubernetes.html</loc>
+    	<lastmod>2016-04-30</lastmod>
     </url>
 
     <url>

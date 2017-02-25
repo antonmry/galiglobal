@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Introduction to Go kit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/asciidoctor.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
+    <link rel="shortcut icon" href="../../favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+   
+
+
+		<!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../">GaliGlobal</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../archive.html">Archive</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
+                <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a></li>
+                <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
+              </ul>
+            <li><a href="../../about.html">About</a></li>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">
+
+
+	<div class="page-header">
+		<h1>Introduction to Go kit</h1>
+	</div>
+
+	<p><em>08 January 2017</em></p>
+
+	<p><h2>Microservices don&rsquo;t fit all use cases</h2><p>When I&rsquo;ve started <a href="https://github.com/antonmry/leanmanager">my Leanmanager bot</a>, I&rsquo;ve chosen to use the same approach (well, really it&rsquo;s a framework but that word seems to be censured if you are a gopher so I will use <em>approach</em>) as the kubernetes project: if it&rsquo;s good for k8s, it should be good for me and also a good way to learn a bit more about kubernetes. So I&rsquo;ve implemented all the REST APIs using <a href="https://github.com/emicklei/go-restful">github.com/emicklei/go-restful</a>.</p><p>Then I had the opportunity to work a bit with <a href="https://gokit.io/">go-kit</a>. A framework, ups, no, sorry, a toolkit to create microservices. My initial opinion was too complicated and too much boilerplate. Yet I would like to give it another opportunity, there are some interesting things useful for bots (support many transports, RPC approach, instrumentation) and my main motivation with the bot is to test new technologies and ideas so&hellip; why not?</p><p>If you visit the <a href="https://gokit.io">Go-kit website</a>, and then, you will jump very soon into the <a href="https://gokit.io/examples/stringsvc.html">stringsvc tutorial</a>. The tutorial is awesome but it isn&rsquo;t a five minutes read and it&rsquo;s a bit too complicated to start to work with Go-kit. I recommend an approach a bit different. First, watch <a href="https://www.youtube.com/watch?v=JXEjAwNWays">Go + Microservices = Go Kit</a> from <a href="https://peter.bourgon.org/">Peter Bourgon</a>. This is an awesome talk explaining microservices and their use cases. Clearly Peter knows a lot about the subject: microservices aren&rsquo;t for everyone.</p><p>If after the video, you think microservices fit your case, go ahead and may the Force be with you.</p><h2>Go-kit addsvc example</h2><p>First step, download Go-kit:</p>
+<pre><code class="sh">go get github.com/go-kit/kit
+</code></pre><p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you&rsquo;ve already in the GOPATH).</p>
+<pre><code class="sh">cp -r ../../go-kit/kit/examples/addsvc/ .
+go get ./...
+</code></pre><p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let&rsquo;s try the example. Launch the server:</p>
+<pre><code class="sh">cd cmd/addsvc/
+go run main.go
+</code></pre><p>And in a different shell, launch the client:</p>
+<pre><code class="sh">cd cmd/addcli/
+go run main.go -http.addr=:8081 1 2
+</code></pre><p>If everything goes well, you will obtain something like:</p>
+<blockquote><p>1 + 2 = 3</p>
+</blockquote><p>Or you can use <code>curl</code> directly:</p>
+<pre><code class="sh">curl -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}&#39; http://localhost:8081/concat
+</code></pre><p>There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:</p>
+<pre><code class="sh">go run main.go -grpc.addr=:8082 1 2
+</code></pre><h2>Show me the code!</h2><p>It&rsquo;s time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p><p>Note: I may continue this in the future if I resume my work with go-kit.</p></p>
+
+	<hr />
+
+		</div>
+		<div id="push"></div>
+    </div>
+    
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.4.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+      </div>
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../js/jquery-1.11.1.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/prettify.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-57796882-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    
+  </body>
+</html>
+
