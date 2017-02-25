@@ -5,7 +5,7 @@ tags=galiglobal
 status=published
 ~~~~~~
 
-I am a passionate software development manager who specializes in the telecom business domain. I'm an [Oracle ACE Associate](https://apex.oracle.com/pls/apex/f?p=19297:4:::NO:4:P4_ID:12240), Certified Implementation Specialist and a fan of Agile. I work as [Software Development Manager](http://bit.ly/antonmry-linkedin) with [Optare Solutions](http://www.optaresolutions.com). My professional interests include new technologies in web and telecom products, team workflow development and DevOps practices.
+I am a Senior Software Engineer who specializes in the telecom business domain. I'm an [Oracle ACE Associate](https://apex.oracle.com/pls/apex/f?p=19297:4:::NO:4:P4_ID:12240), Certified Implementation Specialist and a fan of Agile. I work as [Software Development Manager](http://bit.ly/antonmry-linkedin) with [Optare Solutions](http://www.optaresolutions.com). My professional interests include new technologies in web and telecom products, team workflow development and DevOps practices.
 
 As [Oracle Communications Service and Network Evolution (SaNE) Solution](http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html) expert I've earned a wide experience with Oracle technologies (Weblogic, JavaEE), network protocols (SIP, WebRTC, Diameter, SMPP, REST/SOAP) and Implementation Specialist certifications in several Oracle products:
 
