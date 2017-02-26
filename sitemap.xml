@@ -7,6 +7,11 @@
     </url>
 
     <url>
+    	<loc>http://www.galiglobal.com/blog/2017/20170226-Vim-as-Java-IDE-again.html</loc>
+    	<lastmod>2017-02-26</lastmod>
+    </url>
+
+    <url>
     	<loc>http://www.galiglobal.com/blog/2017/20160117-New-proposals-for-2017.html</loc>
     	<lastmod>2017-02-25</lastmod>
     </url>
@@ -24,6 +29,11 @@
     <url>
     	<loc>http://www.galiglobal.com/blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</loc>
     	<lastmod>2017-01-06</lastmod>
+    </url>
+
+    <url>
+    	<loc>http://www.galiglobal.com/blog/2016/20160616-first-blog-post-with-hugo.html</loc>
+    	<lastmod>2016-06-16</lastmod>
     </url>
 
     <url>

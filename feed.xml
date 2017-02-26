@@ -6,9 +6,84 @@
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Antón R. Yuste Blog</description>
     <language>en-us</language>
-    <pubDate>Sat, 25 Feb 2017 16:54:33 +0100</pubDate>
-    <lastBuildDate>Sat, 25 Feb 2017 16:54:33 +0100</lastBuildDate>
+    <pubDate>Sun, 26 Feb 2017 15:57:36 +0100</pubDate>
+    <lastBuildDate>Sun, 26 Feb 2017 15:57:36 +0100</lastBuildDate>
 
+    
+    <item>
+      <title>Vim as Java and Groovy IDE (again) but now with Neovim</title>
+      <link>http://www.galiglobal.com/blog/2017/20170226-Vim-as-Java-IDE-again.html</link>
+      <pubDate>Sun, 26 Feb 2017 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2017/20170226-Vim-as-Java-IDE-again.html</guid>
+      <description>
+      &lt;p&gt;I&amp;rsquo;ve tried so many times change Intellij or Eclipse by vim.. But when it&amp;rsquo;s related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it&amp;rsquo;s even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.&lt;/p&gt;&lt;p&gt;Some weeks ago I&amp;rsquo;ve discovered this blog post &lt;a href=&quot;https://spacevim.org/use-vim-as-a-java-ide/&quot;&gt;Use Vim as a Java IDE&lt;/a&gt; and I want to give it another opportunity. Let&amp;rsquo;s start.&lt;/p&gt;&lt;h2&gt;Neovim in Fedora&lt;/h2&gt;&lt;p&gt;This is straight-forward:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf -y copr enable dperson/neovim
+sudo dnf -y install neovim
+sudo dnf -y install python3-neovim python3-neovim-gui
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;For Fedora 25 is even easier:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf -y install neovim
+sudo dnf -y install python2-neovim python3-neovim
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;For other systems, just check &lt;a href=&quot;https://github.com/neovim/neovim/wiki/Installing-Neovim&quot;&gt;the official Neovim documentation&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;We&amp;rsquo;ll need some other plugins:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf -y install astyle
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Install vim-plug&lt;/h2&gt;&lt;p&gt;Again, this is straight-forward following &lt;a href=&quot;https://github.com/junegunn/vim-plug&quot;&gt;the official instructions&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Install plugins&lt;/h2&gt;&lt;p&gt;This is when things become messy. Start editing &lt;code&gt;~/.config/nvim/init.vim&lt;/code&gt; to add the plugins:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;    vim-plug     &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+call plug#begin(&amp;#39;~/.local/share/nvim/plugged&amp;#39;)
+
+&amp;quot; Others
+
+Plug &amp;#39;scrooloose/nerdtree&amp;#39;, { &amp;#39;on&amp;#39;:  &amp;#39;NERDTreeToggle&amp;#39; }
+Plug &amp;#39;majutsushi/tagbar&amp;#39;
+
+&amp;quot; Java development
+
+Plug &amp;#39;sbdchd/neoformat&amp;#39;
+Plug &amp;#39;artur-shaik/vim-javacomplete2&amp;#39;
+Plug &amp;#39;Shougo/deoplete.nvim&amp;#39;, { &amp;#39;do&amp;#39;: &amp;#39;:UpdateRemotePlugins&amp;#39; }
+Plug &amp;#39;neomake/neomake&amp;#39;
+
+&amp;quot; Initialize plugin system
+call plug#end()
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;    deoplete     &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.java = &amp;#39;[^. *\t]\.\w*&amp;#39;
+let g:deoplete#sources = {}
+let g:deoplete#sources._ = []
+let g:deoplete#file#enable_buffer_path = 1
+
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;  Java Complete  &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;     neomake     &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+autocmd! BufWritePost,BufEnter * Neomake
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;     neoformat   &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+augroup astyle
+  autocmd!
+  autocmd BufWritePre * Neoformat
+augroup END
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Open &lt;code&gt;nvim&lt;/code&gt; and type &lt;code&gt;:PlugInstall&lt;/code&gt;.&lt;/p&gt;&lt;h2&gt;Done!&lt;/h2&gt;&lt;p&gt;Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.&lt;/p&gt;&lt;p&gt;I will update this blog post with new things as soon as I have them.&lt;/p&gt;&lt;h2&gt;TODO&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;[ ] Add Groovy support.&lt;/li&gt;
+  &lt;li&gt;[ ] Add some screenshots or recording.&lt;/li&gt;
+&lt;/ul&gt;
+	  </description>
+    </item>
     
     <item>
       <title>Be humble and my goals for 2017</title>
@@ -16,7 +91,7 @@
       <pubDate>Sat, 25 Feb 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20160117-New-proposals-for-2017.html</guid>
       <description>
-      &lt;p&gt;Last year I wrote a post with my goals for first time in my life. It was something new and I must say I&amp;rsquo;ve read it many times to see how things are going. It has been a good experience and I want to repeat it this year.&lt;/p&gt;&lt;p&gt;2016 year has been, in the professional aspect, the best year of my life. Probably also in the personal aspect with a new kid. I&amp;rsquo;m not going to speak too much about the last year, it was just great for me. I&amp;rsquo;ve achieved some of the goals, failed in others, and there was new ones&amp;hellip; That&amp;rsquo;s the life.&lt;/p&gt;&lt;p&gt;Beginning of 2017 has been very stormy, even hard. Lots of problems, work and changes. That&amp;rsquo;s the reason I&amp;rsquo;ve waited so much to write this blog post. The good point when things are difficult is you are going to learn a lot. I have discovered things about my environment and myself which I&amp;rsquo;ve never thought about before.&lt;/p&gt;&lt;p&gt;The first thing I&amp;rsquo;ve discovered is the engineers &amp;ldquo;ego problem&amp;rdquo;. When you are fighting hard to make a project success, when you solve difficult problems, when you have to make your customers understand the consequences of their decisions or you are training younger engineers&amp;hellip; Slowly but relentless the ego problem is growing on you. And let&amp;rsquo;s make this clear: I&amp;rsquo;m guilty. My motto always was: &amp;ldquo;No project where I work can&amp;rsquo;t fail&amp;rdquo;. Now I understand how wrong I was. Project can be a huge success for the customer, but a big fail for your company or the team because the lost of trustiness or the casualties.. And now I know I had some failed projects in my life.&lt;/p&gt;&lt;p&gt;Other good sign of this is my proposals for the last year. All of them are about me. Again, the ego problem. The reason was my fear to be out of the IT jobs market. Be without a project or a salary really scares me. I think this is irrational, I have a B plan just in case I loose my job and I wasn&amp;rsquo;t able to find a new one. Also I&amp;rsquo;m receiving job offers every week, some of them really good ones (that does not help with the ego problem either). Probably it&amp;rsquo;s more related to spend days without to do something useful and because I feel lucky to do what I do.&lt;/p&gt;&lt;p&gt;I deserve a punishment and 2017 will be the year to start with it.&lt;/p&gt;&lt;p&gt;First goal: repeat every morning in front of the mirror &amp;ldquo;Be humble&amp;rdquo; three times. If in some point of the day I fail on that, I will go to the involved person and I will ask for forgiveness. It doesn&amp;rsquo;t matter if it&amp;rsquo;s a small fail or the involved person is a jerk, I will do it anyway.&lt;/p&gt;&lt;p&gt;Second goal: make the company where I work a better place to work. This means stop claiming and start to actively work in the solution to solve the problems I&amp;rsquo;m claiming about. Let&amp;rsquo;s make this clear: companies must earn money. But at the same time, employees must be feel involved, happy and positive. Both things are related. I&amp;rsquo;m not sure how to do this or the real impact which I can have with my actions in a big company. I&amp;rsquo;m just one, I&amp;rsquo;m not a superhero and the company where I work is really good but there is always groom for improvement. It doesn&amp;rsquo;t matter my role, I will just try to do as much as possible. Also I want to focus in the youngest engineers. In my opinion senior engineers should be more involved in professional evolution of the younger ones and I want to lead by example on that.&lt;/p&gt;&lt;p&gt;Third goal: return something to your local community. I can&amp;rsquo;t believe this is a goal I have when I&amp;rsquo;m 36 years old. Start so late on this is probably the biggest failure in my career. It was even more clear to me after an event last week for students. Two of the speakers made great points on the importance of contribute to your local community. I admire those two guys. I don&amp;rsquo;t pretend to be like them but at least I want to do something. Start the &lt;a href=&quot;https://www.meetup.com/Vigo-JUG/&quot;&gt;VigoJUG&lt;/a&gt; is a beginning. I hope to find other ways to contribute during the year. If you are reading this and you have any idea, please, let me know.&lt;/p&gt;&lt;p&gt;The last goal isn&amp;rsquo;t really a goal but a fear. Yesterday a fellow said I&amp;rsquo;m a Project Manager. It has been very painful for me because I realize he was partially right and I don&amp;rsquo;t want that role anymore.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://assets.amuniversal.com/07b853c0c94f013441df005056a9545d&quot; alt=&quot;Dilbert Has Management Potential&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;Last year I&amp;rsquo;ve been developing a lot but 2017 has been crazy and I&amp;rsquo;ve been more focused in solve problems and get things done&amp;hellip; So my technical work has been reduced to Pull Request reviews and some time developing in the weekend. Rest of the time: mails, phone calls, write documents and meetings. I don&amp;rsquo;t want to spend the rest of my life doing only those things. I know they are useful and they are the way to achieve the goals I&amp;rsquo;ve described before. But I&amp;rsquo;ve spent 20 years of my life dealing with computers, I&amp;rsquo;ve trained myself to learn vim shortcuts, researching how to write clean code, use the command shell, etc. and I don&amp;rsquo;t want to loose that. It makes me feel happy and full. If I don&amp;rsquo;t do it, I will end being sad and frustrated, so I have to found a way to conciliate both things. Any advise will be welcomed.&lt;/p&gt;&lt;p&gt;I want to finish this post asking for forgiveness. Specially during my time in Accenture I did a lot of wrong things. Not even close but I pushed too hard some times in Optare. If I did something which has troubled you, I&amp;rsquo;m very sorry. I promise: I will be humble, I will be humble, I will be humble.&lt;/p&gt;
+      &lt;p&gt;Last year I wrote a post with my goals for first time in my life. It was something new and I must say I&amp;rsquo;ve read it many times to see how things are going. It has been a good experience and I want to repeat it this year.&lt;/p&gt;&lt;p&gt;2016 year has been, in the professional aspect, the best year of my life. Probably also in the personal aspect with a new kid. I&amp;rsquo;m not going to speak too much about the last year, it was just great for me. I&amp;rsquo;ve achieved some of the goals, failed in others, and there was new ones&amp;hellip; That&amp;rsquo;s the life.&lt;/p&gt;&lt;p&gt;Beginning of 2017 has been very stormy, even hard. Lots of problems, work and changes. That&amp;rsquo;s the reason I&amp;rsquo;ve waited so much to write this blog post. The good point when things are difficult is you are going to learn a lot. I have discovered things about my environment and myself which I&amp;rsquo;ve never thought about before.&lt;/p&gt;&lt;p&gt;The first thing I&amp;rsquo;ve discovered is the engineers &amp;ldquo;ego problem&amp;rdquo;. When you are fighting hard to make a project success, when you solve difficult problems, when you have to make your customers understand the consequences of their decisions or you are training younger engineers&amp;hellip; Slowly but relentless the ego problem is growing on you. And let&amp;rsquo;s make this clear: I&amp;rsquo;m guilty. My motto always was: &amp;ldquo;No project where I work can&amp;rsquo;t fail&amp;rdquo;. Now I understand how wrong I was. Project can be a huge success for the customer, but a big fail for your company or the team because the lost of trustiness or the casualties.. And now I know I had some failed projects in my life.&lt;/p&gt;&lt;p&gt;Other good sign of this is my proposals for the last year. All of them are about me. Again, the ego problem. The reason was my fear to be out of the IT jobs market. Be without a project or a salary really scares me. I think this is irrational, I have a B plan just in case I loose my job and I wasn&amp;rsquo;t able to find a new one. Also I&amp;rsquo;m receiving job offers every week, some of them really good ones (that does not help with the ego problem either). Probably it&amp;rsquo;s more related to spend days without to do something useful and because I feel lucky to do what I do.&lt;/p&gt;&lt;p&gt;I deserve a punishment and 2017 will be the year to start with it.&lt;/p&gt;&lt;p&gt;First goal: repeat every morning in front of the mirror &amp;ldquo;Be humble&amp;rdquo; three times. If in some point of the day I fail on that, I will go to the involved person and I will ask for forgiveness. It doesn&amp;rsquo;t matter if it&amp;rsquo;s a small fail or the involved person is a jerk, I will do it anyway.&lt;/p&gt;&lt;p&gt;Second goal: make the company where I work a better place to work. This means stop claiming and start to actively work in the solution to solve the problems I&amp;rsquo;m claiming about. Let&amp;rsquo;s make this clear: companies must earn money. But at the same time, employees must be feel involved, happy and positive. Both things are related. I&amp;rsquo;m not sure how to do this or the real impact which I can have with my actions in a big company. I&amp;rsquo;m just one, I&amp;rsquo;m not a superhero and the company where I work is good but not perfect, there is always room for improvement. It doesn&amp;rsquo;t matter my role, I will just try to do as much as possible. Also I want to focus in the youngest engineers. In my opinion senior engineers should be more involved in professional evolution of the younger ones and I want to lead by example on that.&lt;/p&gt;&lt;p&gt;Third goal: return something to your local community. I can&amp;rsquo;t believe this is a goal I have when I&amp;rsquo;m 36 years old. Start so late on this is probably the biggest failure in my career. It was even more clear to me after an event last week for students. Two of the speakers made great points on the importance of contribute to your local community. I admire those two guys. I don&amp;rsquo;t pretend to be like them but at least I want to do something. Start the &lt;a href=&quot;https://www.meetup.com/Vigo-JUG/&quot;&gt;VigoJUG&lt;/a&gt; is a beginning. I hope to find other ways to contribute during the year. If you are reading this and you have any idea, please, let me know.&lt;/p&gt;&lt;p&gt;The last goal isn&amp;rsquo;t really a goal but a fear. Yesterday a fellow said I&amp;rsquo;m a Project Manager. It has been very painful for me because I realize he was partially right and I don&amp;rsquo;t want that role anymore.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://assets.amuniversal.com/07b853c0c94f013441df005056a9545d&quot; alt=&quot;Dilbert Has Management Potential&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;Last year I&amp;rsquo;ve been developing a lot but 2017 has been crazy and I&amp;rsquo;ve been more focused in solve problems and get things done&amp;hellip; So my technical work has been reduced to Pull Request reviews and some time developing in the weekend. Rest of the time: mails, phone calls, write documents and meetings. I don&amp;rsquo;t want to spend the rest of my life doing only those things. I know they are useful and they are the way to achieve the goals I&amp;rsquo;ve described before. But I&amp;rsquo;ve spent 20 years of my life dealing with computers, I&amp;rsquo;ve trained myself to learn vim shortcuts, researching how to write clean code, use the command shell, etc. and I don&amp;rsquo;t want to loose that. It makes me feel happy and full. If I don&amp;rsquo;t do it, I will end being sad and frustrated, so I have to found a way to conciliate both things. Any advise will be welcomed.&lt;/p&gt;&lt;p&gt;I want to finish this post asking for forgiveness. Specially during my time in Accenture I did a lot of wrong things. Not even close but I pushed too hard some times in Optare. If I did something which has troubled you, I&amp;rsquo;m very sorry. I promise: I will be humble, I will be humble, I will be humble.&lt;/p&gt;
 	  </description>
     </item>
     
@@ -225,6 +300,45 @@ kubectl cluster-info
   &lt;li&gt;&lt;a href=&quot;https://github.com/kelseyhightower/kubestack&quot;&gt;kubestack&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://cloud.google.com/solutions/automated-build-images-with-jenkins-kubernetes&quot;&gt;Automated Image Builds with Jenkins, Packer, and Kubernetes&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+	  </description>
+    </item>
+    
+    <item>
+      <title>Time to start a Go blog with Hugo</title>
+      <link>http://www.galiglobal.com/blog/2016/20160616-first-blog-post-with-hugo.html</link>
+      <pubDate>Thu, 16 Jun 2016 00:00:00 +0200</pubDate>
+      <guid isPermaLink="false">blog/2016/20160616-first-blog-post-with-hugo.html</guid>
+      <description>
+      &lt;p&gt;&lt;strong&gt;UPDATE&lt;/strong&gt;: I finally merged both blogs, so this blog post doesn&amp;rsquo;t make sense. I prefer Hugo to JBake but because I&amp;rsquo;ve been doing more Java/Groovy development, I will stay with JBake.&lt;/p&gt;&lt;p&gt;Well, this is embarrassing. I&amp;rsquo;m launching another blog!. Why?. Some time ago I&amp;rsquo;ve started to write a blog, in the beginning for corporate news but it has become a place where to write or document interesting things I do in my work, most of them related to Java, Groovy and Oracle technologies. The blog is generated with &lt;a href=&quot;http://jbake.org/&quot;&gt;JBake&lt;/a&gt; with the &lt;a href=&quot;https://github.com/antonmry/jbake-gradle-plugin&quot;&gt;gradle plugin&lt;/a&gt;, I like to use related technologies and I&amp;rsquo;m quite happy with the result, but to be honest, I don&amp;rsquo;t write frequently.&lt;/p&gt;&lt;p&gt;Six months ago I&amp;rsquo;ve started to learn and use &lt;a href=&quot;https://golang.org/&quot;&gt;Go&lt;/a&gt;. I was very impressed with the simplicity of the language and I&amp;rsquo;ve started to read a lot of articles, books, etc., watch videos and develop some projects. I discovered &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;, a site generator similar to JBake but written in Go. I was tempted to migrate my previous blog, but today I&amp;rsquo;m going to continue writing about not Go subjects, so it&amp;rsquo;s simpler to open a new one only for Go, bots, DevOps, concurrency and perfomance. In another post I will write more about Go and why I find it so interesting.&lt;/p&gt;&lt;p&gt;As the first post, let&amp;rsquo;s see how to configure &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;. I&amp;rsquo;ve to say it was really easy, I really impressed with piece of software. I can compare with other site generators as Jekyll, Hexo or JBake, and I have to say Hugo is my favourite.&lt;/p&gt;&lt;p&gt;First of all, I&amp;rsquo;ve created a new repo in my Gihub account and cloned it in my laptop:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;git clone git@github.com:antonmry/antonmry.github.io.git
+cd antonmry.github.io
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Because I&amp;rsquo;m going to use my github user page, the source code of the page must be in master branch. For your Hugo code, you can have a separate repo or just a different branch. I choose the second option with a branch named source, I prefer it in that way, it&amp;rsquo;s simpler and this is the main difference with the procedure you can find in &lt;a href=&quot;https://gohugo.io/tutorials/github-pages-blog&quot;&gt;the excellent Hugo documentation&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;git checkout -b source
+git push -u origin source
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Inside the source code folder, we are going to create a folder linking to the master branch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash
+git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It&amp;rsquo;s time to generate the site. First you have to install Hugo, plenty of options in the &lt;a href=&quot;https://gohugo.io/overview/installing/&quot;&gt;the Hugo website&lt;/a&gt;. I&amp;rsquo;ve chosen the Fedora package, updates will be easier.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;hugo new site antonmry.github.io
+mv antonmry.github.io/* .
+rm -r antonmry.github.io
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Choose your theme, there are very nice options, I&amp;rsquo;ve chosen beatifulhugo:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;cd themes
+git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo
+cd ..
+echo &amp;quot;theme = \&amp;quot;beautifulhugo\&amp;quot;&amp;quot; &amp;gt;&amp;gt; config.toml
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Create your first blog and start the server:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;hugo new post/hugo-site-created.md
+hugo server --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Open in your browser &lt;a href=&quot;http://localhost:1313/&quot;&gt;http://localhost:1313/&lt;/a&gt; and enjoy your first post with Hugo ;-)&lt;/p&gt;&lt;p&gt;Let&amp;rsquo;s move the post from draft to publised: edit the file content/post/hugo-site-created.md and change the draft line from true to false if exists.&lt;/p&gt;&lt;p&gt;Now it&amp;rsquo;s time to upload it to Gihub and make it public:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;hugo
+git add -A
+git commit -m &amp;quot;Initial version&amp;quot;
+git push
+git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git master
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Oh, really, can it be so easy?. Just go to &lt;a href=&quot;https://antonmry.github.io&quot;&gt;https://antonmry.github.io&lt;/a&gt; (or your equivalent site)&lt;/p&gt;&lt;p&gt;I was thinking in create a travis job to do the publishing in master (I did it before for jbake) but to be honest, this method is simple enough. I&amp;rsquo;ve added to my .bash_alias the last command and that&amp;rsquo;s all I need.&lt;/p&gt;&lt;p&gt;Enjoy!&lt;/p&gt;&lt;p&gt;PS: if you do a rebase in &lt;code&gt;source&lt;/code&gt;, you will need to do it a bit more tricky to push to master because you can&amp;rsquo;t use &lt;code&gt;--force&lt;/code&gt; with the &lt;code&gt;subtree&lt;/code&gt; option:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;git push origin `git subtree split --prefix public source`:master --force
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;More info can be found in Stackoverflow &lt;a href=&quot;http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push&quot;&gt;Git subtree - subtree up-to-date but can&amp;rsquo;t push&lt;/a&gt;.&lt;/p&gt;
 	  </description>
     </item>
     
