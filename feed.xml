@@ -6,8 +6,8 @@
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Antón R. Yuste Blog</description>
     <language>en-us</language>
-    <pubDate>Tue, 7 Mar 2017 20:02:09 +0100</pubDate>
-    <lastBuildDate>Tue, 7 Mar 2017 20:02:09 +0100</lastBuildDate>
+    <pubDate>Tue, 7 Mar 2017 20:15:21 +0100</pubDate>
+    <lastBuildDate>Tue, 7 Mar 2017 20:15:21 +0100</lastBuildDate>
 
     
     <item>
@@ -550,6 +550,16 @@ vim restcomm_service.yml
   &lt;li&gt;&lt;strong&gt;Don&amp;rsquo;t use the mouse&lt;/strong&gt;: yes, I&amp;rsquo;m a vim fan and a linux user. My goal is just stop to use the mouse for all the task I do. I feel quite confident with Intellij Idea now and the &lt;a href=&quot;https://plugins.jetbrains.com/plugin/164?pr=idea&quot;&gt;IdeaVim&lt;/a&gt; plugin, &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/vimperator/&quot;&gt;Firefox vimperator&lt;/a&gt; for browsing and the Linux console for most of the tasks. My main problems are with the email, calendar and some webs as Waffle and Feedly&amp;hellip;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;A pet project&lt;/strong&gt;: that&amp;rsquo;s something I have been looking for some time without luck. I would like to build something using Java/Groovy and WebRTC, working with others in something not too complex to start with / greenfield. Well, I hope 2016 is the year for this.&lt;/li&gt;
 &lt;/ul&gt;&lt;p&gt;That&amp;rsquo;s all! &lt;strong&gt;Happy and prosperous 2016!!&lt;/strong&gt;.&lt;/p&gt;
+	  </description>
+    </item>
+    
+    <item>
+      <title>Oracle Pre-conference and TADSummit 2015</title>
+      <link>http://www.galiglobal.com/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</link>
+      <pubDate>Tue, 17 Nov 2015 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</guid>
+      <description>
+      &lt;p&gt;Great event and people, I participated the first day in the Oracle pre-workshop and also I did a lightning talk about our winner hack in the TADHack. Here the video:&lt;/p&gt;&lt;p&gt;&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/ao9GRo5cjxM&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;&lt;/p&gt;
 	  </description>
     </item>
     
