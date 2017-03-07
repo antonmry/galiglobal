@@ -1,4 +1,3 @@
-+++
 title=Time to start a Go blog with Hugo
 date=2016-06-16
 type=post
