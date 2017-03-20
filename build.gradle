@@ -1,28 +1,36 @@
 buildscript {
-  repositories {
-      mavenLocal()
-      mavenCentral()
-      maven { url 'https://plugins.gradle.org/m2/' }
-      maven { url 'http://dl.bintray.com/antonmry/maven' }
-      //jcenter()
-  }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'http://dl.bintray.com/antonmry/maven' }
+        jcenter()
+    }
 
-  dependencies {
-      classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3'
-      classpath 'org.ajoberstar:grgit:1.1.0'
-      classpath "org.ajoberstar:gradle-git:1.5.0"
-  }
+    dependencies {
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3'
+        classpath 'org.ajoberstar:grgit:1.1.0'
+        classpath "org.ajoberstar:gradle-git:1.5.0"
+        classpath 'org.kordamp.gradle:livereload-gradle-plugin:0.2.1'
+    }
 }
 
 apply plugin: 'me.champeau.jbake'
 apply plugin: 'idea'
-apply plugin: "org.ajoberstar.github-pages"
+apply plugin: 'war'
+apply plugin: 'org.ajoberstar.github-pages'
+apply plugin: 'org.kordamp.gradle.livereload'
+
 
 jbake {
-    srcDirName  = 'src/jbake'
+    srcDirName = 'src/jbake'
     destDirName = 'jbake'
     clearCache = true
     configuration['render.tag'] = 'true'
+}
+
+liveReload {
+    docRoot = "$buildDir/jbake"
 }
 
 // jbake in master, web published in gh-pages
@@ -35,21 +43,3 @@ githubPages {
     }
 }
 
-// jbake in source, web published in master
-jbakeBuild.doFirst {
-    if (!project.file('build/jbake').exists()) {
-        ext.repo = org.ajoberstar.grgit.Grgit.clone(
-                dir: 'build/jbake',
-                uri: 'https://github.com/antonmry/galiglobal.git')
-    }
-}
-
-
-task publish << {
-    ext.repo = org.ajoberstar.grgit.Grgit.open(
-                project.file('build/jbake'),
-                new org.ajoberstar.grgit.Credentials('antonmry', System.getenv('GH_TOKEN')))
-    //repo.add(patterns: ['.'])
-    //repo.commit(message: System.getenv('TRAVIS_COMMIT_DESCRIPTION'), amend: true)
-    //repo.push(force: true);
-}
