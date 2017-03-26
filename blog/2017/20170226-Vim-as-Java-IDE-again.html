@@ -21,15 +21,11 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
   <body onload="prettyPrint()">
     <div id="wrap">
-   
+
 
 
 		<!-- Fixed navbar -->
@@ -72,19 +68,29 @@
 
 	<p><em>26 February 2017</em></p>
 
-	<p><p>I&rsquo;ve tried so many times change Intellij or Eclipse by vim.. But when it&rsquo;s related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it&rsquo;s even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.</p><p>Some weeks ago I&rsquo;ve discovered this blog post <a href="https://spacevim.org/use-vim-as-a-java-ide/">Use Vim as a Java IDE</a> and I want to give it another opportunity. Let&rsquo;s start.</p><h2>Neovim in Fedora</h2><p>This is straight-forward:</p>
+	<p><p>I&rsquo;ve tried so many times change Intellij or Eclipse by vim.. But when it&rsquo;s related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it&rsquo;s even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.</p>
+<p>Some weeks ago I&rsquo;ve discovered this blog post <a href="https://spacevim.org/use-vim-as-a-java-ide/">Use Vim as a Java IDE</a> and I want to give it another opportunity. Let&rsquo;s start.</p>
+<h2><a href="#neovim-in-fedora" name="neovim-in-fedora">Neovim in Fedora</a></h2>
+<p>This is straight-forward:</p>
 <pre><code>sudo dnf -y copr enable dperson/neovim
 sudo dnf -y install neovim
 sudo dnf -y install python3-neovim python3-neovim-gui
-</code></pre><p>For Fedora 25 is even easier:</p>
+</code></pre>
+<p>For Fedora 25 is even easier:</p>
 <pre><code>sudo dnf -y install neovim
 sudo dnf -y install python2-neovim python3-neovim
-</code></pre><p>For other systems, just check <a href="https://github.com/neovim/neovim/wiki/Installing-Neovim">the official Neovim documentation</a>.</p><p>We&rsquo;ll need some other plugins:</p>
+</code></pre>
+<p>For other systems, just check <a href="https://github.com/neovim/neovim/wiki/Installing-Neovim">the official Neovim documentation</a>.</p>
+<p>We&rsquo;ll need some other plugins:</p>
 <pre><code>sudo dnf -y install astyle
-</code></pre><h2>Install vim-plug</h2><p>Again, this is straight-forward following <a href="https://github.com/junegunn/vim-plug">the official instructions</a>:</p>
+</code></pre>
+<h2>Install vim-plug</h2>
+<p>Again, this is straight-forward following <a href="https://github.com/junegunn/vim-plug">the official instructions</a>:</p>
 <pre><code>curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-</code></pre><h2>Install plugins</h2><p>This is when things become messy. Start editing <code>~/.config/nvim/init.vim</code> to add the plugins:</p>
+</code></pre>
+<h2><a href="#install-plugins" name="install-plugins">Install plugins</a></h2>
+<p>This is when things become messy. Start editing <code>~/.config/nvim/init.vim</code> to add the plugins:</p>
 <pre><code>&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
 &quot;&quot;&quot;&quot;    vim-plug     &quot;&quot;&quot;&quot;
 &quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
@@ -133,7 +139,12 @@ augroup astyle
   autocmd!
   autocmd BufWritePre * Neoformat
 augroup END
-</code></pre><p>Open <code>nvim</code> and type <code>:PlugInstall</code>.</p><h2>Done!</h2><p>Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.</p><p>I will update this blog post with new things as soon as I have them.</p><h2>TODO</h2>
+</code></pre>
+<p>Open <code>nvim</code> and type <code>:PlugInstall</code>.</p>
+<h2>Done!</h2>
+<p>Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.</p>
+<p>I will update this blog post with new things as soon as I have them.</p>
+<h2><a href="#todo" name="todo">TODO</a></h2>
 <ul>
   <li>[ ] Add Groovy support.</li>
   <li>[ ] Add some screenshots or recording.</li>
@@ -147,7 +158,7 @@ augroup END
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.4.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 

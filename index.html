@@ -21,15 +21,11 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
     <link rel="shortcut icon" href="favicon.ico">
   </head>
   <body onload="prettyPrint()">
     <div id="wrap">
-   
+
 
 
 		<!-- Fixed navbar -->
@@ -103,7 +99,21 @@
 
                         
                         <div itemprop="blogPost">
-                            <p><p>This weekend I&rsquo;ve participated in the <a href="http://refu.gal/">Refugal</a>, a hackathon for refugees. It isn&rsquo;t the fist time I participate in a hackathon but this one has been special in some way. Do you know those videos of strangers who doesn&rsquo;t know each other but they start to play together in the middle of the station?. Something like this one:</p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/5Y39CwHfOHM" frameborder="0" allowfullscreen></iframe></p><p>Well, this is exactly what I felt some times during the weekend.</p><p>Let me start in the beginning. I arrived soon and started to speak with people. A nice introduction to the hackathon by <a href="https://twitter.com/dvilchez">David</a> and <a href="https://twitter.com/edosadikovic">Edo</a>, a game to improve creativity and we started with the ideas.</p><p>I know I&rsquo;m more a doer than a thinker. But I like to collaborate so I proposed two ideas: a bot to help communicated refugees and volunteers and a network of home webcams interconnected to provide real-time information to the refugees and also to people at home. My presentation of the ideas was quite bad, mainly I was speaking about a bot&hellip; but not all people were developers so later some people told me they didn&rsquo;t know what a bot is. Big fail.</p><p>My &ldquo;bot&rdquo; idea was the third one with more votes. It was another one I liked a lot more (the first one) but I stayed with the bot. Very soon the team was formed: four developers (2 web, 1 mobile and myself) and one designer. It was the more technical team, probably because of my bad explanation of the idea.</p><p>We moved to a room. We discussed the idea for a while in front of a whiteboard and we separated the bot in different sections: Facebook Connector, Telegram Connector, Bot Logic, Design (logo, web, slides, etc.) and DevOps (my part: server, docker, Apache Kafka, etc.). In less than 30 minutes, everything was ready and we were working on the project.</p><p>Hard to explain what happened after that, four guys and a designer working like one person. Lines of code, commands, systems, drawings&hellip; everything happening so fast, <a href="https://github.com/refu-gal/refubot/graphs/commit-activity">133 commits in less than 10 hours</a>. I remember the designer stopping her drawing and asking: &ldquo;Ey, guys, I know some development but I&rsquo;m not understanding what are you are talking about. Is it complex what you are doing?&rdquo;. The four developers in the room said Yes! at the same time. You may take a look to <a href="https://github.com/refu-gal/refubot">github repo</a>: Docker, Docker Compose, AWS, Apache Kafka, four nodeJS and one SQLLite&hellip; Everything integrated and working!. And the designer, what a great work she did. You may have the best backend in the world, but without a good designer, people isn&rsquo;t going to appreciate it. <a href="http://refubot.refu.gal/">The bot web</a> is done by her, nice work!</p><p><img src="https://lh3.googleusercontent.com/a5r3LdOYsH4W6qW3F-wyOAzsaVI5Mgqim6yF64Qeq9zw4K-FRPzQMyVe4QmR-EU4Lwk3HO0I4aDFGyz8a8zfG3a1hZ0nFpHM-cAbJH2YkGm9h8GNFcSa9Dtf-2795D6Avn96gF43keZVLGeqAROMOUlG4Orf-D_n26pbPG5lv9xNWT6Po62hqWMW9WDOobBX1rn0Cv3mjqn7-Yu5l1lCuRTANOrv6U-4DwCD-sKpmFinUYPl8y3y-veH6nB9NORgf0yjBQpr7RO5KSKRrc9fiAOvP63O8_FCpcdV1Zb5U-_DrPPbYtAMwbk50YyhSiaXghcQpJglHlqx7O-NAxZHDxAfoHyVE70w1so_af6v_KZfJBKzdEDUCZQ8rYJuCCQ4CBeK4u-Xe62U598F15e5x3Wb0lYSzSj-M_JBC6-qyqErio9NOKj4_akItup6Vp3_iDy5emavrNr9fuPa7p1lSOqBIg31LkR1Gz5y_skIV5iitaJS9HXa8D_NJS17gnUngIgCrI2s0vsbVZ753AhZFFOXdEqYwsI6LOuMhhwntmHdQa7Jcf1nmn5ybkt9qwSwYf7YNRy1iugRpg7DMIQOR6iffrQklAXfRSIbdeUKV0ytCKlftlk8UFR4DlN4JaZU0WbnMz4upj8mkK5xFzZE51o8NIbQEsCWwEH6vEXR=w1287-h965-no" alt="Working as a team""/></p><p>From time to time someone proposing something: always accepted or postponed to the end if there was time for that. And back to work, not even a discussion in the whole weekend. Sometimes we even forget go to eat (but a great organization and <a href="http://vigo.impacthub.net/en/">the impacthub Vigo is so cool</a>!). Also we had some funny moments, smiles and lot of complicity.</p><p>I even had time to add a SMS connector using Nexmo, the best 15 euros spent in my life. First time I develop something using nodejs. I don&rsquo;t like it yet but I have to say it was a good decision for the project: lot of libraries and SDKs, easy to deploy and fast to develop.</p><p>Of course, we run the demo during the presentation, it was great to see people sending messages from different networks and speaking with our bot. So fun!. I will pay good money for a video of that moment but everybody was too busy sending messages.</p><p><img src="https://lh3.googleusercontent.com/wEfS8qxIqm0Jg01y6C3t6wDnZslQz4-FsHs1gPuzqXxR51gH_xkSu7wZCAJ_9JYYZUteo0FvF2ThF_8XBuLcDtS0zKrnpz2AdARMVps7eCHgnaFxzKnyMp5KPerV7KOzhlJg1wX8avgpu7injwgz_0oiYLO7VIRs-uYDW8s_GavTiafJ3EpwftWJqP6sH-o9KmQRntwBuZt8QbggBhF7HWw4377Soc9GKm3mNsocqALa6Sl9Zwa5BFlZ-LnPQjp8Y2WA8_FVVq_KJdV0EzF8U4yEgcSkOlzZsiEShfcyfAwIF_NShDlOH-qYz8o22hF1rFP303zfoBfdSzuddIyD1jpMP9oRRAoQMEu7EuGEejp28Rz-GvzvbmgsJyvD3XzmuJgU-vJcq_es2D4PXabR9oHR_xQJXku2ip697ZiKrIhSlc0ye3oLFpANwC_Od_CiLp1m3NUG7KZ-vsf0BvfwYLrj1MURv2cRjChTXNTZ62LXXFbQv2uqUPWIdUlNVYcGrYoSg3lhWsCqzl3xm_80T5DDQOxyMavjJ7T4KwK-vN5CoFSiB3HSuy0NA__nUXYhhk6fudr1cw5myfyURuicvGjg1J9LD2NkbgSusyjPSgqVJqhBW4L84Q3cwMBJmcdFl921U-kD_iFRBG7VWYarTsWPPZ1i1mA_eoQCt8BRww=w1448-h965-no" alt="RefuBot presentation""/></p><p>This morning, when I terminated the EC2 instance hosting the bot, I felt some type of sadness. Yet it has been great to meet such great team this weekend. And who knows?. RefuBot works and it scales. I can assure that. Maybe someone will discover it in the future and RefuBot becomes real. If it&rsquo;s really useful, that would be fair.</p><p><em>Photos are from <a href="https://photos.google.com/share/AF1QipMDKf-GpnBzjFBII47B_Yoy5jOUpFqM1_agHANPrlG3CcKsbba09EcMIeZNP_R3sA?key=cllPNDJFMjlTYWtybXNIZ01PT1RMSWpabU5LVFF3">this Picassa album</a></em>.</p></p>
+                            <p><p>This weekend I&rsquo;ve participated in the <a href="http://refu.gal/">Refugal</a>, a hackathon for refugees. It isn&rsquo;t the fist time I participate in a hackathon but this one has been special in some way. Do you know those videos of strangers who doesn&rsquo;t know each other but they start to play together in the middle of the station?. Something like this one:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5Y39CwHfOHM" frameborder="0" allowfullscreen></iframe>
+<p>Well, this is exactly what I felt some times during the weekend.</p>
+<p>Let me start in the beginning. I arrived soon and started to speak with people. A nice introduction to the hackathon by <a href="https://twitter.com/dvilchez">David</a> and <a href="https://twitter.com/edosadikovic">Edo</a>, a game to improve creativity and we started with the ideas.</p>
+<p>I know I&rsquo;m more a doer than a thinker. But I like to collaborate so I proposed two ideas: a bot to help communicated refugees and volunteers and a network of home webcams interconnected to provide real-time information to the refugees and also to people at home. My presentation of the ideas was quite bad, mainly I was speaking about a bot&hellip; but not all people were developers so later some people told me they didn&rsquo;t know what a bot is. Big fail.</p>
+<p>My &ldquo;bot&rdquo; idea was the third one with more votes. It was another one I liked a lot more (the first one) but I stayed with the bot. Very soon the team was formed: four developers (2 web, 1 mobile and myself) and one designer. It was the more technical team, probably because of my bad explanation of the idea.</p>
+<p>We moved to a room. We discussed the idea for a while in front of a whiteboard and we separated the bot in different sections: Facebook Connector, Telegram Connector, Bot Logic, Design (logo, web, slides, etc.) and DevOps (my part: server, docker, Apache Kafka, etc.). In less than 30 minutes, everything was ready and we were working on the project.</p>
+<p>Hard to explain what happened after that, four guys and a designer working like one person. Lines of code, commands, systems, drawings&hellip; everything happening so fast, <a href="https://github.com/refu-gal/refubot/graphs/commit-activity">133 commits in less than 10 hours</a>. I remember the designer stopping her drawing and asking: &ldquo;Ey, guys, I know some development but I&rsquo;m not understanding what are you are talking about. Is it complex what you are doing?&rdquo;. The four developers in the room said Yes! at the same time. You may take a look to <a href="https://github.com/refu-gal/refubot">github repo</a>: Docker, Docker Compose, AWS, Apache Kafka, four nodeJS and one SQLLite&hellip; Everything integrated and working!. And the designer, what a great work she did. You may have the best backend in the world, but without a good designer, people isn&rsquo;t going to appreciate it. <a href="http://refubot.refu.gal/">The bot web</a> is done by her, nice work!</p>
+<p><img src="https://lh3.googleusercontent.com/a5r3LdOYsH4W6qW3F-wyOAzsaVI5Mgqim6yF64Qeq9zw4K-FRPzQMyVe4QmR-EU4Lwk3HO0I4aDFGyz8a8zfG3a1hZ0nFpHM-cAbJH2YkGm9h8GNFcSa9Dtf-2795D6Avn96gF43keZVLGeqAROMOUlG4Orf-D_n26pbPG5lv9xNWT6Po62hqWMW9WDOobBX1rn0Cv3mjqn7-Yu5l1lCuRTANOrv6U-4DwCD-sKpmFinUYPl8y3y-veH6nB9NORgf0yjBQpr7RO5KSKRrc9fiAOvP63O8_FCpcdV1Zb5U-_DrPPbYtAMwbk50YyhSiaXghcQpJglHlqx7O-NAxZHDxAfoHyVE70w1so_af6v_KZfJBKzdEDUCZQ8rYJuCCQ4CBeK4u-Xe62U598F15e5x3Wb0lYSzSj-M_JBC6-qyqErio9NOKj4_akItup6Vp3_iDy5emavrNr9fuPa7p1lSOqBIg31LkR1Gz5y_skIV5iitaJS9HXa8D_NJS17gnUngIgCrI2s0vsbVZ753AhZFFOXdEqYwsI6LOuMhhwntmHdQa7Jcf1nmn5ybkt9qwSwYf7YNRy1iugRpg7DMIQOR6iffrQklAXfRSIbdeUKV0ytCKlftlk8UFR4DlN4JaZU0WbnMz4upj8mkK5xFzZE51o8NIbQEsCWwEH6vEXR=w1287-h965-no" alt="Working as a team" /></p>
+<p>From time to time someone proposing something: always accepted or postponed to the end if there was time for that. And back to work, not even a discussion in the whole weekend. Sometimes we even forget go to eat (but a great organization and <a href="http://vigo.impacthub.net/en/">the impacthub Vigo is so cool</a>!). Also we had some funny moments, smiles and lot of complicity.</p>
+<p>I even had time to add a SMS connector using Nexmo, the best 15 euros spent in my life. First time I develop something using nodejs. I don&rsquo;t like it yet but I have to say it was a good decision for the project: lot of libraries and SDKs, easy to deploy and fast to develop.</p>
+<p>Of course, we run the demo during the presentation, it was great to see people sending messages from different networks and speaking with our bot. So fun!. I will pay good money for a video of that moment but everybody was too busy sending messages.</p>
+<p><img src="https://lh3.googleusercontent.com/wEfS8qxIqm0Jg01y6C3t6wDnZslQz4-FsHs1gPuzqXxR51gH_xkSu7wZCAJ_9JYYZUteo0FvF2ThF_8XBuLcDtS0zKrnpz2AdARMVps7eCHgnaFxzKnyMp5KPerV7KOzhlJg1wX8avgpu7injwgz_0oiYLO7VIRs-uYDW8s_GavTiafJ3EpwftWJqP6sH-o9KmQRntwBuZt8QbggBhF7HWw4377Soc9GKm3mNsocqALa6Sl9Zwa5BFlZ-LnPQjp8Y2WA8_FVVq_KJdV0EzF8U4yEgcSkOlzZsiEShfcyfAwIF_NShDlOH-qYz8o22hF1rFP303zfoBfdSzuddIyD1jpMP9oRRAoQMEu7EuGEejp28Rz-GvzvbmgsJyvD3XzmuJgU-vJcq_es2D4PXabR9oHR_xQJXku2ip697ZiKrIhSlc0ye3oLFpANwC_Od_CiLp1m3NUG7KZ-vsf0BvfwYLrj1MURv2cRjChTXNTZ62LXXFbQv2uqUPWIdUlNVYcGrYoSg3lhWsCqzl3xm_80T5DDQOxyMavjJ7T4KwK-vN5CoFSiB3HSuy0NA__nUXYhhk6fudr1cw5myfyURuicvGjg1J9LD2NkbgSusyjPSgqVJqhBW4L84Q3cwMBJmcdFl921U-kD_iFRBG7VWYarTsWPPZ1i1mA_eoQCt8BRww=w1448-h965-no" alt="RefuBot presentation" /></p>
+<p>This morning, when I terminated the EC2 instance hosting the bot, I felt some type of sadness. Yet it has been great to meet such great team this weekend. And who knows?. RefuBot works and it scales. I can assure that. Maybe someone will discover it in the future and RefuBot becomes real. If it&rsquo;s really useful, that would be fair.</p>
+<p><em>Photos are from <a href="https://photos.google.com/share/AF1QipMDKf-GpnBzjFBII47B_Yoy5jOUpFqM1_agHANPrlG3CcKsbba09EcMIeZNP_R3sA?key=cllPNDJFMjlTYWtybXNIZ01PT1RMSWpabU5LVFF3">this Picassa album</a></em>.</p></p>
                         </div>
                         
                     </div>
@@ -135,19 +145,29 @@
 
                         
                         <div itemprop="blogPost">
-                            <p><p>I&rsquo;ve tried so many times change Intellij or Eclipse by vim.. But when it&rsquo;s related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it&rsquo;s even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.</p><p>Some weeks ago I&rsquo;ve discovered this blog post <a href="https://spacevim.org/use-vim-as-a-java-ide/">Use Vim as a Java IDE</a> and I want to give it another opportunity. Let&rsquo;s start.</p><h2>Neovim in Fedora</h2><p>This is straight-forward:</p>
+                            <p><p>I&rsquo;ve tried so many times change Intellij or Eclipse by vim.. But when it&rsquo;s related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it&rsquo;s even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.</p>
+<p>Some weeks ago I&rsquo;ve discovered this blog post <a href="https://spacevim.org/use-vim-as-a-java-ide/">Use Vim as a Java IDE</a> and I want to give it another opportunity. Let&rsquo;s start.</p>
+<h2><a href="#neovim-in-fedora" name="neovim-in-fedora">Neovim in Fedora</a></h2>
+<p>This is straight-forward:</p>
 <pre><code>sudo dnf -y copr enable dperson/neovim
 sudo dnf -y install neovim
 sudo dnf -y install python3-neovim python3-neovim-gui
-</code></pre><p>For Fedora 25 is even easier:</p>
+</code></pre>
+<p>For Fedora 25 is even easier:</p>
 <pre><code>sudo dnf -y install neovim
 sudo dnf -y install python2-neovim python3-neovim
-</code></pre><p>For other systems, just check <a href="https://github.com/neovim/neovim/wiki/Installing-Neovim">the official Neovim documentation</a>.</p><p>We&rsquo;ll need some other plugins:</p>
+</code></pre>
+<p>For other systems, just check <a href="https://github.com/neovim/neovim/wiki/Installing-Neovim">the official Neovim documentation</a>.</p>
+<p>We&rsquo;ll need some other plugins:</p>
 <pre><code>sudo dnf -y install astyle
-</code></pre><h2>Install vim-plug</h2><p>Again, this is straight-forward following <a href="https://github.com/junegunn/vim-plug">the official instructions</a>:</p>
+</code></pre>
+<h2>Install vim-plug</h2>
+<p>Again, this is straight-forward following <a href="https://github.com/junegunn/vim-plug">the official instructions</a>:</p>
 <pre><code>curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-</code></pre><h2>Install plugins</h2><p>This is when things become messy. Start editing <code>~/.config/nvim/init.vim</code> to add the plugins:</p>
+</code></pre>
+<h2><a href="#install-plugins" name="install-plugins">Install plugins</a></h2>
+<p>This is when things become messy. Start editing <code>~/.config/nvim/init.vim</code> to add the plugins:</p>
 <pre><code>&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
 &quot;&quot;&quot;&quot;    vim-plug     &quot;&quot;&quot;&quot;
 &quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
@@ -196,7 +216,12 @@ augroup astyle
   autocmd!
   autocmd BufWritePre * Neoformat
 augroup END
-</code></pre><p>Open <code>nvim</code> and type <code>:PlugInstall</code>.</p><h2>Done!</h2><p>Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.</p><p>I will update this blog post with new things as soon as I have them.</p><h2>TODO</h2>
+</code></pre>
+<p>Open <code>nvim</code> and type <code>:PlugInstall</code>.</p>
+<h2>Done!</h2>
+<p>Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.</p>
+<p>I will update this blog post with new things as soon as I have them.</p>
+<h2><a href="#todo" name="todo">TODO</a></h2>
 <ul>
   <li>[ ] Add Groovy support.</li>
   <li>[ ] Add some screenshots or recording.</li>
@@ -232,7 +257,19 @@ augroup END
 
                         
                         <div itemprop="blogPost">
-                            <p><p>Last year I wrote a post with my goals for first time in my life. It was something new and I must say I&rsquo;ve read it many times to see how things are going. It has been a good experience and I want to repeat it this year.</p><p>2016 year has been, in the professional aspect, the best year of my life. Probably also in the personal aspect with a new kid. I&rsquo;m not going to speak too much about the last year, it was just great for me. I&rsquo;ve achieved some of the goals, failed in others, and there was new ones&hellip; That&rsquo;s the life.</p><p>Beginning of 2017 has been very stormy, even hard. Lots of problems, work and changes. That&rsquo;s the reason I&rsquo;ve waited so much to write this blog post. The good point when things are difficult is you are going to learn a lot. I have discovered things about my environment and myself which I&rsquo;ve never thought about before.</p><p>The first thing I&rsquo;ve discovered is the engineers &ldquo;ego problem&rdquo;. When you are fighting hard to make a project success, when you solve difficult problems, when you have to make your customers understand the consequences of their decisions or you are training younger engineers&hellip; Slowly but relentless the ego problem is growing on you. And let&rsquo;s make this clear: I&rsquo;m guilty. My motto always was: &ldquo;No project where I work can&rsquo;t fail&rdquo;. Now I understand how wrong I was. Project can be a huge success for the customer, but a big fail for your company or the team because the lost of trustiness or the casualties.. And now I know I had some failed projects in my life.</p><p>Other good sign of this is my proposals for the last year. All of them are about me. Again, the ego problem. The reason was my fear to be out of the IT jobs market. Be without a project or a salary really scares me. I think this is irrational, I have a B plan just in case I loose my job and I wasn&rsquo;t able to find a new one. Also I&rsquo;m receiving job offers every week, some of them really good ones (that does not help with the ego problem either). Probably it&rsquo;s more related to spend days without to do something useful and because I feel lucky to do what I do.</p><p>I deserve a punishment and 2017 will be the year to start with it.</p><p>First goal: repeat every morning in front of the mirror &ldquo;Be humble&rdquo; three times. If in some point of the day I fail on that, I will go to the involved person and I will ask for forgiveness. It doesn&rsquo;t matter if it&rsquo;s a small fail or the involved person is a jerk, I will do it anyway.</p><p>Second goal: make the company where I work a better place to work. This means stop claiming and start to actively work in the solution to solve the problems I&rsquo;m claiming about. Let&rsquo;s make this clear: companies must earn money. But at the same time, employees must be feel involved, happy and positive. Both things are related. I&rsquo;m not sure how to do this or the real impact which I can have with my actions in a big company. I&rsquo;m just one, I&rsquo;m not a superhero and the company where I work is good but not perfect, there is always room for improvement. It doesn&rsquo;t matter my role, I will just try to do as much as possible. Also I want to focus in the youngest engineers. In my opinion senior engineers should be more involved in professional evolution of the younger ones and I want to lead by example on that.</p><p>Third goal: return something to your local community. I can&rsquo;t believe this is a goal I have when I&rsquo;m 36 years old. Start so late on this is probably the biggest failure in my career. It was even more clear to me after an event last week for students. Two of the speakers made great points on the importance of contribute to your local community. I admire those two guys. I don&rsquo;t pretend to be like them but at least I want to do something. Start the <a href="https://www.meetup.com/Vigo-JUG/">VigoJUG</a> is a beginning. I hope to find other ways to contribute during the year. If you are reading this and you have any idea, please, let me know.</p><p>The last goal isn&rsquo;t really a goal but a fear. Yesterday a fellow said I&rsquo;m a Project Manager. It has been very painful for me because I realize he was partially right and I don&rsquo;t want that role anymore.</p><p><img src="http://assets.amuniversal.com/07b853c0c94f013441df005056a9545d" alt="Dilbert Has Management Potential""/></p><p>Last year I&rsquo;ve been developing a lot but 2017 has been crazy and I&rsquo;ve been more focused in solve problems and get things done&hellip; So my technical work has been reduced to Pull Request reviews and some time developing in the weekend. Rest of the time: mails, phone calls, write documents and meetings. I don&rsquo;t want to spend the rest of my life doing only those things. I know they are useful and they are the way to achieve the goals I&rsquo;ve described before. But I&rsquo;ve spent 20 years of my life dealing with computers, I&rsquo;ve trained myself to learn vim shortcuts, researching how to write clean code, use the command shell, etc. and I don&rsquo;t want to loose that. It makes me feel happy and full. If I don&rsquo;t do it, I will end being sad and frustrated, so I have to found a way to conciliate both things. Any advise will be welcomed.</p><p>I want to finish this post asking for forgiveness. Specially during my time in Accenture I did a lot of wrong things. Not even close but I pushed too hard some times in Optare. If I did something which has troubled you, I&rsquo;m very sorry. I promise: I will be humble, I will be humble, I will be humble.</p></p>
+                            <p><p>Last year I wrote a post with my goals for first time in my life. It was something new and I must say I&rsquo;ve read it many times to see how things are going. It has been a good experience and I want to repeat it this year.</p>
+<p>2016 year has been, in the professional aspect, the best year of my life. Probably also in the personal aspect with a new kid. I&rsquo;m not going to speak too much about the last year, it was just great for me. I&rsquo;ve achieved some of the goals, failed in others, and there was new ones&hellip; That&rsquo;s the life.</p>
+<p>Beginning of 2017 has been very stormy, even hard. Lots of problems, work and changes. That&rsquo;s the reason I&rsquo;ve waited so much to write this blog post. The good point when things are difficult is you are going to learn a lot. I have discovered things about my environment and myself which I&rsquo;ve never thought about before.</p>
+<p>The first thing I&rsquo;ve discovered is the engineers &ldquo;ego problem&rdquo;. When you are fighting hard to make a project success, when you solve difficult problems, when you have to make your customers understand the consequences of their decisions or you are training younger engineers&hellip; Slowly but relentless the ego problem is growing on you. And let&rsquo;s make this clear: I&rsquo;m guilty. My motto always was: &ldquo;No project where I work can&rsquo;t fail&rdquo;. Now I understand how wrong I was. Project can be a huge success for the customer, but a big fail for your company or the team because the lost of trustiness or the casualties.. And now I know I had some failed projects in my life.</p>
+<p>Other good sign of this is my proposals for the last year. All of them are about me. Again, the ego problem. The reason was my fear to be out of the IT jobs market. Be without a project or a salary really scares me. I think this is irrational, I have a B plan just in case I loose my job and I wasn&rsquo;t able to find a new one. Also I&rsquo;m receiving job offers every week, some of them really good ones (that does not help with the ego problem either). Probably it&rsquo;s more related to spend days without to do something useful and because I feel lucky to do what I do.</p>
+<p>I deserve a punishment and 2017 will be the year to start with it.</p>
+<p>First goal: repeat every morning in front of the mirror &ldquo;Be humble&rdquo; three times. If in some point of the day I fail on that, I will go to the involved person and I will ask for forgiveness. It doesn&rsquo;t matter if it&rsquo;s a small fail or the involved person is a jerk, I will do it anyway.</p>
+<p>Second goal: make the company where I work a better place to work. This means stop claiming and start to actively work in the solution to solve the problems I&rsquo;m claiming about. Let&rsquo;s make this clear: companies must earn money. But at the same time, employees must be feel involved, happy and positive. Both things are related. I&rsquo;m not sure how to do this or the real impact which I can have with my actions in a big company. I&rsquo;m just one, I&rsquo;m not a superhero and the company where I work is good but not perfect, there is always room for improvement. It doesn&rsquo;t matter my role, I will just try to do as much as possible. Also I want to focus in the youngest engineers. In my opinion senior engineers should be more involved in professional evolution of the younger ones and I want to lead by example on that.</p>
+<p>Third goal: return something to your local community. I can&rsquo;t believe this is a goal I have when I&rsquo;m 36 years old. Start so late on this is probably the biggest failure in my career. It was even more clear to me after an event last week for students. Two of the speakers made great points on the importance of contribute to your local community. I admire those two guys. I don&rsquo;t pretend to be like them but at least I want to do something. Start the <a href="https://www.meetup.com/Vigo-JUG/">VigoJUG</a> is a beginning. I hope to find other ways to contribute during the year. If you are reading this and you have any idea, please, let me know.</p>
+<p>The last goal isn&rsquo;t really a goal but a fear. Yesterday a fellow said I&rsquo;m a Project Manager. It has been very painful for me because I realize he was partially right and I don&rsquo;t want that role anymore.</p>
+<p><img src="http://assets.amuniversal.com/07b853c0c94f013441df005056a9545d" alt="Dilbert Has Management Potential" /></p>
+<p>Last year I&rsquo;ve been developing a lot but 2017 has been crazy and I&rsquo;ve been more focused in solve problems and get things done&hellip; So my technical work has been reduced to Pull Request reviews and some time developing in the weekend. Rest of the time: mails, phone calls, write documents and meetings. I don&rsquo;t want to spend the rest of my life doing only those things. I know they are useful and they are the way to achieve the goals I&rsquo;ve described before. But I&rsquo;ve spent 20 years of my life dealing with computers, I&rsquo;ve trained myself to learn vim shortcuts, researching how to write clean code, use the command shell, etc. and I don&rsquo;t want to loose that. It makes me feel happy and full. If I don&rsquo;t do it, I will end being sad and frustrated, so I have to found a way to conciliate both things. Any advise will be welcomed.</p>
+<p>I want to finish this post asking for forgiveness. Specially during my time in Accenture I did a lot of wrong things. Not even close but I pushed too hard some times in Optare. If I did something which has troubled you, I&rsquo;m very sorry. I promise: I will be humble, I will be humble, I will be humble.</p></p>
                         </div>
                         
                     </div>
@@ -267,9 +304,13 @@ augroup END
 
                         
                         <div itemprop="blogPost">
-                            <p><p>In my previous post, <a href="https://antonmry.github.io/post/deploy-on-kubernetes-gke-with-terraform/">Deploy on Kubernetes GKE with Terraform</a>, we&rsquo;ve seen how to start to use kubernetes but in a very simple way. The next thing we would like to do is persist the configuration, so we don&rsquo;t need to reconfigure our bot each time we start the cluster. This post explain how to do it from the configuration created in the previous one.</p><p>Again we&rsquo;ll use <a href="https://github.com/antonmry/leanmanager">Leanmanager bot</a> but everything applies to any other system which needs to store configuration or data in a database. In the case of <a href="https://github.com/antonmry/leanmanager">Leanmanager</a> we are using <a href="https://github.com/boltdb/bolt">Boltdb</a>, a pure Go key/value store. <a href="https://github.com/boltdb/bolt">Boltdb</a> is great for development but it doesn&rsquo;t support to have more than one process opening the same database file, so it may be problematic if we want to have more than one Docker instance at the same time. Yet it&rsquo;s enough for our purposes and the process is similar for <a href="https://www.consul.io/">Consul</a> which it&rsquo;s already in the Roadmap.</p><h2>Create your persistent disks</h2><p>If we want to persist data, we are going to need a disk, that&rsquo;s common sense. In GCE we can do it very easily:</p>
+                            <p><p>In my previous post, <a href="https://antonmry.github.io/post/deploy-on-kubernetes-gke-with-terraform/">Deploy on Kubernetes GKE with Terraform</a>, we&rsquo;ve seen how to start to use kubernetes but in a very simple way. The next thing we would like to do is persist the configuration, so we don&rsquo;t need to reconfigure our bot each time we start the cluster. This post explain how to do it from the configuration created in the previous one.</p>
+<p>Again we&rsquo;ll use <a href="https://github.com/antonmry/leanmanager">Leanmanager bot</a> but everything applies to any other system which needs to store configuration or data in a database. In the case of <a href="https://github.com/antonmry/leanmanager">Leanmanager</a> we are using <a href="https://github.com/boltdb/bolt">Boltdb</a>, a pure Go key/value store. <a href="https://github.com/boltdb/bolt">Boltdb</a> is great for development but it doesn&rsquo;t support to have more than one process opening the same database file, so it may be problematic if we want to have more than one Docker instance at the same time. Yet it&rsquo;s enough for our purposes and the process is similar for <a href="https://www.consul.io/">Consul</a> which it&rsquo;s already in the Roadmap.</p>
+<h2><a href="#create-your-persistent-disks" name="create-your-persistent-disks">Create your persistent disks</a></h2>
+<p>If we want to persist data, we are going to need a disk, that&rsquo;s common sense. In GCE we can do it very easily:</p>
 <pre><code class="sh">gcloud compute disks create --size 1GB leanmanager-disk
-</code></pre><p>But again, we want to do it in an automated way with Terraform. Use the following file <code>leanmanager-disk.tf</code>:</p>
+</code></pre>
+<p>But again, we want to do it in an automated way with Terraform. Use the following file <code>leanmanager-disk.tf</code>:</p>
 <pre><code>variable &quot;disk_name&quot; {
   default = &quot;leanmanager-disk&quot;
 }
@@ -280,7 +321,10 @@ name  = &quot;${var.disk_name}&quot;
   zone = &quot;${var.region}&quot;
   size  = &quot;1&quot;
 }
-</code></pre><p>If you want to know more about it, visit the <a href="https://www.terraform.io/docs/providers/google/r/compute_disk.html">Terraform Google_Compute_Disk reference documentation</a>.</p><h2>Tell the container about the disk</h2><p>In our previous post, we&rsquo;ve launched the bot using <code>kubectl run</code>. This is OK for simple configuration but if we need to have something more complex, it doesn&rsquo;t scale. We can create a <a href="http://kubernetes.io/docs/user-guide/pods/">pod</a>, a group of one or more containers, using a YAML file like this:</p>
+</code></pre>
+<p>If you want to know more about it, visit the <a href="https://www.terraform.io/docs/providers/google/r/compute_disk.html">Terraform Google_Compute_Disk reference documentation</a>.</p>
+<h2><a href="#tell-the-container-about-the-disk" name="tell-the-container-about-the-disk">Tell the container about the disk</a></h2>
+<p>In our previous post, we&rsquo;ve launched the bot using <code>kubectl run</code>. This is OK for simple configuration but if we need to have something more complex, it doesn&rsquo;t scale. We can create a <a href="http://kubernetes.io/docs/user-guide/pods/">pod</a>, a group of one or more containers, using a YAML file like this:</p>
 <pre><code>apiVersion: v1
 kind: Pod
 metadata:
@@ -306,7 +350,9 @@ spec:
         # This disk must already exist.
         pdName: leanmanager-disk
         fsType: ext4
-</code></pre><p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I don&rsquo;t want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn&rsquo;t supported yet in K8s, see <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>. </p><p>So I&rsquo;ve created a YAML template and in the Terraform file changed the last <code>local-exec</code> to:</p>
+</code></pre>
+<p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I don&rsquo;t want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn&rsquo;t supported yet in K8s, see <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>. </p>
+<p>So I&rsquo;ve created a YAML template and in the Terraform file changed the last <code>local-exec</code> to:</p>
 <pre><code>  provisioner &quot;local-exec&quot; {
     command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- &#39;s/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g&#39; leanmanager.tmp.yaml&quot;
   }
@@ -318,17 +364,27 @@ spec:
   provisioner &quot;local-exec&quot; {
     command = &quot;rm -f leanmanager.tmp.yaml&quot;
   }
-</code></pre><p>Basically, I&rsquo;m replacing strings with <code>sed</code>. Other more sophisticate approaches are possible as K8s secrets or Ansible, but this is simple and enough for the task we want to do.</p><h2>Create the pod and test</h2><p>Time to create the cluster and the pod:</p>
+</code></pre>
+<p>Basically, I&rsquo;m replacing strings with <code>sed</code>. Other more sophisticate approaches are possible as K8s secrets or Ansible, but this is simple and enough for the task we want to do.</p>
+<h2><a href="#create-the-pod-and-test" name="create-the-pod-and-test">Create the pod and test</a></h2>
+<p>Time to create the cluster and the pod:</p>
 <pre><code class="sh">terraform plan
 terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
-</code></pre><p>The bot should connect. Now we can do some changes in the configuration, delete the pod:</p>
+</code></pre>
+<p>The bot should connect. Now we can do some changes in the configuration, delete the pod:</p>
 <pre><code class="sh">kubectl delete pod leanmanager
-</code></pre><p>Create it again:</p>
+</code></pre>
+<p>Create it again:</p>
 <pre><code class="sh">kubectl create -f leanmanager.yaml
-</code></pre><p>And check the status with the following commands and, once it&rsquo;s in <em>Running</em> state, see if everything has been persisted:</p>
+</code></pre>
+<p>And check the status with the following commands and, once it&rsquo;s in <em>Running</em> state, see if everything has been persisted:</p>
 <pre><code class="sh">kubectl get pod leanmanager
 kubectl logs leanmanager
-</code></pre><h2>Conclusion</h2><p>Persist data in Kubernetes is quite easy, even if you are going to do it automatically.</p><p>If you want to check all the files, the full project and the associated PR are in <a href="https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0">Github</a>.</p><h2>Not already linked but useful resources</h2>
+</code></pre>
+<h2><a href="#conclusion" name="conclusion">Conclusion</a></h2>
+<p>Persist data in Kubernetes is quite easy, even if you are going to do it automatically.</p>
+<p>If you want to check all the files, the full project and the associated PR are in <a href="https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0">Github</a>.</p>
+<h2><a href="#not-already-linked-but-useful-resources" name="not-already-linked-but-useful-resources">Not already linked but useful resources</a></h2>
 <ul>
   <li><a href="http://kubernetes.io/docs/user-guide/persistent-volumes/">Kubernetes persistent volumes</a></li>
   <li><a href="https://cloud.google.com/container-engine/docs/tutorials/persistent-disk/">Using Persistent Disks with WordPress and MySQL</a></li>
@@ -364,24 +420,40 @@ kubectl logs leanmanager
 
                         
                         <div itemprop="blogPost">
-                            <p><h2>Microservices don&rsquo;t fit all use cases</h2><p>When I&rsquo;ve started <a href="https://github.com/antonmry/leanmanager">my Leanmanager bot</a>, I&rsquo;ve chosen to use the same approach (well, really it&rsquo;s a framework but that word seems to be censured if you are a gopher so I will use <em>approach</em>) as the kubernetes project: if it&rsquo;s good for k8s, it should be good for me and also a good way to learn a bit more about kubernetes. So I&rsquo;ve implemented all the REST APIs using <a href="https://github.com/emicklei/go-restful">github.com/emicklei/go-restful</a>.</p><p>Then I had the opportunity to work a bit with <a href="https://gokit.io/">go-kit</a>. A framework, ups, no, sorry, a toolkit to create microservices. My initial opinion was too complicated and too much boilerplate. Yet I would like to give it another opportunity, there are some interesting things useful for bots (support many transports, RPC approach, instrumentation) and my main motivation with the bot is to test new technologies and ideas so&hellip; why not?</p><p>If you visit the <a href="https://gokit.io">Go-kit website</a>, and then, you will jump very soon into the <a href="https://gokit.io/examples/stringsvc.html">stringsvc tutorial</a>. The tutorial is awesome but it isn&rsquo;t a five minutes read and it&rsquo;s a bit too complicated to start to work with Go-kit. I recommend an approach a bit different. First, watch <a href="https://www.youtube.com/watch?v=JXEjAwNWays">Go + Microservices = Go Kit</a> from <a href="https://peter.bourgon.org/">Peter Bourgon</a>. This is an awesome talk explaining microservices and their use cases. Clearly Peter knows a lot about the subject: microservices aren&rsquo;t for everyone.</p><p>If after the video, you think microservices fit your case, go ahead and may the Force be with you.</p><h2>Go-kit addsvc example</h2><p>First step, download Go-kit:</p>
+                            <p><h2>Microservices don&rsquo;t fit all use cases</h2>
+<p>When I&rsquo;ve started <a href="https://github.com/antonmry/leanmanager">my Leanmanager bot</a>, I&rsquo;ve chosen to use the same approach (well, really it&rsquo;s a framework but that word seems to be censured if you are a gopher so I will use <em>approach</em>) as the kubernetes project: if it&rsquo;s good for k8s, it should be good for me and also a good way to learn a bit more about kubernetes. So I&rsquo;ve implemented all the REST APIs using <a href="https://github.com/emicklei/go-restful">github.com/emicklei/go-restful</a>.</p>
+<p>Then I had the opportunity to work a bit with <a href="https://gokit.io/">go-kit</a>. A framework, ups, no, sorry, a toolkit to create microservices. My initial opinion was too complicated and too much boilerplate. Yet I would like to give it another opportunity, there are some interesting things useful for bots (support many transports, RPC approach, instrumentation) and my main motivation with the bot is to test new technologies and ideas so&hellip; why not?</p>
+<p>If you visit the <a href="https://gokit.io">Go-kit website</a>, and then, you will jump very soon into the <a href="https://gokit.io/examples/stringsvc.html">stringsvc tutorial</a>. The tutorial is awesome but it isn&rsquo;t a five minutes read and it&rsquo;s a bit too complicated to start to work with Go-kit. I recommend an approach a bit different. First, watch <a href="https://www.youtube.com/watch?v=JXEjAwNWays">Go + Microservices = Go Kit</a> from <a href="https://peter.bourgon.org/">Peter Bourgon</a>. This is an awesome talk explaining microservices and their use cases. Clearly Peter knows a lot about the subject: microservices aren&rsquo;t for everyone.</p>
+<p>If after the video, you think microservices fit your case, go ahead and may the Force be with you.</p>
+<h2>Go-kit addsvc example</h2>
+<p>First step, download Go-kit:</p>
 <pre><code class="sh">go get github.com/go-kit/kit
-</code></pre><p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you&rsquo;ve already in the GOPATH).</p>
+</code></pre>
+<p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you&rsquo;ve already in the GOPATH).</p>
 <pre><code class="sh">cp -r ../../go-kit/kit/examples/addsvc/ .
 go get ./...
-</code></pre><p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let&rsquo;s try the example. Launch the server:</p>
+</code></pre>
+<p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let&rsquo;s try the example. Launch the server:</p>
 <pre><code class="sh">cd cmd/addsvc/
 go run main.go
-</code></pre><p>And in a different shell, launch the client:</p>
+</code></pre>
+<p>And in a different shell, launch the client:</p>
 <pre><code class="sh">cd cmd/addcli/
 go run main.go -http.addr=:8081 1 2
-</code></pre><p>If everything goes well, you will obtain something like:</p>
-<blockquote><p>1 + 2 = 3</p>
-</blockquote><p>Or you can use <code>curl</code> directly:</p>
+</code></pre>
+<p>If everything goes well, you will obtain something like:</p>
+<blockquote>
+  <p>1 + 2 = 3</p>
+</blockquote>
+<p>Or you can use <code>curl</code> directly:</p>
 <pre><code class="sh">curl -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}&#39; http://localhost:8081/concat
-</code></pre><p>There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:</p>
+</code></pre>
+<p>There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:</p>
 <pre><code class="sh">go run main.go -grpc.addr=:8082 1 2
-</code></pre><h2>Show me the code!</h2><p>It&rsquo;s time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p><p>Note: I may continue this in the future if I resume my work with go-kit.</p></p>
+</code></pre>
+<h2>Show me the code!</h2>
+<p>It&rsquo;s time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p>
+<p>Note: I may continue this in the future if I resume my work with go-kit.</p></p>
                         </div>
                         
                     </div>
@@ -413,38 +485,62 @@ go run main.go -http.addr=:8081 1 2
 
                         
                         <div itemprop="blogPost">
-                            <p><p>Writing a new post after six months and in Christmas&hellip; New year, new promises, old projects. I&rsquo;ve been quite busy the second half of 2016, but also very happy and satisfied with some personal and professional projects. No more excuses and let&rsquo;s focus in this post.</p><h2>Introduction</h2><p>I want to deploy my <a href="https://hub.docker.com/r/antonmry/leanmanager">leanmanager Docker image</a> so the bot is available all the time for the team, but you can choose any Docker image you want to use. I want to use <a href="https://cloud.google.com/container-engine/docs/quickstart">Google Container Engine</a> Kubernetes implementation and do it everything as much automatic as possible using Terraform.</p><h2>GCE installation</h2><p>First step, make sure you&rsquo;ve created previously a project in the Google Cloud console. If you don&rsquo;t have the Cloud SDK, you are going to need it. It&rsquo;s quite easy to install following <a href="https://cloud.google.com/sdk/docs/quickstart-linux">the Google instructions</a>:</p>
+                            <p><p>Writing a new post after six months and in Christmas&hellip; New year, new promises, old projects. I&rsquo;ve been quite busy the second half of 2016, but also very happy and satisfied with some personal and professional projects. No more excuses and let&rsquo;s focus in this post.</p>
+<h2><a href="#introduction" name="introduction">Introduction</a></h2>
+<p>I want to deploy my <a href="https://hub.docker.com/r/antonmry/leanmanager">leanmanager Docker image</a> so the bot is available all the time for the team, but you can choose any Docker image you want to use. I want to use <a href="https://cloud.google.com/container-engine/docs/quickstart">Google Container Engine</a> Kubernetes implementation and do it everything as much automatic as possible using Terraform.</p>
+<h2><a href="#gce-installation" name="gce-installation">GCE installation</a></h2>
+<p>First step, make sure you&rsquo;ve created previously a project in the Google Cloud console. If you don&rsquo;t have the Cloud SDK, you are going to need it. It&rsquo;s quite easy to install following <a href="https://cloud.google.com/sdk/docs/quickstart-linux">the Google instructions</a>:</p>
 <pre><code class="sh">cd ~/Software
 curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
 tar -zxvf google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
 rm google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
 ./google-cloud-sdk/install.sh
-</code></pre><p><strong>Note</strong>: be careful, last command modifies your .bashrc and it may cause problems.</p><p>Now, it&rsquo;s time to log in:</p>
+</code></pre>
+<p><strong>Note</strong>: be careful, last command modifies your .bashrc and it may cause problems.</p>
+<p>Now, it&rsquo;s time to log in:</p>
 <pre><code class="sh">gcloud init
-</code></pre><p>And now, install kubectl, the client to manage kubernetes:</p>
+</code></pre>
+<p>And now, install kubectl, the client to manage kubernetes:</p>
 <pre><code class="sh">gcloud components install kubectl
-</code></pre><h2>Launching the service</h2><p>The first step is to create the cluster. It may take some time.</p>
+</code></pre>
+<h2><a href="#launching-the-service" name="launching-the-service">Launching the service</a></h2>
+<p>The first step is to create the cluster. It may take some time.</p>
 <pre><code class="sh">gcloud container clusters create leanmanager-cluster
-</code></pre><p>Ensure kubectl can access to the service:</p>
+</code></pre>
+<p>Ensure kubectl can access to the service:</p>
 <pre><code class="sh">gcloud auth application-default login
-</code></pre><p>And now, it&rsquo;s time to launch the leanmanager image:</p>
+</code></pre>
+<p>And now, it&rsquo;s time to launch the leanmanager image:</p>
 <pre><code class="sh">kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&quot;
-</code></pre><p><strong>Note:</strong> I have an environment variable <code>LEANMANAGER_TOKEN</code> with the token to authenticate to Slack. The bot automatically connects using Websocket but if you want to expose any service, add <code>--port=8080</code> to allow access to it. You will need also to create a Load Balancer, the steps are explained <a href="https://cloud.google.com/container-engine/docs/quickstart">here</a>.</p><h2>Clean the service</h2><p>To stop the service and delete the cluster:</p>
+</code></pre>
+<p><strong>Note:</strong> I have an environment variable <code>LEANMANAGER_TOKEN</code> with the token to authenticate to Slack. The bot automatically connects using Websocket but if you want to expose any service, add <code>--port=8080</code> to allow access to it. You will need also to create a Load Balancer, the steps are explained <a href="https://cloud.google.com/container-engine/docs/quickstart">here</a>.</p>
+<h2><a href="#clean-the-service" name="clean-the-service">Clean the service</a></h2>
+<p>To stop the service and delete the cluster:</p>
 <pre><code class="sh">gcloud container clusters delete leanmanager-cluster
-</code></pre><h2>Install Terraform</h2><p>Our next step it&rsquo;s going to be to automate all the process. To do it, we&rsquo;ll use <a href="https://www.terraform.io">Terraform</a>.</p><p>If you don&rsquo;t have it, first step is download it from <a href="https://www.terraform.io/downloads.html">here</a> and install it. For linux:</p>
+</code></pre>
+<h2><a href="#install-terraform" name="install-terraform">Install Terraform</a></h2>
+<p>Our next step it&rsquo;s going to be to automate all the process. To do it, we&rsquo;ll use <a href="https://www.terraform.io">Terraform</a>.</p>
+<p>If you don&rsquo;t have it, first step is download it from <a href="https://www.terraform.io/downloads.html">here</a> and install it. For linux:</p>
 <pre><code class="sh">curl -O https://releases.hashicorp.com/terraform/0.8.2/terraform_0.8.2_linux_amd64.zip
 unzip terraform_0.8.2_linux_amd64.zip
-</code></pre><p>Now move it to a folder which is in your PATH, in my case:</p>
+</code></pre>
+<p>Now move it to a folder which is in your PATH, in my case:</p>
 <pre><code class="sh">terraform ~/bin/
 echo terraform &gt;&gt; ~/bin/.gitignore
-</code></pre><p>Last command is executed because I&rsquo;ve <code>~/bin</code> in github but I don&rsquo;t want upload a so big file as <code>terraform</code> executable.</p><p>Now you should be able to use <code>terraform</code> in your system. If you&rsquo;ve never used before, it&rsquo;s a good moment to read the <a href="https://www.terraform.io/intro/getting-started/build.html">Getting started guide</a>.</p><h2>Download GKE credentials</h2><p>Follow these instructions to download the credentials file:</p>
+</code></pre>
+<p>Last command is executed because I&rsquo;ve <code>~/bin</code> in github but I don&rsquo;t want upload a so big file as <code>terraform</code> executable.</p>
+<p>Now you should be able to use <code>terraform</code> in your system. If you&rsquo;ve never used before, it&rsquo;s a good moment to read the <a href="https://www.terraform.io/intro/getting-started/build.html">Getting started guide</a>.</p>
+<h2><a href="#download-gke-credentials" name="download-gke-credentials">Download GKE credentials</a></h2>
+<p>Follow these instructions to download the credentials file:</p>
 <ol>
   <li>Log into the <a href="https://console.cloud.google.com">Google Developers Console</a> and select a project.</li>
   <li>Click the menu button in the top left corner, and navigate to &ldquo;IAM &amp; Admin&rdquo;, then &ldquo;Service accounts&rdquo;, and finally &ldquo;Create service account&rdquo;.</li>
   <li>Provide a name and ID in the corresponding fields, select &ldquo;Furnish a new private key&rdquo;, and select &ldquo;JSON&rdquo; as the key type.</li>
   <li>Clicking &ldquo;Create&rdquo; will download your credentials.</li>
   <li>Rename it to <code>account.json</code>. Make sure you don&rsquo;t publish this file, for instance in Github (add it to <code>.gitignore</code>).</li>
-</ol><h2>Create the cluster using Terraform</h2><p>In the same folder you have your <code>account.json</code>, create a Terraform file like <code>leanmanager.tf</code>:</p>
+</ol>
+<h2><a href="#create-the-cluster-using-terraform" name="create-the-cluster-using-terraform">Create the cluster using Terraform</a></h2>
+<p>In the same folder you have your <code>account.json</code>, create a Terraform file like <code>leanmanager.tf</code>:</p>
 <pre><code>variable &quot;region&quot; {
   default = &quot;europe-west1-d&quot;
 }
@@ -474,36 +570,52 @@ resource &quot;google_container_cluster&quot; &quot;primary&quot; {
     ]
   }
 }
-</code></pre><p>Check what it&rsquo;s going to create:</p>
+</code></pre>
+<p>Check what it&rsquo;s going to create:</p>
 <pre><code class="sh">terraform plan
-</code></pre><p>Review the output and if it&rsquo;s ok, launch it!.</p>
+</code></pre>
+<p>Review the output and if it&rsquo;s ok, launch it!.</p>
 <pre><code class="sh">terraform apply
-</code></pre><p>If everything goes well, you will see a message like this:</p>
-<blockquote><p>Apply complete! Resources: 1 added, 0 changed, 0 destroyed.</p>
-</blockquote><p>And you can check it with:</p>
+</code></pre>
+<p>If everything goes well, you will see a message like this:</p>
+<blockquote>
+  <p>Apply complete! Resources: 1 added, 0 changed, 0 destroyed.</p>
+</blockquote>
+<p>And you can check it with:</p>
 <pre><code class="sh">gcloud container clusters list
-</code></pre><p>If you want to access with <code>kubectl</code> you need to login first:</p>
+</code></pre>
+<p>If you want to access with <code>kubectl</code> you need to login first:</p>
 <pre><code>gcloud container clusters get-credentials leanmanager-cluster --zone europe-west1-d
 kubectl cluster-info
-</code></pre><p>This step can be added to the <code>leanmanager.tf</code> inside the <code>resource</code> block:</p>
+</code></pre>
+<p>This step can be added to the <code>leanmanager.tf</code> inside the <code>resource</code> block:</p>
 <pre><code>provisioner &quot;local-exec&quot; {
     command = &quot;gcloud container clusters get-credentials ${var.cluster_name} --zone ${google_container_cluster.primary.zone}&quot;
 }
-</code></pre><h2>Launch our Docker instance</h2><p>Once you are logged in with <code>kubectl</code>, it&rsquo;s exactly the same as before:</p>
+</code></pre>
+<h2><a href="#launch-our-docker-instance" name="launch-our-docker-instance">Launch our Docker instance</a></h2>
+<p>Once you are logged in with <code>kubectl</code>, it&rsquo;s exactly the same as before:</p>
 <pre><code class="sh">kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&quot;
-</code></pre><p>But you can also do it with Terraform adding this snippet in the beginning: </p>
+</code></pre>
+<p>But you can also do it with Terraform adding this snippet in the beginning: </p>
 <pre><code>variable &quot;LEANMANAGER_TOKEN&quot; {
       default = &quot;USE YOUR OWN TOKEN&quot;
 }
-</code></pre><p>And after the previous <code>local-exec</code>:</p>
+</code></pre>
+<p>And after the previous <code>local-exec</code>:</p>
 <pre><code>provisioner &quot;local-exec&quot; {
     command = &quot;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=LEANMANAGER_TOKEN=${var.LEANMANAGER_TOKEN}&quot;
 }
-</code></pre><p>And executing terraform passing the variable:</p>
+</code></pre>
+<p>And executing terraform passing the variable:</p>
 <pre><code class="sh">terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
-</code></pre><p>Other option would be read the variable directly but you have to change the name to fit the terraform requirements and I&rsquo;m using it for other things. More info <a href="https://www.terraform.io/docs/configuration/variables.html">here</a>.</p><h2>Clean everything</h2><p>With Terraform is really easy, just:</p>
+</code></pre>
+<p>Other option would be read the variable directly but you have to change the name to fit the terraform requirements and I&rsquo;m using it for other things. More info <a href="https://www.terraform.io/docs/configuration/variables.html">here</a>.</p>
+<h2><a href="#clean-everything" name="clean-everything">Clean everything</a></h2>
+<p>With Terraform is really easy, just:</p>
 <pre><code class="sh">terraform destroy
-</code></pre><h2>Not already linked but useful resources</h2>
+</code></pre>
+<h2><a href="#not-already-linked-but-useful-resources" name="not-already-linked-but-useful-resources">Not already linked but useful resources</a></h2>
 <ul>
   <li><a href="http://container-solutions.com/simple-gce-setup-terraform/">Simple GCE setup Terraform</a></li>
   <li><a href="https://github.com/l337ch/terraform-gke">terraform-gke</a></li>
@@ -541,36 +653,53 @@ kubectl cluster-info
 
                         
                         <div itemprop="blogPost">
-                            <p><p><strong>UPDATE</strong>: I finally merged both blogs, so this blog post doesn&rsquo;t make sense. I prefer Hugo to JBake but because I&rsquo;ve been doing more Java/Groovy development, I will stay with JBake.</p><p>Well, this is embarrassing. I&rsquo;m launching another blog!. Why?. Some time ago I&rsquo;ve started to write a blog, in the beginning for corporate news but it has become a place where to write or document interesting things I do in my work, most of them related to Java, Groovy and Oracle technologies. The blog is generated with <a href="http://jbake.org/">JBake</a> with the <a href="https://github.com/antonmry/jbake-gradle-plugin">gradle plugin</a>, I like to use related technologies and I&rsquo;m quite happy with the result, but to be honest, I don&rsquo;t write frequently.</p><p>Six months ago I&rsquo;ve started to learn and use <a href="https://golang.org/">Go</a>. I was very impressed with the simplicity of the language and I&rsquo;ve started to read a lot of articles, books, etc., watch videos and develop some projects. I discovered <a href="https://gohugo.io/">Hugo</a>, a site generator similar to JBake but written in Go. I was tempted to migrate my previous blog, but today I&rsquo;m going to continue writing about not Go subjects, so it&rsquo;s simpler to open a new one only for Go, bots, DevOps, concurrency and perfomance. In another post I will write more about Go and why I find it so interesting.</p><p>As the first post, let&rsquo;s see how to configure <a href="https://gohugo.io/">Hugo</a>. I&rsquo;ve to say it was really easy, I really impressed with piece of software. I can compare with other site generators as Jekyll, Hexo or JBake, and I have to say Hugo is my favourite.</p><p>First of all, I&rsquo;ve created a new repo in my Gihub account and cloned it in my laptop:</p>
+                            <p><p><strong>UPDATE</strong>: I finally merged both blogs, so this blog post doesn&rsquo;t make sense. I prefer Hugo to JBake but because I&rsquo;ve been doing more Java/Groovy development, I will stay with JBake.</p>
+<p>Well, this is embarrassing. I&rsquo;m launching another blog!. Why?. Some time ago I&rsquo;ve started to write a blog, in the beginning for corporate news but it has become a place where to write or document interesting things I do in my work, most of them related to Java, Groovy and Oracle technologies. The blog is generated with <a href="http://jbake.org/">JBake</a> with the <a href="https://github.com/antonmry/jbake-gradle-plugin">gradle plugin</a>, I like to use related technologies and I&rsquo;m quite happy with the result, but to be honest, I don&rsquo;t write frequently.</p>
+<p>Six months ago I&rsquo;ve started to learn and use <a href="https://golang.org/">Go</a>. I was very impressed with the simplicity of the language and I&rsquo;ve started to read a lot of articles, books, etc., watch videos and develop some projects. I discovered <a href="https://gohugo.io/">Hugo</a>, a site generator similar to JBake but written in Go. I was tempted to migrate my previous blog, but today I&rsquo;m going to continue writing about not Go subjects, so it&rsquo;s simpler to open a new one only for Go, bots, DevOps, concurrency and perfomance. In another post I will write more about Go and why I find it so interesting.</p>
+<p>As the first post, let&rsquo;s see how to configure <a href="https://gohugo.io/">Hugo</a>. I&rsquo;ve to say it was really easy, I really impressed with piece of software. I can compare with other site generators as Jekyll, Hexo or JBake, and I have to say Hugo is my favourite.</p>
+<p>First of all, I&rsquo;ve created a new repo in my Gihub account and cloned it in my laptop:</p>
 <pre><code class="sh">git clone git@github.com:antonmry/antonmry.github.io.git
 cd antonmry.github.io
-</code></pre><p>Because I&rsquo;m going to use my github user page, the source code of the page must be in master branch. For your Hugo code, you can have a separate repo or just a different branch. I choose the second option with a branch named source, I prefer it in that way, it&rsquo;s simpler and this is the main difference with the procedure you can find in <a href="https://gohugo.io/tutorials/github-pages-blog">the excellent Hugo documentation</a>:</p>
+</code></pre>
+<p>Because I&rsquo;m going to use my github user page, the source code of the page must be in master branch. For your Hugo code, you can have a separate repo or just a different branch. I choose the second option with a branch named source, I prefer it in that way, it&rsquo;s simpler and this is the main difference with the procedure you can find in <a href="https://gohugo.io/tutorials/github-pages-blog">the excellent Hugo documentation</a>:</p>
 <pre><code class="sh">git checkout -b source
 git push -u origin source
-</code></pre><p>Inside the source code folder, we are going to create a folder linking to the master branch:</p>
+</code></pre>
+<p>Inside the source code folder, we are going to create a folder linking to the master branch:</p>
 <pre><code class="sh">git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash
 git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master
-</code></pre><p>It&rsquo;s time to generate the site. First you have to install Hugo, plenty of options in the <a href="https://gohugo.io/overview/installing/">the Hugo website</a>. I&rsquo;ve chosen the Fedora package, updates will be easier.</p>
+</code></pre>
+<p>It&rsquo;s time to generate the site. First you have to install Hugo, plenty of options in the <a href="https://gohugo.io/overview/installing/">the Hugo website</a>. I&rsquo;ve chosen the Fedora package, updates will be easier.</p>
 <pre><code class="sh">hugo new site antonmry.github.io
 mv antonmry.github.io/* .
 rm -r antonmry.github.io
-</code></pre><p>Choose your theme, there are very nice options, I&rsquo;ve chosen beatifulhugo:</p>
+</code></pre>
+<p>Choose your theme, there are very nice options, I&rsquo;ve chosen beatifulhugo:</p>
 <pre><code class="sh">cd themes
 git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo
 cd ..
 echo &quot;theme = \&quot;beautifulhugo\&quot;&quot; &gt;&gt; config.toml
-</code></pre><p>Create your first blog and start the server:</p>
+</code></pre>
+<p>Create your first blog and start the server:</p>
 <pre><code class="sh">hugo new post/hugo-site-created.md
 hugo server --buildDrafts
-</code></pre><p>Open in your browser <a href="http://localhost:1313/">http://localhost:1313/</a> and enjoy your first post with Hugo ;-)</p><p>Let&rsquo;s move the post from draft to publised: edit the file content/post/hugo-site-created.md and change the draft line from true to false if exists.</p><p>Now it&rsquo;s time to upload it to Gihub and make it public:</p>
+</code></pre>
+<p>Open in your browser <a href="http://localhost:1313/">http://localhost:1313/</a> and enjoy your first post with Hugo ;-)</p>
+<p>Let&rsquo;s move the post from draft to publised: edit the file content/post/hugo-site-created.md and change the draft line from true to false if exists.</p>
+<p>Now it&rsquo;s time to upload it to Gihub and make it public:</p>
 <pre><code class="sh">hugo
 git add -A
 git commit -m &quot;Initial version&quot;
 git push
 git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git master
-</code></pre><p>Oh, really, can it be so easy?. Just go to <a href="https://antonmry.github.io">https://antonmry.github.io</a> (or your equivalent site)</p><p>I was thinking in create a travis job to do the publishing in master (I did it before for jbake) but to be honest, this method is simple enough. I&rsquo;ve added to my .bash_alias the last command and that&rsquo;s all I need.</p><p>Enjoy!</p><p>PS: if you do a rebase in <code>source</code>, you will need to do it a bit more tricky to push to master because you can&rsquo;t use <code>--force</code> with the <code>subtree</code> option:</p>
+</code></pre>
+<p>Oh, really, can it be so easy?. Just go to <a href="https://antonmry.github.io">https://antonmry.github.io</a> (or your equivalent site)</p>
+<p>I was thinking in create a travis job to do the publishing in master (I did it before for jbake) but to be honest, this method is simple enough. I&rsquo;ve added to my .bash_alias the last command and that&rsquo;s all I need.</p>
+<p>Enjoy!</p>
+<p>PS: if you do a rebase in <code>source</code>, you will need to do it a bit more tricky to push to master because you can&rsquo;t use <code>--force</code> with the <code>subtree</code> option:</p>
 <pre><code class="sh">git push origin `git subtree split --prefix public source`:master --force
-</code></pre><p>More info can be found in Stackoverflow <a href="http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push">Git subtree - subtree up-to-date but can&rsquo;t push</a>.</p></p>
+</code></pre>
+<p>More info can be found in Stackoverflow <a href="http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push">Git subtree - subtree up-to-date but can&rsquo;t push</a>.</p></p>
                         </div>
                         
                     </div>
@@ -597,6 +726,8 @@ git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git 
             <div class="sidebar-module">
                 <h4>Tags</h4>
                 <ol class="list-unstyled" style="margin-left: 0px">
+                    
+                        <li><a href="tags/galiglobal.html">galiglobal</a> (0)</li>
                     
                         <li><a href="tags/ServiceDelivery.html">ServiceDelivery</a> (13)</li>
                     
@@ -710,7 +841,7 @@ git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git 
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2016 Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.4.0 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 
