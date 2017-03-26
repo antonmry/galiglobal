@@ -3,12 +3,11 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven { url 'https://plugins.gradle.org/m2/' }
-        maven { url 'http://dl.bintray.com/antonmry/maven' }
         jcenter()
     }
 
     dependencies {
-        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3'
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3.0-SNAPSHOT'
         classpath 'org.ajoberstar:grgit:1.1.0'
         classpath "org.ajoberstar:gradle-git:1.5.0"
         classpath 'org.kordamp.gradle:livereload-gradle-plugin:0.2.1'

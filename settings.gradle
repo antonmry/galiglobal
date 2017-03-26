@@ -1,1 +1,3 @@
 rootProject.name = 'galiglobal'
+
+includeBuild '../jbake-gradle-plugin'
