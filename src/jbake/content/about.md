@@ -9,7 +9,7 @@ I am a Senior Software Engineer who specializes in the telecom business domain. 
 
 As [Oracle Communications Service and Network Evolution (SaNE) Solution](http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html) expert I've earned a wide experience with Oracle technologies (Weblogic, JavaEE) and network protocols (SIP, WebRTC, Diameter, SMPP, REST/SOAP).
 
-I am also interesting in some cool Open Source projects (check my [Github account](https://github.com/antonmry). I like to participate as speaker at developer conferences, such as SpringIO, Geecon or TADSummit when I have the opportunity and I'm organising the [VigoJUG](http://www.vigojug.org). 
+I am also interesting in some cool Open Source projects (check my [Github account](https://github.com/antonmry)). I like to participate as speaker at developer conferences, such as SpringIO, Geecon or TADSummit when I have the opportunity and I'm organising the [VigoJUG](http://www.vigojug.org). 
 
 More information about me is available in [my Linkedin profile](http://bit.ly/antonmry-linkedin) or you can contact me at galiglobal@galiglobal.com.
 
