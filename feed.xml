@@ -6,9 +6,36 @@
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Antón R. Yuste Blog</description>
     <language>en-us</language>
-    <pubDate>Sun, 26 Mar 2017 01:00:52 +0100</pubDate>
-    <lastBuildDate>Sun, 26 Mar 2017 01:00:52 +0100</lastBuildDate>
+    <pubDate>Sat, 1 Apr 2017 23:21:09 +0200</pubDate>
+    <lastBuildDate>Sat, 1 Apr 2017 23:21:09 +0200</lastBuildDate>
 
+    
+    <item>
+      <title>Speaking about Jython in Python Vigo</title>
+      <link>http://www.galiglobal.com/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</link>
+      <pubDate>Sat, 1 Apr 2017 00:00:00 +0200</pubDate>
+      <guid isPermaLink="false">blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</guid>
+      <description>
+      &lt;p&gt;Some weeks ago I had the opportunity to speak in &lt;a href=&quot;https://www.python-vigo.es/posts/reunion-del-grupo-el-16032017/&quot;&gt;the Python Vigo meetup&lt;/a&gt;. It was just a lightning talk, 5 minutes. Why?. I really enjoy Python Vigo meetups, they are useful, fun and I always learn something new. So, when I read an email asking for speakers, I proposed the only Python related subject I know something about: &lt;a href=&quot;http://www.jython.org/&quot;&gt;Jython&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;I have been using Jython for years to manage Weblogic servers. Being honest, I don&amp;rsquo;t like it, without any doubt I would prefer to use Groovy, in fact, that&amp;rsquo;s what we usually do. But I thought it may be interesting for someone in the Python community. &lt;/p&gt;
+&lt;p&gt;It was my first time doing a talk so short. Also I&amp;rsquo;m more used to do them in English. It was clear to me how hard it&amp;rsquo;s to do a 5 minutes talk, even for an easy subject like this.&lt;/p&gt;
+&lt;p&gt;I just wanted to say three things, if possible, without slides:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Don&amp;rsquo;t use Jython if you are looking for Python performance improvement.&lt;/li&gt;
+  &lt;li&gt;Use Jython to explore Java classes or change them dinamically using Python syntax.&lt;/li&gt;
+  &lt;li&gt;Use Jython to combine it with Java programs, to load configuration dinamically, something like a DSL (Domain Specific Language) but using Python as language.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Probably, the talk wasn&amp;rsquo;t clear for most people&amp;hellip; Also I miss 15 seconds more to finish my example. Yet, some people asked me some things later related to it&amp;hellip; so I&amp;rsquo;m not completely sad with the result and I learnt how hard it&amp;rsquo;s to do a good lightning talk.&lt;/p&gt;
+&lt;p&gt;In case you are insterested, in &lt;a href=&quot;https://github.com/antonmry/talk-pythonvigo-2017-introduction-to-jython&quot;&gt;this GitHub repo&lt;/a&gt; you can find the things I did and also a Readme with the explanation. The talk is recorded so you can watch it here:&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/FwgpPsiYg_o&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;Notes for the future:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Be careful with short talks, they are harder than the long ones.&lt;/li&gt;
+  &lt;li&gt;Use introductory slides, at least one.&lt;/li&gt;
+  &lt;li&gt;It&amp;rsquo;s better to say less and clear than more and hard to understand.&lt;/li&gt;
+&lt;/ul&gt;
+	  </description>
+    </item>
     
     <item>
       <title>My experience in Refugal</title>
