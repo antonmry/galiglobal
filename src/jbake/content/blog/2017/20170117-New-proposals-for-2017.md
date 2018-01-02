@@ -1,7 +1,7 @@
 title=Be humble and my goals for 2017
 date=2017-02-25
 type=post
-tags=humble,OptareSolutions,management
+tags=
 status=published
 ~~~~~~
 

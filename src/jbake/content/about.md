@@ -13,5 +13,5 @@ I am also interesting in some cool Open Source projects (check my [Github accoun
 
 More information about me is available in [my Linkedin profile](http://bit.ly/antonmry-linkedin) or you can contact me at galiglobal@galiglobal.com.
 
-If you want to follow the blog, the easiest way is RSS using [this link](/feed.xml) and your favorite app, as for example, [feedly](http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fhttps%3A%2F%2Fantonmry.github.com%2Ffeed.xml).
+If you want to follow the blog, the easiest way is RSS using [this link](/feed.xml) and your favorite app, as for example, [feedly](https://feedly.com/i/discover/sources/search/http%3A%2F%2Fwww.galiglobal.com%2Ffeed.xml).
 
