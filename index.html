@@ -86,6 +86,648 @@
                             <meta itemprop="name" content="Yan Bonnel"/>
                         </div>
                         <meta itemprop="inLanguage" content="en-US"/>
+                        <a itemprop="url" href="blog/2018/20180111-JUnit4-JUnit5-Spock-Comparison.html">
+                            <h1 itemprop="name">JUnit4, JUnit5 and Spock framework comparison</h1>
+                        </a>
+                        <p>
+                            <time itemprop="datePublished"
+                                  datetime="2018-01-11">
+                                11 January 2018
+                            </time>
+                             - Tags :
+                            <meta itemprop="keywords" content="spock,testing"/>
+                            <a href="tags/spock.html">spock</a>, <a href="tags/testing.html">testing</a>
+                        </p>
+
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.galiglobal.com/blog/2018/20180111-JUnit4-JUnit5-Spock-Comparison.html" data-text="JUnit4, JUnit5 and Spock framework comparison" data-via="antonmry" data-lang="en">Tweeter</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                        <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/blog/2018/20180111-JUnit4-JUnit5-Spock-Comparison.html"></div>
+
+                        
+                        <div itemprop="blogPost">
+                            <p><div class="sect1">
+<h2 id="_introduction_and_motivation">Introduction and motivation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Recently I gave a talk in my local Java User Group about unit testing. Some of the content of the talk was about some popular libraries you can use in your Java project. I&#8217;ve reviewed <a href="http://junit.org/junit4/">JUnit4</a>, <a href="http://junit.org/junit5/">JUnit5</a> and <a href="http://spockframework.org/">Spock framework</a>. Many of the attendees were quite surprised with the differences. In this post, I will summarize the most commented: assert, parametrized tests and mocking.</p>
+</div>
+<div class="paragraph">
+<p>I always like to demonstrate the concepts with examples and live coding so I chose a simple algorithm: <a href="https://en.wikipedia.org/wiki/Fibonacci">Fibonacci number calculator</a>. If you don&#8217;t know it, it&#8217;s just to generate numbers which are the sum of the two previous ones in the series: <code>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377</code>.</p>
+</div>
+<div class="paragraph">
+<p>I used the typical (and with very bad performance) implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    private static int fibonacci(int n) {
+        if (n &lt;= 1) return n; else
+            return fibonacci(n-1) + fibonacci(n-2);
+    }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_junit4">JUnit4</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I started explaining JUnit4. It makes sense because it&#8217;s the most popular library and the base for many others. I started explaining <code>assertTrue</code> and then, more advances usages, including <code>assertEquals</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Test
+    public void improvedFibonacciTestSimple() {
+        FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
+        assertEquals(f.fibonacci(4), 3);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If it&#8217;s false, it would give you an error like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java.lang.AssertionError:
+Expected :3
+Actual   :2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Not very spectacular but quite useful.</p>
+</div>
+<div class="paragraph">
+<p>The next thing was to show how to write a parametrized test, a nice feature very useful for test algorithms. In JUnit4 is quite tricky. You need to create a Collection with the annotation <code>@Parameters</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Parameters
+    public static Collection&lt;Object[]&gt; data() {
+        return Arrays.asList(new Object[][]{
+                {0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}, {6, 8}
+        });
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we create some local variables and a constructor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    private int fInput;
+    private int fExpected;
+
+    public ParametrizedFibonacciJUnit4(int input, int expected) {
+        fInput = input;
+        fExpected = expected;
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and finally, we can use the <code>assertEquals</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Test
+    public void test() {
+        FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
+        assertEquals(fExpected, f.fibonacci(fInput));
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s quite verbose and if the test fails, you would obtain a message which doesn&#8217;t indicate clearly the order or the parameters used (but your IDE probably will help on that):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java.lang.AssertionError:
+Expected :0
+Actual   :1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I didn&#8217;t explain mocking here because an external library as <a href="http://site.mockito.org/">Mockito</a> is usually required when you want to use mocking with JUnit4. Mockito is great but I didn&#8217;t have enough time to explain it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_junit5">JUnit5</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since September 2017, JUnit5 is considered stable and it should be your choice over JUnit4 for several reasons. It has better support for Java 8 and Lambdas, it&#8217;s compatible with JUnit4 (you can have both which it&#8217;s great to migrate in a progressive way) and it provides new runners and better integrations.</p>
+</div>
+<div class="paragraph">
+<p>I repeated the same process. First, show an <code>assertEquals</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Test
+    public void bestFibonacciTestSimple() {
+        FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+        Assertions.assertEquals(f.fibonacci(4), 3);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are important advances in other <code>assert</code>, for instance the timeout, but for <code>assertEqual</code> with integers, it&#8217;s practically the same. Also the message is similar if there is an error:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>org.opentest4j.AssertionFailedError:
+Expected :3
+Actual   :2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where we can find important changes is in the parametrized test. First, we need to use the <code>@ParametrizedTest</code> annotation and we can specify a name using <code>{</code> and <code>}</code> to indicate important parameters as <code>index</code> as <code>arguments</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @ParameterizedTest(name = "run #{index} with [{arguments}]")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can define our test. We start defining the entries to test function with the annotation <code>@CsvSource</code>. Each item will replace the parameters in the test function, in this case, <code>input</code> and <code>expected</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @CsvSource({"1, 1", "4, 3"})
+        public void test2(int input , int expected) {
+                FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+             	Assertions.assertEquals(f.fibonacci(input), expected);
+         }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is lot better than the JUnit4 implementation. Also, if there is a fail in the test, we obtain a better message indicating the difference, the index causing the fail and the used parameters.</p>
+</div>
+<div class="paragraph">
+<p>Finally, it&#8217;s the same for mocking as JUnit4: you normally use an external library so I didn&#8217;t explained it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spock_framework">Spock framework</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The last one was the Spock framework. It&#8217;s based in <a href="http://groovy-lang.org/">Apache Groovy</a>. If you don&#8217;t know Groovy, it&#8217;s a language which you can use with the JVM and it interact very well with Java. It allows write less code in a more clear way. It&#8217;s very powerful. Some years ago we started to use it for "non critical" development: tests, dependency management, Continuous Integration, load testing and in any place where we need some configuration file avoiding XML, JSON or any format like that. We continue to develop in Java the core of our software and it isn&#8217;t a problem because both languages play very well together. If you know Java, you know Groovy&#8230;&#8203; so we have the best of both worlds.</p>
+</div>
+<div class="paragraph">
+<p>Write a test in Spock is quite different, it would be like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    def "Simple test"() {
+        setup:
+        BadFibonacci f = new BadFibonacci()
+
+        expect:
+        f.fibonacci(1) == 1
+        assert f.fibonacci(4) == 3
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Basically, we can use <code>def</code> where we don&#8217;t care about the type. The name of the function can be defined between quotation marks, which allow us to use better naming for our tests. We have some special words as <code>setup</code>, <code>when</code>, <code>expect</code>, <code>and</code>, etc. to define our test in a more descriptive and structured way. And we have a power assert, which is part of the language itself, proving nice messages:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Condition not satisfied:
+
+f.fibonacci(4) == 2
+| |            |
+| 3            false
+BadFibonacci@23c30a20
+
+Expected :2
+
+Actual   :3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It provides all the information: the returned value (actual), the expected value, the function, the parameter, etc. <code>assert</code> is Groovy is really handy.</p>
+</div>
+<div class="paragraph">
+<p>Now it&#8217;s the turn for the parametrized test. It would be something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    def "parametrized test"() {
+        setup:
+        BadFibonacci f = new BadFibonacci()
+
+        expect:
+        f.fibonacci(index) == fibonacciNumber
+
+        where:
+        index | fibonacciNumber
+        1     | 1
+        2     | 1
+        3     | 2
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After show this I heard some 'oooh' in the audience. The magic of this code is: you don&#8217;t need to explain it! There is a table in the <code>where:</code> section and the values in <code>expect:</code> are automagically replace it in each iteration. If there is a fail, the message is crystal clear:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Condition not satisfied:
+
+f.fibonacci(index) == fibonacciNumber
+| |         |      |  |
+| 2         3      |  4
+|                  false
+BadFibonacci@437da279
+
+Expected :4
+
+Actual   :2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then I&#8217;ve introduced very shortly mocks and stubs. <a href="https://en.wikipedia.org/wiki/Mock_object">A mock</a> is a object you create in your test to avoid to use a real object. For example, you don&#8217;t want to do real web requests or print a page in your tests, so you can use a mock from an interface or another object.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Subscriber subscriber = Mock()
+
+    def "mock example"() {
+        when:
+        publisher.send("hello")
+
+        then:
+        1 * subscriber.receive("hello")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Basically, you create the <code>subscriber</code> interface as Mock and then you can invoke the methods. The <code>1 *</code> is another nice feature of Spock, it specify how many messages you should receive. Cool, right?.</p>
+</div>
+<div class="paragraph">
+<p>In some occasions, you need to define what return the methods of your mocks. For that, you can create <a href="https://en.wikipedia.org/wiki/Method_stub">a stub</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    def "stub example"() {
+        setup:
+        subscriber.receive(_) &gt;&gt; "ok"
+
+        when:
+        publisher.send("message1")
+
+        then:
+        subscriber.receive("message1") == 'ok'
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, with the <code>&gt;&gt;</code> notation we are defining the method <code>receive</code> should return <code>ok</code> independently of the parameter (<code>_</code> means any value). The test pass without any problem.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusions">Conclusions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I don&#8217;t like to recommend one library or another: all of the them have their use cases. It&#8217;s pretty clear we have great options in Java and I just give some examples. Now it&#8217;s your turn to decide which it&#8217;s better for you. The only thing I can say: write test and master your library of choice, it would make you a better developer!</p>
+</div>
+<div class="paragraph">
+<p>If you want to take a deeper look to the examples, you will find them in <a href="https://github.com/vigojug/developer-vago-1-unit-testing">this GitHub repository</a>. Enjoy!</p>
+</div>
+</div>
+</div></p>
+                        </div>
+                        
+                    </div>
+                
+
+            
+                
+                    <div  itemscope itemtype="http://schema.org/Blog">
+                        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
+                            <meta itemprop="name" content="Yan Bonnel"/>
+                        </div>
+                        <meta itemprop="inLanguage" content="en-US"/>
+                        <a itemprop="url" href="blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html">
+                            <h1 itemprop="name">JUnit4, JUnit5 and Spock framework comparison</h1>
+                        </a>
+                        <p>
+                            <time itemprop="datePublished"
+                                  datetime="2018-01-11">
+                                11 January 2018
+                            </time>
+                             - Tags :
+                            <meta itemprop="keywords" content="spock,testing"/>
+                            <a href="tags/spock.html">spock</a>, <a href="tags/testing.html">testing</a>
+                        </p>
+
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.galiglobal.com/blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html" data-text="JUnit4, JUnit5 and Spock framework comparison" data-via="antonmry" data-lang="en">Tweeter</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                        <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html"></div>
+
+                        
+                        <div itemprop="blogPost">
+                            <p><div class="sect1">
+<h2 id="_introduction_and_motivation">Introduction and motivation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Recently I gave a talk in my local Java User Group about unit testing. Some of the content of the talk was about some popular libraries you can use in your Java project. I&#8217;ve reviewed <a href="http://junit.org/junit4/">JUnit4</a>, <a href="http://junit.org/junit5/">JUnit5</a> and <a href="http://spockframework.org/">Spock framework</a>. Many of the attendees were quite surprised with the differences. In this post, I will summarize the most commented: assert, parametrized tests and mocking.</p>
+</div>
+<div class="paragraph">
+<p>I always like to demonstrate the concepts with examples and live coding so I chose a simple algorithm: <a href="https://en.wikipedia.org/wiki/Fibonacci">Fibonacci number calculator</a>. If you don&#8217;t know it, it&#8217;s just to generate numbers which are the sum of the two previous ones in the series: <code>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377</code>.</p>
+</div>
+<div class="paragraph">
+<p>I used the typical (and with very bad performance) implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    private static int fibonacci(int n) {
+        if (n &lt;= 1) return n; else
+            return fibonacci(n-1) + fibonacci(n-2);
+    }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_junit4">JUnit4</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I started explaining JUnit4. It makes sense because it&#8217;s the most popular library and the base for many others. I started explaining <code>assertTrue</code> and then, more advances usages, including <code>assertEquals</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Test
+    public void improvedFibonacciTestSimple() {
+        FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
+        assertEquals(f.fibonacci(4), 3);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If it&#8217;s false, it would give you an error like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java.lang.AssertionError:
+Expected :3
+Actual   :2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Not very spectacular but quite useful.</p>
+</div>
+<div class="paragraph">
+<p>The next thing was to show how to write a parametrized test, a nice feature very useful for test algorithms. In JUnit4 is quite tricky. You need to create a Collection with the annotation <code>@Parameters</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Parameters
+    public static Collection&lt;Object[]&gt; data() {
+        return Arrays.asList(new Object[][]{
+                {0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}, {6, 8}
+        });
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we create some local variables and a constructor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    private int fInput;
+    private int fExpected;
+
+    public ParametrizedFibonacciJUnit4(int input, int expected) {
+        fInput = input;
+        fExpected = expected;
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and finally, we can use the <code>assertEquals</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Test
+    public void test() {
+        FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
+        assertEquals(fExpected, f.fibonacci(fInput));
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s quite verbose and if the test fails, you would obtain a message which doesn&#8217;t indicate clearly the order or the parameters used (but your IDE probably will help on that):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java.lang.AssertionError:
+Expected :0
+Actual   :1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I didn&#8217;t explain mocking here because an external library as <a href="http://site.mockito.org/">Mockito</a> is usually required when you want to use mocking with JUnit4. Mockito is great but I didn&#8217;t have enough time to explain it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_junit5">JUnit5</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since September 2017, JUnit5 is considered stable and it should be your choice over JUnit4 for several reasons. It has better support for Java 8 and Lambdas, it&#8217;s compatible with JUnit4 (you can have both which it&#8217;s great to migrate in a progressive way) and it provides new runners and better integrations.</p>
+</div>
+<div class="paragraph">
+<p>I repeated the same process. First, show an <code>assertEquals</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @Test
+    public void bestFibonacciTestSimple() {
+        FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+        Assertions.assertEquals(f.fibonacci(4), 3);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are important advances in other <code>assert</code>, for instance the timeout, but for <code>assertEqual</code> with integers, it&#8217;s practically the same. Also the message is similar if there is an error:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>org.opentest4j.AssertionFailedError:
+Expected :3
+Actual   :2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where we can find important changes is in the parametrized test. First, we need to use the <code>@ParametrizedTest</code> annotation and we can specify a name using <code>{</code> and <code>}</code> to indicate important parameters as <code>index</code> as <code>arguments</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @ParameterizedTest(name = "run #{index} with [{arguments}]")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can define our test. We start defining the entries to test function with the annotation <code>@CsvSource</code>. Each item will replace the parameters in the test function, in this case, <code>input</code> and <code>expected</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">    @CsvSource({"1, 1", "4, 3"})
+        public void test2(int input , int expected) {
+                FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+             	Assertions.assertEquals(f.fibonacci(input), expected);
+         }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is lot better than the JUnit4 implementation. Also, if there is a fail in the test, we obtain a better message indicating the difference, the index causing the fail and the used parameters.</p>
+</div>
+<div class="paragraph">
+<p>Finally, it&#8217;s the same for mocking as JUnit4: you normally use an external library so I didn&#8217;t explained it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spock_framework">Spock framework</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The last one was the Spock framework. It&#8217;s based in <a href="http://groovy-lang.org/">Apache Groovy</a>. If you don&#8217;t know Groovy, it&#8217;s a language which you can use with the JVM and it interact very well with Java. It allows write less code in a more clear way. It&#8217;s very powerful. Some years ago we started to use it for "non critical" development: tests, dependency management, Continuous Integration, load testing and in any place where we need some configuration file avoiding XML, JSON or any format like that. We continue to develop in Java the core of our software and it isn&#8217;t a problem because both languages play very well together. If you know Java, you know Groovy&#8230;&#8203; so we have the best of both worlds.</p>
+</div>
+<div class="paragraph">
+<p>Write a test in Spock is quite different, it would be like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    def "Simple test"() {
+        setup:
+        BadFibonacci f = new BadFibonacci()
+
+        expect:
+        f.fibonacci(1) == 1
+        assert f.fibonacci(4) == 3
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Basically, we can use <code>def</code> where we don&#8217;t care about the type. The name of the function can be defined between quotation marks, which allow us to use better naming for our tests. We have some special words as <code>setup</code>, <code>when</code>, <code>expect</code>, <code>and</code>, etc. to define our test in a more descriptive and structured way. And we have a power assert, which is part of the language itself, proving nice messages:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Condition not satisfied:
+
+f.fibonacci(4) == 2
+| |            |
+| 3            false
+BadFibonacci@23c30a20
+
+Expected :2
+
+Actual   :3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It provides all the information: the returned value (actual), the expected value, the function, the parameter, etc. <code>assert</code> is Groovy is really handy.</p>
+</div>
+<div class="paragraph">
+<p>Now it&#8217;s the turn for the parametrized test. It would be something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    def "parametrized test"() {
+        setup:
+        BadFibonacci f = new BadFibonacci()
+
+        expect:
+        f.fibonacci(index) == fibonacciNumber
+
+        where:
+        index | fibonacciNumber
+        1     | 1
+        2     | 1
+        3     | 2
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After show this I heard some 'oooh' in the audience. The magic of this code is: you don&#8217;t need to explain it! There is a table in the <code>where:</code> section and the values in <code>expect:</code> are automagically replace it in each iteration. If there is a fail, the message is crystal clear:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Condition not satisfied:
+
+f.fibonacci(index) == fibonacciNumber
+| |         |      |  |
+| 2         3      |  4
+|                  false
+BadFibonacci@437da279
+
+Expected :4
+
+Actual   :2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then I&#8217;ve introduced very shortly mocks and stubs. <a href="https://en.wikipedia.org/wiki/Mock_object">A mock</a> is a object you create in your test to avoid to use a real object. For example, you don&#8217;t want to do real web requests or print a page in your tests, so you can use a mock from an interface or another object.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Subscriber subscriber = Mock()
+
+    def "mock example"() {
+        when:
+        publisher.send("hello")
+
+        then:
+        1 * subscriber.receive("hello")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Basically, you create the <code>subscriber</code> interface as Mock and then you can invoke the methods. The <code>1 *</code> is another nice feature of Spock, it specify how many messages you should receive. Cool, right?.</p>
+</div>
+<div class="paragraph">
+<p>In some occasions, you need to define what return the methods of your mocks. For that, you can create <a href="https://en.wikipedia.org/wiki/Method_stub">a stub</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    def "stub example"() {
+        setup:
+        subscriber.receive(_) &gt;&gt; "ok"
+
+        when:
+        publisher.send("message1")
+
+        then:
+        subscriber.receive("message1") == 'ok'
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, with the <code>&gt;&gt;</code> notation we are defining the method <code>receive</code> should return <code>ok</code> independently of the parameter (<code>_</code> means any value). The test pass without any problem.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusions">Conclusions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I don&#8217;t like to recommend one library or another: all of the them have their use cases. It&#8217;s pretty clear we have great options in Java and I just give some examples. Now it&#8217;s your turn to decide which it&#8217;s better for you. The only thing I can say: write test and master your library of choice, it would make you a better developer!</p>
+</div>
+<div class="paragraph">
+<p>If you want to take a deeper look to the examples, you will find them in <a href="https://github.com/vigojug/developer-vago-1-unit-testing">this GitHub repository</a>. Enjoy!</p>
+</div>
+</div>
+</div></p>
+                        </div>
+                        
+                    </div>
+                
+
+            
+                
+                    <div  itemscope itemtype="http://schema.org/Blog">
+                        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
+                            <meta itemprop="name" content="Yan Bonnel"/>
+                        </div>
+                        <meta itemprop="inLanguage" content="en-US"/>
                         <a itemprop="url" href="blog/2018/20180102-New-proposals-for-2018.html">
                             <h1 itemprop="name">My goals for 2018: more focus</h1>
                         </a>
@@ -379,187 +1021,6 @@ augroup END
                 
 
             
-                
-                    <div  itemscope itemtype="http://schema.org/Blog">
-                        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
-                            <meta itemprop="name" content="Yan Bonnel"/>
-                        </div>
-                        <meta itemprop="inLanguage" content="en-US"/>
-                        <a itemprop="url" href="blog/2017/20170109-how-to-persist-your-configuration-in-gke.html">
-                            <h1 itemprop="name">How to persist your configuration in GKE</h1>
-                        </a>
-                        <p>
-                            <time itemprop="datePublished"
-                                  datetime="2017-01-09">
-                                09 January 2017
-                            </time>
-                             - Tags :
-                            <meta itemprop="keywords" content="development,devops,gke,terraform"/>
-                            <a href="tags/development.html">development</a>, <a href="tags/devops.html">devops</a>, <a href="tags/gke.html">gke</a>, <a href="tags/terraform.html">terraform</a>
-                        </p>
-
-                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.galiglobal.com/blog/2017/20170109-how-to-persist-your-configuration-in-gke.html" data-text="How to persist your configuration in GKE" data-via="antonmry" data-lang="en">Tweeter</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                        <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/blog/2017/20170109-how-to-persist-your-configuration-in-gke.html"></div>
-
-                        
-                        <div itemprop="blogPost">
-                            <p><p>In my previous post, <a href="https://antonmry.github.io/post/deploy-on-kubernetes-gke-with-terraform/">Deploy on Kubernetes GKE with Terraform</a>, we&rsquo;ve seen how to start to use kubernetes but in a very simple way. The next thing we would like to do is persist the configuration, so we don&rsquo;t need to reconfigure our bot each time we start the cluster. This post explain how to do it from the configuration created in the previous one.</p>
-<p>Again we&rsquo;ll use <a href="https://github.com/antonmry/leanmanager">Leanmanager bot</a> but everything applies to any other system which needs to store configuration or data in a database. In the case of <a href="https://github.com/antonmry/leanmanager">Leanmanager</a> we are using <a href="https://github.com/boltdb/bolt">Boltdb</a>, a pure Go key/value store. <a href="https://github.com/boltdb/bolt">Boltdb</a> is great for development but it doesn&rsquo;t support to have more than one process opening the same database file, so it may be problematic if we want to have more than one Docker instance at the same time. Yet it&rsquo;s enough for our purposes and the process is similar for <a href="https://www.consul.io/">Consul</a> which it&rsquo;s already in the Roadmap.</p>
-<h2><a href="#create-your-persistent-disks" name="create-your-persistent-disks">Create your persistent disks</a></h2>
-<p>If we want to persist data, we are going to need a disk, that&rsquo;s common sense. In GCE we can do it very easily:</p>
-<pre><code class="sh">gcloud compute disks create --size 1GB leanmanager-disk
-</code></pre>
-<p>But again, we want to do it in an automated way with Terraform. Use the following file <code>leanmanager-disk.tf</code>:</p>
-<pre><code>variable &quot;disk_name&quot; {
-  default = &quot;leanmanager-disk&quot;
-}
-
-resource &quot;google_compute_disk&quot; &quot;default&quot; {
-name  = &quot;${var.disk_name}&quot;
-  type  = &quot;pd-ssd&quot;
-  zone = &quot;${var.region}&quot;
-  size  = &quot;1&quot;
-}
-</code></pre>
-<p>If you want to know more about it, visit the <a href="https://www.terraform.io/docs/providers/google/r/compute_disk.html">Terraform Google_Compute_Disk reference documentation</a>.</p>
-<h2><a href="#tell-the-container-about-the-disk" name="tell-the-container-about-the-disk">Tell the container about the disk</a></h2>
-<p>In our previous post, we&rsquo;ve launched the bot using <code>kubectl run</code>. This is OK for simple configuration but if we need to have something more complex, it doesn&rsquo;t scale. We can create a <a href="http://kubernetes.io/docs/user-guide/pods/">pod</a>, a group of one or more containers, using a YAML file like this:</p>
-<pre><code>apiVersion: v1
-kind: Pod
-metadata:
-  name: leanmanager
-  labels:
-    name: leanmanager
-spec:
-  containers:
-    - image: antonmry/leanmanager:latest
-      name: leanmanager
-      env:
-        - name: LEANMANAGER_TOKEN
-          value: LEANMANAGER_TOKEN_TEMPLATE
-        - name: LEANMANAGER_PATHDB
-          value: /mnt
-      volumeMounts:
-          # This name must match the volumes.name below.
-        - name: leanmanager-persistent-storage
-          mountPath: /mnt
-  volumes:
-    - name: leanmanager-persistent-storage
-      gcePersistentDisk:
-        # This disk must already exist.
-        pdName: leanmanager-disk
-        fsType: ext4
-</code></pre>
-<p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I don&rsquo;t want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn&rsquo;t supported yet in K8s, see <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>. </p>
-<p>So I&rsquo;ve created a YAML template and in the Terraform file changed the last <code>local-exec</code> to:</p>
-<pre><code>  provisioner &quot;local-exec&quot; {
-    command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- &#39;s/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g&#39; leanmanager.tmp.yaml&quot;
-  }
-
-  provisioner &quot;local-exec&quot; {
-    command = &quot;kubectl create -f leanmanager.tmp.yaml&quot;
-  }
-
-  provisioner &quot;local-exec&quot; {
-    command = &quot;rm -f leanmanager.tmp.yaml&quot;
-  }
-</code></pre>
-<p>Basically, I&rsquo;m replacing strings with <code>sed</code>. Other more sophisticate approaches are possible as K8s secrets or Ansible, but this is simple and enough for the task we want to do.</p>
-<h2><a href="#create-the-pod-and-test" name="create-the-pod-and-test">Create the pod and test</a></h2>
-<p>Time to create the cluster and the pod:</p>
-<pre><code class="sh">terraform plan
-terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
-</code></pre>
-<p>The bot should connect. Now we can do some changes in the configuration, delete the pod:</p>
-<pre><code class="sh">kubectl delete pod leanmanager
-</code></pre>
-<p>Create it again:</p>
-<pre><code class="sh">kubectl create -f leanmanager.yaml
-</code></pre>
-<p>And check the status with the following commands and, once it&rsquo;s in <em>Running</em> state, see if everything has been persisted:</p>
-<pre><code class="sh">kubectl get pod leanmanager
-kubectl logs leanmanager
-</code></pre>
-<h2><a href="#conclusion" name="conclusion">Conclusion</a></h2>
-<p>Persist data in Kubernetes is quite easy, even if you are going to do it automatically.</p>
-<p>If you want to check all the files, the full project and the associated PR are in <a href="https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0">Github</a>.</p>
-<h2><a href="#not-already-linked-but-useful-resources" name="not-already-linked-but-useful-resources">Not already linked but useful resources</a></h2>
-<ul>
-  <li><a href="http://kubernetes.io/docs/user-guide/persistent-volumes/">Kubernetes persistent volumes</a></li>
-  <li><a href="https://cloud.google.com/container-engine/docs/tutorials/persistent-disk/">Using Persistent Disks with WordPress and MySQL</a></li>
-</ul></p>
-                        </div>
-                        
-                    </div>
-                
-
-            
-                
-                    <div  itemscope itemtype="http://schema.org/Blog">
-                        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
-                            <meta itemprop="name" content="Yan Bonnel"/>
-                        </div>
-                        <meta itemprop="inLanguage" content="en-US"/>
-                        <a itemprop="url" href="blog/2017/20170108-introduction-to-go-kit.html">
-                            <h1 itemprop="name">Introduction to Go kit</h1>
-                        </a>
-                        <p>
-                            <time itemprop="datePublished"
-                                  datetime="2017-01-08">
-                                08 January 2017
-                            </time>
-                             - Tags :
-                            <meta itemprop="keywords" content="development,microservices,go,go-kit"/>
-                            <a href="tags/development.html">development</a>, <a href="tags/microservices.html">microservices</a>, <a href="tags/go.html">go</a>, <a href="tags/go-kit.html">go-kit</a>
-                        </p>
-
-                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.galiglobal.com/blog/2017/20170108-introduction-to-go-kit.html" data-text="Introduction to Go kit" data-via="antonmry" data-lang="en">Tweeter</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                        <div class="g-plusone" data-size="medium" data-href="http://www.galiglobal.com/blog/2017/20170108-introduction-to-go-kit.html"></div>
-
-                        
-                        <div itemprop="blogPost">
-                            <p><h2>Microservices don&rsquo;t fit all use cases</h2>
-<p>When I&rsquo;ve started <a href="https://github.com/antonmry/leanmanager">my Leanmanager bot</a>, I&rsquo;ve chosen to use the same approach (well, really it&rsquo;s a framework but that word seems to be censured if you are a gopher so I will use <em>approach</em>) as the kubernetes project: if it&rsquo;s good for k8s, it should be good for me and also a good way to learn a bit more about kubernetes. So I&rsquo;ve implemented all the REST APIs using <a href="https://github.com/emicklei/go-restful">github.com/emicklei/go-restful</a>.</p>
-<p>Then I had the opportunity to work a bit with <a href="https://gokit.io/">go-kit</a>. A framework, ups, no, sorry, a toolkit to create microservices. My initial opinion was too complicated and too much boilerplate. Yet I would like to give it another opportunity, there are some interesting things useful for bots (support many transports, RPC approach, instrumentation) and my main motivation with the bot is to test new technologies and ideas so&hellip; why not?</p>
-<p>If you visit the <a href="https://gokit.io">Go-kit website</a>, and then, you will jump very soon into the <a href="https://gokit.io/examples/stringsvc.html">stringsvc tutorial</a>. The tutorial is awesome but it isn&rsquo;t a five minutes read and it&rsquo;s a bit too complicated to start to work with Go-kit. I recommend an approach a bit different. First, watch <a href="https://www.youtube.com/watch?v=JXEjAwNWays">Go + Microservices = Go Kit</a> from <a href="https://peter.bourgon.org/">Peter Bourgon</a>. This is an awesome talk explaining microservices and their use cases. Clearly Peter knows a lot about the subject: microservices aren&rsquo;t for everyone.</p>
-<p>If after the video, you think microservices fit your case, go ahead and may the Force be with you.</p>
-<h2>Go-kit addsvc example</h2>
-<p>First step, download Go-kit:</p>
-<pre><code class="sh">go get github.com/go-kit/kit
-</code></pre>
-<p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you&rsquo;ve already in the GOPATH).</p>
-<pre><code class="sh">cp -r ../../go-kit/kit/examples/addsvc/ .
-go get ./...
-</code></pre>
-<p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let&rsquo;s try the example. Launch the server:</p>
-<pre><code class="sh">cd cmd/addsvc/
-go run main.go
-</code></pre>
-<p>And in a different shell, launch the client:</p>
-<pre><code class="sh">cd cmd/addcli/
-go run main.go -http.addr=:8081 1 2
-</code></pre>
-<p>If everything goes well, you will obtain something like:</p>
-<blockquote>
-  <p>1 + 2 = 3</p>
-</blockquote>
-<p>Or you can use <code>curl</code> directly:</p>
-<pre><code class="sh">curl -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}&#39; http://localhost:8081/concat
-</code></pre>
-<p>There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:</p>
-<pre><code class="sh">go run main.go -grpc.addr=:8082 1 2
-</code></pre>
-<h2>Show me the code!</h2>
-<p>It&rsquo;s time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p>
-<p>Note: I may continue this in the future if I resume my work with go-kit.</p></p>
-                        </div>
-                        
-                    </div>
-                
-
-            
 
             <hr />
 
@@ -627,9 +1088,13 @@ go run main.go -http.addr=:8081 1 2
                     
                         <li><a href="tags/RestComm.html">RestComm</a> (2)</li>
                     
+                        <li><a href="tags/spock.html">spock</a> (2)</li>
+                    
                         <li><a href="tags/TADSummit.html">TADSummit</a> (2)</li>
                     
                         <li><a href="tags/terraform.html">terraform</a> (2)</li>
+                    
+                        <li><a href="tags/testing.html">testing</a> (2)</li>
                     
                         <li><a href="tags/Weblogic.html">Weblogic</a> (2)</li>
                     
