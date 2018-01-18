@@ -6,8 +6,8 @@
     <atom:link href="http://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Antón R. Yuste Blog</description>
     <language>en-us</language>
-    <pubDate>Thu, 11 Jan 2018 22:54:06 +0100</pubDate>
-    <lastBuildDate>Thu, 11 Jan 2018 22:54:06 +0100</lastBuildDate>
+    <pubDate>Thu, 18 Jan 2018 23:26:00 +0100</pubDate>
+    <lastBuildDate>Thu, 18 Jan 2018 23:26:00 +0100</lastBuildDate>
 
     
     <item>
@@ -315,7 +315,14 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</guid>
       <description>
-      &lt;div class=&quot;sect1&quot;&gt;
+      &lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This article has been published on &lt;a href=&quot;https://dzone.com/articles/junit4-junit5-and-spock-framework-comparison&quot;&gt;DZone&lt;/a&gt; with editor revision so I recommend you to read it there.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
 &lt;h2 id=&quot;_introduction_and_motivation&quot;&gt;Introduction and motivation&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -602,6 +609,9 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;If you want to take a deeper look to the examples, you will find them in &lt;a href=&quot;https://github.com/vigojug/developer-vago-1-unit-testing&quot;&gt;this GitHub repository&lt;/a&gt;. Enjoy!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/28&quot;&gt;Comments&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
