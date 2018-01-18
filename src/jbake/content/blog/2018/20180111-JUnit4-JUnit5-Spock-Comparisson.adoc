@@ -5,6 +5,8 @@ Antón R. Yuste
 :jbake-tags: spock, testing
 :jbake-status: published
 
+This article has been published on https://dzone.com/articles/junit4-junit5-and-spock-framework-comparison[DZone] with editor revision so I recommend you to read it there.
+
 == Introduction and motivation
 
 Recently I gave a talk in my local Java User Group about unit testing. Some of the content of the talk was about some popular libraries you can use in your Java project. I've reviewed http://junit.org/junit4/[JUnit4], http://junit.org/junit5/[JUnit5] and http://spockframework.org/[Spock framework]. Many of the attendees were quite surprised with the differences. In this post, I will summarize the most commented: assert, parametrized tests and mocking.
