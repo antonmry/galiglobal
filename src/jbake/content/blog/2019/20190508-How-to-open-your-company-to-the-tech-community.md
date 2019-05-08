@@ -69,10 +69,10 @@ There are companies also launching an Engineering blog. It's a great idea which 
 
 Open source is another good way to collaborate with the community. Just open a GitHub organization and let your engineers know they can publish software there. It would need some reviewing and validation process but it's a great way, especially if they start to work in the open, not just publish the final outcome.
 
+Another way is contribute to open source projects. Part of the dedication of some of your engineers can go to fix bugs, create new features, documentation, etc.
+
 Not only will help to collaborate with the community, but it would also have a positive impact on the company improving quality, performance and talent retention. That deserves another blog post. 
 
 # Summary
 
-There are a lot of ways and reasons to collaborate with the community. Ask other companies: worth it. But it isn't as easy as you may think. So start small and ask people with experience and good intentions. They will help. 
-
-
+There are a lot of ways and reasons to collaborate with the community. Ask other companies: worth it. But it isn't as easy as you may think. So start small and ask people with experience and good intentions. They will help. And remember, your engineers are the best ambassadors you may have in the Tech community. Empower them!. 
