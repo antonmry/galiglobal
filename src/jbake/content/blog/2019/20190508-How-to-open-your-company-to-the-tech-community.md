@@ -7,9 +7,9 @@ status=published
 
 As a Software Engineer and usual participant in different Tech communities, it was always a priority for me to involve in the Tech community the company where I work. I really believe it's a win-win for the company and for the community but I also know it's quite complex. 
 
-Have you ever do it something for the first time? If someone appears from nowhere and says you suck on that, probably you will lose the interest very soon. Even if that person approached with good intentions or saying the truth, the timing is crucial here. This happens all the time to opening companies so they stop the process and it's a pity.
+Have you ever do it something for the first time? If someone appears from nowhere and says you suck on that, probably you will lose the interest very soon. Even if that person approached with good intentions or saying the truth, the timing is crucial here. This happens all the time to opening companies. They stop the process and it's a pity.
 
-As co-organizer of local JUGs and conferences, I was asked several times from different companies about this. It's hard to answer, there are so many things involved. So I prepared a list of possible answers to help you in your path to collaborate with the community.
+As co-organizer of local JUGs and conferences, I was asked several times from different companies about this. It's hard to answer, there are so many things involved. So I prepared a list of possible answers to help you in the path to collaborate with the community.
 
 # Have clear your reasons
 
@@ -41,7 +41,7 @@ You will have time in the future to come back a start a deeper collaboration onc
 
 Some companies like to start with their own group or conference. It usually doesn't work well in the short-term. My advice starts contributing before to create something from scratch. Again, it isn't about your size or expertise, it takes time to do things well so start small and grow from there.is a good plan. Think about what's better for your interests. The ego never helps.
 
-It's a lot better if you name some of your engineers as ambassadors in the Tech community. It's a partial-time role. His mission is to establish the link between both words: help the communities from the company and promote the community inside. Make sure they can decide and are listening. If a possible sponsorship is evaluated only by HR, you are missing important information.
+It's a lot better if you name some of your engineers as ambassadors in the Tech community. It's a partial-time role. His mission is to establish the link between both words: help the communities from the company and promote the community inside. Make sure they can decide and you are listening when they give their opinion. If a possible sponsorship is evaluated only by HR, you are missing important information.
 
 # What can we do?
 
@@ -57,7 +57,7 @@ If your company is going to be a sponsor of a conference, there are things you s
 
 One of the best things in a conference it's sending some of your engineers to make a talk and share their experiences. Everybody loves that, people will provide great real feedback and will get interested. It's a win-win and quite easy.
 
-# What more? Social media.
+# Social media and blogs
 
 If you don't show something to the world, it doesn't exist. Social media is important. Most of the HR departments are quite familiar with Linkedin, but most of the engineers receive their updates from Twitter. So start to promote events, communities, etc. But be careful. In case of doubt, don't publish it. 
 
