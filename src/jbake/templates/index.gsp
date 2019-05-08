@@ -67,7 +67,7 @@
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
                 <h4>Antón R. Yuste</h4>
-                <p>I am a Senior Software Engineer who specializes in the telecom domain. My professional interests include new technologies in web and telecom products, team workflow management and DevOps practices. </p>
+                <p>I'm a Software Engineer passionate about development with JVM languages, distributed systems and Deployment pipelines, mainly for big companies where technology is part of the business core.</p>
             </div>
 
             <div class="sidebar-module">
