@@ -39,7 +39,7 @@ You will have time in the future to come back a start a deeper collaboration onc
 
 # Should we organize our own group/event?
 
-Some companies like to start with their own group or conference. It usually doesn't work well in the short-term. My advice starts contributing before to create something from scratch. Again, it isn't about your size or expertise, it takes time to do things well so start small and grow from there.is a good plan. Think about what's better for your interests. The ego never helps.
+Some companies like to start with their own group or conference. It usually doesn't work well in the short-term. My advice starts contributing before to create something from scratch. Again, it isn't about your size or expertise, it takes time to do things well so start small and grow from there. Think about what's better for your interests. The ego never helps.
 
 It's a lot better if you name some of your engineers as ambassadors in the Tech community. It's a partial-time role. His mission is to establish the link between both words: help the communities from the company and promote the community inside. Make sure they can decide and you are listening when they give their opinion. If a possible sponsorship is evaluated only by HR, you are missing important information.
 
