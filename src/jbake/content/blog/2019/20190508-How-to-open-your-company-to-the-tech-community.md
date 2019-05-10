@@ -39,7 +39,7 @@ You will have time in the future to come back a start a deeper collaboration onc
 
 # Should we organize our own group/event?
 
-Some companies like to start with their own group or conference. It usually doesn't work well in the short-term. My advice starts contributing before to create something from scratch. Again, it isn't about your size or expertise, it takes time to do things well so start small and grow from there. Think about what's better for your interests. The ego never helps.
+Some companies like to start with their own group or conference. It usually doesn't work well in the short-term. My advice is to start contributing before to create something from scratch. Again, it isn't about your size or expertise, it takes time to do things well so start small and grow from there. Think about what's better for your interests. The ego never helps.
 
 It's a lot better if you name some of your engineers as ambassadors in the Tech community. It's a partial-time role. His mission is to establish the link between both words: help the communities from the company and promote the community inside. Make sure they can decide and you are listening when they give their opinion. If a possible sponsorship is evaluated only by HR, you are missing important information.
 
@@ -51,7 +51,7 @@ The easiest thing is event sponsorship but most of the companies are doing it wr
 
 If your company is going to be a sponsor of a conference, there are things you should do:
 
-- Make sure some engineers of your company attend the conference and organizers know about them so they can introduce everybody to them. It's sad when a company pay money and there is anyone to ask at the conference. There is no better ambassador than your own employees and social networking is the most important thing in a conference.
+- Make sure some engineers of your company attend the conference and organizers know about them so they can introduce everybody to them. It's sad when a company pay money and there is nobody to ask at the conference. There is no better ambassador than your own employees and social networking is the most important thing in a conference.
 - Ask the organizers if your company can help in some way: find speakers or other sponsors, promote the conference or record the talks. Once you start to collaborate in this way, organizers will start to contribute back and speak nicely about your company to others. That's the type of publicity you want.
 - Promote the event and talks in your social media. It's free, easy to do and with a great impact on your Company image. 
 
@@ -59,9 +59,9 @@ One of the best things in a conference it's sending some of your engineers to ma
 
 # Social media and blogs
 
-If you don't show something to the world, it doesn't exist. Social media is important. Most of the HR departments are quite familiar with Linkedin, but most of the engineers receive their updates from Twitter. So start to promote events, communities, etc. But be careful. In case of doubt, don't publish it. 
+If you don't show something to the world, it doesn't exist. Social media is important. Most of the HR departments are quite familiar with Linkedin, but most of the engineers receive their news from Twitter. So start to promote your projects, events, communities, etc. and show a more human view of your company. But be careful: in case of doubt, don't publish it. Nobody wants to deal with trolls. 
 
-If you don't want to pollute your Social Media mixing messages for engineers and customers, create a new account specifically for that. It would help a lot.
+If you don't want to pollute your Social Media mixing messages for engineers and customers, create a new account specifically for that. It would help a lot but make sure you keep it alive!.
 
 There are companies also launching an Engineering blog. It's a great idea which helps to promote your brand, but also to create some type of shared identity in your company and gives deserved credit to your engineers. The only problem: it takes time. If you do it, plan it carefully for the long-term. 
 
