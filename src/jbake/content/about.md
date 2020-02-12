@@ -5,11 +5,9 @@ tags=galiglobal
 status=published
 ~~~~~~
 
-I am a Senior Software Engineer who specializes in the telecom business domain. I'm an [Oracle ACE Associate](https://apex.oracle.com/pls/apex/f?p=19297:4:::NO:4:P4_ID:12240), Certified Implementation Specialist and a fan of Agile. I work as [Senior Software Engineer](http://bit.ly/antonmry-linkedin) with [Optare Solutions](http://www.optaresolutions.com). My professional interests include new technologies in web and telecom products, team workflow development and DevOps practices.
+I’m a Software Engineer focused on Data Pipelines (Spark) and Event Streaming (Kafka Streams, Flink). Nowadays I work for Inditex Group (Zara, Massimo Dutti, etc.) as Data Engineer. In the past, I worked as a specialist in Deployment Pipelines, API Management and Advanced Orchestration in distributed systems. I really enjoy building Data Pipelines with Java/Scala and deploying them to the Cloud or Kubernetes.
 
-As [Oracle Communications Service and Network Evolution (SaNE) Solution](http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html) expert I've earned a wide experience with Oracle technologies (Weblogic, JavaEE) and network protocols (SIP, WebRTC, Diameter, SMPP, REST/SOAP).
-
-I am also interesting in some cool Open Source projects (check my [Github account](https://github.com/antonmry)). I like to participate as speaker at developer conferences, such as SpringIO, Geecon or TADSummit when I have the opportunity and I'm organising the [VigoJUG](http://www.vigojug.org). 
+I am also interesting in some cool Open Source projects (check my [Github account](https://github.com/antonmry)). I like to participate as speaker at developer conferences, such as SpringIO, Geecon or TADSummit when I have the opportunity and I'm organising the [VigoJUG](http://www.vigojug.org) and [CoruñaJUG](http://www.corunajug.org). 
 
 More information about me is available in [my Linkedin profile](http://bit.ly/antonmry-linkedin) or you can contact me at galiglobal@galiglobal.com.
 
