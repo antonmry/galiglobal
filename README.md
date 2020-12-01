@@ -19,16 +19,17 @@ If you want to have it updated with changes in real-time:
 To run it locally:
 
 ```sh
-./gradlew liveReload 
+./gradlew liveReload
 ```
 
-and open http://localhost:35729 with your browser. It should refresh with any change.
+and open http://localhost:35729 with your browser. It should refresh with any
+change.
 
 ## Deploy
 
-To publish it:
+To publish it, change to master and execute:
 
 ```sh
-./gradlew publishGhPages
+./deploy.sh
 ```
 
