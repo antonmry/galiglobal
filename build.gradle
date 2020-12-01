@@ -7,19 +7,19 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.3.0-SNAPSHOT'
         classpath 'org.ajoberstar:grgit:1.1.0'
         classpath "org.ajoberstar:gradle-git:1.5.0"
-        classpath 'org.kordamp.gradle:livereload-gradle-plugin:0.2.1'
     }
 }
 
-apply plugin: 'me.champeau.jbake'
+plugins {
+    id 'org.jbake.site' version '5.3.0'
+    id 'org.kordamp.gradle.livereload' version '0.4.0'
+}
+
 apply plugin: 'idea'
 apply plugin: 'war'
 apply plugin: 'org.ajoberstar.github-pages'
-apply plugin: 'org.kordamp.gradle.livereload'
-
 
 jbake {
     srcDirName = 'src/jbake'

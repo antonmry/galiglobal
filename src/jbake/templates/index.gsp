@@ -5,7 +5,7 @@
 	<div class="page-header">
         <div class="row">
             <!--<div class="col-xs-4 col-md-2"><img src="img/JustAnOtherDevBlog.png"></div> -->
-            <div class="col-xs-12 col-md-8"><h1>new AntonRYuste().blog()</h1></div>
+            <div class="col-xs-12 col-md-8"><h1>new AntonRodriguez().blog()</h1></div>
         </div>
 	</div>
 
@@ -66,8 +66,8 @@
 
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
-                <h4>Antón R. Yuste</h4>
-                <p>I'm a Software Engineer passionate about development with JVM languages, distributed systems and Deployment pipelines, mainly for big companies where technology is part of the business core.</p>
+                <h4>Antón Rodríguez</h4>
+                <p>I'm a Principal Software Engineer focused on Event Streaming, Real-Time Processing and build internal SaaS in big corporations</p>
             </div>
 
             <div class="sidebar-module">

@@ -9,3 +9,5 @@
 build
 .gradle
 jbake-gradle-plugin
+.settings/
+.project

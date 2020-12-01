@@ -1,15 +1,13 @@
 # GaliGlobal
 
-This is the source for my [blog](http://www.galiglobal.com/). The content is rendered using [JBake](http://jbake.org/), source is in the master branch and output is pushed on the gh-pages branch.
+This is the source for my [blog](http://www.galiglobal.com/). The content is
+rendered using [JBake](http://jbake.org/), source is in the master branch and
+output is pushed on the gh-pages branch.
 
 ## Build
 
-To build the project:
-
-Make sure you have downloaded the [jbake-gradle-plugin](https://github.com/jbake-org/jbake-gradle-plugin) in the same folder as the website.
-
 ```sh
-./gradlew clean bake
+./gradlew bake
 ```
 
 If you want to have it updated with changes in real-time:
