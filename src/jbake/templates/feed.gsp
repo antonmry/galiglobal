@@ -4,7 +4,7 @@
     <title>GaliGlobal</title>
     <link>${config.site_host}</link>
     <atom:link href="${config.site_host}/${config.feed_file}" rel="self" type="application/rss+xml" />
-    <description>Antón R. Yuste Blog</description>
+    <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
     <pubDate>${published_date.format("EEE, d MMM yyyy HH:mm:ss Z")}</pubDate>
     <lastBuildDate>${published_date.format("EEE, d MMM yyyy HH:mm:ss Z")}</lastBuildDate>
