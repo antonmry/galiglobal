@@ -47,17 +47,7 @@
                 <li><a href="../../index.html">Home</a>
                 </li>
                 <li><a href="../../archive.html">Archive</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html">2017 PythonVigo</a>
-                        </li>
-                        <li><a href="/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html">2015 TADSummit</a></li>
-                        <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
-                        <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a>
-                        </li>
-                        <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
-                    </ul>
+                <li><a href="../../public-talks.html">Public Talks</a>
                 <li><a href="../../about.html">About</a>
                 </li>
             </li>
@@ -76,7 +66,7 @@
 
 	<p><p>I&rsquo;ve tried so many times change Intellij or Eclipse by vim.. But when it&rsquo;s related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it&rsquo;s even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.</p>
 <p>Some weeks ago I&rsquo;ve discovered this blog post <a href="https://spacevim.org/use-vim-as-a-java-ide/">Use Vim as a Java IDE</a> and I want to give it another opportunity. Let&rsquo;s start.</p>
-<h2><a href="#neovim-in-fedora" name="neovim-in-fedora">Neovim in Fedora</a></h2>
+<h2><a href="#neovim-in-fedora" id="neovim-in-fedora">Neovim in Fedora</a></h2>
 <p>This is straight-forward:</p>
 <pre><code>sudo dnf -y copr enable dperson/neovim
 sudo dnf -y install neovim
@@ -90,29 +80,29 @@ sudo dnf -y install python2-neovim python3-neovim
 <p>We&rsquo;ll need some other plugins:</p>
 <pre><code>sudo dnf -y install astyle
 </code></pre>
-<h2>Install vim-plug</h2>
+<h2><a href="#install-vim-plug" id="install-vim-plug">Install vim-plug</a></h2>
 <p>Again, this is straight-forward following <a href="https://github.com/junegunn/vim-plug">the official instructions</a>:</p>
 <pre><code>curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 </code></pre>
-<h2><a href="#install-plugins" name="install-plugins">Install plugins</a></h2>
+<h2><a href="#install-plugins" id="install-plugins">Install plugins</a></h2>
 <p>This is when things become messy. Start editing <code>~/.config/nvim/init.vim</code> to add the plugins:</p>
 <pre><code>&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
 &quot;&quot;&quot;&quot;    vim-plug     &quot;&quot;&quot;&quot;
 &quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
-call plug#begin(&#39;~/.local/share/nvim/plugged&#39;)
+call plug#begin('~/.local/share/nvim/plugged')
 
 &quot; Others
 
-Plug &#39;scrooloose/nerdtree&#39;, { &#39;on&#39;:  &#39;NERDTreeToggle&#39; }
-Plug &#39;majutsushi/tagbar&#39;
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'majutsushi/tagbar'
 
 &quot; Java development
 
-Plug &#39;sbdchd/neoformat&#39;
-Plug &#39;artur-shaik/vim-javacomplete2&#39;
-Plug &#39;Shougo/deoplete.nvim&#39;, { &#39;do&#39;: &#39;:UpdateRemotePlugins&#39; }
-Plug &#39;neomake/neomake&#39;
+Plug 'sbdchd/neoformat'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'neomake/neomake'
 
 &quot; Initialize plugin system
 call plug#end()
@@ -122,7 +112,7 @@ call plug#end()
 &quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.java = &#39;[^. *\t]\.\w*&#39;
+let g:deoplete#omni_patterns.java = '[^. *\t]\.\w*'
 let g:deoplete#sources = {}
 let g:deoplete#sources._ = []
 let g:deoplete#file#enable_buffer_path = 1
@@ -147,14 +137,15 @@ augroup astyle
 augroup END
 </code></pre>
 <p>Open <code>nvim</code> and type <code>:PlugInstall</code>.</p>
-<h2>Done!</h2>
+<h2><a href="#done" id="done">Done!</a></h2>
 <p>Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.</p>
 <p>I will update this blog post with new things as soon as I have them.</p>
-<h2><a href="#todo" name="todo">TODO</a></h2>
+<h2><a href="#todo" id="todo">TODO</a></h2>
 <ul>
-  <li>[ ] Add Groovy support.</li>
-  <li>[ ] Add some screenshots or recording.</li>
-</ul></p>
+<li>[ ] Add Groovy support.</li>
+<li>[ ] Add some screenshots or recording.</li>
+</ul>
+</p>
 
 	<hr />
 
@@ -164,7 +155,7 @@ augroup END
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Baked with <a href="http://jbake.org">JBake</a> v2.6.5 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 

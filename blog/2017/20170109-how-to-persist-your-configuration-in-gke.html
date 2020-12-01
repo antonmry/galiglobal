@@ -47,17 +47,7 @@
                 <li><a href="../../index.html">Home</a>
                 </li>
                 <li><a href="../../archive.html">Archive</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html">2017 PythonVigo</a>
-                        </li>
-                        <li><a href="/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html">2015 TADSummit</a></li>
-                        <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
-                        <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a>
-                        </li>
-                        <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
-                    </ul>
+                <li><a href="../../public-talks.html">Public Talks</a>
                 <li><a href="../../about.html">About</a>
                 </li>
             </li>
@@ -76,9 +66,9 @@
 
 	<p><p>In my previous post, <a href="https://antonmry.github.io/post/deploy-on-kubernetes-gke-with-terraform/">Deploy on Kubernetes GKE with Terraform</a>, we&rsquo;ve seen how to start to use kubernetes but in a very simple way. The next thing we would like to do is persist the configuration, so we don&rsquo;t need to reconfigure our bot each time we start the cluster. This post explain how to do it from the configuration created in the previous one.</p>
 <p>Again we&rsquo;ll use <a href="https://github.com/antonmry/leanmanager">Leanmanager bot</a> but everything applies to any other system which needs to store configuration or data in a database. In the case of <a href="https://github.com/antonmry/leanmanager">Leanmanager</a> we are using <a href="https://github.com/boltdb/bolt">Boltdb</a>, a pure Go key/value store. <a href="https://github.com/boltdb/bolt">Boltdb</a> is great for development but it doesn&rsquo;t support to have more than one process opening the same database file, so it may be problematic if we want to have more than one Docker instance at the same time. Yet it&rsquo;s enough for our purposes and the process is similar for <a href="https://www.consul.io/">Consul</a> which it&rsquo;s already in the Roadmap.</p>
-<h2><a href="#create-your-persistent-disks" name="create-your-persistent-disks">Create your persistent disks</a></h2>
+<h2><a href="#create-your-persistent-disks" id="create-your-persistent-disks">Create your persistent disks</a></h2>
 <p>If we want to persist data, we are going to need a disk, that&rsquo;s common sense. In GCE we can do it very easily:</p>
-<pre><code class="sh">gcloud compute disks create --size 1GB leanmanager-disk
+<pre><code class="language-sh">gcloud compute disks create --size 1GB leanmanager-disk
 </code></pre>
 <p>But again, we want to do it in an automated way with Terraform. Use the following file <code>leanmanager-disk.tf</code>:</p>
 <pre><code>variable &quot;disk_name&quot; {
@@ -93,7 +83,7 @@ name  = &quot;${var.disk_name}&quot;
 }
 </code></pre>
 <p>If you want to know more about it, visit the <a href="https://www.terraform.io/docs/providers/google/r/compute_disk.html">Terraform Google_Compute_Disk reference documentation</a>.</p>
-<h2><a href="#tell-the-container-about-the-disk" name="tell-the-container-about-the-disk">Tell the container about the disk</a></h2>
+<h2><a href="#tell-the-container-about-the-disk" id="tell-the-container-about-the-disk">Tell the container about the disk</a></h2>
 <p>In our previous post, we&rsquo;ve launched the bot using <code>kubectl run</code>. This is OK for simple configuration but if we need to have something more complex, it doesn&rsquo;t scale. We can create a <a href="http://kubernetes.io/docs/user-guide/pods/">pod</a>, a group of one or more containers, using a YAML file like this:</p>
 <pre><code>apiVersion: v1
 kind: Pod
@@ -121,10 +111,10 @@ spec:
         pdName: leanmanager-disk
         fsType: ext4
 </code></pre>
-<p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I don&rsquo;t want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn&rsquo;t supported yet in K8s, see <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>. </p>
+<p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I don&rsquo;t want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn&rsquo;t supported yet in K8s, see <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>.</p>
 <p>So I&rsquo;ve created a YAML template and in the Terraform file changed the last <code>local-exec</code> to:</p>
 <pre><code>  provisioner &quot;local-exec&quot; {
-    command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- &#39;s/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g&#39; leanmanager.tmp.yaml&quot;
+    command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- 's/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g' leanmanager.tmp.yaml&quot;
   }
 
   provisioner &quot;local-exec&quot; {
@@ -136,29 +126,30 @@ spec:
   }
 </code></pre>
 <p>Basically, I&rsquo;m replacing strings with <code>sed</code>. Other more sophisticate approaches are possible as K8s secrets or Ansible, but this is simple and enough for the task we want to do.</p>
-<h2><a href="#create-the-pod-and-test" name="create-the-pod-and-test">Create the pod and test</a></h2>
+<h2><a href="#create-the-pod-and-test" id="create-the-pod-and-test">Create the pod and test</a></h2>
 <p>Time to create the cluster and the pod:</p>
-<pre><code class="sh">terraform plan
+<pre><code class="language-sh">terraform plan
 terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
 </code></pre>
 <p>The bot should connect. Now we can do some changes in the configuration, delete the pod:</p>
-<pre><code class="sh">kubectl delete pod leanmanager
+<pre><code class="language-sh">kubectl delete pod leanmanager
 </code></pre>
 <p>Create it again:</p>
-<pre><code class="sh">kubectl create -f leanmanager.yaml
+<pre><code class="language-sh">kubectl create -f leanmanager.yaml
 </code></pre>
 <p>And check the status with the following commands and, once it&rsquo;s in <em>Running</em> state, see if everything has been persisted:</p>
-<pre><code class="sh">kubectl get pod leanmanager
+<pre><code class="language-sh">kubectl get pod leanmanager
 kubectl logs leanmanager
 </code></pre>
-<h2><a href="#conclusion" name="conclusion">Conclusion</a></h2>
+<h2><a href="#conclusion" id="conclusion">Conclusion</a></h2>
 <p>Persist data in Kubernetes is quite easy, even if you are going to do it automatically.</p>
 <p>If you want to check all the files, the full project and the associated PR are in <a href="https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0">Github</a>.</p>
-<h2><a href="#not-already-linked-but-useful-resources" name="not-already-linked-but-useful-resources">Not already linked but useful resources</a></h2>
+<h2><a href="#not-already-linked-but-useful-resources" id="not-already-linked-but-useful-resources">Not already linked but useful resources</a></h2>
 <ul>
-  <li><a href="http://kubernetes.io/docs/user-guide/persistent-volumes/">Kubernetes persistent volumes</a></li>
-  <li><a href="https://cloud.google.com/container-engine/docs/tutorials/persistent-disk/">Using Persistent Disks with WordPress and MySQL</a></li>
-</ul></p>
+<li><a href="http://kubernetes.io/docs/user-guide/persistent-volumes/">Kubernetes persistent volumes</a></li>
+<li><a href="https://cloud.google.com/container-engine/docs/tutorials/persistent-disk/">Using Persistent Disks with WordPress and MySQL</a></li>
+</ul>
+</p>
 
 	<hr />
 
@@ -168,7 +159,7 @@ kubectl logs leanmanager
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Baked with <a href="http://jbake.org">JBake</a> v2.6.5 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 

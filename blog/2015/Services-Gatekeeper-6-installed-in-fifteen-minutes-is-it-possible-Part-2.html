@@ -47,17 +47,7 @@
                 <li><a href="../../index.html">Home</a>
                 </li>
                 <li><a href="../../archive.html">Archive</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html">2017 PythonVigo</a>
-                        </li>
-                        <li><a href="/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html">2015 TADSummit</a></li>
-                        <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
-                        <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a>
-                        </li>
-                        <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
-                    </ul>
+                <li><a href="../../public-talks.html">Public Talks</a>
                 <li><a href="../../about.html">About</a>
                 </li>
             </li>
@@ -75,98 +65,108 @@
 	<p><em>30 August 2015</em></p>
 
 	<p><p>This is the continuation of how to install and test OCSG, you can find the part 1 <a href="/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html">here</a>.</p>
-<h2>Platform Test Environment (PTE) Installation</h2>
+<h2><a href="#platform-test-environment-pte-installation" id="platform-test-environment-pte-installation">Platform Test Environment (PTE) Installation</a></h2>
 <ol>
-  <li>
-  <p>Login to <a href="https://edelivery.oracle.com/">Oracle Software Delivery Cloud</a>, choose <em>Oracle Communications</em> in <strong>Select a Product Pack</strong> and <em>Linux x86-64</em> and click on <strong>Go</strong>. Click on <em>Oracle Communications Services Gatekeeper 6.0</em>.</p></li>
-  <li>
-  <p>Download Oracle Communications Services Gatekeeper 6.0 Platform Test Environment, V73999-01.zip and copy it into the VM.</p></li>
-  <li>
-  <p>Unzip the file and execute the installer:</p></li>
+<li>
+<p>Login to <a href="https://edelivery.oracle.com/">Oracle Software Delivery Cloud</a>, choose <em>Oracle Communications</em> in <strong>Select a Product Pack</strong> and <em>Linux x86-64</em> and click on <strong>Go</strong>. Click on <em>Oracle Communications Services Gatekeeper 6.0</em>.</p>
+</li>
+<li>
+<p>Download Oracle Communications Services Gatekeeper 6.0 Platform Test Environment, V73999-01.zip and copy it into the VM.</p>
+</li>
+<li>
+<p>Unzip the file and execute the installer:</p>
+</li>
 </ol>
-<pre><code class="sh">unzip V73999-01.zip
+<pre><code class="language-sh">unzip V73999-01.zip
 java -jar ocsg_pte_generic.jar
 </code></pre>
 <ol>
-  <li>
-  <p>In the first window, accept the default Inventory Directory pressing <strong>OK</strong>.</p></li>
-  <li>
-  <p>The Welcome screen appears, press <strong>Next</strong>.</p></li>
-  <li>
-  <p>Introduce <em>/opt/ocsg6</em> in the Oracle Home field and press <strong>Next</strong>.</p></li>
-  <li>
-  <p>Let <strong>PTE Installation</strong> selected and press <strong>Next</strong>.</p></li>
+<li>
+<p>In the first window, accept the default Inventory Directory pressing <strong>OK</strong>.</p>
+</li>
+<li>
+<p>The Welcome screen appears, press <strong>Next</strong>.</p>
+</li>
+<li>
+<p>Introduce <em>/opt/ocsg6</em> in the Oracle Home field and press <strong>Next</strong>.</p>
+</li>
+<li>
+<p>Let <strong>PTE Installation</strong> selected and press <strong>Next</strong>.</p>
+</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTE.png" alt="PTE Installation" /></p>
-<p><br/>8. Review the Installation Summary and press <strong>Install</strong>. It may take a while. Press <strong>Next</strong> when available and <strong>Finish</strong>.</p>
+<p> 8. Review the Installation Summary and press <strong>Install</strong>. It may take a while. Press <strong>Next</strong> when available and <strong>Finish</strong>.</p>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/installationPTEDone.png" alt="PTE Installation Done" /></p>
-<h2><a href="#start-the-pte" name="start-the-pte">Start the PTE</a></h2>
+<h2><a href="#start-the-pte" id="start-the-pte">Start the PTE</a></h2>
 <ol>
-  <li>Open a new Terminal and execute the following commands.</li>
+<li>Open a new Terminal and execute the following commands.</li>
 </ol>
-<pre><code class="sh">cd /opt/ocsg6/ocsg_pte/
+<pre><code class="language-sh">cd /opt/ocsg6/ocsg_pte/
 ./run.sh
 </code></pre>
 <ol>
-  <li>The PTE should appear:</li>
+<li>The PTE should appear:</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/PTE.png" alt="The PTE" /></p>
 <ol>
-  <li>Go to <strong>Tools -&gt; Variables Manager</strong> or press <strong>Ctrl+3</strong>.</li>
+<li>Go to <strong>Tools -&gt; Variables Manager</strong> or press <strong>Ctrl+3</strong>.</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/VariablesManagerMenu.png" alt="Variables Manager Menu" /></p>
 <ol>
-  <li>Change the following fields and press <strong>OK</strong>:</li>
+<li>Change the following fields and press <strong>OK</strong>:</li>
 </ol>
 <ul>
-  <li><strong>at.host:</strong> <em>ocsg</em></li>
-  <li><strong>nt.host:</strong> <em>ocsg</em></li>
+<li><strong>at.host:</strong> <em>ocsg</em></li>
+<li><strong>nt.host:</strong> <em>ocsg</em></li>
 </ul>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/VariablesManager.png" alt="Variables Manager Screen" /></p>
 <ol>
-  <li>Click on <strong>Server</strong> and change the following fields:</li>
+<li>Click on <strong>Server</strong> and change the following fields:</li>
 </ol>
 <ul>
-  <li><strong>Hostname:</strong> <em>ocsg</em></li>
-  <li><strong>Port:</strong> <em>8001</em></li>
-  <li><strong>Username:</strong> <em>weblogic</em></li>
-  <li><strong>Password:</strong> <em>welcome1</em></li>
+<li><strong>Hostname:</strong> <em>ocsg</em></li>
+<li><strong>Port:</strong> <em>8001</em></li>
+<li><strong>Username:</strong> <em>weblogic</em></li>
+<li><strong>Password:</strong> <em>welcome1</em></li>
 </ul>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/ServerCredentials.png" alt="Server Credentials" /></p>
 <ol>
-  <li>Go to <strong>Tools -&gt; SLA Manager</strong> or press <strong>Ctrl+1</strong>.</li>
+<li>Go to <strong>Tools -&gt; SLA Manager</strong> or press <strong>Ctrl+1</strong>.</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/SLAManagerMenu.png" alt="SLA Manager Menu" /></p>
 <ol>
-  <li>Select <strong>default_app_group</strong> and click on the pencil icon.</li>
+<li>Select <strong>default_app_group</strong> and click on the pencil icon.</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/default_app_group.png" alt="Default App Group SLA" /></p>
 <ol>
-  <li>Click on the globe icon with a green arrow pointing up and press <strong>Local</strong>. The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</li>
+<li>Click on the globe icon with a green arrow pointing up and press <strong>Local</strong>. The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/default_app_group_done.png" alt="Default App Group SLA Done" /></p>
 <ol>
-  <li>
-  <p>Select <strong>default_sp_group</strong> and click on the pencil icon. Click on the globe icon with a up arrow and press <strong>Local</strong>. The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</p></li>
-  <li>
-  <p>Go to <strong>Simulators -&gt; SMPP</strong> and click on <strong>Start</strong>. The button will change to <strong>Stop</strong>.</p></li>
+<li>
+<p>Select <strong>default_sp_group</strong> and click on the pencil icon. Click on the globe icon with a up arrow and press <strong>Local</strong>. The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</p>
+</li>
+<li>
+<p>Go to <strong>Simulators -&gt; SMPP</strong> and click on <strong>Start</strong>. The button will change to <strong>Stop</strong>.</p>
+</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/SMPPSimulator.png" alt="SMPP Simulator" /></p>
-<h2>Final test: send SMS</h2>
+<h2><a href="#final-test-send-sms" id="final-test-send-sms">Final test: send SMS</a></h2>
 <ol>
-  <li>In the PTE, go to <strong>Clients -&gt; Login</strong> and press <strong>Login</strong> (green arrow). The button should change to <strong>Logout</strong> (red square).</li>
+<li>In the PTE, go to <strong>Clients -&gt; Login</strong> and press <strong>Login</strong> (green arrow). The button should change to <strong>Logout</strong> (red square).</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/login.png" alt="Client Login" /></p>
 <ol>
-  <li>Go to <strong>Messaging -&gt; Short Messaging -&gt; Application-initiated</strong> and change the message to <em>Hello SaNE!</em>. Click on <strong>Send</strong> (green arrow).</li>
+<li>Go to <strong>Messaging -&gt; Short Messaging -&gt; Application-initiated</strong> and change the message to <em>Hello SaNE!</em>. Click on <strong>Send</strong> (green arrow).</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/sendSMS.png" alt="Send SMS" /></p>
 <ol>
-  <li>Go to the <strong>Map</strong>, click on the second button over the phone <strong>1234</strong> and choose <em>Read messages</em>. Here it is!!</li>
+<li>Go to the <strong>Map</strong>, click on the second button over the phone <strong>1234</strong> and choose <em>Read messages</em>. Here it is!!</li>
 </ol>
 <p><img src="/images/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible/SMS.png" alt="SMS Sent" /></p>
-<h2><a href="#conclusion" name="conclusion">Conclusion</a></h2>
-<p>Probably you have spent more than fifteen minutes to arrive here&hellip; but it&rsquo;s also true most of the actions are part of the configuration, not the installation. The process is straightforward and it can be easily explained. Even if you don&rsquo;t have advanced knowledge of Weblogic or Linux, it&rsquo;s possible to do it. So, as we can see in this article, OCSG is very easy to install now and it has a lot of features deployed out-of-the-box. Because it&rsquo;s a so extensive application supporting a huge number of business possibilities (Service API Exposure, Direct Carrier Billing, Policy Gateway, etc. ), a basic fresh installation is a very powerful way to focus in the functionality and forget problems with databases, OS and other technical questions and now we can have it in only 15 minutes!</p></p>
+<h2><a href="#conclusion" id="conclusion">Conclusion</a></h2>
+<p>Probably you have spent more than fifteen minutes to arrive here&hellip; but it&rsquo;s also true most of the actions are part of the configuration, not the installation. The process is straightforward and it can be easily explained. Even if you don&rsquo;t have advanced knowledge of Weblogic or Linux, it&rsquo;s possible to do it. So, as we can see in this article, OCSG is very easy to install now and it has a lot of features deployed out-of-the-box. Because it&rsquo;s a so extensive application supporting a huge number of business possibilities (Service API Exposure, Direct Carrier Billing, Policy Gateway, etc. ), a basic fresh installation is a very powerful way to focus in the functionality and forget problems with databases, OS and other technical questions and now we can have it in only 15 minutes!</p>
+</p>
 
 	<hr />
 
@@ -176,7 +176,7 @@ java -jar ocsg_pte_generic.jar
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Baked with <a href="http://jbake.org">JBake</a> v2.6.5 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 

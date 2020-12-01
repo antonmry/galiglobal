@@ -47,17 +47,7 @@
                 <li><a href="../../index.html">Home</a>
                 </li>
                 <li><a href="../../archive.html">Archive</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html">2017 PythonVigo</a>
-                        </li>
-                        <li><a href="/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html">2015 TADSummit</a></li>
-                        <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
-                        <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a>
-                        </li>
-                        <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
-                    </ul>
+                <li><a href="../../public-talks.html">Public Talks</a>
                 <li><a href="../../about.html">About</a>
                 </li>
             </li>
@@ -79,36 +69,36 @@
 <p>Six months ago I&rsquo;ve started to learn and use <a href="https://golang.org/">Go</a>. I was very impressed with the simplicity of the language and I&rsquo;ve started to read a lot of articles, books, etc., watch videos and develop some projects. I discovered <a href="https://gohugo.io/">Hugo</a>, a site generator similar to JBake but written in Go. I was tempted to migrate my previous blog, but today I&rsquo;m going to continue writing about not Go subjects, so it&rsquo;s simpler to open a new one only for Go, bots, DevOps, concurrency and perfomance. In another post I will write more about Go and why I find it so interesting.</p>
 <p>As the first post, let&rsquo;s see how to configure <a href="https://gohugo.io/">Hugo</a>. I&rsquo;ve to say it was really easy, I really impressed with piece of software. I can compare with other site generators as Jekyll, Hexo or JBake, and I have to say Hugo is my favourite.</p>
 <p>First of all, I&rsquo;ve created a new repo in my Gihub account and cloned it in my laptop:</p>
-<pre><code class="sh">git clone git@github.com:antonmry/antonmry.github.io.git
+<pre><code class="language-sh">git clone git@github.com:antonmry/antonmry.github.io.git
 cd antonmry.github.io
 </code></pre>
 <p>Because I&rsquo;m going to use my github user page, the source code of the page must be in master branch. For your Hugo code, you can have a separate repo or just a different branch. I choose the second option with a branch named source, I prefer it in that way, it&rsquo;s simpler and this is the main difference with the procedure you can find in <a href="https://gohugo.io/tutorials/github-pages-blog">the excellent Hugo documentation</a>:</p>
-<pre><code class="sh">git checkout -b source
+<pre><code class="language-sh">git checkout -b source
 git push -u origin source
 </code></pre>
 <p>Inside the source code folder, we are going to create a folder linking to the master branch:</p>
-<pre><code class="sh">git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash
+<pre><code class="language-sh">git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash
 git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master
 </code></pre>
 <p>It&rsquo;s time to generate the site. First you have to install Hugo, plenty of options in the <a href="https://gohugo.io/overview/installing/">the Hugo website</a>. I&rsquo;ve chosen the Fedora package, updates will be easier.</p>
-<pre><code class="sh">hugo new site antonmry.github.io
+<pre><code class="language-sh">hugo new site antonmry.github.io
 mv antonmry.github.io/* .
 rm -r antonmry.github.io
 </code></pre>
 <p>Choose your theme, there are very nice options, I&rsquo;ve chosen beatifulhugo:</p>
-<pre><code class="sh">cd themes
+<pre><code class="language-sh">cd themes
 git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo
 cd ..
 echo &quot;theme = \&quot;beautifulhugo\&quot;&quot; &gt;&gt; config.toml
 </code></pre>
 <p>Create your first blog and start the server:</p>
-<pre><code class="sh">hugo new post/hugo-site-created.md
+<pre><code class="language-sh">hugo new post/hugo-site-created.md
 hugo server --buildDrafts
 </code></pre>
 <p>Open in your browser <a href="http://localhost:1313/">http://localhost:1313/</a> and enjoy your first post with Hugo ;-)</p>
 <p>Let&rsquo;s move the post from draft to publised: edit the file content/post/hugo-site-created.md and change the draft line from true to false if exists.</p>
 <p>Now it&rsquo;s time to upload it to Gihub and make it public:</p>
-<pre><code class="sh">hugo
+<pre><code class="language-sh">hugo
 git add -A
 git commit -m &quot;Initial version&quot;
 git push
@@ -118,9 +108,10 @@ git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git 
 <p>I was thinking in create a travis job to do the publishing in master (I did it before for jbake) but to be honest, this method is simple enough. I&rsquo;ve added to my .bash_alias the last command and that&rsquo;s all I need.</p>
 <p>Enjoy!</p>
 <p>PS: if you do a rebase in <code>source</code>, you will need to do it a bit more tricky to push to master because you can&rsquo;t use <code>--force</code> with the <code>subtree</code> option:</p>
-<pre><code class="sh">git push origin `git subtree split --prefix public source`:master --force
+<pre><code class="language-sh">git push origin `git subtree split --prefix public source`:master --force
 </code></pre>
-<p>More info can be found in Stackoverflow <a href="http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push">Git subtree - subtree up-to-date but can&rsquo;t push</a>.</p></p>
+<p>More info can be found in Stackoverflow <a href="http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push">Git subtree - subtree up-to-date but can&rsquo;t push</a>.</p>
+</p>
 
 	<hr />
 
@@ -130,7 +121,7 @@ git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git 
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Baked with <a href="http://jbake.org">JBake</a> v2.6.5 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 

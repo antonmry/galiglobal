@@ -47,17 +47,7 @@
                 <li><a href="../../index.html">Home</a>
                 </li>
                 <li><a href="../../archive.html">Archive</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conferences<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html">2017 PythonVigo</a>
-                        </li>
-                        <li><a href="/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html">2015 TADSummit</a></li>
-                        <li><a href="/blog/2015/A-look-back-to-Geecon-2015.html">2015 Geecon</a></li>
-                        <li><a href="/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html">2015 SpringIO</a>
-                        </li>
-                        <li><a href="/blog/2014/Oracle-Preworkshop-TADSummit-2014.html">2014 TADSummit</a></li>
-                    </ul>
+                <li><a href="../../public-talks.html">Public Talks</a>
                 <li><a href="../../about.html">About</a>
                 </li>
             </li>
@@ -77,7 +67,7 @@
 	<p><p>Deal with java.lang.OutOfMemoryError: PermGen space errors is always tricky. Most of the times it&rsquo;s something related to the chosen JVM, probably not supported for the hosting OS (for example, using a 32bits JVM in a 64bits OS is a typical issue).</p>
 <p>Here I provide two interesting ways to check the JVM configuration:</p>
 <script src="https://gist.github.com/antonmry/efe307a587388c3ecdfb.js"></script>
-<p>For example, perhaps we could want to increase the PermSize, so we edit the &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:</p>
+<p>For example, perhaps we could want to increase the PermSize, so we edit the  &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:</p>
 <pre><code># USER_MEM_ARGS   - The variable to override the standard memory arguments
 #                   passed to java.
 
@@ -85,7 +75,8 @@ USER_MEM_ARGS=&quot;-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=2
 export USER_MEM_ARGS
 </code></pre>
 <p>Now it&rsquo;s time to reboot the weblogic and check everything again using the same commands I showed previously.</p>
-<p>More info:<br/>- <a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/using_WLST.html#wp1093952">Invoking WLST</a><br/>- <a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/monitoring.html">Getting Runtime Information</a><br/>- <a href="https://blogs.oracle.com/practicalbpm/entry/wlst_scripting_to_get_weblogic">WLST Scripting Introduction</a></p></p>
+<p>More info: - <a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/using_WLST.html#wp1093952">Invoking WLST</a> - <a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/monitoring.html">Getting Runtime Information</a> - <a href="https://blogs.oracle.com/practicalbpm/entry/wlst_scripting_to_get_weblogic">WLST Scripting Introduction</a></p>
+</p>
 
 	<hr />
 
@@ -95,7 +86,7 @@ export USER_MEM_ARGS
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Antón R. Yuste | Baked with <a href="http://jbake.org">JBake</a> v2.5.1 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
+        <p class="muted credit"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. | Baked with <a href="http://jbake.org">JBake</a> v2.6.5 and <a href="https://github.com/jbake-org/jbake-gradle-plugin">JBake Gradle plugin</a></p>
       </div>
     </div>
 
