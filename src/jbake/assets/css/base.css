@@ -4,7 +4,6 @@
 html,
 body {
   height: 100%;
-  font-size: 18px;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -48,6 +47,18 @@ body {
   margin: 20px 0;
 }
 
-/*code {
-  font-size: 80%;
-}*/
+span.small {
+  font-size: 0.9em;
+}
+
+body h1 {
+  font-size: 2.2em;
+}
+
+body h2 {
+  font-size: 2em;
+}
+
+body {
+  font-size: 1.8em;
+}
