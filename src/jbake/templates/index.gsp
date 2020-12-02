@@ -4,7 +4,6 @@
 
 	<div class="page-header">
         <div class="row">
-            <!--<div class="col-xs-4 col-md-2"><img src="img/JustAnOtherDevBlog.png"></div> -->
             <div class="col-xs-12 col-md-8"><h1>new AntonRodriguez().blog()</h1></div>
         </div>
 	</div>
@@ -64,37 +63,6 @@
 
         </div>
 
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-            <div class="sidebar-module sidebar-module-inset">
-                <h4>Antón Rodríguez</h4>
-                <p>I'm a Principal Software Engineer focused on Event Streaming, Real-Time Processing and build internal SaaS in big corporations</p>
-            </div>
-
-            <div class="sidebar-module">
-            <img src="images/duke.png">
-            </div>
-
-            <div class="sidebar-module">
-                <h4>Tags</h4>
-                <ol class="list-unstyled" style="margin-left: 0px">
-                    <%
-                        // alltags : list de tags (String)
-                        alltags.collect { tag ->
-                            [
-                                tag,
-                                posts.findAll { post ->
-                                    post.tags.contains(tag)
-                                }.size()
-                            ]
-                        } .sort { tag ->
-                            String.format("%03d%s", 1000 - tag[1], tag[0].toLowerCase())
-                        } .each { tagWithCount ->
-                    %>
-                        <li><a href="tags/${tagWithCount[0]}.html">${tagWithCount[0]}</a> (${tagWithCount[1]})</li>
-                    <%}%>
-                 </ol>
-            </div>
-        </div>
 
     </div>
 

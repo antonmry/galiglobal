@@ -17,10 +17,8 @@
                 <li><a href="<% if (content.rootpath) { %>${content.rootpath}<% } else { %><% } %>index.html">Home</a>
                 </li>
                 <li><a href="<% if (content.rootpath) { %>${content.rootpath}<% } else { %><%
-                    } %>archive.html">Archive</a></li>
+                    } %>archive.html">Blog Posts</a></li>
                 <li><a href="<% if (content.rootpath) { %>${content.rootpath}<% } else { %><% } %>public-talks.html">Public Talks</a>
-                <li><a href="<% if (content.rootpath) { %>${content.rootpath}<% } else { %><% } %>about.html">About</a>
-                </li>
             </li>
             </ul>
         </div><!--/.nav-collapse -->
