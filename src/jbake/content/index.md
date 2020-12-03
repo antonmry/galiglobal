@@ -5,6 +5,8 @@ tags=galiglobal
 status=published
 ~~~~~~
 
+<img align="right" style="  max-width: 30%;height: auto;  padding: 0px 10px;" src="/images/antonmry_with_mask.jpg">
+
 I'm a Principal Software Engineer focused on **Event Streaming and Real-Time
 Processing**. I've experience working with different message brokers and event
 streaming platforms ([Apache Kafka], [Google Pub/Sub] and [Azure EventHub]) and
@@ -16,6 +18,7 @@ corporations to make complex technologies easily used and adopted by teams so
 they can build solutions to real business use cases. From the very beginning,
 I can help with governance, operation, performance, adoption, training and any
 task related to system administration or backend development.
+
 
 I have a strong sense of my goals as Principal Software Engineer which are
 very good summarized in [Some Thoughts on the Principal Role]:
