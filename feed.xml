@@ -6,9 +6,31 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Thu, 3 Dec 2020 18:11:47 +0100</pubDate>
-    <lastBuildDate>Thu, 3 Dec 2020 18:11:47 +0100</lastBuildDate>
+    <pubDate>Thu, 3 Dec 2020 23:30:36 +0100</pubDate>
+    <lastBuildDate>Thu, 3 Dec 2020 23:30:36 +0100</lastBuildDate>
 
+    
+    <item>
+      <title>My goals for 2020: survive and build</title>
+      <link>https://www.galiglobal.com/blog/2020/20200309-New-proposals-for-2020.html</link>
+      <pubDate>Mon, 9 Mar 2020 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2020/20200309-New-proposals-for-2020.html</guid>
+      <description>
+      &lt;p&gt;Last year I didn&amp;rsquo;t write about one of my goals: to find a new job. I didn&amp;rsquo;t want to make it public and it took more than I was expecting.&lt;/p&gt;
+&lt;p&gt;This year is very different. I made a big change in my career: from a role more oriented to manage and spread good development/deployment practices I have moved to a Data Engineering role. The reason to do that it was to avoid overlapping with other persons in my organization so nowadays I spent my time working with several cool technologies as Kafka or Spark. I&amp;rsquo;m having fun and I don&amp;rsquo;t miss too much Jenkins, Kubernetes or API Gateways. In the end, that&amp;rsquo;s what I like: learn new things more than work in specific areas for years.&lt;/p&gt;
+&lt;p&gt;So my role for this year is clear: I just want to contribute as much as possible and wait for an opportunity to build great things. In some point in the future I would like to build again something as the NetApps team: a highly skilled team able to do whatever it&amp;rsquo;s necessary and have fun at the same time. That&amp;rsquo;s a complex goal which requires several factors, I don&amp;rsquo;t think 2020 is going to be the year for that. It&amp;rsquo;s time to be patient and build the bases for the future.&lt;/p&gt;
+&lt;p&gt;Regarding the community, I&amp;rsquo;m very happy with the CoruñaJUG. We are building a solid community and we can say it&amp;rsquo;s quite stable now. The main goal for the JUG now is to have better defined &amp;ldquo;core members&amp;rdquo; which, at some point, could continue with the JUG if we would like to step down as organizers. It&amp;rsquo;s really hard to achieve that but that&amp;rsquo;s the goal. I would like also to have smaller meetups (the current situation is a bit too much) and more local developers as speakers, especially from unrepresented minorities.&lt;/p&gt;
+&lt;p&gt;VigoJUG status is different. I can&amp;rsquo;t travel to Vigo each month and find speakers is quite complicated. We are trying to do a meetup every two months so the JUG can survive in low-maintenance mode. It&amp;rsquo;s fine for now, the situation could improve in the future if some volunteer appears.&lt;/p&gt;
+&lt;p&gt;No news from VigoTech, the community seems a bit blocked now and I can&amp;rsquo;t help from Coruña. I almost abandoned the idea of CoruñaTech, we need a more diverse group in Coruña to have something like that. Luckily, new groups and individuals are starting and I&amp;rsquo;m quite positive.&lt;/p&gt;
+&lt;p&gt;I also abandoned the idea of XantarJ, there are too many conferences and I don&amp;rsquo;t feel motivated enough to work so much. Organize a conference is a big effort and I&amp;rsquo;m the type of person who wants to do it great or not do it at all. I&amp;rsquo;m not sure about &amp;ldquo;La Atlántica&amp;rdquo;. It was a great experience last year but I don&amp;rsquo;t feel comfortable collaborating with conferences which aren&amp;rsquo;t 100% technical. I don&amp;rsquo;t have anything against entrepreneurship, privacy, agile or recruiting but they are just not what motivates me.&lt;/p&gt;
+&lt;p&gt;I plan to attend some conferences this year as speaker or attendee: GReach, J on the Beach, Kafka Summit, JNation, JBCNConf, Lambda World, Spark Summit, etc. I&amp;rsquo;m not sure if I&amp;rsquo;m going to attend all of them, it&amp;rsquo;s a bit too much but I will try to attend as many as possible. It&amp;rsquo;s always great to meet those communities!&lt;/p&gt;
+&lt;p&gt;In a more personal sense, last year I started to participate in a French reading club. I did a great effort to learn French and I don&amp;rsquo;t want to lose it. It has been a great activity! As another goal for 2020, I will try to read all the club books (one per month), plus twelve technical books (six about programming, six about data engineering) and another six in Galician (another reading club I found in Goodreads). Read is one of the things I&amp;rsquo;m enjoying more nowadays.&lt;/p&gt;
+&lt;p&gt;In contrast, I&amp;rsquo;m doing a lot less sport. My goal is to visit the gym two days per week. I never liked the gym but there are some interesting activities and it&amp;rsquo;s only 45 minutes at the lunchtime. Once I have more time, I will try to increase the number of days. By now, I&amp;rsquo;m just in surviving-mode.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m very happy with how things are going with my kids. We find a suitable way so my goal is to continue with them in the same way.&lt;/p&gt;
+&lt;p&gt;I know some personal challenges will come in the middle of the summer including resume the rebuilding of our future house&amp;hellip; so I don&amp;rsquo;t have more goals for 2020. This year goal is to survive, build the basis and wait for better times to start new projects.&lt;/p&gt;
+
+	  </description>
+    </item>
     
     <item>
       <title>Thanks, Optare!</title>
@@ -291,6 +313,30 @@ spec:
 &lt;li&gt;&lt;a href=&quot;https://medium.com/containermind/how-to-create-a-kubernetes-cluster-on-aws-in-few-minutes-89dda10354f4&quot;&gt;How to Create a Kubernetes Cluster on AWS in Few Minutes&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://medium.com/@jkinkead/external-http-https-server-on-kubernetes-in-aws-9b182328fff1&quot;&gt;External HTTP/HTTPS Server on Kubernetes in AWS&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+	  </description>
+    </item>
+    
+    <item>
+      <title>My goals for 2019: back to work</title>
+      <link>https://www.galiglobal.com/blog/2019/20190320-New-proposals-for-2019.html</link>
+      <pubDate>Wed, 20 Mar 2019 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2019/20190320-New-proposals-for-2019.html</guid>
+      <description>
+      &lt;p&gt;Ok, I&amp;rsquo;m writing my goals for 2019 in the end of March. What&amp;rsquo;s wrong with me?. Well, somehow it makes sense in my head. For several reasons I wasn&amp;rsquo;t sure about my goals this year, the situation wasn&amp;rsquo;t stable enough to do that reasoning but let&amp;rsquo;s start with the beginning.&lt;/p&gt;
+&lt;p&gt;I don&amp;rsquo;t usually review the previous year goals but I have to. 2018 has been one of the most complicated years of my life. I have to write a post about being father explaining how difficult is children concurrency and how important is to do your homework before. In my case, two relocations, rebuild an old house and move to remote work again. Right now, I define my wife and myself as survivors :-)&lt;/p&gt;
+&lt;p&gt;In that context, I started the year exhausted, worried and focused in recovering which involved a lot of things and some changes. My only goal was recover my life. Luckily I&amp;rsquo;m a lot better now.&lt;/p&gt;
+&lt;p&gt;In the professional area, I&amp;rsquo;m not sure yet what&amp;rsquo;s my goal for 2019. Now I&amp;rsquo;m quite focused in my role as Technical Director in Optare. It&amp;rsquo;s a great role which allows me to help others and do many different things: management but also some development and system administration. It has a positive impact in the company and it suits quite well with my actual life.&lt;/p&gt;
+&lt;p&gt;But there are challenges too. I never expect to stay in that role more than one year so sometimes I act as it was something temporary. I shouldn&amp;rsquo;t. Also I miss a lot spend more time coding &lt;strong&gt;without interruptions&lt;/strong&gt; and the thousand of context changes I usually have. Being a remote worker doesn&amp;rsquo;t help. Finally, I have been working for the same company more than 10 years. Even if I don&amp;rsquo;t think there is any better place to work and I had multiple roles in multiple clients, it feels weird sometimes and somehow I have to deal with that.&lt;/p&gt;
+&lt;p&gt;So my professional goal for 2019 is to continue positive and be more and more productive.&lt;/p&gt;
+&lt;p&gt;Regarding the tech community. I co-founded the VigoJUG in 2017 with important contributions to VigoTech in the same year. 2018 was for CoruñaJUG and our first Java conference: XantarJ.&lt;/p&gt;
+&lt;p&gt;For 2019 I had the idea of promote CoruñaTech but it has been a failure until now. In this point I don&amp;rsquo;t think A Coruña is ready for a community like that. We need more local tech groups and more people involved. There is no a clear organizer or leader of VigoTech, it&amp;rsquo;s a really distributed community effort. I really think it&amp;rsquo;s the only way.&lt;/p&gt;
+&lt;p&gt;So my &amp;ldquo;community&amp;rdquo; goal will be the CoruñaJUG and the VigoJUG again. But I really like the JUGs how they are. I don&amp;rsquo;t care about how many members or how many people came to the events. I only care about if there are good places to share knowledge and have fun and I think they are. So what to do?. Probably the only answer I have is to find more speakers (local and international) which means more fun and more knowledge.&lt;/p&gt;
+&lt;p&gt;Regarding conferences, last year I attended JCrete. I didn&amp;rsquo;t have the opportunity to profit the conference as much as I would like because some sad events. But I love the format and the original idea. I really would like to build something similar here but not so Java related, more community focused.&lt;/p&gt;
+&lt;p&gt;I also attended as speaker JBCNConf which motivated me to co-launch the first XantarJ. It was a great initiative, we have to repeat it this year!&lt;/p&gt;
+&lt;p&gt;In 2019, I will continue attending conferences when possible but I&amp;rsquo;m going to focus in non-profit events where they don&amp;rsquo;t charge the attendants and travel expenses are covered. It seems fair to me.&lt;/p&gt;
+&lt;p&gt;Regarding my personal life, I stopped drinking any coffee or alcohol last year but I wasn&amp;rsquo;t able to back to sport. It&amp;rsquo;s a pending point.&lt;/p&gt;
+&lt;p&gt;My family and kids will continue being the most important thing.&lt;/p&gt;
 
 	  </description>
     </item>
