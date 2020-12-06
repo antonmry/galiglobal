@@ -1,5 +1,5 @@
 title=Gentle (and practical) introduction to Apache Avro - Part 1
-date=2020-12-0505
+date=2020-12-05
 type=post
 tags=Kafka, Avro
 status=published
@@ -8,10 +8,11 @@ status=published
 ## Introduction
 
 This post is a gentle introduction to [Apache Avro]. After several discussions
-with [Dario Cazas] about what's possible with [Apache Avro], he did some research
-and summarize it in an email. I found myself looking for that email several times
-to forward it to different teams to clarify doubts about Avro. After a while, I
-thought it could be useful for others and this is how this post was born.
+with [Dario Cazas] about what's possible with [Apache Avro], he did some
+research and summarize it in an email. I found myself looking for that email
+several times to forward it to different teams to clarify doubts about Avro.
+After a while, I thought it could be useful for others and this is how this
+post was born.
 
 In summary, [Apache Avro] is a binary format with the following characteristics:
 
@@ -21,7 +22,7 @@ editor.
 - It's a row format so each record is stored independently (for example, Parquet
 is a columnar format) so it's bad for aggregations but quite good to send data
 independently from one place to another.
-- It has a great support to manage the schema of the data. The schema is
+- It has great support to manage the schema of the data. The schema is
 typically defined in JSON format.
 
 These characteristics make [Apache Avro] very popular in Event Streaming
@@ -32,10 +33,10 @@ Wikipedia Page].
 
 ## Avro with the Schema Registry and Kafka
 
-[Apache Avro] plays really well with [Apache Kafka] because it provides good
+[Apache Avro] plays well with [Apache Kafka] because it provides good
 performance and an easy way to govern schemas. There is an important thing to
-note, because [Apache Avro] is a binary format, consumers needs to know how is
-the schema of the information stored in that message in order to deserialize the
+note: because [Apache Avro] is a binary format, consumers need to know how is
+the schema of the information stored in that message to deserialize the
 message.
 
 The most common way to do this is using the [Schema Registry], aka SR. We are
@@ -43,7 +44,7 @@ going to speak about the Confluent implementation but it isn't the only one and
 it isn't part of the Kafka project. The workflow is quite simple: the producer
 consults the ID of the schema in the SR (or create a new one if it doesn't
 exist) and add that ID to the message. The consumer retrieves the schema from
-the SR using that ID and deserialize the message.
+the SR using that ID and deserializes the message.
 
 The way to add the ID to the message is also simple: one byte with the value `0`
 in the case of Confluent, 4 bytes with the ID and the rest of the data. It's
@@ -54,7 +55,7 @@ documented in the [Wire Format] entry.
 Using the Confluent Avro serializer/deserializer, the process is quite
 straight-forward. Let's try it using the Confluent Community Docker version.
 The setup is documented in the [Quick Start for Apache Kafka using Confluent
-Platform Community Components (Docker)] which basically is:
+Platform Community Components (Docker)] which it's summarized here:
 
 ```sh
 git clone https://github.com/confluentinc/cp-all-in-one.git
@@ -100,7 +101,7 @@ favourite IDE. We are going to work with a schema which it's located in the
 This is going to create a Test class you can use in your project.
 
 **Note for IntelliJ Idea users**: you need to generate the classes from the
-Avro file.  Right click on your project and choose `Maven` > `Generate sources
+Avro file.  Right-click on your project and choose `Maven` > `Generate sources
 and update folders`. It's important to do it each time you change the schema.
 
 You can run now the `ConfluentProducerExample` and it should print:
@@ -182,7 +183,7 @@ One of the big issues with asynchronous communications is how to evolve the
 schema without affect consumers of that particular topic. Schema Registry helps
 with that because it can check the changes in the schema and validate if they
 are breaking compatibility. They are different types of compatibility, you can
-read more on [Schema Evolution and Compatibility]. Let's test it. First we'll
+read more on [Schema Evolution and Compatibility]. Let's test it. First, we'll
 check what type of compatibility the SR is enforcing:
 
 ```sh
@@ -243,10 +244,14 @@ show:
 
 ## Summary and next steps
 
-TODO
+We have covered here the basics of [Apache Avro] in an [Apache Kafka]
+architecture.  It has important advantages in terms of performance, reduction
+of message size and governance of the schemas.
 
-TODO: review with grammarly
-TODO: review with Dario
+But it also has some problems, especially when we are dealing with hybrid
+and/or multi-tenant architectures. In the following two parts of this series,
+we'll cover these problems in details and the different alternatives we have
+with Avro to deal with them.
 
 [Apache Avro]: https://avro.apache.org/
 [Apache Kafka]: https://kafka.apache.org/
