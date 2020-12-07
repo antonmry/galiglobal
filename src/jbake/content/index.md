@@ -5,7 +5,7 @@ tags=galiglobal
 status=published
 ~~~~~~
 
-<img align="right" style="  max-width: 30%;height: auto;  padding: 0px 10px;" src="/images/antonmry_with_mask.jpg">
+<img align="right" style="  max-width: 30%;height: auto;  padding: 0px 10px;" src="/images/antonmry.jpg">
 
 I'm a Principal Software Engineer focused on **Event Streaming and Real-Time
 Processing**. I've experience working with different message brokers and event
