@@ -194,35 +194,13 @@ By default, it should return:
 
 > {"compatibilityLevel":"BACKWARD"}
 
-Backward compatibility means we could delete a new field to our schema so new
-consumers can real old records (ignoring the deleted field) but old consumers
-need to upgrade to the new version. We could test it using curl but it's a bit
-tricky because you should have to scape the JSON file. Let's do it instead with
-the Producer deleting one field:
+Backward compatibility means new consumers can read old records but old
+consumers need to upgrade to the new version to be able to deserialize new
+messages.
 
-```json
-{
- "namespace": "com.galiglobal.examples.testavro",
- "type": "record",
- "name": "Test",
- "fields": [
-     {"name": "id", "type": "string"}
- ]
-}
-```
-
-If we make the proper changes and run `ConfluentProducerExample` again, it
-would save a new version of the schema:
-
-```sh
-curl http://localhost:8081/subjects/test-value/versions/2
-```
-
-It should return:
-
-> {"subject":"test-value","version":2,"id":2,"schema":"{\"type\":\"record\",\"name\":\"Test\",\"namespace\":\"com.galiglobal.examples.testavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"}]}"}
-
-Let's add now a different field to the schema:
+We can test it using curl but it's a bit tricky because we have to
+scape the JSON file. Let's do it instead with the Producer adding one field to
+the schema:
 
 ```json
 {
@@ -231,7 +209,8 @@ Let's add now a different field to the schema:
  "name": "Test",
  "fields": [
      {"name": "id", "type": "string"},
-     {"name": "boom", "type": "string"}
+     {"name": "test", "type": "double"},
+     {"name": "boom", "type": "double"}
  ]
 }
 ```
@@ -241,6 +220,38 @@ show:
 
 > org.apache.kafka.common.errors.SerializationException: Error registering Avro schema: {"type":"record","name":"Test","namespace":"com.galiglobal.examples.testavro","fields":[{"name":"id","type":"string"},{"name":"boom","type":"string"}]}
 > Caused by: io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException: Schema being registered is incompatible with an earlier schema for subject "test-value"; error code: 409
+
+Adding a new field isn't a backward compatible change because new consumers
+can't read old messages with that schema. They don't have a way to fill the new
+field which it's mandatory. One possibility to make this change backward
+compatible would be to give a default value to the new field, so consumers know
+what value give it when the field isn't present in the message.
+
+Let's add a default value to the new field in the schema:
+
+```json
+{
+ "namespace": "com.galiglobal.examples.testavro",
+ "type": "record",
+ "name": "Test",
+ "fields": [
+     {"name": "id", "type": "string"},
+     {"name": "test", "type": "double"},
+     {"name": "boom", "type": "double", "default":  0.0}
+ ]
+}
+```
+
+If we make the proper changes and run `ConfluentProducerExample` again, it
+will produce 10 new events and save a new version of the schema:
+
+```sh
+curl http://localhost:8081/subjects/test-value/versions/2
+```
+
+It should return:
+
+> {"subject":"test-value","version":2,"id":2,"schema":"{\"type\":\"record\",\"name\":\"Test\",\"namespace\":\"com.galiglobal.examples.testavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"test\",\"type\":\"double\"},{\"name\":\"boom\",\"type\":\"double\",\"default\":0.0}]}"}
 
 ## Summary and next steps
 
@@ -262,3 +273,4 @@ with Avro to deal with them.
 [Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)]: https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html
 [GenericRecord]: https://avro.apache.org/docs/1.8.2/api/java/org/apache/avro/generic/GenericRecord.html
 [Schema Evolution and Compatibility]: https://docs.confluent.io/platform/current/schema-registry/avro.html
+[kafka-java-client-examples]: https://github.com/antonmry/kafka-java-client-examples
