@@ -12,13 +12,12 @@ with [Dario Cazas] about what's possible with [Apache Avro], he did some
 research and summarize it in an email. I found myself looking for that email
 several times to forward it to different teams to clarify doubts about Avro.
 After a while, I thought it could be useful for others and this is how this
-post was born.
+series of three posts was born.
 
 In summary, [Apache Avro] is a binary format with the following characteristics:
 
-- It's a binary protocol what means it's very efficient (the keys of your data
-aren't copied several times as with JSON) but you can't read it in your text
-editor.
+- It's a binary what means it's very efficient (the keys of your data aren't
+  copied several times as with JSON) but you can't read it in your text editor.
 - It's a row format so each record is stored independently (for example, Parquet
 is a columnar format) so it's bad for aggregations but quite good to send data
 independently from one place to another.
@@ -29,15 +28,14 @@ These characteristics make [Apache Avro] very popular in Event Streaming
 architectures based in [Apache Kafka] but it isn't the only possible use.
 
 If you have more interest in [Apache Avro], take a look to the [Apache Avro
-Wikipedia Page].
+Wikipedia page].
 
 ## Avro with the Schema Registry and Kafka
 
 [Apache Avro] plays well with [Apache Kafka] because it provides good
 performance and an easy way to govern schemas. There is an important thing to
 note: because [Apache Avro] is a binary format, consumers need to know how is
-the schema of the information stored in that message to deserialize the
-message.
+the schema of the information stored in that message to deserialize it.
 
 The most common way to do this is using the [Schema Registry], aka SR. We are
 going to speak about the Confluent implementation but it isn't the only one and
@@ -76,7 +74,7 @@ docker-compose exec broker kafka-topics \
 
 The output should be:
 
-> Created topic test.` message.
+> Created topic test.
 
 To test it, we are going to create a Kafka Producer and a Kafka Consumer.
 
@@ -98,7 +96,7 @@ favourite IDE. We are going to work with a schema which it's located in the
 }
 ```
 
-This is going to create a Test class you can use in your project.
+This Avro file is going to create a Test class you can use in your project.
 
 **Note for IntelliJ Idea users**: you need to generate the classes from the
 Avro file.  Right-click on your project and choose `Maven` > `Generate sources
@@ -267,7 +265,7 @@ with Avro to deal with them.
 [Apache Avro]: https://avro.apache.org/
 [Apache Kafka]: https://kafka.apache.org/
 [Dario Cazas]: https://github.com/dariocazas
-[Apache Avro Wikipedia Page]: https://en.wikipedia.org/wiki/Apache_Avro
+[Apache Avro Wikipedia page]: https://en.wikipedia.org/wiki/Apache_Avro
 [Schema Registry]: https://docs.confluent.io/platform/current/schema-registry/index.html
 [Wire Format]: https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#wire-format
 [Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)]: https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html
