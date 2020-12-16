@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Gentle (and practical) introduction to Apache Avro - Part 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="antonmry">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/asciidoctor.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="../../favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+
+
+
+	<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"
+               href="../../">GaliGlobal</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="../../index.html">Home</a>
+                </li>
+                <li><a href="../../archive.html">Blog Posts</a></li>
+                <li><a href="../../public-talks.html">Public Talks</a>
+            </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+<div class="container">
+
+
+	<div class="page-header">
+		<h1>Gentle (and practical) introduction to Apache Avro - Part 1</h1>
+	</div>
+
+	<p><em>05 December 2020</em></p>
+
+	<p><h2><a href="#introduction" id="introduction">Introduction</a></h2>
+<p>This post is a gentle introduction to <a href="https://avro.apache.org/">Apache Avro</a>. After several discussions with <a href="https://github.com/dariocazas">Dario Cazas</a> about what&rsquo;s possible with <a href="https://avro.apache.org/">Apache Avro</a>, he did some research and summarize it in an email. I found myself looking for that email several times to forward it to different teams to clarify doubts about Avro. After a while, I thought it could be useful for others and this is how this series of three posts was born.</p>
+<p>In summary, <a href="https://avro.apache.org/">Apache Avro</a> is a binary format with the following characteristics:</p>
+<ul>
+<li>It&rsquo;s a binary what means it&rsquo;s very efficient (the keys of your data aren&rsquo;t copied several times as with JSON) but you can&rsquo;t read it in your text editor.</li>
+<li>It&rsquo;s a row format so each record is stored independently (for example, Parquet is a columnar format) so it&rsquo;s bad for aggregations but quite good to send data independently from one place to another.</li>
+<li>It has great support to manage the schema of the data. The schema is typically defined in JSON format.</li>
+</ul>
+<p>These characteristics make <a href="https://avro.apache.org/">Apache Avro</a> very popular in Event Streaming architectures based in <a href="https://kafka.apache.org/">Apache Kafka</a> but it isn&rsquo;t the only possible use.</p>
+<p>If you have more interest in <a href="https://avro.apache.org/">Apache Avro</a>, take a look to the <a href="https://en.wikipedia.org/wiki/Apache_Avro">Apache Avro Wikipedia page</a>.</p>
+<h2><a href="#avro-with-the-schema-registry-and-kafka" id="avro-with-the-schema-registry-and-kafka">Avro with the Schema Registry and Kafka</a></h2>
+<p><a href="https://avro.apache.org/">Apache Avro</a> plays well with <a href="https://kafka.apache.org/">Apache Kafka</a> because it provides good performance and an easy way to govern schemas. There is an important thing to note: because <a href="https://avro.apache.org/">Apache Avro</a> is a binary format, consumers need to know how is the schema of the information stored in that message to deserialize it.</p>
+<p>The most common way to do this is using the <a href="https://docs.confluent.io/platform/current/schema-registry/index.html">Schema Registry</a>, aka SR. We are going to speak about the Confluent implementation but it isn&rsquo;t the only one and it isn&rsquo;t part of the Kafka project. The workflow is quite simple: the producer consults the ID of the schema in the SR (or create a new one if it doesn&rsquo;t exist) and add that ID to the message. The consumer retrieves the schema from the SR using that ID and deserializes the message.</p>
+<p>The way to add the ID to the message is also simple: one byte with the value <code>0</code> in the case of Confluent, 4 bytes with the ID and the rest of the data. It&rsquo;s documented in the <a href="https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#wire-format">Wire Format</a> entry.</p>
+<h2><a href="#environment-setup" id="environment-setup">Environment setup</a></h2>
+<p>Using the Confluent Avro serializer/deserializer, the process is quite straight-forward. Let&rsquo;s try it using the Confluent Community Docker version. The setup is documented in the <a href="https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html">Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)</a> which it&rsquo;s summarized here:</p>
+<pre><code class="language-sh">git clone https://github.com/confluentinc/cp-all-in-one.git
+cd cp-all-in-one/cp-all-in-one-community/
+docker-compose up -d
+</code></pre>
+<p>Let&rsquo;s start creating a topic:</p>
+<pre><code class="language-sh">docker-compose exec broker kafka-topics \
+  --create \
+  --bootstrap-server localhost:9092 \
+  --replication-factor 1 \
+  --partitions 1 \
+  --topic test
+</code></pre>
+<p>The output should be:</p>
+<blockquote>
+<p>Created topic test.</p>
+</blockquote>
+<p>To test it, we are going to create a Kafka Producer and a Kafka Consumer.</p>
+<h2><a href="#kafka-producer-with-confluent-schema-registry" id="kafka-producer-with-confluent-schema-registry">Kafka Producer with Confluent Schema Registry</a></h2>
+<p>Download the <a href="https://github.com/antonmry/kafka-java-client-examples">kafka-java-client-examples</a> project and open it with your favourite IDE. We are going to work with a schema which it&rsquo;s located in the <code>src/main/resources</code> folder:</p>
+<pre><code class="language-json">{
+ &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;,
+ &quot;type&quot;: &quot;record&quot;,
+ &quot;name&quot;: &quot;Test&quot;,
+ &quot;fields&quot;: [
+     {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;},
+     {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;}
+ ]
+}
+</code></pre>
+<p>This Avro file is going to create a Test class you can use in your project.</p>
+<p><strong>Note for IntelliJ Idea users</strong>: you need to generate the classes from the Avro file.  Right-click on your project and choose <code>Maven</code> &gt; <code>Generate sources and update folders</code>. It&rsquo;s important to do it each time you change the schema.</p>
+<p>You can run now the <code>ConfluentProducerExample</code> and it should print:</p>
+<blockquote>
+<p>Successfully produced 10 messages to a topic called test</p>
+</blockquote>
+<p>The more relevant parts are the properties of the producer:</p>
+<pre><code class="language-java">props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &quot;http://localhost:8081&quot;);
+</code></pre>
+<p>We indicate how to connect to the SR and the serializer which it&rsquo;s publishing to the SR under the hood. In the class <code>io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient</code> you can find the Rest client used to request schemas to the SR using http.</p>
+<p>If you check in the SR, you can see the schema which has been created by the producer:</p>
+<pre><code class="language-sh">curl http://localhost:8081/subjects/test-value/versions/1
+</code></pre>
+<p>It should return:</p>
+<pre><code class="language-json">{
+  &quot;subject&quot;: &quot;test-value&quot;,
+  &quot;version&quot;: 1,
+  &quot;id&quot;: 1,
+  &quot;schema&quot;: &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;Test\&quot;,\&quot;namespace\&quot;:\&quot;com.galiglobal.examples.testavro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;test\&quot;,\&quot;type\&quot;:\&quot;double\&quot;}]}&quot;
+}
+</code></pre>
+<h2><a href="#kafka-consumer" id="kafka-consumer">Kafka Consumer</a></h2>
+<p>We are going to consume the messages using the Kafka Consumer just executing the <code>ConfluentConsumerExample</code> class. It should print something similar to:</p>
+<blockquote>
+<p>key = id0, value = {&ldquo;id&rdquo;: &ldquo;id0&rdquo;, &ldquo;amount&rdquo;: 1000.0}<br />
+key = id1, value = {&ldquo;id&rdquo;: &ldquo;id1&rdquo;, &ldquo;amount&rdquo;: 1000.0}<br />
+key = id2, value = {&ldquo;id&rdquo;: &ldquo;id2&rdquo;, &ldquo;amount&rdquo;: 1000.0}<br />
+key = id3, value = {&ldquo;id&rdquo;: &ldquo;id3&rdquo;, &ldquo;amount&rdquo;: 1000.0}<br />
+key = id4, value = {&ldquo;id&rdquo;: &ldquo;id4&rdquo;, &ldquo;amount&rdquo;: 1000.0}<br />
+key = id5, value = {&ldquo;id&rdquo;: &ldquo;id5&rdquo;, &ldquo;amount&rdquo;: 1000.0}</p>
+</blockquote>
+<p>The relevant part is again the configuration of the SR and the deserializer:</p>
+<pre><code class="language-java">props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
+props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &quot;http://localhost:8081&quot;);
+props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
+</code></pre>
+<p>The schema url and deserializer are equivalent to the producer. <code>SPECIFIC_AVRO_READER_CONFIG</code> indicates we would like to deserialize to a Test object instead of a <a href="https://avro.apache.org/docs/1.8.2/api/java/org/apache/avro/generic/GenericRecord.html">GenericRecord</a>.</p>
+<p>If we try to consume directly from the topic without use the Confluent deserializer, the result isn&rsquo;t quite legible:</p>
+<pre><code class="language-sh">docker-compose exec broker kafka-console-consumer \
+ --topic test \
+ --bootstrap-server localhost:9092 \
+ --from-beginning \
+ --property print.key=true \
+ --property key.separator=&quot; : &quot; \
+ --key-deserializer &quot;org.apache.kafka.common.serialization.StringDeserializer&quot; \
+ --value-deserializer &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;
+</code></pre>
+<p>As you can see, it&rsquo;s a binary protocol and quite efficient! We aren&rsquo;t sending the schema with every record as we would do with JSON or any other based protocol and that&rsquo;s a good saving.</p>
+<h2><a href="#schema-compatibility" id="schema-compatibility">Schema Compatibility</a></h2>
+<p>Efficiency isn&rsquo;t the only positive point of this approach. One of the nice things you have with a Schema Registry is the possibility to govern schemas and make sure they are being used properly.</p>
+<p>One of the big issues with asynchronous communications is how to evolve the schema without affect consumers of that particular topic. Schema Registry helps with that because it can check the changes in the schema and validate if they are breaking compatibility. They are different types of compatibility, you can read more on <a href="https://docs.confluent.io/platform/current/schema-registry/avro.html">Schema Evolution and Compatibility</a>. Let&rsquo;s test it. First, we&rsquo;ll check what type of compatibility the SR is enforcing:</p>
+<pre><code class="language-sh">curl -X GET http://localhost:8081/config
+</code></pre>
+<p>By default, it should return:</p>
+<blockquote>
+<p>{&ldquo;compatibilityLevel&rdquo;:&ldquo;BACKWARD&rdquo;}</p>
+</blockquote>
+<p>Backward compatibility means new consumers can read old records but old consumers need to upgrade to the new version to be able to deserialize new messages.</p>
+<p>We can test it using curl but it&rsquo;s a bit tricky because we have to scape the JSON file. Let&rsquo;s do it instead with the Producer adding one field to the schema:</p>
+<pre><code class="language-json">{
+ &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;,
+ &quot;type&quot;: &quot;record&quot;,
+ &quot;name&quot;: &quot;Test&quot;,
+ &quot;fields&quot;: [
+     {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;},
+     {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;},
+     {&quot;name&quot;: &quot;boom&quot;, &quot;type&quot;: &quot;double&quot;}
+ ]
+}
+</code></pre>
+<p>If we modify <code>ConfluentProducerExample</code> and run it again, an exception will show:</p>
+<blockquote>
+<p>org.apache.kafka.common.errors.SerializationException: Error registering Avro schema: {&ldquo;type&rdquo;:&ldquo;record&rdquo;,&ldquo;name&rdquo;:&ldquo;Test&rdquo;,&ldquo;namespace&rdquo;:&ldquo;com.galiglobal.examples.testavro&rdquo;,&ldquo;fields&rdquo;:[{&ldquo;name&rdquo;:&ldquo;id&rdquo;,&ldquo;type&rdquo;:&ldquo;string&rdquo;},{&ldquo;name&rdquo;:&ldquo;boom&rdquo;,&ldquo;type&rdquo;:&ldquo;string&rdquo;}]} Caused by: io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException: Schema being registered is incompatible with an earlier schema for subject &ldquo;test-value&rdquo;; error code: 409</p>
+</blockquote>
+<p>Adding a new field isn&rsquo;t a backward compatible change because new consumers can&rsquo;t read old messages with that schema. They don&rsquo;t have a way to fill the new field which it&rsquo;s mandatory. One possibility to make this change backward compatible would be to give a default value to the new field, so consumers know what value give it when the field isn&rsquo;t present in the message.</p>
+<p>Let&rsquo;s add a default value to the new field in the schema:</p>
+<pre><code class="language-json">{
+ &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;,
+ &quot;type&quot;: &quot;record&quot;,
+ &quot;name&quot;: &quot;Test&quot;,
+ &quot;fields&quot;: [
+     {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;},
+     {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;},
+     {&quot;name&quot;: &quot;boom&quot;, &quot;type&quot;: &quot;double&quot;, &quot;default&quot;:  0.0}
+ ]
+}
+</code></pre>
+<p>If we make the proper changes and run <code>ConfluentProducerExample</code> again, it will produce 10 new events and save a new version of the schema:</p>
+<pre><code class="language-sh">curl http://localhost:8081/subjects/test-value/versions/2
+</code></pre>
+<p>It should return:</p>
+<pre><code class="language-json">{
+  &quot;subject&quot;: &quot;test-value&quot;,
+  &quot;version&quot;: 2,
+  &quot;id&quot;: 2,
+  &quot;schema&quot;: &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;Test\&quot;,\&quot;namespace\&quot;:\&quot;com.galiglobal.examples.testavro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;test\&quot;,\&quot;type\&quot;:\&quot;double\&quot;},{\&quot;name\&quot;:\&quot;boom\&quot;,\&quot;type\&quot;:\&quot;double\&quot;,\&quot;default\&quot;:0.0}]}&quot;
+}
+</code></pre>
+<h2><a href="#summary-and-next-steps" id="summary-and-next-steps">Summary and next steps</a></h2>
+<p>We have covered here the basics of <a href="https://avro.apache.org/">Apache Avro</a> in an <a href="https://kafka.apache.org/">Apache Kafka</a> architecture.  It has important advantages in terms of performance, reduction of message size and governance of the schemas.</p>
+<p>But it also has some problems, especially when we are dealing with hybrid and/or multi-tenant architectures. In the following two parts of this series, we&rsquo;ll cover these problems in details and the different alternatives we have with Avro to deal with them.</p>
+<p>Do you have comments? I would love to read them. <a href="https://github.com/antonmry/galiglobal/pull/34">Leave a message</a>!</p>
+</p>
+
+	<hr />
+
+		</div>
+		<div id="push"></div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+      </div>
+    </div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../js/jquery-1.11.1.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/prettify.js"></script>
+
+    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+        document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+        + ':35729/livereload.js"></'
+        + 'script>')</script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-57796882-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+  </body>
+</html>
+
