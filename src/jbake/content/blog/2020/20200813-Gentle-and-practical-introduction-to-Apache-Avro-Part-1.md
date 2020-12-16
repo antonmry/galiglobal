@@ -276,6 +276,8 @@ and/or multi-tenant architectures. In the following two parts of this series,
 we'll cover these problems in details and the different alternatives we have
 with Avro to deal with them.
 
+Do you have comments? I would love to read them. [Leave a message]!
+
 [Apache Avro]: https://avro.apache.org/
 [Apache Kafka]: https://kafka.apache.org/
 [Dario Cazas]: https://github.com/dariocazas
@@ -286,3 +288,4 @@ with Avro to deal with them.
 [GenericRecord]: https://avro.apache.org/docs/1.8.2/api/java/org/apache/avro/generic/GenericRecord.html
 [Schema Evolution and Compatibility]: https://docs.confluent.io/platform/current/schema-registry/avro.html
 [kafka-java-client-examples]: https://github.com/antonmry/kafka-java-client-examples
+[Leave a message]: https://github.com/antonmry/galiglobal/pull/34
