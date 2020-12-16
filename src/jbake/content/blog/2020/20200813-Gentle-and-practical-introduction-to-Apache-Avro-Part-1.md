@@ -127,19 +127,26 @@ curl http://localhost:8081/subjects/test-value/versions/1
 
 It should return:
 
-> {"subject":"test-value","version":1,"id":1,"schema":"{\"type\":\"record\",\"name\":\"Test\",\"namespace\":\"com.galiglobal.examples.testavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"test\",\"type\":\"double\"}]}"}
+```json
+{
+  "subject": "test-value",
+  "version": 1,
+  "id": 1,
+  "schema": "{\"type\":\"record\",\"name\":\"Test\",\"namespace\":\"com.galiglobal.examples.testavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"test\",\"type\":\"double\"}]}"
+}
+```
 
 ## Kafka Consumer
 
 We are going to consume the messages using the Kafka Consumer just executing
 the `ConfluentConsumerExample` class. It should print something similar to:
 
-> key = id0, value = {"id": "id0", "amount": 1000.0}
-> key = id1, value = {"id": "id1", "amount": 1000.0}
-> key = id2, value = {"id": "id2", "amount": 1000.0}
-> key = id3, value = {"id": "id3", "amount": 1000.0}
-> key = id4, value = {"id": "id4", "amount": 1000.0}
-> key = id5, value = {"id": "id5", "amount": 1000.0}
+> key = id0, value = {"id": "id0", "amount": 1000.0}  
+> key = id1, value = {"id": "id1", "amount": 1000.0}  
+> key = id2, value = {"id": "id2", "amount": 1000.0}  
+> key = id3, value = {"id": "id3", "amount": 1000.0}  
+> key = id4, value = {"id": "id4", "amount": 1000.0}  
+> key = id5, value = {"id": "id5", "amount": 1000.0}  
 
 The relevant part is again the configuration of the SR and the deserializer:
 
@@ -249,7 +256,14 @@ curl http://localhost:8081/subjects/test-value/versions/2
 
 It should return:
 
-> {"subject":"test-value","version":2,"id":2,"schema":"{\"type\":\"record\",\"name\":\"Test\",\"namespace\":\"com.galiglobal.examples.testavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"test\",\"type\":\"double\"},{\"name\":\"boom\",\"type\":\"double\",\"default\":0.0}]}"}
+```json
+{
+  "subject": "test-value",
+  "version": 2,
+  "id": 2,
+  "schema": "{\"type\":\"record\",\"name\":\"Test\",\"namespace\":\"com.galiglobal.examples.testavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"test\",\"type\":\"double\"},{\"name\":\"boom\",\"type\":\"double\",\"default\":0.0}]}"
+}
+```
 
 ## Summary and next steps
 
