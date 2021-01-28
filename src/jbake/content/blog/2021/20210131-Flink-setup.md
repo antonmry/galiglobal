@@ -232,9 +232,69 @@ see your job running:
 
 ![Flink Dashboard in local mode](flink-dashboard.png "Flink Dashboard in local mode")
 
+## Debug with breakpoints
+
+One of the nice things it's be able to debug your Flink job [using breakpoints]
+as usual.
+
+![Flink breakpoints](flink-breakpoint.png "Flink breakpoints")
+
 ## Monitoring
 
-TODO: local and cluster
+Let's add some proper logging to our job. First of all, add the following
+field to `StreamingJob.java`:
+
+```java
+private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);
+```
+
+Let's delete the longStream variable and create a new one:
+
+```java
+LOG.debug("Start Flink example job");
+
+DataStreamSink<Long> logTestStream = env.fromElements(0L, 1L, 2L)
+    .map(new IncrementMapFunction())
+    .addSink(sink);
+
+LOG.debug("Stop Flink example job");
+```
+
+Modify `src/main/resources/log4j2.properties` to use the DEBUG log level:
+
+```
+rootLogger.level = DEBUG
+```
+
+Re-run the job and you should see the new log traces:
+
+![Flink log messages](flink-logtraces.png "Flink log messages")
+
+When running the job locally, the log level is quite verbose and it may be hard
+to find your own messages between the Flink messages. Let's configure that. Edit
+`src/main/resources/log4j2.properties` again to add the following lines:
+
+```
+logger.flink.name = org.apache.flink
+logger.flink.level = warn
+```
+
+Re-run the job and you should only see the proper logs messages.
+
+## Run and monitoring in the cluster
+
+Once we are done with our job, we can deploy it in a local cluster. The first
+step is to start the cluster again:
+
+```sh
+./flink-1.12.0/bin/start-cluster.sh
+```
+
+Compile our job:
+
+```sh
+mvn clean package -Pbuild-jar
+```
 
 ## Metrics?
 
@@ -247,9 +307,13 @@ TODO
 ## Summary and next steps
 
 
-Do you have comments? I would love to read them. [Leave a message]!
+Did I miss something? You can comment on [GitHub] or just drop me a note on
+[Twitter]!
 
 [Getting Started]: https://ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html
 [Hands-on Training]:https://ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/
 [Flink Web Dashboard]: http://localhost:8081/
-[Leave a message]: https://github.com/antonmry/galiglobal/pull/34
+[GitHub]: https://github.com/antonmry/galiglobal/pull/37
+[Twitter]: https://twitter.com/antonmry
+[using breakpoints]: https://www.jetbrains.com/help/idea/using-breakpoints.html
+
