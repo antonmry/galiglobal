@@ -6,12 +6,12 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Fri, 29 Jan 2021 23:30:43 +0100</pubDate>
-    <lastBuildDate>Fri, 29 Jan 2021 23:30:43 +0100</lastBuildDate>
+    <pubDate>Fri, 29 Jan 2021 23:44:02 +0100</pubDate>
+    <lastBuildDate>Fri, 29 Jan 2021 23:44:02 +0100</lastBuildDate>
 
     
     <item>
-      <title>Flink setup for development and some IntelliJ Idea cool tricks</title>
+      <title>Flink setup for development (and some IntelliJ Idea cool tricks)</title>
       <link>https://www.galiglobal.com/blog/2021/20210131-Flink-setup.html</link>
       <pubDate>Sat, 30 Jan 2021 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2021/20210131-Flink-setup.html</guid>
