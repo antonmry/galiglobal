@@ -1,5 +1,5 @@
-title=Flink setup for development
-date=2021-01-31
+title=Flink setup for development and some IntelliJ Idea cool tricks
+date=2021-01-30
 type=post
 tags=Flink
 status=published
@@ -7,26 +7,33 @@ status=published
 
 ## Introduction
 
-Start to work with a new technology is always a challenge. Even if there is
+Start to work with news technologies is always a challenge. Even if there is
 a good [Getting Started] or a great (and free) [Hands-on Training], there are
 always questions about how to start, how to debug problems or how to launch the
 project in your IDE. In this article, I summarize some of the notes I've been
-writing since I started with Flink.
+writing since I started with Flink. If Flink is something new for you, it's an
+easy guide to follow. If you are already an experienced Flink developer, there
+are some tricks you may find useful: access to JMX metrics, profiling, etc.
+
+The source code is available in this [GitHub repository].
 
 ## Install Flink
 
-The first step is to install Flink. This is really straightforward, just go
-to the Flink download page and download it:
+The first step is to install Flink. This is straightforward, just go to the
+Flink download page and download it:
 
 ```sh
 wget https://archive.apache.org/dist/flink/flink-1.12.0/flink-1.12.0-bin-scala_2.12.tgz
 tar -zxvf flink-1.12.0-bin-scala_2.12.tgz
 ```
 
-And start the cluster:
+Note: it's a good idea to create a variable $FLINK_HOME pointing to the Flink
+folder.
+
+Start the cluster:
 
 ```sh
-./flink-1.12.0/bin/start-cluster.sh
+$FLINK_HOME/bin/start-cluster.sh
 ```
 
 You can access the [Flink Web Dashboard] in your browser.
@@ -34,7 +41,7 @@ You can access the [Flink Web Dashboard] in your browser.
 We aren't going to need it initially so it's better to stop it:
 
 ```sh
-./flink-1.12.0/bin/stop-cluster.sh
+$FLINK_HOME/bin/stop-cluster.sh
 ```
 
 ## Bootstrap a Flink job
@@ -75,16 +82,16 @@ We are going to focus only on `StreamingJob.java`.
 
 ## Import and run the job in IntelliJ IDEA
 
-We are going only to cover my favourite Java IDE. Other IDEs should work in a
-similar way. First of all, import in the IDE as maven project. You can do it
-easily from the command-line.
+We are going only to cover my favourite Java IDE: IntelliJ IDEA. Other IDEs
+should work similarly. First of all, import in the IDE as a maven project. You
+can do it easily from the command-line.
 
 ```sh
 idea pom.xml
 ```
 
 You can go to `StreamingJob.java` and execute it as a normal Java application
-using the Shift+F10 shortcut on Linux/Windows. An error like this is showed
+using the Shift+F10 shortcut on Linux/Windows. An error like this should appear
 in the output:
 
 > Exception in thread "main" java.lang.NoClassDefFoundError: org/apache/flink/streaming/api/environment/StreamExecutionEnvironment
@@ -110,6 +117,8 @@ Re-run the job and a new error appears:
 > 	at org.apache.flink.streaming.api.environment.StreamExecutionEnvironment.getStreamGraph(StreamExecutionEnvironment.java:1976)
 > 	at org.apache.flink.streaming.api.environment.StreamExecutionEnvironment.execute(StreamExecutionEnvironment.java:1822)
 > 	at galiglobal.flink.StreamingJob.main(StreamingJob.java:62)
+
+It's time to create our Flink job.
 
 ## Develop our first Flink job
 
@@ -188,17 +197,17 @@ public class StreamingJob {
 }
 ```
 
-Note: this code is from this [StackOverflow answer](https://stackoverflow.com/questions/61458182/flink-streaming-example-that-generates-its-own-data).
+Note: this class is from the [Hands-on Training].
 
 If you execute it, you will see an infinite list of long numbers:
 
-> ...
-> 3> 3869376031196493001
-> 12> 4265560998598976840
-> 12> -7434045225389162179
-> 1> 3964290136030554255
-> 1> 8881056576399978883
-> ...
+> ...  
+> 3> 3869376031196493001  
+> 12> 4265560998598976840  
+> 12> -7434045225389162179  
+> 1> 3964290136030554255  
+> 1> 8881056576399978883  
+> ...  
 
 Note: The 3>, 12>, 1> indicate which sub-task (i.e., thread) produced the
 output.
@@ -234,10 +243,51 @@ see your job running:
 
 ## Debug with breakpoints
 
-One of the nice things it's be able to debug your Flink job [using breakpoints]
-as usual.
+One of the nice things of run Flink jobs in your IDE is to able to debug your
+Flink job [using breakpoints] as usual.
 
 ![Flink breakpoints](flink-breakpoint.png "Flink breakpoints")
+
+## Profiling
+
+Other nice thing you may use with IntelliJ is profiling to research and
+improve the performance of your jobs. See [Profiling Tools and IntelliJ IDEA
+Ultimate] for more info. It works well with this setup:
+
+![Flink with IDEA profiler](flink-profiler.png "Flink with IDEA profiler")
+
+You can also use VisualVM and launch it from IntelliJ with the
+[VisualVMLauncher plugin]:
+
+![Flink with VisualVM](flink-visualvm.png "Flink with VisualVM")
+
+## Metrics
+
+Flink generates metrics exposed through different interfaces including JMX.
+See [Flink metrics] for more info.
+
+To activate it, add the following dependency to `pom.xml`:
+
+```xml
+<dependency>
+	<groupId>org.apache.flink</groupId>
+	<artifactId>flink-metrics-jmx_2.11</artifactId>
+	<version>${flink.version}</version>
+</dependency>
+```
+
+And change the `env` variable to expose metrics in the JMX interface:
+
+```java
+Properties props = new Properties();
+props.put("metrics.reporter.jmx.factory.class", "org.apache.flink.metrics.jmx.JMXReporterFactory");
+Configuration conf = ConfigurationUtils.createConfiguration(props);
+StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
+```
+Run the job as usual and open it in VisualVM. You need to install the [VisualVM
+MBeans Browser]. Metrics should be available in the MBeans tab:
+
+![Flink metrics with VisualVM](flink-visualvm.png "Flink metrics with VisualVM")
 
 ## Monitoring
 
@@ -248,7 +298,8 @@ field to `StreamingJob.java`:
 private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);
 ```
 
-Let's delete the longStream variable and create a new one:
+Let's delete the longStream variable and create a new one with some log
+messages:
 
 ```java
 LOG.debug("Start Flink example job");
@@ -271,7 +322,7 @@ Re-run the job and you should see the new log traces:
 ![Flink log messages](flink-logtraces.png "Flink log messages")
 
 When running the job locally, the log level is quite verbose and it may be hard
-to find your own messages between the Flink messages. Let's configure that. Edit
+to find your messages between the Flink messages. Let's configure that. Edit
 `src/main/resources/log4j2.properties` again to add the following lines:
 
 ```
@@ -281,13 +332,68 @@ logger.flink.level = warn
 
 Re-run the job and you should only see the proper logs messages.
 
-## Run and monitoring in the cluster
+## Tests
+
+One of the most important things when creating jobs is to have proper tests you
+can run from your IDE. It will make you go faster because you can make changes,
+run the test and be sure everything is working as it was before the change.
+That level of confidence in your changes worths the cost of writing the test
+from the very beginning.
+
+Add the following dependency to your `pom.xml`:
+
+```xml
+<dependency>
+	<groupId>org.apache.flink</groupId>
+	<artifactId>flink-test-utils-junit</artifactId>
+	<version>${flink.version}</version>
+</dependency>
+```
+
+Move the inner class `IncrementMapFunction` to their own file:
+
+![Refactor Map function](flink-refactor.png "Refactor Map function")
+
+Now let's add a unit test to `src/test/java` which tests this function:
+
+```java
+public class StreamingJobTest {
+
+    @Test
+    public void testMap() throws Exception {
+        IncrementMapFunction statelessMap = new IncrementMapFunction();
+        Long out = statelessMap.map(1L);
+        Assert.assertEquals(2L, out.longValue());
+    }
+}
+
+```
+
+Run the test from the IDE and see the result:
+
+![Flink Unit Test](flink-unittest.png "Flink Unit test")
+
+For more information, see [Testing Flik Jobs] in the official documentation.
+
+## Monitoring in the cluster
 
 Once we are done with our job, we can deploy it in a local cluster. The first
-step is to start the cluster again:
+step is to enable the log level Debug for the local cluster. Edit
+`$FLINK_HOME/conf/log4j-cli.properties` and change root level to debug:
+
+> rootLogger.level = DEBUG
+
+Start the cluster again:
 
 ```sh
-./flink-1.12.0/bin/start-cluster.sh
+$FLINK_HOME/bin/start-cluster.sh
+```
+
+We need to modify our source code to use a remote execution environment so you
+should replace the `env` variable again:
+
+```java
+StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 ```
 
 Compile our job:
@@ -296,16 +402,32 @@ Compile our job:
 mvn clean package -Pbuild-jar
 ```
 
-## Metrics?
+Run the job in the local cluster:
 
-TODO
+```sh
+$FLINK_HOME/bin/flink run target/flink-example-0.1.jar
+```
 
-## Tests
+It should obtain an output similar to:
 
-TODO
+> Job has been submitted with JobID bbea3ed5f5082a7267f85d92807b19dc  
+> Program execution finished  
+> Job with JobID bbea3ed5f5082a7267f85d92807b19dc has finished.  
+> Job Runtime: 827 ms  
+
+If you check the logs, you should see your traces:
+
+```sh
+grep -R "example job" $FLINK_HOME/log/
+```
 
 ## Summary and next steps
 
+In this article, we have covered the basics and some typical gotchas to work
+with Apache Flink in local environments. It's really important to invest time
+in your setup to be productive and have a pleasant experience building your
+jobs. Each minute you spent improving your workflow will pay off in the
+future.
 
 Did I miss something? You can comment on [GitHub] or just drop me a note on
 [Twitter]!
@@ -316,4 +438,9 @@ Did I miss something? You can comment on [GitHub] or just drop me a note on
 [GitHub]: https://github.com/antonmry/galiglobal/pull/37
 [Twitter]: https://twitter.com/antonmry
 [using breakpoints]: https://www.jetbrains.com/help/idea/using-breakpoints.html
-
+[Testing Flik Jobs]: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html
+[Profiling Tools and IntelliJ IDEA Ultimate]: https://blog.jetbrains.com/idea/2020/03/profiling-tools-and-intellij-idea-ultimate/
+[VisualVMLauncher plugin]: https://github.com/krasa/VisualVMLauncher/
+[VisualVM MBeans Browser]: https://visualvm.github.io/plugins.html
+[Flink metrics]: https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html#metrics
+[GitHub repository]: https://github.com/antonmry/flink-playground
