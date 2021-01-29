@@ -1,4 +1,4 @@
-title=Flink setup for development and some IntelliJ Idea cool tricks
+title=Flink setup for development (and some IntelliJ Idea cool tricks)
 date=2021-01-30
 type=post
 tags=Flink

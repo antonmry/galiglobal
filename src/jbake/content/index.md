@@ -9,16 +9,16 @@ status=published
 
 I'm a Principal Software Engineer focused on **Event Streaming and Real-Time
 Processing**. I've experience working with different message brokers and event
-streaming platforms ([Apache Kafka], [Google Pub/Sub] and [Azure EventHub]) and
-real-time processing frameworks ([Kafka Streams], [Spark Structured Streaming],
-[Google Dataflow], [Azure Stream Analytics], etc.).
+streaming platforms ([Apache Kafka], [Apache Pulsar], [Google Pub/Sub] and
+[Azure EventHub]) and real-time processing frameworks ([Flink], [Kafka
+Streams], [Spark Structured Streaming], [Google Dataflow], [Azure Stream
+Analytics], etc.).
 
 During my career, **I specialized in building internal SaaS** in big
 corporations to make complex technologies easily used and adopted by teams so
 they can build solutions to real business use cases. From the very beginning,
 I can help with governance, operation, performance, adoption, training and any
 task related to system administration or backend development.
-
 
 I have a strong sense of my goals as Principal Software Engineer which are
 very good summarized in [Some Thoughts on the Principal Role]:
@@ -32,14 +32,15 @@ very good summarized in [Some Thoughts on the Principal Role]:
 
 ## Tech Community
 
-I also like to organize technology events and groups:
+I also like to organize technology events, groups and other activities:
 
-- [VigoJUG] co-organizer of the Vigo Java User Group
-  since 2017.
-- [CoruñaJUG] co-organizer of the Coruña Java User
-  Group since 2018.
-- [LaretasGeek] is a virtual panel and podcast
-  about technology with focus on Java.
+- [Streaming Annotated Newsletter]: receive the last news and interesting
+  articles about streaming platforms and processing frameworks each month in
+  your mailbox.
+- [VigoJUG] co-organizer of the Vigo Java User Group since 2017.
+- [CoruñaJUG] co-organizer of the Coruña Java User Group since 2018.
+- [LaretasGeek] is a virtual panel and podcast about technology with focus on
+  Java.
 
 Sometimes I speak at international [technology conferences] as Geecon, JBCNConf,
 Greach, SpringIO, CommitConf, TADSummit, AtlánticaConf, LicorcaConf, CoimbraJUG,
@@ -85,3 +86,6 @@ I've received some awards during my career:
 [Spark Structured Streaming]: https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html
 [Google Dataflow]: https://cloud.google.com/dataflow
 [Azure Stream Analytics]: https://azure.microsoft.com/en-us/services/stream-analytics/
+[Flink]: https://flink.apache.org/
+[Apache Pulsar]: https://pulsar.apache.org/
+[Streaming Annotated Newsletter]: https://lowlatency.substack.com/
