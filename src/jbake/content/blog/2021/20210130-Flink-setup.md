@@ -103,9 +103,10 @@ in the output:
 > 	at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
 > 	... 1 more
 
-Some dependencies are missing. To solve it, go to `Run` -> `Edit Configuration` ->
-`Modify options` -> `Use classpath of module` and in the new field, mark
-`Include dependencies with "Provided" scope`.
+This is a particular problem of Flink running in the IDE: some dependencies are
+missing. To solve it, go to `Run` -> `Edit Configuration` -> `Modify options`
+-> `Use classpath of module` and in the new field, mark `Include dependencies
+with "Provided" scope`.
 
 ![Run configuration for Flink](flink-idea-run-configuration.png "Run configuration for Flink")
 
@@ -287,9 +288,9 @@ StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironme
 Run the job as usual and open it in VisualVM. You need to install the [VisualVM
 MBeans Browser]. Metrics should be available in the MBeans tab:
 
-![Flink metrics with VisualVM](flink-visualvm.png "Flink metrics with VisualVM")
+![Flink metrics with VisualVM](flink-metrics.png "Flink metrics with VisualVM")
 
-## Monitoring
+## Logging
 
 Let's add some proper logging to our job. First of all, add the following
 field to `StreamingJob.java`:
@@ -375,7 +376,7 @@ Run the test from the IDE and see the result:
 
 For more information, see [Testing Flik Jobs] in the official documentation.
 
-## Monitoring in the cluster
+## Run in the local cluster with proper logging
 
 Once we are done with our job, we can deploy it in a local cluster. The first
 step is to enable the log level Debug for the local cluster. Edit
