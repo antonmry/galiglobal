@@ -114,7 +114,7 @@ cd flink-example
 <blockquote>
 <p>Exception in thread &ldquo;main&rdquo; java.lang.NoClassDefFoundError: org/apache/flink/streaming/api/environment/StreamExecutionEnvironment at galiglobal.flink.StreamingJob.main(StreamingJob.java:39) Caused by: java.lang.ClassNotFoundException: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:418) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:352) at java.lang.ClassLoader.loadClass(ClassLoader.java:351) &hellip; 1 more</p>
 </blockquote>
-<p>Some dependencies are missing. To solve it, go to <code>Run</code> -&gt; <code>Edit Configuration</code> -&gt; <code>Modify options</code> -&gt; <code>Use classpath of module</code> and in the new field, mark <code>Include dependencies with &quot;Provided&quot; scope</code>.</p>
+<p>This is a particular problem of Flink running in the IDE: some dependencies are missing. To solve it, go to <code>Run</code> -&gt; <code>Edit Configuration</code> -&gt; <code>Modify options</code> -&gt; <code>Use classpath of module</code> and in the new field, mark <code>Include dependencies with &quot;Provided&quot; scope</code>.</p>
 <p><img src="flink-idea-run-configuration.png" alt="Run configuration for Flink" title="Run configuration for Flink" /></p>
 <p>Re-run the job and a new error appears:</p>
 <blockquote>
@@ -240,8 +240,8 @@ Configuration conf = ConfigurationUtils.createConfiguration(props);
 StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
 </code></pre>
 <p>Run the job as usual and open it in VisualVM. You need to install the <a href="https://visualvm.github.io/plugins.html">VisualVM MBeans Browser</a>. Metrics should be available in the MBeans tab:</p>
-<p><img src="flink-visualvm.png" alt="Flink metrics with VisualVM" title="Flink metrics with VisualVM" /></p>
-<h2><a href="#monitoring" id="monitoring">Monitoring</a></h2>
+<p><img src="flink-metrics.png" alt="Flink metrics with VisualVM" title="Flink metrics with VisualVM" /></p>
+<h2><a href="#logging" id="logging">Logging</a></h2>
 <p>Let&rsquo;s add some proper logging to our job. First of all, add the following field to <code>StreamingJob.java</code>:</p>
 <pre><code class="language-java">private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);
 </code></pre>
@@ -290,7 +290,7 @@ logger.flink.level = warn
 <p>Run the test from the IDE and see the result:</p>
 <p><img src="flink-unittest.png" alt="Flink Unit Test" title="Flink Unit test" /></p>
 <p>For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html">Testing Flik Jobs</a> in the official documentation.</p>
-<h2><a href="#monitoring-in-the-cluster" id="monitoring-in-the-cluster">Monitoring in the cluster</a></h2>
+<h2><a href="#run-in-the-local-cluster-with-proper-logging" id="run-in-the-local-cluster-with-proper-logging">Run in the local cluster with proper logging</a></h2>
 <p>Once we are done with our job, we can deploy it in a local cluster. The first step is to enable the log level Debug for the local cluster. Edit <code>$FLINK_HOME/conf/log4j-cli.properties</code> and change root level to debug:</p>
 <blockquote>
 <p>rootLogger.level = DEBUG</p>
