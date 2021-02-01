@@ -289,7 +289,7 @@ logger.flink.level = warn
 </code></pre>
 <p>Run the test from the IDE and see the result:</p>
 <p><img src="flink-unittest.png" alt="Flink Unit Test" title="Flink Unit test" /></p>
-<p>For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html">Testing Flik Jobs</a> in the official documentation.</p>
+<p>For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html">Testing Flink Jobs</a> in the official documentation. It&rsquo;s particularly interesting how to <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html#testing-flink-jobs">test complete jobs</a>. You can find also good examples in the <a href="https://github.com/apache/flink-training/blob/master/ride-cleansing/src/test/java/org/apache/flink/training/exercises/ridecleansing/RideCleansingTest.java">official Flink training tests</a>.</p>
 <h2><a href="#run-in-the-local-cluster-with-proper-logging" id="run-in-the-local-cluster-with-proper-logging">Run in the local cluster with proper logging</a></h2>
 <p>Once we are done with our job, we can deploy it in a local cluster. The first step is to enable the log level Debug for the local cluster. Edit <code>$FLINK_HOME/conf/log4j-cli.properties</code> and change root level to debug:</p>
 <blockquote>

@@ -6,8 +6,8 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Sat, 30 Jan 2021 09:40:55 +0100</pubDate>
-    <lastBuildDate>Sat, 30 Jan 2021 09:40:55 +0100</lastBuildDate>
+    <pubDate>Mon, 1 Feb 2021 08:17:36 +0100</pubDate>
+    <lastBuildDate>Mon, 1 Feb 2021 08:17:36 +0100</lastBuildDate>
 
     
     <item>
@@ -243,7 +243,7 @@ logger.flink.level = warn
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Run the test from the IDE and see the result:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;flink-unittest.png&quot; alt=&quot;Flink Unit Test&quot; title=&quot;Flink Unit test&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;For more information, see &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html&quot;&gt;Testing Flik Jobs&lt;/a&gt; in the official documentation.&lt;/p&gt;
+&lt;p&gt;For more information, see &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html&quot;&gt;Testing Flink Jobs&lt;/a&gt; in the official documentation. It&amp;rsquo;s particularly interesting how to &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html#testing-flink-jobs&quot;&gt;test complete jobs&lt;/a&gt;. You can find also good examples in the &lt;a href=&quot;https://github.com/apache/flink-training/blob/master/ride-cleansing/src/test/java/org/apache/flink/training/exercises/ridecleansing/RideCleansingTest.java&quot;&gt;official Flink training tests&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;&lt;a href=&quot;#run-in-the-local-cluster-with-proper-logging&quot; id=&quot;run-in-the-local-cluster-with-proper-logging&quot;&gt;Run in the local cluster with proper logging&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Once we are done with our job, we can deploy it in a local cluster. The first step is to enable the log level Debug for the local cluster. Edit &lt;code&gt;$FLINK_HOME/conf/log4j-cli.properties&lt;/code&gt; and change root level to debug:&lt;/p&gt;
 &lt;blockquote&gt;
