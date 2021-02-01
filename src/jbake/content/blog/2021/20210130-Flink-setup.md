@@ -374,7 +374,9 @@ Run the test from the IDE and see the result:
 
 ![Flink Unit Test](flink-unittest.png "Flink Unit test")
 
-For more information, see [Testing Flik Jobs] in the official documentation.
+For more information, see [Testing Flink Jobs] in the official documentation.
+It's particularly interesting how to [test complete jobs]. You can find also
+good examples in the [official Flink training tests].
 
 ## Run in the local cluster with proper logging
 
@@ -439,7 +441,9 @@ Did I miss something? You can comment on [GitHub] or just drop me a note on
 [GitHub]: https://github.com/antonmry/galiglobal/pull/37
 [Twitter]: https://twitter.com/antonmry
 [using breakpoints]: https://www.jetbrains.com/help/idea/using-breakpoints.html
-[Testing Flik Jobs]: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html
+[Testing Flink Jobs]: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html
+[test complete jobs]: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html#testing-flink-jobs
+[official Flink training tests]: https://github.com/apache/flink-training/blob/master/ride-cleansing/src/test/java/org/apache/flink/training/exercises/ridecleansing/RideCleansingTest.java
 [Profiling Tools and IntelliJ IDEA Ultimate]: https://blog.jetbrains.com/idea/2020/03/profiling-tools-and-intellij-idea-ultimate/
 [VisualVMLauncher plugin]: https://github.com/krasa/VisualVMLauncher/
 [VisualVM MBeans Browser]: https://visualvm.github.io/plugins.html
