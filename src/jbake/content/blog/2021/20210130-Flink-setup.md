@@ -7,13 +7,16 @@ status=published
 
 ## Introduction
 
-Start to work with news technologies is always a challenge. Even if there is
-a good [Getting Started] or a great (and free) [Hands-on Training], there are
-always questions about how to start, how to debug problems or how to launch the
-project in your IDE. In this article, I summarize some of the notes I've been
-writing since I started with Flink. If Flink is something new for you, it's an
-easy guide to follow. If you are already an experienced Flink developer, there
-are some tricks you may find useful: access to JMX metrics, profiling, etc.
+[Apache Flink] is an open-source, unified stream-processing and
+batch-processing framework. As any of those framework, start to work with it
+can be a challenge. Even if there is a good [Getting Started] or a great (and
+free) [Hands-on Training], there are always questions about how to start, how
+to debug problems or how to launch the project in your IDE.
+
+In this article, I summarize some of the notes I've been writing since
+I started with Flink. If Flink is something new for you, it's an easy guide to
+follow. If you are already an experienced Flink developer, there are some
+tricks you may find useful: access to JMX metrics, profiling, etc.
 
 The source code is available in this [GitHub repository].
 
@@ -449,3 +452,4 @@ Did I miss something? You can comment on [GitHub] or just drop me a note on
 [VisualVM MBeans Browser]: https://visualvm.github.io/plugins.html
 [Flink metrics]: https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html#metrics
 [GitHub repository]: https://github.com/antonmry/flink-playground
+[Apache Flink]: https://flink.apache.org/
