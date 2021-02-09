@@ -5,6 +5,10 @@ tags=galiglobal
 status=published
 ~~~~~~
 
+## 2021
+
+- Oracledbacr - [Podcast Cita a Ciegas](https://open.spotify.com/episode/4Uyzyosb4kWvVEbkKqaavI?si=xjPHhf3sRV-2d39fKw0cAQ&nd=1)
+
 ## 2020
 
 - PosadaDev - [Panel discusion : La oficina del futuro post-pandemia -o incluso antes- desde la visión de devs](https://convoca.dev/posadev-2020/talk/GZAA8K/): [Video](https://youtu.be/fBmiacbdRpE?t=10447)
