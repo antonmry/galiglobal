@@ -6,8 +6,8 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Mon, 1 Feb 2021 08:17:36 +0100</pubDate>
-    <lastBuildDate>Mon, 1 Feb 2021 08:17:36 +0100</lastBuildDate>
+    <pubDate>Tue, 9 Feb 2021 21:07:27 +0100</pubDate>
+    <lastBuildDate>Tue, 9 Feb 2021 21:07:27 +0100</lastBuildDate>
 
     
     <item>
@@ -17,7 +17,8 @@
       <guid isPermaLink="false">blog/2021/20210130-Flink-setup.html</guid>
       <description>
       &lt;h2&gt;&lt;a href=&quot;#introduction&quot; id=&quot;introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Start to work with news technologies is always a challenge. Even if there is a good &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html&quot;&gt;Getting Started&lt;/a&gt; or a great (and free) &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/&quot;&gt;Hands-on Training&lt;/a&gt;, there are always questions about how to start, how to debug problems or how to launch the project in your IDE. In this article, I summarize some of the notes I&amp;rsquo;ve been writing since I started with Flink. If Flink is something new for you, it&amp;rsquo;s an easy guide to follow. If you are already an experienced Flink developer, there are some tricks you may find useful: access to JMX metrics, profiling, etc.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://flink.apache.org/&quot;&gt;Apache Flink&lt;/a&gt; is an open-source, unified stream-processing and batch-processing framework. As any of those framework, start to work with it can be a challenge. Even if there is a good &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html&quot;&gt;Getting Started&lt;/a&gt; or a great (and free) &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/&quot;&gt;Hands-on Training&lt;/a&gt;, there are always questions about how to start, how to debug problems or how to launch the project in your IDE.&lt;/p&gt;
+&lt;p&gt;In this article, I summarize some of the notes I&amp;rsquo;ve been writing since I started with Flink. If Flink is something new for you, it&amp;rsquo;s an easy guide to follow. If you are already an experienced Flink developer, there are some tricks you may find useful: access to JMX metrics, profiling, etc.&lt;/p&gt;
 &lt;p&gt;The source code is available in this &lt;a href=&quot;https://github.com/antonmry/flink-playground&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;&lt;a href=&quot;#install-flink&quot; id=&quot;install-flink&quot;&gt;Install Flink&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The first step is to install Flink. This is straightforward, just go to the Flink download page and download it:&lt;/p&gt;
