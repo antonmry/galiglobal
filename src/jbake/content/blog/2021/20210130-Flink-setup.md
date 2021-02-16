@@ -57,12 +57,12 @@ mvn archetype:generate                               \
     -DarchetypeArtifactId=flink-quickstart-java \
     -DarchetypeVersion=1.12.0 \
     -DgroupId=galiglobal \
-    -DartifactId=flink-example \
+    -DartifactId=flink-playground \
     -Dversion=0.1 \
     -Dpackage=galiglobal.flink \
     -DinteractiveMode=false
 
-cd flink-example
+cd flink-playground
 ```
 
 The structure of the project is quite simple:
@@ -411,7 +411,7 @@ mvn clean package -Pbuild-jar
 Run the job in the local cluster:
 
 ```sh
-$FLINK_HOME/bin/flink run target/flink-example-0.1.jar
+$FLINK_HOME/bin/flink run target/flink-playground-0.1.jar
 ```
 
 It should obtain an output similar to:
