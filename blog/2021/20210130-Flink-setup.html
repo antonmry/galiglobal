@@ -86,12 +86,12 @@ tar -zxvf flink-1.12.0-bin-scala_2.12.tgz
     -DarchetypeArtifactId=flink-quickstart-java \
     -DarchetypeVersion=1.12.0 \
     -DgroupId=galiglobal \
-    -DartifactId=flink-example \
+    -DartifactId=flink-playground \
     -Dversion=0.1 \
     -Dpackage=galiglobal.flink \
     -DinteractiveMode=false
 
-cd flink-example
+cd flink-playground
 </code></pre>
 <p>The structure of the project is quite simple:</p>
 <pre><code>.
@@ -306,7 +306,7 @@ logger.flink.level = warn
 <pre><code class="language-sh">mvn clean package -Pbuild-jar
 </code></pre>
 <p>Run the job in the local cluster:</p>
-<pre><code class="language-sh">$FLINK_HOME/bin/flink run target/flink-example-0.1.jar
+<pre><code class="language-sh">$FLINK_HOME/bin/flink run target/flink-playground-0.1.jar
 </code></pre>
 <p>It should obtain an output similar to:</p>
 <blockquote>

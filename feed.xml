@@ -6,8 +6,8 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Tue, 9 Feb 2021 21:07:27 +0100</pubDate>
-    <lastBuildDate>Tue, 9 Feb 2021 21:07:27 +0100</lastBuildDate>
+    <pubDate>Thu, 25 Feb 2021 12:17:26 +0100</pubDate>
+    <lastBuildDate>Thu, 25 Feb 2021 12:17:26 +0100</lastBuildDate>
 
     
     <item>
@@ -40,12 +40,12 @@ tar -zxvf flink-1.12.0-bin-scala_2.12.tgz
     -DarchetypeArtifactId=flink-quickstart-java \
     -DarchetypeVersion=1.12.0 \
     -DgroupId=galiglobal \
-    -DartifactId=flink-example \
+    -DartifactId=flink-playground \
     -Dversion=0.1 \
     -Dpackage=galiglobal.flink \
     -DinteractiveMode=false
 
-cd flink-example
+cd flink-playground
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The structure of the project is quite simple:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;.
@@ -260,7 +260,7 @@ logger.flink.level = warn
 &lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;mvn clean package -Pbuild-jar
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Run the job in the local cluster:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;$FLINK_HOME/bin/flink run target/flink-example-0.1.jar
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;$FLINK_HOME/bin/flink run target/flink-playground-0.1.jar
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It should obtain an output similar to:&lt;/p&gt;
 &lt;blockquote&gt;
