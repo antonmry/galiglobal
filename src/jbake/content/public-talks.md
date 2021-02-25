@@ -8,18 +8,17 @@ status=published
 ## 2021
 
 - Oracledbacr - [Podcast Cita a Ciegas](https://open.spotify.com/episode/4Uyzyosb4kWvVEbkKqaavI?si=xjPHhf3sRV-2d39fKw0cAQ&nd=1)
+- BigData Boutique's AMA - Apache Kafka vs Apache Pulsar: [video](https://www.youtube.com/watch?v=GUgAxaO92UY)
 
 ## 2020
 
 - PosadaDev - [Panel discusion : La oficina del futuro post-pandemia -o incluso antes- desde la visión de devs](https://convoca.dev/posadev-2020/talk/GZAA8K/): [Video](https://youtu.be/fBmiacbdRpE?t=10447)
 - LicorcaConf - [Code Review sin tirarse los trastos a la cabeza](https://compostelatech.org/licorcaconf): [video](https://youtu.be/zoaA6ruNhbI?t=1667) and [slides](https://docs.google.com/presentation/d/1zj0pcTbapkHXBFvY43oPZcnHAUupDO9np06pH8Ta6ro/edit?usp=sharing)
 - Laretas Geek - [Especial Kafka](https://www.meetup.com/CorunaJUG/events/273296959/): [video](https://www.youtube.com/watch?v=L25ryiRmTYQ)
-<!--
 - BigData Boutique's AMA - Usage patterns for Kafka - Pub/Sub, Observer, CQRS and more: [video](https://www.youtube.com/watch?v=mAc7XANAuCo)
 - BigData Boutique's AMA - How to expose Big Data efficiently: [video](https://www.youtube.com/watch?v=sH7k5GZ3q00)
 - BigData Boutique's AMA - Avro, Parquet or JSON? What to use and, more importantly, how to do it: [video](https://www.youtube.com/watch?v=9-HkE6XNgo8)
 - BigData Boutique's AMA - Kafka Streams: a gentle comparison with other frameworks: [video](https://www.youtube.com/watch?v=KRg7jC4EElw)
--->
 
 ## 2019
 
