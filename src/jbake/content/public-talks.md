@@ -12,7 +12,7 @@ status=published
 
 ## 2020
 
-- PosadaDev - [Panel discusion : La oficina del futuro post-pandemia -o incluso antes- desde la visión de devs](https://convoca.dev/posadev-2020/talk/GZAA8K/): [Video](https://youtu.be/fBmiacbdRpE?t=10447)
+- PosadaDev - [Panel discusion : La oficina del futuro post-pandemia -o incluso antes- desde la visión de devs](https://convoca.dev/posadev-2020/talk/GZAA8K/): [video](https://youtu.be/fBmiacbdRpE?t=10447)
 - LicorcaConf - [Code Review sin tirarse los trastos a la cabeza](https://compostelatech.org/licorcaconf): [video](https://youtu.be/zoaA6ruNhbI?t=1667) and [slides](https://docs.google.com/presentation/d/1zj0pcTbapkHXBFvY43oPZcnHAUupDO9np06pH8Ta6ro/edit?usp=sharing)
 - Laretas Geek - [Especial Kafka](https://www.meetup.com/CorunaJUG/events/273296959/): [video](https://www.youtube.com/watch?v=L25ryiRmTYQ)
 - BigData Boutique's AMA - Usage patterns for Kafka - Pub/Sub, Observer, CQRS and more: [video](https://www.youtube.com/watch?v=mAc7XANAuCo)
@@ -35,7 +35,7 @@ status=published
 ## 2018
 
 * VigoJUG - [Introduction to i3wm](https://www.meetup.com/VigoJUG/events/255662689/): [source code](https://github.com/antonmry/dotfiles)
-* [JCrete](https://www.jcrete.org/category/jcrete-2018/): Java unconference.
+* JCrete - [Java unconference](https://www.jcrete.org/category/jcrete-2018/)
 * JBCNConf - [Docker In Anger for Java Developers](https://www.jbcnconf.com/2018/infoTalk.html?id=43): [source code](https://github.com/antonmry/docker-java-workshop)
 * CoimbraJUG - [Safely Shoot Yourself in the Foot with Microservices](https://www.meetup.com/Coimbra-JUG/events/250175880/): [slides](https://drive.google.com/file/d/1Nd7mjJOotZfigPBuYa2gxh4v-7iFBTBp/view)
 * VigoJUG - [Developer Vago 2: microbenchmarks, a caza dos erros máis habituais](https://www.meetup.com/VigoJUG/events/246838531/): [slides](http://www.vigojug.org/developer-vago-2-micro-benchmarking/#/) and [source code](https://github.com/vigojug/developer-vago-2-micro-benchmarking)
