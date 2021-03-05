@@ -11,37 +11,38 @@ One of the most important concepts for stream-processing frameworks is the
 concept of time. There are different concepts of time:
 
 - **Processing time**: it's the time-based on the clock of the machine where
-  the event is being processed. It's easy to use because it's easy to retrieve
-  but because that time changes each time the job executed, the result of the
-  job isn't consistent. Each time you execute the job, you may have different
-  results. This isn't an acceptable for many use cases.
+  the event is being processed. It's easy to use but because that time changes
+  when the job is executed, the result of the job isn't consistent. Each time
+  you execute the job, you may have different results. This isn't an acceptable
+  trade-off for many use cases.
 - **Event time**: it's the time-based on some of the fields in the event,
   typically a timestamp field. Each time you execute the pipeline with the same
   input, you obtain the same result which it's a good thing. But it also tends
-  to be a bit harder to work with it for several reasons we'll cover later in
-  the article.
-- **Ingestion time** is based on the time when the event was ingested in the
-  streaming platform (Kafka) and it usually goes in the metadata. From a Flink
-  perspective, we can consider it a particular case of Event Time.
+  to be a bit harder to work with it for several reasons. We'll cover them
+  later in the article.
+- **Ingestion time**: it's based on the timestamp when the event was ingested
+  in the streaming platform (Kafka) and it usually goes in the metadata. From
+  a Flink perspective, we can consider it a particular mix of Event time and
+  processing time with the disadvantages of both.
 
-[Apache Flink] has excellent support for Event time, probably the best of
-the different stream-processing frameworks available. For more information, you
-can read [Notions of Time: Event Time and Processing Time] in the official
-documentation. If you prefer videos, [Streaming Concepts & Introduction to
-Flink - Event Time and Watermarks] is a good explanation.
+[Apache Flink] has excellent support for Event time processing, probably the
+best of the different stream-processing frameworks available. For more
+information, you can read [Notions of Time: Event Time and Processing Time] in
+the official documentation. If you prefer videos, [Streaming Concepts
+& Introduction to Flink - Event Time and Watermarks] is a good explanation.
 
-In this article, we'll take a look at Event-time based pipelines and also to
+In this article, we'll take a look at Event time based pipelines and also to
 some common problems and misunderstandings working on this type of pipelines.
 
 ## Timestamps and watermarks
 
-When we speak about timestamp in Flink, we are referring to a particular field
+When we speak about timestamps in Flink, we are referring to a particular field
 in the event.  We can extract it and make it available to Flink so it knows
 what's the actual time from the pipeline perspective. The format expected by
-Flink is [Unix-time], specified as milliseconds since the Java epoch of
-1970-01-01T00:00:00Z, so we may need to do some type of conversion. To do that,
-Flink expects an implementation of the [TimestampAssigner]. We'll see later an
-example.
+Flink is [Unix time], specified as milliseconds since the Java epoch of
+1970-01-01T00:00:00Z, so we may need to do some type of conversion. To be able
+to map current time with the event timestamp, Flink expects an implementation
+of the [TimestampAssigner]. We'll see later an example.
 
 Once Flink knows what time it is, it's the moment to generate a watermark. This
 is one of the most surprising and genial thinks working with Flink. A watermark
@@ -98,7 +99,7 @@ env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());
 The problem with this approach is we are mixing processing and event time so the
 result won't be deterministic, or even correct depending on the circumstances.
 
-For example, [BoundedOutOfOrdernessStrategyJob]. It starts defining the
+For example, with [BoundedOutOfOrdernessStrategyJob], we start defining the
 watermark interval each 100 ms.
 
 ```java
@@ -163,20 +164,22 @@ are three options:
 
 - Check the current watermark metric. See [my previous article about the Flink
   setup]. This is ideal for real jobs but a bit more complicated with tests
-  because the finish almost immediately.
+  because they finish almost immediately.
 - Check the current watermark in the Flink UI: as with the previous one, it
   doesn't work with tests if they finish too quickly.
 - Introduce a custom operator which has access to the current watermark. I used
-  this one which allows also us to play with some more advanced operators.
+  this one which allows us also to play with some more advanced operators.
+
+![Flink UI](eventtime-flink.png "Flink UI")
 
 [StreamWatermarkDebugFilter] is the internal class [StreamFilter] with
 some minor modifications:
 
-- Do nothing, we don't want to filter any event. This could be improved a bit
-  avoiding the filtering but because it's a class only for debugging, I didn't
-  care too much.
+- We don't want to filter any event. This could be improved a bit avoiding the
+  filtering but because it's a class only for debugging, I didn't care too
+  much.
 - In the method `processWatermark`, emit the watermark to be consumed for the
-next operator and print it for debugging purposes.
+  next operator and print it for debugging purposes.
 
 We apply the new operator to the job:
 
@@ -238,6 +241,8 @@ var sensorEventTimeStream =
 It's `BoundedOutOfOrdernessWatermarks` but we modify the method `onEvent` to
 invoke `onPeriodicEmit` which emits the watermark. So, instead of being invoked
 by the framework, now it emits a new watermark each time it receives an event.
+
+![Flink Pipeline with Punctuated Generator](eventtime-pipeline.png "Flink Pipeline with Punctuated Generator")
 
 The test gives the following output now:
 
