@@ -1,9 +1,9 @@
-title=Flink Event Time
+title=How to build and debug a Flink pipeline based in Event Time
 date=2021-02-28
 type=post
 tags=Flink
 status=published
-//~~~~~~
+~~~~~~
 
 ## Introduction
 
@@ -191,7 +191,7 @@ sensorEventTimeStream
     .addSink(sink);
 ```
 
-Executing the test again, we can see the watermarks generated:
+We can see the watermarks generated executing the test again:
 
 > Watermark: 9223372036854775807  
 
@@ -238,13 +238,14 @@ var sensorEventTimeStream =
         );
 ```
 
-It's `BoundedOutOfOrdernessWatermarks` but we modify the method `onEvent` to
-invoke `onPeriodicEmit` which emits the watermark. So, instead of being invoked
-by the framework, now it emits a new watermark each time it receives an event.
+It's similar to `BoundedOutOfOrdernessWatermarks` but we modify the method
+`onEvent` to invoke `onPeriodicEmit` which emits the watermark. So, instead of
+being invoked by the framework, now it emits a new watermark each time it
+receives an event.
 
 ![Flink Pipeline with Punctuated Generator](eventtime-pipeline.png "Flink Pipeline with Punctuated Generator")
 
-The test gives the following output now:
+The test produces the following output now:
 
 > Watermark: -1  
 > Watermark: -1  
@@ -258,10 +259,11 @@ The test gives the following output now:
 > Watermark: 9223372036854775807  
 > Watermark: 9223372036854775807  
 
-This seems a lot better but there is a problem. We don't have a watermark generated
-for the sensor 0 at 199. The problem here it's our stream is keyed, so it's being
-processed by two different tasks. Watermark work per task so they don't advance at
-the same time. To solve this, the easier way is to set parallelism to 1.
+This seems a lot better but there is a problem. We don't have a watermark
+generated for the sensor 0 at 199. The problem here it's our stream is keyed,
+so it's being processed by two different tasks. Watermarks generations works
+per task so they don't advance at the same time. To solve this, the easier way
+is to set parallelism to 1. Unfortunately, this approach isn't very efficient.
 
 Relaunching the test, we obtain the expected result:
 
@@ -286,36 +288,36 @@ advantages over other frameworks. But it's also quite complex to understand
 because:
 
 1. The official documentation is scarce.
-2. APIs have changed a lot between versions. It's hard to find examples even
-   in GitHub.
-3. Debug Even Time is tricky.
+2. APIs have changed a lot between versions. It's hard to find updated examples
+   even in GitHub.
+3. Debug Event Time pipelines is hard.
 
 I wrote this article to contribute to these points. But I have yet some doubts
 about different points in Event Time so take my conclusions with scepticism and
-draw your own conclusions. If they are different, I would appreciate knowing
-more about it.
+draw your own. If they are different or you would like to share your thoughts,
+I would appreciate knowing more about it.
 
-Some resources that helped me a lot and if you are reading this
-probably will help you too:
+There are some resources that helped me a lot and they may help you too:
 
 - Book [Stream Processing with Apache Flink: Fundamentals, Implementation, and
   Operation of Streaming Applications]: chapter 6 provides the better
   explanation I found about watermarks with some nice diagrams. It's a bit
   outdated now but the general concepts apply in the same way.
+- [The Dataflow Model] paper.
 - Flink mail list: there are some very interesting discussions about this
   particular topic and people tend to help. I recommend two particular threads
   which I found very illustrative:
   - [Timers not firing until stream end].
-  - [assignTimestampsAndWatermarks not work after Keyed]
+  - [assignTimestampsAndWatermarks not work after Keyed].
 
-All the code shown is on this [GitHub repository].
+Source code is on this [GitHub repository].
 
 Did I miss something? You can leave a comment on [GitHub] or just drop me
-a note on [Twitter]!
+a message on [Twitter]!
 
 [GitHub repository]: https://github.com/antonmry/flink-playground
 [Apache Flink]: https://flink.apache.org/
-[GitHub]: https://github.com/antonmry/galiglobal/pull/37
+[GitHub]: https://github.com/antonmry/galiglobal/pull/38
 [Twitter]: https://twitter.com/antonmry
 
 [Notions of Time: Event Time and Processing Time]: https://ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/timely-stream-processing.html#notions-of-time-event-time-and-processing-time
@@ -339,4 +341,5 @@ a note on [Twitter]!
 [Stream Processing with Apache Flink: Fundamentals, Implementation, and Operation of Streaming Applications]: https://www.goodreads.com/book/show/34431411-stream-processing-with-apache-flink
 [Timers not firing until stream end]: http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/Timers-not-firing-until-stream-end-td41015.html
 [assignTimestampsAndWatermarks not work after Keyed]: http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/assignTimestampsAndWatermarks-not-work-after-KeyedStream-process-td27364.html
+[The Dataflow Model]: https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43864.pdf
 
