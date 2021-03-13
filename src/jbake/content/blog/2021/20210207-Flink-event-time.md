@@ -307,8 +307,8 @@ There are some resources that helped me a lot and they may help you too:
 - Flink mail list: there are some very interesting discussions about this
   particular topic and people tend to help. I recommend two particular threads
   which I found very illustrative:
-  - [Timers not firing until stream end].
-  - [assignTimestampsAndWatermarks not work after Keyed].
+    - [Timers not firing until stream end].
+    - [assignTimestampsAndWatermarks not work after Keyed].
 
 Source code is on this [GitHub repository].
 
