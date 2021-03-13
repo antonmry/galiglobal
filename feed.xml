@@ -6,8 +6,8 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Fri, 12 Mar 2021 09:58:40 +0100</pubDate>
-    <lastBuildDate>Fri, 12 Mar 2021 09:58:40 +0100</lastBuildDate>
+    <pubDate>Sat, 13 Mar 2021 12:59:29 +0100</pubDate>
+    <lastBuildDate>Sat, 13 Mar 2021 12:59:29 +0100</lastBuildDate>
 
     
     <item>
@@ -186,9 +186,12 @@ SensorData{id=&amp;lsquo;sensor1&amp;rsquo;, timestamp=500, measure=-1.0}&lt;/p&
 &lt;ul&gt;
 &lt;li&gt;Book &lt;a href=&quot;https://www.goodreads.com/book/show/34431411-stream-processing-with-apache-flink&quot;&gt;Stream Processing with Apache Flink: Fundamentals, Implementation, and Operation of Streaming Applications&lt;/a&gt;: chapter 6 provides the better explanation I found about watermarks with some nice diagrams. It&amp;rsquo;s a bit outdated now but the general concepts apply in the same way.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43864.pdf&quot;&gt;The Dataflow Model&lt;/a&gt; paper.&lt;/li&gt;
-&lt;li&gt;Flink mail list: there are some very interesting discussions about this particular topic and people tend to help. I recommend two particular threads which I found very illustrative:&lt;/li&gt;
+&lt;li&gt;Flink mail list: there are some very interesting discussions about this particular topic and people tend to help. I recommend two particular threads which I found very illustrative:
+&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/Timers-not-firing-until-stream-end-td41015.html&quot;&gt;Timers not firing until stream end&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/assignTimestampsAndWatermarks-not-work-after-KeyedStream-process-td27364.html&quot;&gt;assignTimestampsAndWatermarks not work after Keyed&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Source code is on this &lt;a href=&quot;https://github.com/antonmry/flink-playground&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Did I miss something? You can leave a comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/38&quot;&gt;GitHub&lt;/a&gt; or just drop me a message on &lt;a href=&quot;https://twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;!&lt;/p&gt;
