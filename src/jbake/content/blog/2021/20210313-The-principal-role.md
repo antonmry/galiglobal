@@ -49,9 +49,10 @@ Role]. Based in this article, it was clear to me:
   tell anybody what has to do.
 
 What a revelation! I'm a Principal Software Engineer. Not only that, it's what
-I want to do, what makes me happy. It was great to know there is a name for that
-and other people out there with the same motivations and struggles. For them,
-I would like to share my main challenges with this role.
+I want to do in the long term, what makes me happy. It was great to know there
+is a name for that and other people out there with the same motivations and
+struggles. It's for that people, I would like to share my main challenges and
+experiences in this role.
 
 ## No clear definition of the role: the management trap
 
@@ -78,6 +79,41 @@ separated technical and people roles.
 
 If after a while things don't evolve, a job change is the only alternative.
 Most of organizations tend to listen when their engineers leave.
+
+## Relation with managers
+
+As Principal, I usually don't make the final decision. This may be quite
+frustrating when managers take decisions without taking you in account. It's
+specially problematic when they decide technical things which have a huge
+impact in the platform.
+
+Build a good relation with engineering managers is very important to succeed in
+the role. They should ask about architecture and processes. Principals should
+train them to have knowledge to report and publish to the rest of the
+organization what we are doing.
+
+This is particularly complex with managers who have a good technical
+background. Because they try to manage people and systems, they are always too
+busy to listen. So they usually take shortcuts: decide now, explain to the team
+later. It's hard to deal with this because it's an organization issue. Managers
+should focus on people, engineers on systems. Processes should be the common
+ground.
+
+Another problem with managers is career evolution. If they see Principals as
+competitors the relation can suffer. If they use their technical background as
+a weapon to deal with politics, principals are a thread. I have seen very weird
+executives meetings discussing deep technical things who nobody in the room
+really understand. This is again, an organization problem. I deal with it
+explaining from the very beginning I don't want their role. This seems to work
+but it takes time to build that trustiness. Politics are hard.
+
+## Don't be a hero
+
+TODO
+
+## Keep your optimism
+
+TODO
 
 Did I miss something? You can leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
