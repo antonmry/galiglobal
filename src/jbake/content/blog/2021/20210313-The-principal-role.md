@@ -115,6 +115,12 @@ TODO
 
 TODO
 
+## Career goals
+
+TODO
+
+## Don't stop coding
+
 Did I miss something? You can leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
 
