@@ -48,6 +48,8 @@ The way to add the ID to the message is also simple: one byte with the value `0`
 in the case of Confluent, 4 bytes with the ID and the rest of the data. It's
 documented in the [Wire Format] entry.
 
+![Schema Registry architecture](schema_registry.png "Schema Registry architecture")
+
 ## Environment setup
 
 Using the Confluent Avro serializer/deserializer, the process is quite
