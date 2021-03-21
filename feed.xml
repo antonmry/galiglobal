@@ -6,8 +6,8 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Sat, 13 Mar 2021 12:59:29 +0100</pubDate>
-    <lastBuildDate>Sat, 13 Mar 2021 12:59:29 +0100</lastBuildDate>
+    <pubDate>Sun, 21 Mar 2021 10:08:09 +0100</pubDate>
+    <lastBuildDate>Sun, 21 Mar 2021 10:08:09 +0100</lastBuildDate>
 
     
     <item>
@@ -488,6 +488,7 @@ Job Runtime: 827 ms&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://avro.apache.org/&quot;&gt;Apache Avro&lt;/a&gt; plays well with &lt;a href=&quot;https://kafka.apache.org/&quot;&gt;Apache Kafka&lt;/a&gt; because it provides good performance and an easy way to govern schemas. There is an important thing to note: because &lt;a href=&quot;https://avro.apache.org/&quot;&gt;Apache Avro&lt;/a&gt; is a binary format, consumers need to know how is the schema of the information stored in that message to deserialize it.&lt;/p&gt;
 &lt;p&gt;The most common way to do this is using the &lt;a href=&quot;https://docs.confluent.io/platform/current/schema-registry/index.html&quot;&gt;Schema Registry&lt;/a&gt;, aka SR. We are going to speak about the Confluent implementation but it isn&amp;rsquo;t the only one and it isn&amp;rsquo;t part of the Kafka project. The workflow is quite simple: the producer consults the ID of the schema in the SR (or create a new one if it doesn&amp;rsquo;t exist) and add that ID to the message. The consumer retrieves the schema from the SR using that ID and deserializes the message.&lt;/p&gt;
 &lt;p&gt;The way to add the ID to the message is also simple: one byte with the value &lt;code&gt;0&lt;/code&gt; in the case of Confluent, 4 bytes with the ID and the rest of the data. It&amp;rsquo;s documented in the &lt;a href=&quot;https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#wire-format&quot;&gt;Wire Format&lt;/a&gt; entry.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;schema_registry.png&quot; alt=&quot;Schema Registry architecture&quot; title=&quot;Schema Registry architecture&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;&lt;a href=&quot;#environment-setup&quot; id=&quot;environment-setup&quot;&gt;Environment setup&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Using the Confluent Avro serializer/deserializer, the process is quite straight-forward. Let&amp;rsquo;s try it using the Confluent Community Docker version. The setup is documented in the &lt;a href=&quot;https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html&quot;&gt;Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)&lt;/a&gt; which it&amp;rsquo;s summarized here:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git clone https://github.com/confluentinc/cp-all-in-one.git
