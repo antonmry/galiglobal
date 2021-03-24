@@ -6,9 +6,55 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Sun, 21 Mar 2021 10:08:09 +0100</pubDate>
-    <lastBuildDate>Sun, 21 Mar 2021 10:08:09 +0100</lastBuildDate>
+    <pubDate>Mon, 22 Mar 2021 10:27:16 +0100</pubDate>
+    <lastBuildDate>Mon, 22 Mar 2021 10:27:16 +0100</lastBuildDate>
 
+    
+    <item>
+      <title>My thoughts about the principal role</title>
+      <link>https://www.galiglobal.com/blog/2021/20210313-The-principal-role.html</link>
+      <pubDate>Sat, 13 Mar 2021 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2021/20210313-The-principal-role.html</guid>
+      <description>
+      &lt;h2&gt;&lt;a href=&quot;#whats-a-principal-software-engineer&quot; id=&quot;whats-a-principal-software-engineer&quot;&gt;What&amp;rsquo;s a Principal Software Engineer?&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;One of the things I couldn&amp;rsquo;t answer in the last 4-5 years it was my role.&lt;/p&gt;
+&lt;p&gt;Am I a manager? No. I may manage people from an organization point of view but my way to manage is &amp;ldquo;don&amp;rsquo;t manage at all&amp;rdquo; and let the team self organize with my help. I tent to focus more in the team and processes and less in people problems.&lt;/p&gt;
+&lt;p&gt;Am I a developer? Well, code is something I like to do but I spent a lot more time helping others to code than coding myself. Even more important, because of frequent interruptions, I don&amp;rsquo;t enjoy too much coding new features. I prefer to work in proof of concepts or refactoring because it isn&amp;rsquo;t so problematic if I have to stop and resume it later. I also spend more time doing coding review than coding myself.&lt;/p&gt;
+&lt;p&gt;An architect? A big part of my work is to improve systems and platforms. Listen problems and propose solutions. But I don&amp;rsquo;t feel like the guy who do a plan which must be blindly followed by others. I see design and architecture as something more collaborative and myself as a facilitator. I usually share my experience doing similar things in the past and I help to make people thing out of the box, see their problems from a different perspective.&lt;/p&gt;
+&lt;p&gt;Am I a product manager? I work a lot with the roadmap and backlog of the platforms where I&amp;rsquo;m more involved. Evangelize in the usage of the service is very important. But this applies more for internal platforms. For public services, it&amp;rsquo;s just too much work and someone focused only on that is needed.&lt;/p&gt;
+&lt;p&gt;The list could continue: Systems Engineer, Support Engineer, DevOps, etc. Even the term &amp;ldquo;Individual contributor&amp;rdquo; seems wrong. My contributions aren&amp;rsquo;t individual but for individuals. The reality of the role is to do whatever is necessary to make teams and platforms succeed with freedom to choose the best way to achieve it. A sort of technical &amp;ldquo;Jack of all trades, master of none&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;One day I found this blog post in my timeline: &lt;a href=&quot;https://margint.blog/2020/10/07/some-thoughts-on-the-principal-role/&quot;&gt;Some Thoughts on the Principal Role&lt;/a&gt;. Based in this article, it was clear to me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I prefer to help people instead of manage people.&lt;/li&gt;
+&lt;li&gt;I like to be very involved in development but not necessarily code it myself, in special features which take more time and need more focus.&lt;/li&gt;
+&lt;li&gt;I help with ideas, patterns and processes to build better systems but I don&amp;rsquo;t tell anybody what has to do.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;What a revelation! I&amp;rsquo;m a Principal Software Engineer. Not only that, it&amp;rsquo;s what I want to do in the long term, what makes me happy. It was great to know there is a name for that and other people out there with the same motivations and struggles. It&amp;rsquo;s for that people, I would like to share my main challenges and experiences in this role.&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;#no-clear-definition-of-the-role-the-management-trap&quot; id=&quot;no-clear-definition-of-the-role-the-management-trap&quot;&gt;No clear definition of the role: the management trap&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Many organizations don&amp;rsquo;t understand the role. They understand they need it but not the role it-self. This tend to lead to the &amp;ldquo;we need people with strong technical background to lead our teams&amp;rdquo; approach.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s easier to fall in that trap. I think I&amp;rsquo;m joining the company as Principal but I end working as Project Manager (or similar). I have experience as Engineering Manager but even with that, things don&amp;rsquo;t evolve well in this situation. If I continue working as manager, I will slowly loose my technical skills but the organization expects them so, in the long term, I won&amp;rsquo;t meet their expectations. If I focus more in the technical part, I will neglect people I manage which it&amp;rsquo;s the most important job of a manager. If, somehow, I fight to keep both things it will end suffering job burnout. The article &lt;a href=&quot;http://www.paulgraham.com/makersschedule.html&quot;&gt;Maker&amp;rsquo;s schedule, manager&amp;rsquo;s schedule&lt;/a&gt; is a great explanation about why both things aren&amp;rsquo;t compatible in the long term.&lt;/p&gt;
+&lt;p&gt;It isn&amp;rsquo;t easy to solve this misalignment between the company and you. I usually try to make alliances with other managers who want to be people managers so I can focus in my role as engineer.  I also start to evangelize about the role and how to implement it properly in the organization. Some of my tasks (recruiting, DevRel, community) require a lot of communication with HR and it helps to make them see the need of separated technical and people roles.&lt;/p&gt;
+&lt;p&gt;If after a while things don&amp;rsquo;t evolve, a job change is the only alternative. Most of organizations tend to listen when their engineers leave so it&amp;rsquo;s a good moment to help them to make this right.&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;#relation-with-managers&quot; id=&quot;relation-with-managers&quot;&gt;Relation with managers&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;As Principal, I usually don&amp;rsquo;t make the final decision. This may be quite frustrating when managers take decisions without taking you in account. It&amp;rsquo;s specially problematic when they decide technical things which have a huge impact in the platform.&lt;/p&gt;
+&lt;p&gt;Build a good relation with engineering managers is very important to succeed in the role. They should ask about architecture and processes. Principals should train them to have knowledge to report and publish to the rest of the organization what we are doing.&lt;/p&gt;
+&lt;p&gt;This is particularly complex with managers who have a good technical background. Because they tent to try to manage people and systems, they are too busy to listen. So they usually take shortcuts: decide now, explain to the team later. It&amp;rsquo;s hard to deal with this because it&amp;rsquo;s an organization issue. Managers should focus on people, engineers on systems. Processes should be the common ground.&lt;/p&gt;
+&lt;p&gt;Another problem with managers is career evolution. If they see Principals as competitors the relation can suffer. If they use their technical background as a weapon to deal with politics, principals are a thread. I have seen very weird executives meetings discussing deep technical things who nobody in the room really understand. This is again, an organization problem. I deal with it explaining from the very beginning I don&amp;rsquo;t want their role. This seems to work but it takes time to build that trustiness. Politics are hard and very harmful for the organization.&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;#dont-be-a-hero&quot; id=&quot;dont-be-a-hero&quot;&gt;Don&amp;rsquo;t be a hero&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Another typical trap of the role it&amp;rsquo;s become a hero. It may happen for many reason, being the typical than it&amp;rsquo;s easier to ask you about something than to think about it. So other engineers may rely on you for tasks they don&amp;rsquo;t like.&lt;/p&gt;
+&lt;p&gt;This isn&amp;rsquo;t an issue when starting with a team but it&amp;rsquo;s a huge problem in the long term. If after one year, you can&amp;rsquo;t leave a team without impact, you&amp;rsquo;ve failed in your work. It&amp;rsquo;s that simple.&lt;/p&gt;
+&lt;p&gt;One of the best ways to avoid this is apply to the leader-leader approach as explained in the book &lt;a href=&quot;https://www.goodreads.com/book/show/16158601-turn-the-ship-around&quot;&gt;Turn the ship around&lt;/a&gt;. Don&amp;rsquo;t tell people what they have to do but help them to define next steps and identify trade-offs. I always try to make questions instead of give answers: &amp;ldquo;Have you tried &amp;hellip;?&amp;rdquo;, &amp;ldquo;What do you think of&amp;hellip; ?&amp;rdquo;, &amp;ldquo;What do you propose as alternative?&amp;rdquo;, etc.&lt;/p&gt;
+&lt;p&gt;You will have a better life, and which it&amp;rsquo;s more important, you will focus in what&amp;rsquo;s really important. The team will grow and learn and they will be happy because of that. Being a hero, you are the villain. Don&amp;rsquo;t do that.&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;#keep-your-optimism&quot; id=&quot;keep-your-optimism&quot;&gt;Keep your optimism&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;#career-goals&quot; id=&quot;career-goals&quot;&gt;Career goals&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;#dont-stop-coding&quot; id=&quot;dont-stop-coding&quot;&gt;Don&amp;rsquo;t stop coding&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;Did I miss something? You can leave a comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/38&quot;&gt;GitHub&lt;/a&gt; or just drop me a message on &lt;a href=&quot;https://twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;!&lt;/p&gt;
+
+	  </description>
+    </item>
     
     <item>
       <title>How to build and debug a Flink pipeline based in Event Time</title>
@@ -488,7 +534,6 @@ Job Runtime: 827 ms&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://avro.apache.org/&quot;&gt;Apache Avro&lt;/a&gt; plays well with &lt;a href=&quot;https://kafka.apache.org/&quot;&gt;Apache Kafka&lt;/a&gt; because it provides good performance and an easy way to govern schemas. There is an important thing to note: because &lt;a href=&quot;https://avro.apache.org/&quot;&gt;Apache Avro&lt;/a&gt; is a binary format, consumers need to know how is the schema of the information stored in that message to deserialize it.&lt;/p&gt;
 &lt;p&gt;The most common way to do this is using the &lt;a href=&quot;https://docs.confluent.io/platform/current/schema-registry/index.html&quot;&gt;Schema Registry&lt;/a&gt;, aka SR. We are going to speak about the Confluent implementation but it isn&amp;rsquo;t the only one and it isn&amp;rsquo;t part of the Kafka project. The workflow is quite simple: the producer consults the ID of the schema in the SR (or create a new one if it doesn&amp;rsquo;t exist) and add that ID to the message. The consumer retrieves the schema from the SR using that ID and deserializes the message.&lt;/p&gt;
 &lt;p&gt;The way to add the ID to the message is also simple: one byte with the value &lt;code&gt;0&lt;/code&gt; in the case of Confluent, 4 bytes with the ID and the rest of the data. It&amp;rsquo;s documented in the &lt;a href=&quot;https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#wire-format&quot;&gt;Wire Format&lt;/a&gt; entry.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;schema_registry.png&quot; alt=&quot;Schema Registry architecture&quot; title=&quot;Schema Registry architecture&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;&lt;a href=&quot;#environment-setup&quot; id=&quot;environment-setup&quot;&gt;Environment setup&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Using the Confluent Avro serializer/deserializer, the process is quite straight-forward. Let&amp;rsquo;s try it using the Confluent Community Docker version. The setup is documented in the &lt;a href=&quot;https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html&quot;&gt;Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)&lt;/a&gt; which it&amp;rsquo;s summarized here:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git clone https://github.com/confluentinc/cp-all-in-one.git
