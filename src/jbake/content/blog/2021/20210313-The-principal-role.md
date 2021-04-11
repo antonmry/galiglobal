@@ -142,6 +142,8 @@ TODO
 
 TODO
 
+TODO: nice article: https://hyperbo.la/w/nemawashi/
+
 Did I miss something? You can leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
 
