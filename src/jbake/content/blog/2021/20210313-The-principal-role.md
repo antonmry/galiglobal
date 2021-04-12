@@ -143,6 +143,7 @@ TODO
 TODO
 
 TODO: nice article: https://hyperbo.la/w/nemawashi/
+TODO: https://hbr.org/2016/12/if-your-boss-could-do-your-job-youre-more-likely-to-be-happy-at-work
 
 Did I miss something? You can leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
