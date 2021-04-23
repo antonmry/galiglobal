@@ -117,7 +117,7 @@ for the organization.
 
 ## Don't be a hero
 
-Another typical trap of the role it's become a hero. It may happen for many
+Another typical trap of the role is become a hero. It may happen for many
 reasons, being the typical than it's easier to ask you about something than to
 think about it. So other engineers may rely on you for tasks they don't like.
 
@@ -129,7 +129,8 @@ One of the best ways to avoid this is apply the leader-leader approach as
 explained in the book [Turn the ship around]. Don't tell people what they have
 to do but help them to define next steps and identify trade-offs. I always
 try to make questions instead of give answers: "Have you tried ...?", "What
-do you think of... ?", "What do you propose as alternative?", etc.
+do you think of... ?", "What do you propose as alternative?", etc. [Senior
+Engineers build consensus].
 
 You will have a better life, and which it's more important, you will focus in
 what's really important. The team will grow and learn and they will be happy
@@ -137,22 +138,81 @@ because of that. Being a hero, you become the villain. Don't do that.
 
 ## Keep your optimism
 
-Be a principal isn't easy because you have to deal with problems of different
-types and you can't solve them alone: you have to do it with team work and
-mentorship. That takes time and you have responsibilities and deadlines as
-anyone. I take my optimism very seriously. What it works for me it's to
-alternate tasks in long periods of time.
+Be a principal can be frustrating because your goals are now more aligned with
+your organization. It's a technical role but it's also oriented to people. You
+usually have a lot of meetings because of that, which it's probably one of the
+reasons you didn't become a manager in first place. At some point you may sense
+you aren't learning as much as you did in the past. That's a warning signal for
+me: things have to change.
+
+I take very seriously my happiness when working. So I don't try to push myself
+too much to do things which I am not motivated to do. This works surprisingly
+well because the principal role allows a lot of flexibility. Some days I may do
+a PoC, others write a blog post to evangelize about some best practices at the
+company level, attend meetings, review Pull Requests, etc.
+
+Give you some space to experiment and do things which really motivates you is
+essential to be successful in the long term. They may be not the most urgent
+things for the company but, in my experience, that's exactly why they are
+important. Principals should be able to see to the future and start that
+journey. If you are stuck all the time in what's urgent, it's very difficult to
+do that.
+
+There is an excellent article about this: [Being glue]. It's from the
+perspective of a junior software engineer which wants to be promoted but it
+isn't because it's doing what's best for the team always. It ends bad. So,
+instead, try to save some time to do whatever makes you happy in your work. In
+the end, you will discover it has also value when properly combined with Glue
+work.
 
 ## Career goals
 
-TODO
+One of the problems in the role is what's come next. The principal role is in
+the end of the Individual Contributor path. Indeed, your contributions come now
+from the group you are helping. Yes, you can aspire to add Senior or whatever
+level number has your company... but that's just naming, which usually implies
+better salary. Nobody complains for a salary raise but optimize to career based
+in the salary is a quite bad idea if you are already covered.
+
+You can aspire to a Distinguished / Fellow role but it doesn't seem right to me.
+I always saw those roles as something really exceptional. The engineer who has
+been in the company for ten years and initially designed the architecture
+/ system. It may apply to some cases but I wouldn't say it's doable for most of
+us, at least, not as goal which motivates you every day.
+
+There is always the option to move to the Management track as Senior Engineer
+Manager or Director. That's fine if it's what you want to do but it's just a
+total different role and you should be aware of that. It has little value a
+promotion if it makes your life miserable.
+
+In summary, as Principal Software Engineer, promotions aren't going to be the
+goal so you need to find new ones and that's highly dependant of each person.
+In my case it's to learn new things. It has been always my passion and the
+reason I'm a software engineer. This role allows me to learn new things every
+day and help others. I can't ask for anything more.
 
 ## Don't stop coding
 
-TODO
+Coding is the last expression of a Software Engineer. It's how we transform
+ideas in something real. It's also a very demanding task. If you stop coding
+for a while, you loose a lot of fluency and it becomes very frustrating. If you
+add the lack of your enough long slots in your calendar and all the
+interruptions, it can be a nightmare. It's important for a Principal to feel
+confident when coding even if it isn't her primary task anymore.
 
-TODO: nice article: https://hyperbo.la/w/nemawashi/
-TODO: https://hbr.org/2016/12/if-your-boss-could-do-your-job-youre-more-likely-to-be-happy-at-work
+There are some tricks which help me with this:
+
+* Try to block in your calendar some time everyday for coding: I usually use my
+  early mornings. Most of the team isn't connected yet and I'm fresh. Start the
+  day with a Pull Request is a great feeling.
+* Avoid to work in things which are in the critical path: you aren't going to
+  have time. You may think you will, but you don't. Deadline will arrive and
+  the whole process will become very frustrating: deliver late or working
+  after-hours. Both options are bad in the long term. So be realistic, don't
+  work in critical features. I prefer to work in Technical Debt, refactorings
+  or Proofs of Concept. There is a lot of value there because the team don't
+  always have time to address these things and I can work without pressure.
+* TODO
 
 Did I miss something? You can leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
@@ -164,3 +224,6 @@ a message on [Twitter]!
 [Maker's schedule, manager's schedule]: http://www.paulgraham.com/makersschedule.html
 [Turn the ship around]: https://www.goodreads.com/book/show/16158601-turn-the-ship-around
 [Don't End The Week With Nothing]: https://training.kalzumeus.com/newsletters/archive/do-not-end-the-week-with-nothing
+[Being glue]: https://noidea.dog/glue
+[Senior Engineers build consensus]: https://hyperbo.la/w/nemawashi/
+[If Your Boss Could Do Your Job, You’re More Likely to Be Happy at Work]: https://hbr.org/2016/12/if-your-boss-could-do-your-job-youre-more-likely-to-be-happy-at-work
