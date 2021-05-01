@@ -62,133 +62,83 @@
 
 	<p><em>28 February 2021</em></p>
 
-	<p><h2><a href="#introduction" id="introduction">Introduction</a></h2>
+	<p><h2>Introduction</h2>
 <p>One of the most important concepts for stream-processing frameworks is the concept of time. There are different concepts of time:</p>
 <ul>
-<li><strong>Processing time</strong>: it&rsquo;s the time-based on the clock of the machine where the event is being processed. It&rsquo;s easy to use but because that time changes when the job is executed, the result of the job isn&rsquo;t consistent. Each time you execute the job, you may have different results. This isn&rsquo;t an acceptable trade-off for many use cases.</li>
-<li><strong>Event time</strong>: it&rsquo;s the time-based on some of the fields in the event, typically a timestamp field. Each time you execute the pipeline with the same input, you obtain the same result which it&rsquo;s a good thing. But it also tends to be a bit harder to work with it for several reasons. We&rsquo;ll cover them later in the article.</li>
-<li><strong>Ingestion time</strong>: it&rsquo;s based on the timestamp when the event was ingested in the streaming platform (Kafka) and it usually goes in the metadata. From a Flink perspective, we can consider it a particular mix of Event time and processing time with the disadvantages of both.</li>
+<li><strong>Processing time</strong>: it's the time-based on the clock of the machine where the event is being processed. It's easy to use but because that time changes when the job is executed, the result of the job isn't consistent. Each time you execute the job, you may have different results. This isn't an acceptable trade-off for many use cases.</li>
+<li><strong>Event time</strong>: it's the time-based on some of the fields in the event, typically a timestamp field. Each time you execute the pipeline with the same input, you obtain the same result which it's a good thing. But it also tends to be a bit harder to work with it for several reasons. We'll cover them later in the article.</li>
+<li><strong>Ingestion time</strong>: it's based on the timestamp when the event was ingested in the streaming platform (Kafka) and it usually goes in the metadata. From a Flink perspective, we can consider it a particular mix of Event time and processing time with the disadvantages of both.</li>
 </ul>
 <p><a href="https://flink.apache.org/">Apache Flink</a> has excellent support for Event time processing, probably the best of the different stream-processing frameworks available. For more information, you can read <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/timely-stream-processing.html#notions-of-time-event-time-and-processing-time">Notions of Time: Event Time and Processing Time</a> in the official documentation. If you prefer videos, <a href="https://www.youtube.com/watch?v=QVDJFZVHZ3c">Streaming Concepts &amp; Introduction to Flink - Event Time and Watermarks</a> is a good explanation.</p>
-<p>In this article, we&rsquo;ll take a look at Event time based pipelines and also to some common problems and misunderstandings working on this type of pipelines.</p>
-<h2><a href="#timestamps-and-watermarks" id="timestamps-and-watermarks">Timestamps and watermarks</a></h2>
-<p>When we speak about timestamps in Flink, we are referring to a particular field in the event.  We can extract it and make it available to Flink so it knows what&rsquo;s the actual time from the pipeline perspective. The format expected by Flink is <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a>, specified as milliseconds since the Java epoch of 1970-01-01T00:00:00Z, so we may need to do some type of conversion. To be able to map current time with the event timestamp, Flink expects an implementation of the <a href="https://ci.apache.org/projects/flink/flink-docs-stable/api/java/org/apache/flink/api/common/eventtime/TimestampAssigner.html">TimestampAssigner</a>. We&rsquo;ll see later an example.</p>
-<p>Once Flink knows what time it is, it&rsquo;s the moment to generate a watermark. This is one of the most surprising and genial thinks working with Flink. A watermark is a special type of event. That means, it flows through your job and it&rsquo;s processed under the hood for each task. This is a clever way to propagate a change through the entire pipeline and it&rsquo;s used for more things in flink, like for example <a href="https://ci.apache.org/projects/flink/flink-docs-stable/ops/state/savepoints.html">savepoints</a>.</p>
-<p>Generate watermarks is the way to tell the system about progress in event time. To do it, you use a <a href="https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/api/common/eventtime/WatermarkGenerator.html">WatermarkGenerator</a>. We&rsquo;ll see later an example.</p>
+<p>In this article, we'll take a look at Event time based pipelines and also to some common problems and misunderstandings working on this type of pipelines.</p>
+<h2>Timestamps and watermarks</h2>
+<p>When we speak about timestamps in Flink, we are referring to a particular field in the event.  We can extract it and make it available to Flink so it knows what's the actual time from the pipeline perspective. The format expected by Flink is <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a>, specified as milliseconds since the Java epoch of 1970-01-01T00:00:00Z, so we may need to do some type of conversion. To be able to map current time with the event timestamp, Flink expects an implementation of the <a href="https://ci.apache.org/projects/flink/flink-docs-stable/api/java/org/apache/flink/api/common/eventtime/TimestampAssigner.html">TimestampAssigner</a>. We'll see later an example.</p>
+<p>Once Flink knows what time it is, it's the moment to generate a watermark. This is one of the most surprising and genial thinks working with Flink. A watermark is a special type of event. That means, it flows through your job and it's processed under the hood for each task. This is a clever way to propagate a change through the entire pipeline and it's used for more things in flink, like for example <a href="https://ci.apache.org/projects/flink/flink-docs-stable/ops/state/savepoints.html">savepoints</a>.</p>
+<p>Generate watermarks is the way to tell the system about progress in event time. To do it, you use a <a href="https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/api/common/eventtime/WatermarkGenerator.html">WatermarkGenerator</a>. We'll see later an example.</p>
 <p>Both together, <a href="https://ci.apache.org/projects/flink/flink-docs-stable/api/java/org/apache/flink/api/common/eventtime/TimestampAssigner.html">TimestampAssigner</a> and <a href="https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/api/common/eventtime/WatermarkGenerator.html">WatermarkGenerator</a> form a <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.12/api/java/org/apache/flink/api/common/eventtime/WatermarkStrategy.html">WatermarkStrategy</a> which defines how to generate Watermarks in the stream sources.</p>
-<h2><a href="#use-case-example" id="use-case-example">Use case example</a></h2>
-<p>Let&rsquo;s illustrate this with an example. Our flink job will receive readings from different sensors. Every sensor will send measures for each 100ms.  We would like to detect when a measure from a particular sensor is missing, for example, because it was off-line.</p>
+<h2>Use case example</h2>
+<p>Let's illustrate this with an example. Our flink job will receive readings from different sensors. Every sensor will send measures for each 100ms.  We would like to detect when a measure from a particular sensor is missing, for example, because it was off-line.</p>
 <p>Sensors send a JSON file like this one:</p>
-<pre><code class="language-json">{
-  &quot;id&quot;: &quot;sensor0&quot;,
-  &quot;timestamp&quot;: 0,
-  &quot;measure&quot;: 0.1
-}
-</code></pre>
-<p>The job will generate a normal event but the measure value will have value -1 when the event wasn&rsquo;t generated by the sensor or lost in the network.</p>
-<h2><a href="#initial-implementation-with-periodic-watermark-generators" id="initial-implementation-with-periodic-watermark-generators">Initial implementation with periodic watermark generators</a></h2>
-<p>We&rsquo;ll have to choose a <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.12/api/java/org/apache/flink/api/common/eventtime/WatermarkStrategy.html">WatermarkStrategy</a>. We have several options, let&rsquo;s start with Periodic WatermarkGenerator:</p>
+<p><code>json { &quot;id&quot;: &quot;sensor0&quot;, &quot;timestamp&quot;: 0, &quot;measure&quot;: 0.1 }</code></p>
+<p>The job will generate a normal event but the measure value will have value -1 when the event wasn't generated by the sensor or lost in the network.</p>
+<h2>Initial implementation with periodic watermark generators</h2>
+<p>We'll have to choose a <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.12/api/java/org/apache/flink/api/common/eventtime/WatermarkStrategy.html">WatermarkStrategy</a>. We have several options, let's start with Periodic WatermarkGenerator:</p>
 <ul>
-<li>WatermarkStrategy.<a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamp_extractors.html#fixed-amount-of-lateness">forBoundedOutOfOrderness</a>: this is a periodic generator that allows dealing with records out of order when it&rsquo;s inside a defined range.</li>
+<li>WatermarkStrategy.<a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamp_extractors.html#fixed-amount-of-lateness">forBoundedOutOfOrderness</a>: this is a periodic generator that allows dealing with records out of order when it's inside a defined range.</li>
 <li>WatermarkStrategy.<a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamp_extractors.html#monotonously-increasing-timestamps">forMonotonousTimestamps</a>: this is the same as <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamp_extractors.html#fixed-amount-of-lateness">forBoundedOutOfOrderness</a> but the out-of-order tolerance is zero.</li>
 </ul>
 <p>In both cases, the framework invokes periodically the Strategy which generates the watermark. <code>setAutoWatermarkInterval</code> allows lo define that periodicity:</p>
-<pre><code class="language-java">env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());
-</code></pre>
-<p>The problem with this approach is we are mixing processing and event time so the result won&rsquo;t be deterministic, or even correct depending on the circumstances.</p>
+<p><code>java env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());</code></p>
+<p>The problem with this approach is we are mixing processing and event time so the result won't be deterministic, or even correct depending on the circumstances.</p>
 <p>For example, with <a href="https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/BoundedOutOfOrdernessStrategyJob.java">BoundedOutOfOrdernessStrategyJob</a>, we start defining the watermark interval each 100 ms.</p>
-<pre><code class="language-java">env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());
-</code></pre>
+<p><code>java env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());</code></p>
 <p>Then we create the DataStream with the watermarks:</p>
-<pre><code class="language-java">DataStream&lt;SensorData&gt; sensorStream =
-    env.addSource(source)
-        .returns(TypeInformation.of(SensorData.class));
-
-var sensorEventTimeStream =
-    sensorStream.assignTimestampsAndWatermarks(
-        WatermarkStrategy.&lt;SensorData&gt;forBoundedOutOfOrderness(
-            Duration.ofMillis(100)
-        ).withTimestampAssigner(
-            (event, timestamp) -&gt; event.getTimestamp()
-        )
-    );
-</code></pre>
+<p>```java DataStream<SensorData> sensorStream = env.addSource(source) .returns(TypeInformation.of(SensorData.class));</p>
+<p>var sensorEventTimeStream = sensorStream.assignTimestampsAndWatermarks( WatermarkStrategy.<SensorData>forBoundedOutOfOrderness( Duration.ofMillis(100) ).withTimestampAssigner( (event, timestamp) -&gt; event.getTimestamp() ) ); ```</p>
 <p>To detect missing events, we used a timer so we need a keyed stream and a KeyedProcessFunction:</p>
-<pre><code class="language-java">sensorEventTimeStream
-    .keyBy((event) -&gt; event.getId())
-    .process(new TimeoutFunction())
-    .addSink(sink);
-</code></pre>
+<p><code>java sensorEventTimeStream .keyBy((event) -&gt; event.getId()) .process(new TimeoutFunction()) .addSink(sink);</code></p>
 <p><a href="https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/TimeoutFunction.java">TimeoutFunction</a> stores each event in the state and creates a timer for each one. It cancels the timer if the next event arrives on time. If not, <code>onTimer</code> should be invoked and the event in the state identifying the missing sensor is emitted.</p>
-<h2><a href="#testing-and-debugging-the-first-implementation" id="testing-and-debugging-the-first-implementation">Testing and debugging the first implementation</a></h2>
-<p>Let&rsquo;s create a simple test: two sensors and one of them misses one of the measures. When we launch the test <a href="https://github.com/antonmry/flink-playground/blob/main/src/test/java/galiglobal/flink/eventTime/StreamingJobTest.java#L24">testBoundedOutOfOrdernessStrategyJob</a>, we obtain the following result:</p>
+<h2>Testing and debugging the first implementation</h2>
+<p>Let's create a simple test: two sensors and one of them misses one of the measures. When we launch the test <a href="https://github.com/antonmry/flink-playground/blob/main/src/test/java/galiglobal/flink/eventTime/StreamingJobTest.java#L24">testBoundedOutOfOrdernessStrategyJob</a>, we obtain the following result:</p>
 <blockquote>
 <p>Timer: 500 -&gt; sensor0<br />
 Timer: 500 -&gt; sensor1<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=0, measure=0.1}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=0, measure=0.2}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=100, measure=0.3}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=100, measure=0.4}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=200, measure=0.5}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=300, measure=0.7}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=300, measure=0.8}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=400, measure=0.9}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=400, measure=1.0}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=500, measure=-1.0}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=500, measure=-1.0}</p>
+SensorData{id='sensor0', timestamp=0, measure=0.1}<br />
+SensorData{id='sensor1', timestamp=0, measure=0.2}<br />
+SensorData{id='sensor0', timestamp=100, measure=0.3}<br />
+SensorData{id='sensor1', timestamp=100, measure=0.4}<br />
+SensorData{id='sensor0', timestamp=200, measure=0.5}<br />
+SensorData{id='sensor0', timestamp=300, measure=0.7}<br />
+SensorData{id='sensor1', timestamp=300, measure=0.8}<br />
+SensorData{id='sensor0', timestamp=400, measure=0.9}<br />
+SensorData{id='sensor1', timestamp=400, measure=1.0}<br />
+SensorData{id='sensor0', timestamp=500, measure=-1.0}<br />
+SensorData{id='sensor1', timestamp=500, measure=-1.0}</p>
 </blockquote>
-<p>The job doesn&rsquo;t detect the missing event but it detects the end of the stream. Why? It&rsquo;s time to do some debugging. Debug watermarks issues isn&rsquo;t easy. There are three options:</p>
+<p>The job doesn't detect the missing event but it detects the end of the stream. Why? It's time to do some debugging. Debug watermarks issues isn't easy. There are three options:</p>
 <ul>
 <li>Check the current watermark metric. See <a href="https://www.galiglobal.com/blog/2021/20210130-Flink-setup.html#metrics">my previous article about the Flink setup</a>. This is ideal for real jobs but a bit more complicated with tests because they finish almost immediately.</li>
-<li>Check the current watermark in the Flink UI: as with the previous one, it doesn&rsquo;t work with tests if they finish too quickly.</li>
+<li>Check the current watermark in the Flink UI: as with the previous one, it doesn't work with tests if they finish too quickly.</li>
 <li>Introduce a custom operator which has access to the current watermark. I used this one which allows us also to play with some more advanced operators.</li>
 </ul>
 <p><img src="eventtime-flink.png" alt="Flink UI" title="Flink UI" /></p>
 <p><a href="https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/StreamWatermarkDebugFilter.java">StreamWatermarkDebugFilter</a> is the internal class <a href="https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/operators/StreamFilter.html">StreamFilter</a> with some minor modifications:</p>
 <ul>
-<li>We don&rsquo;t want to filter any event. This could be improved a bit avoiding the filtering but because it&rsquo;s a class only for debugging, I didn&rsquo;t care too much.</li>
+<li>We don't want to filter any event. This could be improved a bit avoiding the filtering but because it's a class only for debugging, I didn't care too much.</li>
 <li>In the method <code>processWatermark</code>, emit the watermark to be consumed for the next operator and print it for debugging purposes.</li>
 </ul>
 <p>We apply the new operator to the job:</p>
-<pre><code class="language-java">sensorEventTimeStream
-    .transform(&quot;debugFilter&quot;, sensorEventTimeStream.getType(), new StreamWatermarkDebugFilter&lt;&gt;())
-    .keyBy((event) -&gt; event.getId())
-    .process(new TimeoutFunction())
-    .addSink(sink);
-</code></pre>
+<p><code>java sensorEventTimeStream .transform(&quot;debugFilter&quot;, sensorEventTimeStream.getType(), new StreamWatermarkDebugFilter&lt;&gt;()) .keyBy((event) -&gt; event.getId()) .process(new TimeoutFunction()) .addSink(sink);</code></p>
 <p>We can see the watermarks generated executing the test again:</p>
 <blockquote>
 <p>Watermark: 9223372036854775807</p>
 </blockquote>
-<p>Only one watermark is generated: <code>Long.MAX_VALUE</code>. This watermark seems to be executed at the end of the job because it&rsquo;s the bigger possible watermark. This is consequent with the last two timers we see. They are launched with timestamp 500 but there is no watermark with that value: it&rsquo;s just the end of the job.</p>
-<p>So the Watermark generator isn&rsquo;t generating a watermark. The only reason I see for that it&rsquo;s because the job is ending before any watermark is generated. We could set the periodic generation with a smaller value but the problem remains: we are mixing processing and event time so it&rsquo;s really hard to know how the pipeline is going to proceed in some conditions.</p>
-<h2><a href="#final-implementation-with-a-punctuated-watermarkgenerator" id="final-implementation-with-a-punctuated-watermarkgenerator">Final implementation with a Punctuated WatermarkGenerator</a></h2>
+<p>Only one watermark is generated: <code>Long.MAX_VALUE</code>. This watermark seems to be executed at the end of the job because it's the bigger possible watermark. This is consequent with the last two timers we see. They are launched with timestamp 500 but there is no watermark with that value: it's just the end of the job.</p>
+<p>So the Watermark generator isn't generating a watermark. The only reason I see for that it's because the job is ending before any watermark is generated. We could set the periodic generation with a smaller value but the problem remains: we are mixing processing and event time so it's really hard to know how the pipeline is going to proceed in some conditions.</p>
+<h2>Final implementation with a Punctuated WatermarkGenerator</h2>
 <p>We are going to create a generator which will be able to generate watermarks based in the elements of the stream: a <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamps_watermarks.html#writing-a-punctuated-watermarkgenerator">Punctuated WatermarkGenerator</a>. So we create a new job <a href="https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/CustomStrategyJob.java">CustomStrategyJob</a>:</p>
-<pre><code class="language-java">var sensorEventTimeStream =
-    sensorStream
-        .assignTimestampsAndWatermarks(
-            new WatermarkStrategy&lt;SensorData&gt;() {
-                @Override
-                public WatermarkGenerator&lt;SensorData&gt; createWatermarkGenerator(
-                    WatermarkGeneratorSupplier.Context context) {
-                    return new BoundedOutOfOrdernessWatermarks&lt;&gt;(
-                        Duration.ofMillis(0)
-                    ) {
-                        @Override
-                        public void onEvent(
-                            SensorData event,
-                            long eventTimestamp,
-                            WatermarkOutput output) {
-                            super.onEvent(event, eventTimestamp, output);
-                            super.onPeriodicEmit(output);
-                        }
-                    };
-                }
-            }
-                .withTimestampAssigner((event, timestamp) -&gt; event.getTimestamp())
-        );
-</code></pre>
-<p>It&rsquo;s similar to <code>BoundedOutOfOrdernessWatermarks</code> but we modify the method <code>onEvent</code> to invoke <code>onPeriodicEmit</code> which emits the watermark. So, instead of being invoked by the framework, now it emits a new watermark each time it receives an event.</p>
+<p><code>java var sensorEventTimeStream = sensorStream .assignTimestampsAndWatermarks( new WatermarkStrategy&lt;SensorData&gt;() { @Override public WatermarkGenerator&lt;SensorData&gt; createWatermarkGenerator( WatermarkGeneratorSupplier.Context context) { return new BoundedOutOfOrdernessWatermarks&lt;&gt;( Duration.ofMillis(0) ) { @Override public void onEvent( SensorData event, long eventTimestamp, WatermarkOutput output) { super.onEvent(event, eventTimestamp, output); super.onPeriodicEmit(output); } }; } } .withTimestampAssigner((event, timestamp) -&gt; event.getTimestamp()) );</code></p>
+<p>It's similar to <code>BoundedOutOfOrdernessWatermarks</code> but we modify the method <code>onEvent</code> to invoke <code>onPeriodicEmit</code> which emits the watermark. So, instead of being invoked by the framework, now it emits a new watermark each time it receives an event.</p>
 <p><img src="eventtime-pipeline.png" alt="Flink Pipeline with Punctuated Generator" title="Flink Pipeline with Punctuated Generator" /></p>
 <p>The test produces the following output now:</p>
 <blockquote>
@@ -204,33 +154,33 @@ Watermark: 399<br />
 Watermark: 9223372036854775807<br />
 Watermark: 9223372036854775807</p>
 </blockquote>
-<p>This seems a lot better but there is a problem. We don&rsquo;t have a watermark generated for the sensor 0 at 199. The problem here it&rsquo;s our stream is keyed, so it&rsquo;s being processed by two different tasks. Watermarks generations works per task so they don&rsquo;t advance at the same time. To solve this, the easier way is to set parallelism to 1. Unfortunately, this approach isn&rsquo;t very efficient.</p>
+<p>This seems a lot better but there is a problem. We don't have a watermark generated for the sensor 0 at 199. The problem here it's our stream is keyed, so it's being processed by two different tasks. Watermarks generations works per task so they don't advance at the same time. To solve this, the easier way is to set parallelism to 1. Unfortunately, this approach isn't very efficient.</p>
 <p>Relaunching the test, we obtain the expected result:</p>
 <blockquote>
-<p>SensorData{id=&lsquo;sensor0&rsquo;, timestamp=0, measure=0.1}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=0, measure=0.2}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=100, measure=0.3}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=100, measure=0.4}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=200, measure=0.5}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=300, measure=0.7}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=200, measure=-1.0}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=300, measure=0.8}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=400, measure=0.9}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=400, measure=1.0}<br />
-SensorData{id=&lsquo;sensor0&rsquo;, timestamp=500, measure=-1.0}<br />
-SensorData{id=&lsquo;sensor1&rsquo;, timestamp=500, measure=-1.0}</p>
+<p>SensorData{id='sensor0', timestamp=0, measure=0.1}<br />
+SensorData{id='sensor1', timestamp=0, measure=0.2}<br />
+SensorData{id='sensor0', timestamp=100, measure=0.3}<br />
+SensorData{id='sensor1', timestamp=100, measure=0.4}<br />
+SensorData{id='sensor0', timestamp=200, measure=0.5}<br />
+SensorData{id='sensor0', timestamp=300, measure=0.7}<br />
+SensorData{id='sensor1', timestamp=200, measure=-1.0}<br />
+SensorData{id='sensor1', timestamp=300, measure=0.8}<br />
+SensorData{id='sensor0', timestamp=400, measure=0.9}<br />
+SensorData{id='sensor1', timestamp=400, measure=1.0}<br />
+SensorData{id='sensor0', timestamp=500, measure=-1.0}<br />
+SensorData{id='sensor1', timestamp=500, measure=-1.0}</p>
 </blockquote>
-<h2><a href="#summary-and-next-steps" id="summary-and-next-steps">Summary and next steps</a></h2>
-<p><a href="https://flink.apache.org/">Apache Flink</a> is a great framework and it supports Event time in a nice way. The concept of watermarks as events in the pipeline is superb and full of advantages over other frameworks. But it&rsquo;s also quite complex to understand because:</p>
+<h2>Summary and next steps</h2>
+<p><a href="https://flink.apache.org/">Apache Flink</a> is a great framework and it supports Event time in a nice way. The concept of watermarks as events in the pipeline is superb and full of advantages over other frameworks. But it's also quite complex to understand because:</p>
 <ol>
 <li>The official documentation is scarce.</li>
-<li>APIs have changed a lot between versions. It&rsquo;s hard to find updated examples even in GitHub.</li>
+<li>APIs have changed a lot between versions. It's hard to find updated examples even in GitHub.</li>
 <li>Debug Event Time pipelines is hard.</li>
 </ol>
 <p>I wrote this article to contribute to these points. But I have yet some doubts about different points in Event Time so take my conclusions with scepticism and draw your own. If they are different or you would like to share your thoughts, I would appreciate knowing more about it.</p>
 <p>There are some resources that helped me a lot and they may help you too:</p>
 <ul>
-<li>Book <a href="https://www.goodreads.com/book/show/34431411-stream-processing-with-apache-flink">Stream Processing with Apache Flink: Fundamentals, Implementation, and Operation of Streaming Applications</a>: chapter 6 provides the better explanation I found about watermarks with some nice diagrams. It&rsquo;s a bit outdated now but the general concepts apply in the same way.</li>
+<li>Book <a href="https://www.goodreads.com/book/show/34431411-stream-processing-with-apache-flink">Stream Processing with Apache Flink: Fundamentals, Implementation, and Operation of Streaming Applications</a>: chapter 6 provides the better explanation I found about watermarks with some nice diagrams. It's a bit outdated now but the general concepts apply in the same way.</li>
 <li><a href="https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43864.pdf">The Dataflow Model</a> paper.</li>
 <li>Flink mail list: there are some very interesting discussions about this particular topic and people tend to help. I recommend two particular threads which I found very illustrative:
 <ul>

@@ -62,17 +62,14 @@
 
 	<p><em>19 January 2015</em></p>
 
-	<p><p>Deal with java.lang.OutOfMemoryError: PermGen space errors is always tricky. Most of the times it&rsquo;s something related to the chosen JVM, probably not supported for the hosting OS (for example, using a 32bits JVM in a 64bits OS is a typical issue).</p>
+	<p><p>Deal with java.lang.OutOfMemoryError: PermGen space errors is always tricky. Most of the times it's something related to the chosen JVM, probably not supported for the hosting OS (for example, using a 32bits JVM in a 64bits OS is a typical issue).</p>
 <p>Here I provide two interesting ways to check the JVM configuration:</p>
 <script src="https://gist.github.com/antonmry/efe307a587388c3ecdfb.js"></script>
 <p>For example, perhaps we could want to increase the PermSize, so we edit the  &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:</p>
-<pre><code># USER_MEM_ARGS   - The variable to override the standard memory arguments
-#                   passed to java.
-
-USER_MEM_ARGS=&quot;-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=256m&quot;
-export USER_MEM_ARGS
-</code></pre>
-<p>Now it&rsquo;s time to reboot the weblogic and check everything again using the same commands I showed previously.</p>
+<p>```</p>
+<h1>USER_MEM_ARGS   - The variable to override the standard memory arguments</h1>
+<h1>passed to java.</h1>
+<p>USER_MEM_ARGS=&quot;-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=256m&quot; export USER_MEM_ARGS ``` Now it's time to reboot the weblogic and check everything again using the same commands I showed previously.</p>
 <p>More info: - <a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/using_WLST.html#wp1093952">Invoking WLST</a> - <a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/monitoring.html">Getting Runtime Information</a> - <a href="https://blogs.oracle.com/practicalbpm/entry/wlst_scripting_to_get_weblogic">WLST Scripting Introduction</a></p>
 </p>
 

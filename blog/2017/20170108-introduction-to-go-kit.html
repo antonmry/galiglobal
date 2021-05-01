@@ -62,39 +62,30 @@
 
 	<p><em>08 January 2017</em></p>
 
-	<p><h2><a href="#microservices-dont-fit-all-use-cases" id="microservices-dont-fit-all-use-cases">Microservices don&rsquo;t fit all use cases</a></h2>
-<p>When I&rsquo;ve started <a href="https://github.com/antonmry/leanmanager">my Leanmanager bot</a>, I&rsquo;ve chosen to use the same approach (well, really it&rsquo;s a framework but that word seems to be censured if you are a gopher so I will use <em>approach</em>) as the kubernetes project: if it&rsquo;s good for k8s, it should be good for me and also a good way to learn a bit more about kubernetes. So I&rsquo;ve implemented all the REST APIs using <a href="https://github.com/emicklei/go-restful">github.com/emicklei/go-restful</a>.</p>
-<p>Then I had the opportunity to work a bit with <a href="https://gokit.io/">go-kit</a>. A framework, ups, no, sorry, a toolkit to create microservices. My initial opinion was too complicated and too much boilerplate. Yet I would like to give it another opportunity, there are some interesting things useful for bots (support many transports, RPC approach, instrumentation) and my main motivation with the bot is to test new technologies and ideas so&hellip; why not?</p>
-<p>If you visit the <a href="https://gokit.io">Go-kit website</a>, and then, you will jump very soon into the <a href="https://gokit.io/examples/stringsvc.html">stringsvc tutorial</a>. The tutorial is awesome but it isn&rsquo;t a five minutes read and it&rsquo;s a bit too complicated to start to work with Go-kit. I recommend an approach a bit different. First, watch <a href="https://www.youtube.com/watch?v=JXEjAwNWays">Go + Microservices = Go Kit</a> from <a href="https://peter.bourgon.org/">Peter Bourgon</a>. This is an awesome talk explaining microservices and their use cases. Clearly Peter knows a lot about the subject: microservices aren&rsquo;t for everyone.</p>
+	<p><h2>Microservices don't fit all use cases</h2>
+<p>When I've started <a href="https://github.com/antonmry/leanmanager">my Leanmanager bot</a>, I've chosen to use the same approach (well, really it's a framework but that word seems to be censured if you are a gopher so I will use <em>approach</em>) as the kubernetes project: if it's good for k8s, it should be good for me and also a good way to learn a bit more about kubernetes. So I've implemented all the REST APIs using <a href="https://github.com/emicklei/go-restful">github.com/emicklei/go-restful</a>.</p>
+<p>Then I had the opportunity to work a bit with <a href="https://gokit.io/">go-kit</a>. A framework, ups, no, sorry, a toolkit to create microservices. My initial opinion was too complicated and too much boilerplate. Yet I would like to give it another opportunity, there are some interesting things useful for bots (support many transports, RPC approach, instrumentation) and my main motivation with the bot is to test new technologies and ideas so... why not?</p>
+<p>If you visit the <a href="https://gokit.io">Go-kit website</a>, and then, you will jump very soon into the <a href="https://gokit.io/examples/stringsvc.html">stringsvc tutorial</a>. The tutorial is awesome but it isn't a five minutes read and it's a bit too complicated to start to work with Go-kit. I recommend an approach a bit different. First, watch <a href="https://www.youtube.com/watch?v=JXEjAwNWays">Go + Microservices = Go Kit</a> from <a href="https://peter.bourgon.org/">Peter Bourgon</a>. This is an awesome talk explaining microservices and their use cases. Clearly Peter knows a lot about the subject: microservices aren't for everyone.</p>
 <p>If after the video, you think microservices fit your case, go ahead and may the Force be with you.</p>
-<h2><a href="#go-kit-addsvc-example" id="go-kit-addsvc-example">Go-kit addsvc example</a></h2>
+<h2>Go-kit addsvc example</h2>
 <p>First step, download Go-kit:</p>
-<pre><code class="language-sh">go get github.com/go-kit/kit
-</code></pre>
-<p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you&rsquo;ve already in the GOPATH).</p>
-<pre><code class="language-sh">cp -r ../../go-kit/kit/examples/addsvc/ .
-go get ./...
-</code></pre>
-<p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let&rsquo;s try the example. Launch the server:</p>
-<pre><code class="language-sh">cd cmd/addsvc/
-go run main.go
-</code></pre>
+<p><code>sh go get github.com/go-kit/kit</code></p>
+<p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you've already in the GOPATH).</p>
+<p><code>sh cp -r ../../go-kit/kit/examples/addsvc/ . go get ./...</code></p>
+<p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let's try the example. Launch the server:</p>
+<p><code>sh cd cmd/addsvc/ go run main.go</code></p>
 <p>And in a different shell, launch the client:</p>
-<pre><code class="language-sh">cd cmd/addcli/
-go run main.go -http.addr=:8081 1 2
-</code></pre>
+<p><code>sh cd cmd/addcli/ go run main.go -http.addr=:8081 1 2</code></p>
 <p>If everything goes well, you will obtain something like:</p>
 <blockquote>
 <p>1 + 2 = 3</p>
 </blockquote>
 <p>Or you can use <code>curl</code> directly:</p>
-<pre><code class="language-sh">curl -H &quot;Content-Type: application/json&quot; -X POST -d '{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}' http://localhost:8081/concat
-</code></pre>
+<p><code>sh curl -H &quot;Content-Type: application/json&quot; -X POST -d '{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}' http://localhost:8081/concat</code></p>
 <p>There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:</p>
-<pre><code class="language-sh">go run main.go -grpc.addr=:8082 1 2
-</code></pre>
-<h2><a href="#show-me-the-code" id="show-me-the-code">Show me the code!</a></h2>
-<p>It&rsquo;s time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p>
+<p><code>sh go run main.go -grpc.addr=:8082 1 2</code></p>
+<h2>Show me the code!</h2>
+<p>It's time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p>
 <p>Note: I may continue this in the future if I resume my work with go-kit.</p>
 </p>
 

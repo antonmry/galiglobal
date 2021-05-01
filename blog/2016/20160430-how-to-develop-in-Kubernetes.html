@@ -62,101 +62,53 @@
 
 	<p><em>30 April 2016</em></p>
 
-	<p><p>In this post I&rsquo;m going to show how to create a Kubernetes Development Environment and deploy RestComm (a quite complex software) on it for testing. If you want just deploy RestComm, it&rsquo;s better for you use the <a href="http://kubernetes.io/docs/getting-started-guides/docker/">Kubernetes Docker option</a>, instead of doing all this process.</p>
-<h1><a href="#install-go-development-environment" id="install-go-development-environment">Install Go Development Environment</a></h1>
-<pre><code class="language-sh">curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
-tar -zxvf go1.6.linux-amd64.tar.gz
-mv go ~/Software/
-echo &quot;GOROOT=~/Software/go&quot; &gt;&gt; .bash_profile 
-echo &quot;export GOROOT&quot; &gt;&gt; .bash_profile 
-echo &quot;PATH=\$GOROOT/bin:\$PATH&quot; &gt;&gt; ~/.bash_profile
-echo &quot;export PATH&quot; &gt;&gt; ~/.bash_profile
-echo &quot;GOPATH=~/Workspace/Telestax/go_kubernetes&quot; &gt;&gt; ~/.bash_profile
-echo &quot;export GOPATH&quot; &gt;&gt; ~/.bash_profile
-source ~/.bash_profile
-mkdir -p $GOPATH
-</code></pre>
-<h1><a href="#basic-kubernetes-installation" id="basic-kubernetes-installation">Basic Kubernetes installation</a></h1>
-<h2><a href="#clone-and-download" id="clone-and-download">Clone and download</a></h2>
-<pre><code class="language-sh">mkdir -p $GOPATH/src/k8s.io
-cd $GOPATH/src/k8s.io
-git clone https://github.com/antonmry/kubernetes.git
-cd kubernetes
-git remote add upstream 'https://github.com/kubernetes/kubernetes.git'
-</code></pre>
-<h2><a href="#build-and-unit-test" id="build-and-unit-test">Build and unit test</a></h2>
-<pre><code class="language-sh">./hack/build-go.sh &amp;&amp; notify-send &quot;Compilation done&quot;
-</code></pre>
+	<p><p>In this post I'm going to show how to create a Kubernetes Development Environment and deploy RestComm (a quite complex software) on it for testing. If you want just deploy RestComm, it's better for you use the <a href="http://kubernetes.io/docs/getting-started-guides/docker/">Kubernetes Docker option</a>, instead of doing all this process.</p>
+<h1>Install Go Development Environment</h1>
+<p><code>sh curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz tar -zxvf go1.6.linux-amd64.tar.gz mv go ~/Software/ echo &quot;GOROOT=~/Software/go&quot; &gt;&gt; .bash_profile echo &quot;export GOROOT&quot; &gt;&gt; .bash_profile echo &quot;PATH=\$GOROOT/bin:\$PATH&quot; &gt;&gt; ~/.bash_profile echo &quot;export PATH&quot; &gt;&gt; ~/.bash_profile echo &quot;GOPATH=~/Workspace/Telestax/go_kubernetes&quot; &gt;&gt; ~/.bash_profile echo &quot;export GOPATH&quot; &gt;&gt; ~/.bash_profile source ~/.bash_profile mkdir -p $GOPATH</code></p>
+<h1>Basic Kubernetes installation</h1>
+<h2>Clone and download</h2>
+<p><code>sh mkdir -p $GOPATH/src/k8s.io cd $GOPATH/src/k8s.io git clone https://github.com/antonmry/kubernetes.git cd kubernetes git remote add upstream 'https://github.com/kubernetes/kubernetes.git'</code></p>
+<h2>Build and unit test</h2>
+<p><code>sh ./hack/build-go.sh &amp;&amp; notify-send &quot;Compilation done&quot;</code></p>
 <p>Note! Integration test take a long time.</p>
-<pre><code class="language-sh">./hack/test-go.sh &amp;&amp; notify-send &quot;Test done&quot;
-</code></pre>
-<h2><a href="#integration-test" id="integration-test">Integration test</a></h2>
+<p><code>sh ./hack/test-go.sh &amp;&amp; notify-send &quot;Test done&quot;</code></p>
+<h2>Integration test</h2>
 <p>We need etcd to run the integration test, Docker to the rescue?</p>
-<pre><code class="language-sh">docker run -d --name etcd quay.io/coreos/etcd:v2.3.3
-alias etcdctl=&quot;docker exec etcd /etcdctl&quot;
-alias etcd=&quot;docker exec etcd /etcd&quot;
-</code></pre>
+<p><code>sh docker run -d --name etcd quay.io/coreos/etcd:v2.3.3 alias etcdctl=&quot;docker exec etcd /etcdctl&quot; alias etcd=&quot;docker exec etcd /etcd&quot;</code></p>
 <p>Nop, it fails because kubernetes look for it in the PATH :-(</p>
 <p>So,</p>
-<pre><code class="language-sh">curl -O  https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz 
-tar xzvf etcd-v2.3.3-linux-amd64.tar.gz
-mv etcd-v2.3.3-linux-amd64/ ~/Software/
-echo &quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&quot; &gt;&gt; ~/.bash_profile
-echo &quot;export PATH&quot; &gt;&gt; ~./bash_profile
-source ~./bash_profile
-</code></pre>
-<p>And now, time to test. Be careful, I think it uses your Google Cloud account :-S</p>
-<pre><code class="language-sh">go run hack/e2e.go -v --build --up --test --down &amp;&amp; notify-send &quot;Integration test done&quot;
-</code></pre>
-<h1><a href="#running-the-restcomm-image" id="running-the-restcomm-image">Running the Restcomm image</a></h1>
-<h2><a href="#creating-and-launching-the-cluster" id="creating-and-launching-the-cluster">Creating and launching the cluster</a></h2>
+<p><code>sh curl -O https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz tar xzvf etcd-v2.3.3-linux-amd64.tar.gz mv etcd-v2.3.3-linux-amd64/ ~/Software/ echo &quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&quot; &gt;&gt; ~/.bash_profile echo &quot;export PATH&quot; &gt;&gt; ~./bash_profile source ~./bash_profile</code> And now, time to test. Be careful, I think it uses your Google Cloud account :-S</p>
+<p><code>sh go run hack/e2e.go -v --build --up --test --down &amp;&amp; notify-send &quot;Integration test done&quot;</code></p>
+<h1>Running the Restcomm image</h1>
+<h2>Creating and launching the cluster</h2>
 <p>It will ask for sudo permission, you have to be quick, or relaunch.</p>
-<pre><code class="language-sh">hack/local-up-cluster.sh
-</code></pre>
-<p>Let this terminal open and create a new one (tmux&rsquo;s time?)</p>
-<h2><a href="#running-the-container" id="running-the-container">Running the container</a></h2>
-<p>We don&rsquo;t have any container running:</p>
-<pre><code class="language-sh">cluster/kubectl.sh get pods
-cluster/kubectl.sh get services
-cluster/kubectl.sh get deployments
-</code></pre>
+<p><code>sh hack/local-up-cluster.sh</code></p>
+<p>Let this terminal open and create a new one (tmux's time?)</p>
+<h2>Running the container</h2>
+<p>We don't have any container running:</p>
+<p><code>sh cluster/kubectl.sh get pods cluster/kubectl.sh get services cluster/kubectl.sh get deployments</code></p>
 <p>Time to launch RestComm:</p>
-<pre><code class="language-sh">curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml
-vim restcomm_rc.yml 
-</code></pre>
+<p><code>sh curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml vim restcomm_rc.yml</code></p>
 <p>Change STATIC_ADDRESS to your own IP address.</p>
-<pre><code class="language-sh">cluster/kubectl.sh create -f restcomm_rc.yml
-</code></pre>
+<p><code>sh cluster/kubectl.sh create -f restcomm_rc.yml</code></p>
 <p>Now we should be able to see our docker instance working, pods and so on.</p>
-<pre><code class="language-sh">cluster/kubectl.sh get services
-cluster/kubectl.sh get deployments
-cluster/kubectl.sh get pods
-</code></pre>
+<p><code>sh cluster/kubectl.sh get services cluster/kubectl.sh get deployments cluster/kubectl.sh get pods</code></p>
 <p>We have to wait the STATUS pod become running instead of ContainerCreating.</p>
 <p>After that, we can see our RestComm containers running:</p>
-<pre><code class="language-sh">docker images
-docker ps
-</code></pre>
-<p>Once it&rsquo;s running, we can expose the ports to access our instance:</p>
-<pre><code class="language-sh">wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml
-vim restcomm_service.yml
-</code></pre>
+<p><code>sh docker images docker ps</code></p>
+<p>Once it's running, we can expose the ports to access our instance:</p>
+<p><code>sh wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml vim restcomm_service.yml</code></p>
 <p>Change externalIPs to your own IP address.</p>
-<pre><code class="language-sh">cluster/kubectl.sh create -f restcomm_service.yml
-</code></pre>
+<p><code>sh cluster/kubectl.sh create -f restcomm_service.yml</code></p>
 <p>With the following command we can check the status:</p>
-<pre><code class="language-sh">./cluster/kubectl.sh get svc
-</code></pre>
-<h1><a href="#test-restcomm" id="test-restcomm">Test Restcomm!</a></h1>
-<pre><code class="language-sh">chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
-</code></pre>
+<p><code>sh ./cluster/kubectl.sh get svc</code></p>
+<h1>Test Restcomm!</h1>
+<p><code>sh chromium-browser https://CHANGE_WITH_YOUR_IP/olympus</code></p>
 <p>Login as alice, call +1234 and you should listen the message ;-)</p>
-<h1><a href="#stop-all" id="stop-all">Stop all</a></h1>
-<pre><code class="language-sh">./cluster/kubectl.sh delete service restcomm-service
-./cluster/kubectl.sh delete rc restcomm-core-controller
-</code></pre>
+<h1>Stop all</h1>
+<p><code>sh ./cluster/kubectl.sh delete service restcomm-service ./cluster/kubectl.sh delete rc restcomm-core-controller</code></p>
 <p>And Ctrl+C in the terminal running the cluster.</p>
-<h1><a href="#reference-documentation" id="reference-documentation">Reference documentation</a></h1>
+<h1>Reference documentation</h1>
 <ul>
 <li><a href="http://kubernetes.io/docs/getting-started-guides/scratch/">Creating a Custom Cluster from Scratch</a></li>
 <li><a href="https://github.com/kubernetes/kubernetes/blob/master/docs/devel/development.md">Kubernetes Development Guide</a></li>

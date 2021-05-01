@@ -62,199 +62,65 @@
 
 	<p><em>04 April 2019</em></p>
 
-	<p><h2><a href="#introduction" id="introduction">Introduction</a></h2>
-<p>This post explains how to deploy a Kubernetes cluster in Amazon. We want to automatically update Route 53 to use our own domain and use <a href="https://aws.amazon.com/elasticloadbalancing/">AWS ELB</a> to have Load Balancing to our pods. We&rsquo;ll use also <a href="https://aws.amazon.com/certificate-manager/">AWS Certificate Manager (ACM)</a> so our pods open internally HTTP endpoints but externally they expose HTTPS with a proper certificate.</p>
-<h2><a href="#installation" id="installation">Installation</a></h2>
+	<p><h2>Introduction</h2>
+<p>This post explains how to deploy a Kubernetes cluster in Amazon. We want to automatically update Route 53 to use our own domain and use <a href="https://aws.amazon.com/elasticloadbalancing/">AWS ELB</a> to have Load Balancing to our pods. We'll use also <a href="https://aws.amazon.com/certificate-manager/">AWS Certificate Manager (ACM)</a> so our pods open internally HTTP endpoints but externally they expose HTTPS with a proper certificate.</p>
+<h2>Installation</h2>
 <p>Install awscli and <a href="https://github.com/kubernetes/kops#installing">kops</a>.</p>
-<pre><code>export bucket_name=test-kops
-export KOPS_CLUSTER_NAME=k8s.test.net
-export KOPS_STATE_STORE=s3://${bucket_name}
-
-aws s3api create-bucket --bucket ${bucket_name} --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1
-aws s3api put-bucket-versioning --bucket ${bucket_name} --versioning-configuration Status=Enabled
-
-kops create cluster \
---node-count=1 \
---node-size=t2.medium \
---zones=eu-west-1a \
---dns-zone test.net \
---cloud-labels=&quot;Department=TEST&quot; \
---name=${KOPS_CLUSTER_NAME}
-
-kops edit cluster --name ${KOPS_CLUSTER_NAME}
-</code></pre>
+<p>``` export bucket_name=test-kops export KOPS_CLUSTER_NAME=k8s.test.net export KOPS_STATE_STORE=s3://${bucket_name}</p>
+<p>aws s3api create-bucket --bucket ${bucket_name} --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1 aws s3api put-bucket-versioning --bucket ${bucket_name} --versioning-configuration Status=Enabled</p>
+<p>kops create cluster <br />
+--node-count=1 <br />
+--node-size=t2.medium <br />
+--zones=eu-west-1a <br />
+--dns-zone test.net <br />
+--cloud-labels=&quot;Department=TEST&quot; <br />
+--name=${KOPS_CLUSTER_NAME}</p>
+<p>kops edit cluster --name ${KOPS_CLUSTER_NAME} ```</p>
 <p>Add to the end:</p>
-<pre><code class="language-yaml">  additionalPolicies:
-     node: |
-       [
-           {
-               &quot;Effect&quot;: &quot;Allow&quot;,
-               &quot;Action&quot;: &quot;route53:ChangeResourceRecordSets&quot;,
-               &quot;Resource&quot;: &quot;*&quot;
-           },
-           {
-               &quot;Effect&quot;: &quot;Allow&quot;,
-               &quot;Action&quot;: &quot;route53:ListHostedZones&quot;,
-               &quot;Resource&quot;: &quot;*&quot;
-           },
-           {
-               &quot;Effect&quot;: &quot;Allow&quot;,
-               &quot;Action&quot;: &quot;route53:ListResourceRecordSets&quot;,
-               &quot;Resource&quot;: &quot;*&quot;
-           }
-       ]
-</code></pre>
+<p><code>yaml additionalPolicies: node: | [ { &quot;Effect&quot;: &quot;Allow&quot;, &quot;Action&quot;: &quot;route53:ChangeResourceRecordSets&quot;, &quot;Resource&quot;: &quot;*&quot; }, { &quot;Effect&quot;: &quot;Allow&quot;, &quot;Action&quot;: &quot;route53:ListHostedZones&quot;, &quot;Resource&quot;: &quot;*&quot; }, { &quot;Effect&quot;: &quot;Allow&quot;, &quot;Action&quot;: &quot;route53:ListResourceRecordSets&quot;, &quot;Resource&quot;: &quot;*&quot; } ]</code></p>
 <p>and create the cluster executing:</p>
-<pre><code>kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
-kops rolling-update cluster
-</code></pre>
+<p><code>kops update cluster --name ${KOPS_CLUSTER_NAME} --yes kops rolling-update cluster</code></p>
 <p>It takes some time. Use <code>kops validate cluster</code> to validate it. More options:</p>
 <ul>
 <li>validate cluster: kops validate cluster</li>
-<li>list nodes: kubectl get nodes &ndash;show-labels</li>
-<li>ssh to the master: ssh -i ~/.ssh/id_rsa <a href="&#109;a&#105;&#x6c;&#x74;&#x6f;&#x3a;&#97;&#x64;&#x6d;i&#110;&#x40;&#97;p&#105;&#46;&#107;8&#115;.&#x74;&#101;&#x73;&#x74;&#46;&#110;e&#x74;">&#x61;d&#109;&#x69;&#x6e;&#64;&#97;&#112;&#105;&#46;&#x6b;&#x38;&#115;&#46;&#116;&#101;&#x73;&#116;&#46;&#110;&#x65;&#116;</a></li>
+<li>list nodes: kubectl get nodes --show-labels</li>
+<li>ssh to the master: ssh -i ~/.ssh/id_rsa admin@api.k8s.test.net</li>
 <li>the admin user is specific to Debian. If not using Debian please use the appropriate user based on your OS.</li>
-<li>read about installing addons at: <a href="https://github.com/kubernetes/kops/blob/master/docs/addons.md">https://github.com/kubernetes/kops/blob/master/docs/addons.md</a>.</li>
+<li>read about installing addons at: https://github.com/kubernetes/kops/blob/master/docs/addons.md.</li>
 </ul>
-<h3><a href="#deploy-the-dashboard" id="deploy-the-dashboard">Deploy the dashboard</a></h3>
-<pre><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
-kubectl proxy &amp;
-kops get secrets kube --type secret -oplaintext
-</code></pre>
-<p>Open <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login">http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</a></p>
+<h3>Deploy the dashboard</h3>
+<p><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml kubectl proxy &amp; kops get secrets kube --type secret -oplaintext</code></p>
+<p>Open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</p>
 <p>Click on Token and introduce the following output:</p>
-<pre><code>kops get secrets admin --type secret -oplaintext
-</code></pre>
-<h3><a href="#configure-dns" id="configure-dns">Configure DNS</a></h3>
-<p>Note: avoid route53-mapper, it&rsquo;s deprecated. The kops documentation is outdated.</p>
-<p>Obtain the zone ID for your Hosted Zone (you should create a new one if you don&rsquo;t have one, consult <a href="https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone">here</a> how to do it):</p>
-<pre><code>aws route53 list-hosted-zones-by-name --output json --dns-name &quot;test.net.&quot; | jq -r '.HostedZones[0].Id'
-</code></pre>
+<p><code>kops get secrets admin --type secret -oplaintext</code></p>
+<h3>Configure DNS</h3>
+<p>Note: avoid route53-mapper, it's deprecated. The kops documentation is outdated.</p>
+<p>Obtain the zone ID for your Hosted Zone (you should create a new one if you don't have one, consult <a href="https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone">here</a> how to do it):</p>
+<p><code>aws route53 list-hosted-zones-by-name --output json --dns-name &quot;test.net.&quot; | jq -r '.HostedZones[0].Id'</code></p>
 <p>In our case, it returns <code>/hostedzone/AAAAAA</code>.</p>
 <p>Create a new file external-dns.yml and update your data in the end:</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: external-dns
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  name: external-dns
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;services&quot;]
-  verbs: [&quot;get&quot;,&quot;watch&quot;,&quot;list&quot;]
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;pods&quot;]
-  verbs: [&quot;get&quot;,&quot;watch&quot;,&quot;list&quot;]
-- apiGroups: [&quot;extensions&quot;] 
-  resources: [&quot;ingresses&quot;] 
-  verbs: [&quot;get&quot;,&quot;watch&quot;,&quot;list&quot;]
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;nodes&quot;]
-  verbs: [&quot;list&quot;]
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: external-dns-viewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: external-dns
-subjects:
-- kind: ServiceAccount
-  name: external-dns
-  namespace: default
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: external-dns
-spec:
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: external-dns
-    spec:
-      serviceAccountName: external-dns
-      containers:
-      - name: external-dns
-        image: registry.opensource.zalan.do/teapot/external-dns:latest
-        args:
-        - --source=service
-        - --source=ingress
-        - --domain-filter=test.net 
-        - --provider=aws
-          #- --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization
-        - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both)
-        - --registry=txt
-        - --txt-owner-id=AAAAAA
-</code></pre>
+<h2>```yaml apiVersion: v1 kind: ServiceAccount metadata: name: external-dns</h2>
+<h2>apiVersion: rbac.authorization.k8s.io/v1beta1 kind: ClusterRole metadata: name: external-dns rules: - apiGroups: [&quot;&quot;] resources: [&quot;services&quot;] verbs: [&quot;get&quot;,&quot;watch&quot;,&quot;list&quot;] - apiGroups: [&quot;&quot;] resources: [&quot;pods&quot;] verbs: [&quot;get&quot;,&quot;watch&quot;,&quot;list&quot;] - apiGroups: [&quot;extensions&quot;] resources: [&quot;ingresses&quot;] verbs: [&quot;get&quot;,&quot;watch&quot;,&quot;list&quot;] - apiGroups: [&quot;&quot;] resources: [&quot;nodes&quot;] verbs: [&quot;list&quot;]</h2>
+<h2>apiVersion: rbac.authorization.k8s.io/v1beta1 kind: ClusterRoleBinding metadata: name: external-dns-viewer roleRef: apiGroup: rbac.authorization.k8s.io kind: ClusterRole name: external-dns subjects: - kind: ServiceAccount name: external-dns namespace: default</h2>
+<p>apiVersion: extensions/v1beta1 kind: Deployment metadata: name: external-dns spec: strategy: type: Recreate template: metadata: labels: app: external-dns spec: serviceAccountName: external-dns containers: - name: external-dns image: registry.opensource.zalan.do/teapot/external-dns:latest args: - --source=service - --source=ingress - --domain-filter=test.net - --provider=aws #- --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both) - --registry=txt - --txt-owner-id=AAAAAA ```</p>
 <p>and deploy it:</p>
-<pre><code>kubectl apply -f external-dns.yml
-</code></pre>
-<h2><a href="#test-your-configuration-with-an-example" id="test-your-configuration-with-an-example">Test your configuration with an example:</a></h2>
+<p><code>kubectl apply -f external-dns.yml</code></p>
+<h2>Test your configuration with an example:</h2>
 <p>Create an AWS certificate for the service:</p>
-<pre><code>aws acm request-certificate \
---domain-name nginx.test.net \
---validation-method DNS \
---idempotency-token 1234 
-</code></pre>
-<p>and save the <code>CertificateArn</code>. We&rsquo;ll use it later.</p>
-<p>You will need to validate it. The easier way it&rsquo;s from the AWS web console as explained <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">in the official documentation</a>.</p>
+<p><code>aws acm request-certificate \ --domain-name nginx.test.net \ --validation-method DNS \ --idempotency-token 1234</code></p>
+<p>and save the <code>CertificateArn</code>. We'll use it later.</p>
+<p>You will need to validate it. The easier way it's from the AWS web console as explained <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">in the official documentation</a>.</p>
 <p>Create <code>nginx-d.yml</code>:</p>
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: nginx
-spec:
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - image: nginx
-        name: nginx
-        ports:
-        - containerPort: 80
-          name: http
-</code></pre>
+<p><code>yaml apiVersion: extensions/v1beta1 kind: Deployment metadata: name: nginx spec: template: metadata: labels: app: nginx spec: containers: - image: nginx name: nginx ports: - containerPort: 80 name: http</code></p>
 <p>and <code>nginx-svc.yml</code> with the domain you would like to use and the ACM certificate.</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Service
-metadata:
-  name: nginx
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: nginx.test.net.
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:888888:certificate/AAAAAA-BBBBB-CCCCC-DDDDD
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: &quot;443&quot;
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    name: http
-    targetPort: 80
-  - name: https
-    port: 443
-    targetPort: http
-  selector:
-    app: nginx
-</code></pre>
+<p><code>yaml apiVersion: v1 kind: Service metadata: name: nginx annotations: external-dns.alpha.kubernetes.io/hostname: nginx.test.net. service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:888888:certificate/AAAAAA-BBBBB-CCCCC-DDDDD service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http service.beta.kubernetes.io/aws-load-balancer-ssl-ports: &quot;443&quot; spec: type: LoadBalancer ports: - port: 80 name: http targetPort: 80 - name: https port: 443 targetPort: http selector: app: nginx</code></p>
 <p>and deploy them:</p>
-<pre><code>kubectl apply -f nginx-d.yml -d nginx-svc-yml
-</code></pre>
+<p><code>kubectl apply -f nginx-d.yml -d nginx-svc-yml</code></p>
 <p>It would take some minutes. Once the pods are ready, you should be able to open in your browser on <code>http://nginx.test.net</code> and <code>https://nginx.test.net</code> and see the nginx welcome page.</p>
-<h2><a href="#clean-everything" id="clean-everything">Clean everything</a></h2>
+<h2>Clean everything</h2>
 <p>Delete the ACM certificate and execute:</p>
-<pre><code>kops delete cluster --name k8s.test.net --yes
-</code></pre>
-<h2><a href="#resources" id="resources">Resources</a></h2>
+<p><code>kops delete cluster --name k8s.test.net --yes</code></p>
+<h2>Resources</h2>
 <ul>
 <li><a href="https://github.com/kubernetes/kops/blob/master/docs/iam_roles.md">Kops IAM roles</a></li>
 <li><a href="https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md">Setting up ExternalDNS for Services on AWS</a></li>

@@ -62,137 +62,80 @@
 
 	<p><em>06 January 2017</em></p>
 
-	<p><p>Writing a new post after six months and in Christmas&hellip; New year, new promises, old projects. I&rsquo;ve been quite busy the second half of 2016, but also very happy and satisfied with some personal and professional projects. No more excuses and let&rsquo;s focus in this post.</p>
-<h2><a href="#introduction" id="introduction">Introduction</a></h2>
+	<p><p>Writing a new post after six months and in Christmas... New year, new promises, old projects. I've been quite busy the second half of 2016, but also very happy and satisfied with some personal and professional projects. No more excuses and let's focus in this post.</p>
+<h2>Introduction</h2>
 <p>I want to deploy my <a href="https://hub.docker.com/r/antonmry/leanmanager">leanmanager Docker image</a> so the bot is available all the time for the team, but you can choose any Docker image you want to use. I want to use <a href="https://cloud.google.com/container-engine/docs/quickstart">Google Container Engine</a> Kubernetes implementation and do it everything as much automatic as possible using Terraform.</p>
-<h2><a href="#gce-installation" id="gce-installation">GCE installation</a></h2>
-<p>First step, make sure you&rsquo;ve created previously a project in the Google Cloud console. If you don&rsquo;t have the Cloud SDK, you are going to need it. It&rsquo;s quite easy to install following <a href="https://cloud.google.com/sdk/docs/quickstart-linux">the Google instructions</a>:</p>
-<pre><code class="language-sh">cd ~/Software
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
-tar -zxvf google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
-rm google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
-./google-cloud-sdk/install.sh
-</code></pre>
+<h2>GCE installation</h2>
+<p>First step, make sure you've created previously a project in the Google Cloud console. If you don't have the Cloud SDK, you are going to need it. It's quite easy to install following <a href="https://cloud.google.com/sdk/docs/quickstart-linux">the Google instructions</a>:</p>
+<p><code>sh cd ~/Software curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz tar -zxvf google-cloud-sdk-138.0.0-linux-x86_64.tar.gz rm google-cloud-sdk-138.0.0-linux-x86_64.tar.gz ./google-cloud-sdk/install.sh</code></p>
 <p><strong>Note</strong>: be careful, last command modifies your .bashrc and it may cause problems.</p>
-<p>Now, it&rsquo;s time to log in:</p>
-<pre><code class="language-sh">gcloud init
-</code></pre>
+<p>Now, it's time to log in:</p>
+<p><code>sh gcloud init</code></p>
 <p>And now, install kubectl, the client to manage kubernetes:</p>
-<pre><code class="language-sh">gcloud components install kubectl
-</code></pre>
-<h2><a href="#launching-the-service" id="launching-the-service">Launching the service</a></h2>
+<p><code>sh gcloud components install kubectl</code></p>
+<h2>Launching the service</h2>
 <p>The first step is to create the cluster. It may take some time.</p>
-<pre><code class="language-sh">gcloud container clusters create leanmanager-cluster
-</code></pre>
+<p><code>sh gcloud container clusters create leanmanager-cluster</code></p>
 <p>Ensure kubectl can access to the service:</p>
-<pre><code class="language-sh">gcloud auth application-default login
-</code></pre>
-<p>And now, it&rsquo;s time to launch the leanmanager image:</p>
-<pre><code class="language-sh">kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&quot;
-</code></pre>
+<p><code>sh gcloud auth application-default login</code></p>
+<p>And now, it's time to launch the leanmanager image:</p>
+<p><code>sh kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&quot;</code></p>
 <p><strong>Note:</strong> I have an environment variable <code>LEANMANAGER_TOKEN</code> with the token to authenticate to Slack. The bot automatically connects using Websocket but if you want to expose any service, add <code>--port=8080</code> to allow access to it. You will need also to create a Load Balancer, the steps are explained <a href="https://cloud.google.com/container-engine/docs/quickstart">here</a>.</p>
-<h2><a href="#clean-the-service" id="clean-the-service">Clean the service</a></h2>
+<h2>Clean the service</h2>
 <p>To stop the service and delete the cluster:</p>
-<pre><code class="language-sh">gcloud container clusters delete leanmanager-cluster
-</code></pre>
-<h2><a href="#install-terraform" id="install-terraform">Install Terraform</a></h2>
-<p>Our next step it&rsquo;s going to be to automate all the process. To do it, we&rsquo;ll use <a href="https://www.terraform.io">Terraform</a>.</p>
-<p>If you don&rsquo;t have it, first step is download it from <a href="https://www.terraform.io/downloads.html">here</a> and install it. For linux:</p>
-<pre><code class="language-sh">curl -O https://releases.hashicorp.com/terraform/0.8.2/terraform_0.8.2_linux_amd64.zip
-unzip terraform_0.8.2_linux_amd64.zip
-</code></pre>
+<p><code>sh gcloud container clusters delete leanmanager-cluster</code></p>
+<h2>Install Terraform</h2>
+<p>Our next step it's going to be to automate all the process. To do it, we'll use <a href="https://www.terraform.io">Terraform</a>.</p>
+<p>If you don't have it, first step is download it from <a href="https://www.terraform.io/downloads.html">here</a> and install it. For linux:</p>
+<p><code>sh curl -O https://releases.hashicorp.com/terraform/0.8.2/terraform_0.8.2_linux_amd64.zip unzip terraform_0.8.2_linux_amd64.zip</code></p>
 <p>Now move it to a folder which is in your PATH, in my case:</p>
-<pre><code class="language-sh">terraform ~/bin/
-echo terraform &gt;&gt; ~/bin/.gitignore
-</code></pre>
-<p>Last command is executed because I&rsquo;ve <code>~/bin</code> in github but I don&rsquo;t want upload a so big file as <code>terraform</code> executable.</p>
-<p>Now you should be able to use <code>terraform</code> in your system. If you&rsquo;ve never used before, it&rsquo;s a good moment to read the <a href="https://www.terraform.io/intro/getting-started/build.html">Getting started guide</a>.</p>
-<h2><a href="#download-gke-credentials" id="download-gke-credentials">Download GKE credentials</a></h2>
+<p><code>sh terraform ~/bin/ echo terraform &gt;&gt; ~/bin/.gitignore</code></p>
+<p>Last command is executed because I've <code>~/bin</code> in github but I don't want upload a so big file as <code>terraform</code> executable.</p>
+<p>Now you should be able to use <code>terraform</code> in your system. If you've never used before, it's a good moment to read the <a href="https://www.terraform.io/intro/getting-started/build.html">Getting started guide</a>.</p>
+<h2>Download GKE credentials</h2>
 <p>Follow these instructions to download the credentials file:</p>
 <ol>
 <li>Log into the <a href="https://console.cloud.google.com">Google Developers Console</a> and select a project.</li>
-<li>Click the menu button in the top left corner, and navigate to &ldquo;IAM &amp; Admin&rdquo;, then &ldquo;Service accounts&rdquo;, and finally &ldquo;Create service account&rdquo;.</li>
-<li>Provide a name and ID in the corresponding fields, select &ldquo;Furnish a new private key&rdquo;, and select &ldquo;JSON&rdquo; as the key type.</li>
-<li>Clicking &ldquo;Create&rdquo; will download your credentials.</li>
-<li>Rename it to <code>account.json</code>. Make sure you don&rsquo;t publish this file, for instance in Github (add it to <code>.gitignore</code>).</li>
+<li>Click the menu button in the top left corner, and navigate to &quot;IAM &amp; Admin&quot;, then &quot;Service accounts&quot;, and finally &quot;Create service account&quot;.</li>
+<li>Provide a name and ID in the corresponding fields, select &quot;Furnish a new private key&quot;, and select &quot;JSON&quot; as the key type.</li>
+<li>Clicking &quot;Create&quot; will download your credentials.</li>
+<li>Rename it to <code>account.json</code>. Make sure you don't publish this file, for instance in Github (add it to <code>.gitignore</code>).</li>
 </ol>
-<h2><a href="#create-the-cluster-using-terraform" id="create-the-cluster-using-terraform">Create the cluster using Terraform</a></h2>
+<h2>Create the cluster using Terraform</h2>
 <p>In the same folder you have your <code>account.json</code>, create a Terraform file like <code>leanmanager.tf</code>:</p>
-<pre><code>variable &quot;region&quot; {
-  default = &quot;europe-west1-d&quot;
-}
-
-provider &quot;google&quot; {
-  credentials = &quot;${file(&quot;account.json&quot;)}&quot;
-  project     = &quot;wwwleanmanagereu&quot;
-  region      = &quot;${var.region}&quot;
-}
-
-resource &quot;google_container_cluster&quot; &quot;primary&quot; {
-  name = &quot;leanmanager-cluster&quot;
-  zone = &quot;${var.region}&quot;
-  initial_node_count = 1
-
-  master_auth {
-    username = &quot;mr.yoda&quot;
-    password = &quot;testTest1&quot;
-  }
-
-  node_config {
-    oauth_scopes = [
-      &quot;https://www.googleapis.com/auth/compute&quot;,
-      &quot;https://www.googleapis.com/auth/devstorage.read_only&quot;,
-      &quot;https://www.googleapis.com/auth/logging.write&quot;,
-      &quot;https://www.googleapis.com/auth/monitoring&quot;
-    ]
-  }
-}
-</code></pre>
-<p>Check what it&rsquo;s going to create:</p>
-<pre><code class="language-sh">terraform plan
-</code></pre>
-<p>Review the output and if it&rsquo;s ok, launch it!.</p>
-<pre><code class="language-sh">terraform apply
-</code></pre>
+<p>``` variable &quot;region&quot; { default = &quot;europe-west1-d&quot; }</p>
+<p>provider &quot;google&quot; { credentials = &quot;${file(&quot;account.json&quot;)}&quot; project     = &quot;wwwleanmanagereu&quot; region      = &quot;${var.region}&quot; }</p>
+<p>resource &quot;google_container_cluster&quot; &quot;primary&quot; { name = &quot;leanmanager-cluster&quot; zone = &quot;${var.region}&quot; initial_node_count = 1</p>
+<p>master_auth { username = &quot;mr.yoda&quot; password = &quot;testTest1&quot; }</p>
+<p>node_config { oauth_scopes = [ &quot;https://www.googleapis.com/auth/compute&quot;, &quot;https://www.googleapis.com/auth/devstorage.read_only&quot;, &quot;https://www.googleapis.com/auth/logging.write&quot;, &quot;https://www.googleapis.com/auth/monitoring&quot;     ] } } ```</p>
+<p>Check what it's going to create:</p>
+<p><code>sh terraform plan</code></p>
+<p>Review the output and if it's ok, launch it!.</p>
+<p><code>sh terraform apply</code></p>
 <p>If everything goes well, you will see a message like this:</p>
 <blockquote>
 <p>Apply complete! Resources: 1 added, 0 changed, 0 destroyed.</p>
 </blockquote>
 <p>And you can check it with:</p>
-<pre><code class="language-sh">gcloud container clusters list
-</code></pre>
+<p><code>sh gcloud container clusters list</code></p>
 <p>If you want to access with <code>kubectl</code> you need to login first:</p>
-<pre><code>gcloud container clusters get-credentials leanmanager-cluster --zone europe-west1-d
-kubectl cluster-info
-</code></pre>
+<p><code>gcloud container clusters get-credentials leanmanager-cluster --zone europe-west1-d kubectl cluster-info</code></p>
 <p>This step can be added to the <code>leanmanager.tf</code> inside the <code>resource</code> block:</p>
-<pre><code>provisioner &quot;local-exec&quot; {
-    command = &quot;gcloud container clusters get-credentials ${var.cluster_name} --zone ${google_container_cluster.primary.zone}&quot;
-}
-</code></pre>
-<h2><a href="#launch-our-docker-instance" id="launch-our-docker-instance">Launch our Docker instance</a></h2>
-<p>Once you are logged in with <code>kubectl</code>, it&rsquo;s exactly the same as before:</p>
-<pre><code class="language-sh">kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&quot;
-</code></pre>
+<p><code>provisioner &quot;local-exec&quot; { command = &quot;gcloud container clusters get-credentials ${var.cluster_name} --zone ${google_container_cluster.primary.zone}&quot; }</code></p>
+<h2>Launch our Docker instance</h2>
+<p>Once you are logged in with <code>kubectl</code>, it's exactly the same as before:</p>
+<p><code>sh kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&quot;</code></p>
 <p>But you can also do it with Terraform adding this snippet in the beginning:</p>
-<pre><code>variable &quot;LEANMANAGER_TOKEN&quot; {
-      default = &quot;USE YOUR OWN TOKEN&quot;
-}
-</code></pre>
+<p><code>variable &quot;LEANMANAGER_TOKEN&quot; { default = &quot;USE YOUR OWN TOKEN&quot; }</code></p>
 <p>And after the previous <code>local-exec</code>:</p>
-<pre><code>provisioner &quot;local-exec&quot; {
-    command = &quot;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=LEANMANAGER_TOKEN=${var.LEANMANAGER_TOKEN}&quot;
-}
-</code></pre>
+<p><code>provisioner &quot;local-exec&quot; { command = &quot;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=LEANMANAGER_TOKEN=${var.LEANMANAGER_TOKEN}&quot; }</code></p>
 <p>And executing terraform passing the variable:</p>
-<pre><code class="language-sh">terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
-</code></pre>
-<p>Other option would be read the variable directly but you have to change the name to fit the terraform requirements and I&rsquo;m using it for other things. More info <a href="https://www.terraform.io/docs/configuration/variables.html">here</a>.</p>
-<h2><a href="#clean-everything" id="clean-everything">Clean everything</a></h2>
+<p><code>sh terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN</code></p>
+<p>Other option would be read the variable directly but you have to change the name to fit the terraform requirements and I'm using it for other things. More info <a href="https://www.terraform.io/docs/configuration/variables.html">here</a>.</p>
+<h2>Clean everything</h2>
 <p>With Terraform is really easy, just:</p>
-<pre><code class="language-sh">terraform destroy
-</code></pre>
-<h2><a href="#not-already-linked-but-useful-resources" id="not-already-linked-but-useful-resources">Not already linked but useful resources</a></h2>
+<p><code>sh terraform destroy</code></p>
+<h2>Not already linked but useful resources</h2>
 <ul>
 <li><a href="http://container-solutions.com/simple-gce-setup-terraform/">Simple GCE setup Terraform</a></li>
 <li><a href="https://github.com/l337ch/terraform-gke">terraform-gke</a></li>
