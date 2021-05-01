@@ -3,7 +3,7 @@ date=2015-01-01
 type=page
 tags=galiglobal
 status=published
-~~~~~~
+---------
 
 ## 2021
 

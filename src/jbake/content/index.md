@@ -3,7 +3,7 @@ date=2015-01-01
 type=page
 tags=galiglobal
 status=published
-~~~~~~
+---------
 
 <img align="right" style="  max-width: 30%;height: auto;  padding: 0px 10px;" src="/images/antonmry.jpg">
 
