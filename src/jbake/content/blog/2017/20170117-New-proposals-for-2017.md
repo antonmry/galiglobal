@@ -2,7 +2,7 @@ title=Be humble and my goals for 2017
 date=2017-02-25
 type=post
 tags=
-status=published
+status=draft
 ---------
 
 Last year I wrote a post with my goals for first time in my life. It was something new and I must say I've read it many times to see how things are going. It has been a good experience and I want to repeat it this year.

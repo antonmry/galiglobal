@@ -2,7 +2,7 @@ title=My goals for 2020: survive and build
 date=2020-03-09
 type=post
 tags=
-status=published
+status=draft
 ---------
 
 Last year I didn't write about one of my goals: to find a new job. I didn't

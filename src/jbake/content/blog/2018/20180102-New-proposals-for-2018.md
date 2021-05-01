@@ -2,7 +2,7 @@ title=My goals for 2018: more focus
 date=2018-01-02
 type=post
 tags=
-status=published
+status=draft
 ---------
 
 Third year in a row writing my proposals for the new year, yeah!. Again I'm not going to spend time reviewing the previous year, I let that for "internal use".
