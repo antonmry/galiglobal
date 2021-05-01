@@ -7,7 +7,7 @@ status=published
 
 ## 2021
 
-- LaretasGeek - [Java 16 features](https://www.meetup.com/CorunaJUG/events/277493329/): [video](https://www.youtube.com/watch?v=JoKTs_F4PTs)
+- LaretasGeek - [New Java 16 features special](https://www.meetup.com/CorunaJUG/events/277493329/): [video](https://www.youtube.com/watch?v=JoKTs_F4PTs)
 - MadridJUG - [APIs en arquitecturas híbridas orientadas a eventos sin morir en el intento](https://www.meetup.com/MadridJUG/events/276514609/): [video](https://www.youtube.com/watch?v=avSI_9Ex3QQ) and [slides](https://docs.google.com/presentation/d/1qYy6dUmJIr8KZtNXR5n9kS7FcgAU5oiXfKMGhkkqogI/edit?usp=sharing)
 - Oracledbacr - [Podcast Cita a Ciegas](https://open.spotify.com/episode/4Uyzyosb4kWvVEbkKqaavI?si=xjPHhf3sRV-2d39fKw0cAQ&nd=1)
 - BigData Boutique's AMA - Apache Kafka vs Apache Pulsar: [video](https://www.youtube.com/watch?v=GUgAxaO92UY)
