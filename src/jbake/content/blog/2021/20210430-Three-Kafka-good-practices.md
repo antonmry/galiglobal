@@ -31,6 +31,8 @@ last few years but the original gotchas remain:
 In this article, we are going to cover three simple things which can help a lot
 to make the use of Kafka much more smooth.
 
+![Kafka loves small messages, topics, clusters](kafka-loves-small.png)
+
 ## Small messages
 
 Kafka doesn't like big messages. By default, it's limited to 1Mb. You can
