@@ -3,7 +3,7 @@ date=2017-01-06
 type=post
 tags=kubernetes,gke,terraform,devops
 status=published
-~~~~~~
+---------
 
 Writing a new post after six months and in Christmas... New year, new promises, old projects. I've been quite busy the second half of 2016, but also very happy and satisfied with some personal and professional projects. No more excuses and let's focus in this post.
 

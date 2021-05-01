@@ -3,7 +3,7 @@ date=2015-06-11
 type=post
 tags=OCSG,ServicesGatekeeper,ServiceDelivery,OracleComms,OCCAS,ConvergedApplicationServer,OCWSC,WebRTCSessionController
 status=published
-~~~~~~
+---------
 
 Tomorrow I will be travelling to [TADHack](http://tadhack.com/2015/) in Lisbon and I am so excited! It's going to be great! As part of the initiatives we've done to promote [the Oracle sandbox](http://tadhack.optaresolutions.com/) and help the developers, I've recorded three videos to introduce the three Oracle SDP applications. Even if they are oriented to the TADHack, they are a good resource for anyone interested in the products.
 

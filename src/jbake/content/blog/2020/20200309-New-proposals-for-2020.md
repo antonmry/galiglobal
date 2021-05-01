@@ -3,7 +3,7 @@ date=2020-03-09
 type=post
 tags=
 status=published
-~~~~~~
+---------
 
 Last year I didn't write about one of my goals: to find a new job. I didn't
 want to make it public and it took more than I was expecting.

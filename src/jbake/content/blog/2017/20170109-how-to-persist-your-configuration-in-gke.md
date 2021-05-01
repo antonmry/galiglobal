@@ -3,7 +3,7 @@ date=2017-01-09
 type=post
 tags=development,devops,gke,terraform
 status=published
-~~~~~~
+---------
 
 In my previous post, [Deploy on Kubernetes GKE with Terraform](https://antonmry.github.io/post/deploy-on-kubernetes-gke-with-terraform/), we've seen how to start to use kubernetes but in a very simple way. The next thing we would like to do is persist the configuration, so we don't need to reconfigure our bot each time we start the cluster. This post explain how to do it from the configuration created in the previous one.
 

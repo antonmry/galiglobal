@@ -3,7 +3,7 @@ date=2014-05-15
 type=post
 tags=WebRTC,ServiceDelivery,TADHack,Oracle
 status=published
-~~~~~~
+---------
 
 In May 2014, Oracle propose us to deploy and manage its [SANE solution](http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html) for the [TADHack event](http://tadhack.com/2014/) and support the developers community. With only a few weeks, it was a big challenge. I've participated as technical responsible and it was a great experience because it was a very different type of project: any operator was involved so we were free to choose the platform. Also the requirements were very different: the main goal was engage the developers.
 

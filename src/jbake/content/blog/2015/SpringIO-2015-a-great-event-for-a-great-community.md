@@ -3,7 +3,7 @@ date=2015-05-14
 type=post
 tags=WebRTC,ServiceDelivery,SpringIO,Groovy
 status=published
-~~~~~~
+---------
 
 I had the opportunity to participate in [SpringIO as speaker](http://www.springio.net/using-groovy-to-empower-webrtc-network-systems/) in April (Barcelona). It was quite scary to participate in a conference about Spring, I am not a web developer, and, in fact, when I have to develop or design any web system based in Java, I prefer just to use EJB3 and Servlet 3.2, avoiding any framework. But there is something more in this conference: [Groovy](http://en.wikipedia.org/wiki/Groovy_%28programming_language%29). And we are using Groovy in a lot of cool things, specially in the WebRTC domain. So the idea was simple: introduce WebRTC and show an interesting Groovy use case.
 

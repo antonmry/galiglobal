@@ -3,7 +3,7 @@ date=2015-08-30
 type=post
 tags=OCSG,ServicesGatekeeper,ServiceDelivery,Oracle
 status=published
-~~~~~~
+---------
 
 This is the continuation of how to install and test OCSG, you can find the part 1 [here](/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html).
 

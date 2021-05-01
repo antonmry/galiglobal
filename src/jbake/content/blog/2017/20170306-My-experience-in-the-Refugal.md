@@ -3,7 +3,7 @@ date=2017-03-06
 type=post
 tags=hackathon,event,coding
 status=published
-~~~~~~
+---------
 
 This weekend I've participated in the [Refugal](http://refu.gal/), a hackathon for refugees. It isn't the fist time I participate in a hackathon but this one has been special in some way. Do you know those videos of strangers who doesn't know each other but they start to play together in the middle of the station?. Something like this one:
 

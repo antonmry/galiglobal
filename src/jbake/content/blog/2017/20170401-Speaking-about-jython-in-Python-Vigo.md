@@ -3,7 +3,7 @@ date=2017-04-01
 type=post
 tags=event,coding
 status=published
-~~~~~~
+---------
 
 Some weeks ago I had the opportunity to speak in [the Python Vigo meetup](https://www.python-vigo.es/posts/reunion-del-grupo-el-16032017/). It was just a lightning talk, 5 minutes. Why?. I really enjoy Python Vigo meetups, they are useful, fun and I always learn something new. So, when I read an email asking for speakers, I proposed the only Python related subject I know something about: [Jython](http://www.jython.org/). 
 

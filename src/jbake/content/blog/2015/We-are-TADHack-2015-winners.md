@@ -3,7 +3,7 @@ date=2015-07-31
 type=post
 tags=WebRTC,ServiceDelivery,TADHack,Oracle
 status=published
-~~~~~~
+---------
 
 Without any type of doubt, [TADHack](http://www.tadhack.com) is my favourite event in the year. Mainly because of three reasons:
 

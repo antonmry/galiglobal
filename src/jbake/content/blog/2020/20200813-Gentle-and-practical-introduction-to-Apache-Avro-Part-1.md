@@ -3,7 +3,7 @@ date=2020-12-05
 type=post
 tags=Kafka, Avro
 status=published
-~~~~~~
+---------
 
 ## Introduction
 

@@ -3,7 +3,7 @@ date=2015-02-13
 type=post
 tags=OCSG,Weblogic,ServicesGatekeeper,Java
 status=published
-~~~~~~
+---------
 
 I've been using [Talend Open Studio](https://www.talendforge.org/tutorials/tutorial.php?idTuto=14) for a long time. It's an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.
 

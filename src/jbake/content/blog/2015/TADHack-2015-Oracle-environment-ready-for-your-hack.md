@@ -3,7 +3,7 @@ date=2015-04-23
 type=post
 tags=WebRTC,Service Delivery,TADHack,Oracle,SIP
 status=published
-~~~~~~
+---------
 
 I am very glad to be part of TADHack again. The last year it was a great experience but everything was new so, with my previous experience, and I am sure this year I am going to enjoy it even more.
 

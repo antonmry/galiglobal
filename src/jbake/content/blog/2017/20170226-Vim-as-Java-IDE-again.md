@@ -3,7 +3,7 @@ date=2017-02-26
 type=post
 tags=java,vim,neovim,groovy,gradle
 status=published
-~~~~~~
+---------
 
 I've tried so many times change Intellij or Eclipse by vim.. But when it's related to Java is really hard to find a real alternative to those IDEs. And when we speak about Groovy, it's even worse. Yet I use vim a lot: edit files, write blog posts, etc. Also my Chrome and Thunderbird configuration uses Vim shortcuts, so I keep myself more or less trained.
 

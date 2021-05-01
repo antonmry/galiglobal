@@ -3,7 +3,7 @@ date=2015-01-23
 type=post
 tags=OCSG,OracleComms,ServicesGatekeeper
 status=published
-~~~~~~
+---------
 
 The new OCSG version is available and there are a lot of new interesting things, starting with a Documentation reorganization.
 

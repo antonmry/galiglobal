@@ -3,7 +3,7 @@ date=2015-04-15
 type=post
 tags=WebRTC,Oracle,OCCAS,OracleComms,NFV
 status=published
-~~~~~~
+---------
 
 This March has been crazy. Starting with the Mobile World Congress and next week flying to Brazil for three weeks because of an Oracle Comms project... Impossible to find time to tweet, blog or whatever, and it's a pity because there a lot of news!
 

@@ -3,7 +3,7 @@ date=2014-11-17
 type=post
 tags=WebRTC,Oracle,TADSummit
 status=published
-~~~~~~
+---------
 
 I was invited recently to participate in the Pre-conference Oracle WebRTC Workshop of the [TADSummit 2014](http://tadsummit.com/2014/) (Istanbul). I should speak about the implementation and architecture details of a WebRTC deployment in a Communication Service Provider. It was a real challenge, I had a lot of work in the previous weeks and I know about the excellent quality of the other speakers: [Doug](https://twitter.com/Doug_Tait), [Elias](https://twitter.com/EPCarrera) from Quobis or Stephano Gioia (who made a highly recommended presentation about [What is (and isn't WebRTC)](http://www.slideshare.net/gioste/webrtc-workshop-what-i) ).
 

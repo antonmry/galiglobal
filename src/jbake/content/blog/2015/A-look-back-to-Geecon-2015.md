@@ -3,7 +3,7 @@ date=2015-06-30
 type=post
 tags=WebRTC,ServiceDelivery,Geecon,OracleComms
 status=published
-~~~~~~
+---------
 
 I've been invited by Oracle Comms to join [Geecon 2015](http://2015.geecon.org/speakers/info.html?id=70) to speak about Web Real Time Commutations – Voice, Video, and Data Communications with my good friend [Douglas Tait](https://twitter.com/Doug_Tait). It's always a pleasure to work with someone as Doug and his feedback about previous editions was really good, so I was more than happy to participate in this event.
 

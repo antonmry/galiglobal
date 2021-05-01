@@ -3,7 +3,7 @@ date=2015-02-11
 type=post
 tags=OCCAS,OracleComms,NFV
 status=published
-~~~~~~
+---------
 
 This is going to be a different type of post. I usually write about technical things but today I am going to try something different. Well, maybe not so different, I have more questions than answers, but at least, I will try to explain as I see the Oracle Comms portfolio and its evolution. Just for the record, I don't work inside Oracle, I don't have privileged information and if you do any business decision based in this article, you are a fool.
 

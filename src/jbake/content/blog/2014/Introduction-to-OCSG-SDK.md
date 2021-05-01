@@ -3,7 +3,7 @@ date=2014-05-26
 type=post
 tags=OCSG,ServicesGatekeeper,ServiceDelivery,Oracle
 status=published
-~~~~~~
+---------
 
 As part of the activities we did for the [TADHack 2014](http://tadhack.com/2014/), I've recorded [this short tutorial](https://www.youtube.com/watch?v=pvVYH-tpEw8) about the Oracle Communications Services Gatekeeper SDK:
 

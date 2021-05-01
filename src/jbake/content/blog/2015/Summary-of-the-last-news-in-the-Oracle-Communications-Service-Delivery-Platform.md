@@ -3,7 +3,7 @@ date=2015-05-21
 type=post
 tags=OCSG,OCCAS,OCWSC,OCECAS,OracleComms,ServicesGatekeeper,ServiceDelivery,ConvergedApplicationServer,WebRTCSessionController,EvolvedCommunicationsServer
 status=published
-~~~~~~
+---------
 
 When I've started this blog, my main motivation was to provide a central place with information about Service Delivery Platforms, mainly related to the Oracle Communication suite because it's what I know. But I am failing in this goal. I am very busy from the beginning of the year and I don't find time enough to write posts and articles. Excuses. I should keep in mind the original idea and don't miss the opportunity to keep readers updated with the last news.
 

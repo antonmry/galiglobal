@@ -3,7 +3,7 @@ date=2015-01-19
 type=post
 tags=OCSG,Weblogic,ServicesGatekeeper,Java
 status=published
-~~~~~~
+---------
 
 Deal with java.lang.OutOfMemoryError: PermGen space errors is always tricky. Most of the times it's something related to the chosen JVM, probably not supported for the hosting OS (for example, using a 32bits JVM in a 64bits OS is a typical issue).
 

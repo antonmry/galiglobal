@@ -3,7 +3,7 @@ date=2016-06-16
 type=post
 tags=Go,Hugo,Blog
 status=published
-~~~~~~
+---------
 
 **UPDATE**: I finally merged both blogs, so this blog post doesn't make sense. I prefer Hugo to JBake but because I've been doing more Java/Groovy development, I will stay with JBake.
 

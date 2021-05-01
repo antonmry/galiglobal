@@ -3,7 +3,7 @@ date=2017-01-08
 type=post
 tags=development,microservices,go,go-kit
 status=published
-~~~~~~
+---------
 
 ## Microservices don't fit all use cases
 

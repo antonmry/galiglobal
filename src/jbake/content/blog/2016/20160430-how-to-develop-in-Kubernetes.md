@@ -3,7 +3,7 @@ date=2016-04-30
 type=post
 tags=development,Go,Kubernetes,RestComm
 status=published
-~~~~~~
+---------
 
 In this post I'm going to show how to create a Kubernetes Development Environment and deploy RestComm (a quite complex software) on it for testing. If you want just deploy RestComm, it's better for you use the [Kubernetes Docker option](http://kubernetes.io/docs/getting-started-guides/docker/), instead of doing all this process.
 

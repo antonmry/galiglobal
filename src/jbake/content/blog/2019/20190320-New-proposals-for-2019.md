@@ -3,7 +3,7 @@ date=2019-03-20
 type=post
 tags=
 status=published
-~~~~~~
+---------
 
 Ok, I'm writing my goals for 2019 in the end of March. What's wrong with me?.
 Well, somehow it makes sense in my head. For several reasons I wasn't sure

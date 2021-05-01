@@ -3,7 +3,7 @@ date=2021-01-30
 type=post
 tags=Flink
 status=published
-~~~~~~
+---------
 
 ## Introduction
 

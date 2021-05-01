@@ -3,7 +3,7 @@ date=2016-05-08
 type=post
 tags=RestComm, docker, github
 status=published
-~~~~~~
+---------
 
 I'm not a RestComm expert but I like to document the steps when I do something. It's quite schematic but yet, it may help someone. Start to contribute to RestComm is really hard because the lack of documentation and all the team very busy. But it's a interesting project and a nice community.
 

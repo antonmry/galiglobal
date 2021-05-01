@@ -3,7 +3,7 @@ date=2015-04-30
 type=post
 tags=OCSG,ServicesGatekeeper,ServiceDelivery,Oracle
 status=published
-~~~~~~
+---------
 
 Oracle Communications [Services Gatekeeper 6](http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html), the industry-leading API exposure platform, is Generally Available and with many new and interesting features. One of them is the simplified configuration and deployment with installation in 15 minutes, based on lightweight single tier deployment option. I really like the idea, it's going to help with Proofs of Concept and Training. So in this article, I am going to review this feature: a fight against the clock to know how many time an OCSG student needs to deploy OCSG. 
 

@@ -3,7 +3,7 @@ date=2019-05-08
 type=post
 tags=opensource, community, career, jug
 status=published
-~~~~~~
+---------
 
 As a Software Engineer and usual participant in different Tech communities, it was always a priority for me to involve in the Tech community the company where I work. I really believe it's a win-win for the company and for the community but I also know it's quite complex. 
 

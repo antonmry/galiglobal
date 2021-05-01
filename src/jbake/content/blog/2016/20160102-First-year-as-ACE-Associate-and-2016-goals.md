@@ -3,7 +3,7 @@ date=2016-01-02
 type=post
 tags=OracleACE,OracleComms,OptareSolutions,DevOps
 status=published
-~~~~~~
+---------
 
 Another year is gone and as you can see in the look of the blog, I have a lot of new goals for this year :-). In short, 2015 has been a quite good year, with interesting projects in Brazil, business trips to cool cities as London, Paris, Krakow, Barcelona or Lisbon. Also time to mature the team, learn new technologies and evolve our solutions. But now it's time to look to the future. Goals for 2016:
 

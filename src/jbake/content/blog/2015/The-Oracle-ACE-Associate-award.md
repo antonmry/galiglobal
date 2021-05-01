@@ -3,7 +3,7 @@ date=2015-06-16
 type=post
 tags=OracleACE,OracleComms,OptareSolutions
 status=published
-~~~~~~
+---------
 
 In the beginning of the year, I've been awarded as [Oracle ACE Associate](https://apex.oracle.com/pls/apex/f?p=19297:4:::NO:4:P4_ID:12240). It was the first time I've earned something like that so I'm very proud and happy. It's not a secret I've been working with Oracle Comms since 2007 but it wasn't until last year I started to be more active in social networks, writing articles and attending conferences. I should have started to do it sooner but it's not so easy, and it isn't until now I really know my desired professional path.
 

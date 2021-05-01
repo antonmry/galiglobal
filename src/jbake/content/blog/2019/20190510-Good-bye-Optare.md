@@ -3,7 +3,7 @@ date=2019-05-10
 type=post
 tags=career, Optare
 status=published
-~~~~~~
+---------
 
 Today it's a very sad day for me: it's time to say goodbye to all my colleagues in Optare. I internally announced it four weeks ago so I should have enough time to process it, but I didn't yet :-(
 

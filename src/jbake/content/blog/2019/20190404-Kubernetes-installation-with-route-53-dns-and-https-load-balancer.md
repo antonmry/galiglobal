@@ -3,7 +3,7 @@ date=2019-04-04
 type=post
 tags=Kubernetes, Amazon, Docker
 status=published
-~~~~~~
+---------
 
 ## Introduction
 
