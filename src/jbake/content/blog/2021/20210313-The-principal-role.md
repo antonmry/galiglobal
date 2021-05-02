@@ -1,5 +1,5 @@
 title=My thoughts about the Principal role
-date=2021-03-13
+date=2021-05-05
 type=post
 tags=Career
 status=published
@@ -245,7 +245,7 @@ I would love to know what do you thing about the Principal role, specially if
 you disagree with me. Leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
 
-[GitHub]: https://github.com/antonmry/galiglobal/pull/38
+[GitHub]: https://github.com/antonmry/galiglobal/pull/40
 [Twitter]: https://twitter.com/antonmry
 
 [Some Thoughts on the Principal Role]: https://margint.blog/2020/10/07/some-thoughts-on-the-principal-role/
