@@ -29,7 +29,7 @@ a gatekeeper who says what can be used and what can't. In enough big
 organizations is normal, even healthy, to have some duplicities. I see design
 and architecture as something more collaborative and myself as a facilitator.
 I usually share my experience doing similar things in the past and I help to
-make people thing out of the box, see their problems from a different
+make people think out of the box, see their problems from a different
 perspective. I want teams working with me do informed decisions.
 
 **Am I a product manager?** I work a lot with the roadmap and backlog of the
