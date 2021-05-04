@@ -110,19 +110,18 @@ a lot of communication with HR and it helps to make them see the need of
 separated technical and people career paths.
 
 If after a while things don't evolve, a job change is the only alternative.
-Most of organizations tend to listen when their engineers leave so it's a good
+Most organizations tend to listen when their engineers leave so it's a good
 opportunity to help them to make this right.
 
 ## Relation with managers
 
-It's quite frustrating when managers take decisions without taking engineers in
-account. It's specially problematic when they decide technical things which
-have a huge impact in the platform.
-
 **Build a good relation with engineering managers is very important** to
-succeed in the role. They should ask about architecture and processes.
-Principals should inform them to have knowledge to report and publish to the
-rest of the organization what we are doing.
+succeed in the role. It's quite frustrating when managers take decisions
+without taking engineers in account. It's specially problematic when they
+decide technical things which have a huge impact in the platform. They should
+ask about architecture and processes. Principals should inform them to have
+knowledge to report and publish to the rest of the organization what we are
+doing.
 
 This is particularly complex with managers who have a good technical
 background. Because they tend to try to manage people and systems. They are too
