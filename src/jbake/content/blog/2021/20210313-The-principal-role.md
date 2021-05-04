@@ -9,11 +9,15 @@ status=published
 
 One of the things I couldn't answer in the last 4-5 years was my role.
 
-**Am I a manager? No.** In same cases I may manage people from an organization
-point of view but my way to manage is "don't manage at all" and let the team
-self organize with my help. I tend to focus more in the team and processes and
-less in people. I'm not a manager, I try to be a technical leader. It's
-different.
+**Am I a manager? No.** In same cases people may report to me from an
+organization point of view but my way to manage is "don't manage at all" and
+let the team self organize with my help. I tend to focus more in the team and
+processes and less in people. I'm not a manager, I try to be a technical
+leader. Organizations that understand the [Trident Career Model] have a great
+advantage because *"at scale, it is often hard to find people who have deep
+skills and experiences at both of these areas, and that it can be useful to
+have a discussion around where someone’s focus, passion or development
+progression lies"*.
 
 **Am I a developer?** Well, coding is something I like to do but I spent a lot
 more time helping others to code than coding myself. Even more important,
@@ -23,22 +27,34 @@ problematic if I have to stop and resume it later. I also spend more time doing
 coding review than coding myself.
 
 **An architect?** A big part of my work is to improve systems and platforms.
-Listen problems and propose solutions. But I don't feel like the guy who do
+Listen to problems and propose solutions. But I don't feel like the guy who do
 a plan which must be blindly followed by others. I don't want to be
-a gatekeeper who says what can be used and what can't. In enough big
+a gatekeeper who says what can be used and what can't. I'm not saying here all
+architects are gatekeepers but it may happen some times. In enough big
 organizations is normal, even healthy, to have some duplicities. I see design
 and architecture as something more collaborative and myself as a facilitator.
 I usually share my experience doing similar things in the past and I help to
-make people think out of the box, see their problems from a different
+make teams think out of the box, or see their problems from a different
 perspective. I want teams working with me do informed decisions.
+
+I also like be involved in the global architecture. As I see systems design
+as a collaborative task, global architecture works exactly in the same way but
+with other technical leaders and actors in the organization. When a C-level
+role defines the architecture without feedback from the technical leaders of
+the organization, it isn't only frustrating, it's also incomplete. Big
+organizations are too big to be designed by one individual (or a very small
+group): they need to be open and collaborative.
 
 **Am I a product manager?** I work a lot with the roadmap and backlog of the
 platforms where I'm more involved. Evangelize in the usage of the service is
 very important. But this applies more for internal platforms. For public
 services, it's just too much work and someone focused only on that is required.
 As it's a bad idea to have the product manager taking decisions in the
-technical side, it isn't a good thing for the Principal to go too much in
-Product management: their goals are different and,in some cases, conflicting.
+technical side (implementation), it isn't a good thing for the Principal to go
+too much in Product management: define the roadmap of the product, what works
+for the users, etc. PMs and principals should work together and respect their
+own boundaries. When one of them push too much, the delivery slows down because
+excess of technical debt or over-engineering. Both things are wrong.
 
 **Staff Engineer?** That's a tricky one because it's very dependant of the
 organization so I really don't have an answer for that. In some places, the role
@@ -87,11 +103,11 @@ I fight to keep both things **I will end suffering job burnout**. The article
 things aren't compatible in the long term.
 
 It isn't easy to solve this misalignment between the company and you. I usually
-try to **make alliances with other managers** who want to be people managers so
-I can focus in my role as engineer. I also evangelize about the role and how to
-implement it properly in the organization. Some of my tasks (recruiting,
-DevRel, community) require a lot of communication with HR and it helps to make
-them see the need of separated technical and people career paths.
+try to **make alliances with people managers** so I can focus in my role as
+engineer. I also evangelize about the role and how to implement it properly in
+the organization. Some of my tasks (recruiting, DevRel, community) require
+a lot of communication with HR and it helps to make them see the need of
+separated technical and people career paths.
 
 If after a while things don't evolve, a job change is the only alternative.
 Most of organizations tend to listen when their engineers leave so it's a good
@@ -113,15 +129,6 @@ background. Because they tend to try to manage people and systems. They are too
 busy so they take shortcuts: decide now, explain to the team later. It's hard
 to deal with this because it's an organization issue. **Managers should focus
 on people, engineers on systems. Processes should be the common ground.**
-
-Another problem with managers is career progression. If they see Principals as
-competitors the relation can suffer. If they use their technical background as
-a weapon to deal with politics, **principals are a thread**. I have seen very
-weird executive meetings discussing deep technical things who nobody in the
-room really understand. This is again, an organization problem. I deal with it
-explaining from the very beginning I don't want their role. This seems to work
-but it takes time to build that trustiness. **Politics are hard and very
-harmful for organizations**.
 
 ## Don't be a hero
 
@@ -153,13 +160,6 @@ usually have a lot of meetings because of that, which it's probably one of the
 reasons you didn't become a manager in first place. **At some point you may sense
 you aren't learning as much as you did in the past. That's a warning signal for
 me: things have to change**.
-
-I take very seriously my happiness when working. So I don't try to push myself
-too much to do things which generates too much frustration on me. This works
-surprisingly well because **the principal role allows a lot of flexibility**.
-Some days I may do a PoC, others write a blog post to evangelize about some
-best practices at the company level, attend meetings, review Pull Requests,
-focus more in projects which are healthier, etc.
 
 **Give you some space to experiment and do things which really motivates you**
 is essential to be successful in the long term. They may be not the most urgent
@@ -221,11 +221,10 @@ whatever level number has your company... but that's just naming, which usually
 implies better salary. **Nobody complains for a salary raise but optimize to
 career based in the salary is a quite bad idea if you are already covered**.
 
-You can aspire to a Distinguished / Fellow role but it doesn't seem right to me.
-I always saw those roles as something really exceptional. The engineer who has
-been in the company for ten years and initially designed the architecture
-/ system. It may apply to some cases but I wouldn't say it's doable for most of
-us, at least, not as **goal which motivates me every day**.
+You can aspire to a Distinguished / Fellow role. It's a legit goal. I'm not
+very familiar with these roles. In my head, they mean more salary and more
+contact with the C-Suite. Both things are fine but they aren't intrinsic
+motivations (at least not for me).
 
 There is always the option to move to the Management track as Senior Engineer
 Manager or Director. That's fine if it's what you want to do but it's just
@@ -257,3 +256,4 @@ a message on [Twitter]!
 [If Your Boss Could Do Your Job, You’re More Likely to Be Happy at Work]: https://hbr.org/2016/12/if-your-boss-could-do-your-job-youre-more-likely-to-be-happy-at-work
 [exercism.io]: https://exercism.io/
 [Staff Engineer: Leadership beyond the management track]: https://www.goodreads.com/book/show/56481725-staff-engineer
+[Trident Career Model]: https://www.thekua.com/atwork/2019/02/the-trident-model-of-career-development/
