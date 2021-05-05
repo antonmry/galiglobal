@@ -27,8 +27,8 @@ problematic if I have to stop and resume it later. I also spend more time doing
 coding review than coding myself.
 
 **An architect?** A big part of my work is to improve systems and platforms.
-Listen to problems and propose solutions. But I don't feel like the guy who do
-a plan which must be blindly followed by others. I don't want to be
+Listen to problems and propose solutions. But I don't feel like the guy who
+does a plan which must be blindly followed by others. I don't want to be
 a gatekeeper who says what can be used and what can't. I'm not saying here all
 architects are gatekeepers but it may happen some times. In enough big
 organizations is normal, even healthy, to have some duplicities. I see design
@@ -67,7 +67,7 @@ the term "Individual contributor" seems wrong. **My contributions aren't
 individual but working with individuals**. The reality of the role is to do
 whatever is necessary to make teams and platforms succeed with freedom to
 choose the best way to achieve it. A sort of technical "Jack of all trades,
-master of none".
+master of none". [Martín Pérez comment] on this article explains it perfectly.
 
 One day I found this blog post in my timeline: [Some Thoughts on the Principal
 Role]. Based in this article, it was clear to me:
@@ -82,7 +82,7 @@ What a revelation! As explained in the article, I've being a Principal Software
 Engineer for years without being aware of it. Not only that, **it's what I want
 to do, what makes me happy**. It was great to know there is a name for my role
 and other people out there with the same motivations and struggles. It's for
-them, I wrote this article so I can to share my main challenges and experiences
+them, I wrote this article. I want to share my main challenges and experiences
 in this role.
 
 ## No clear definition of the role: the management trap
@@ -256,3 +256,5 @@ a message on [Twitter]!
 [exercism.io]: https://exercism.io/
 [Staff Engineer: Leadership beyond the management track]: https://www.goodreads.com/book/show/56481725-staff-engineer
 [Trident Career Model]: https://www.thekua.com/atwork/2019/02/the-trident-model-of-career-development/
+[Martín Pérez comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-831733828
+
