@@ -5,9 +5,9 @@ tags=Career
 status=published
 ---------
 
-## What's a Principal Software Engineer?
-
 ![Principal Software Engineer role](principal.jpg "Principal Software Engineer")
+
+## What's a Principal Software Engineer?
 
 One of the things I couldn't answer in the last 4-5 years was my role.
 
@@ -16,7 +16,7 @@ organisational point of view but my way to manage is "don't manage at all" and
 let the team self organize with my help. I tend to focus more on the team and
 processes and less on people. I'm not a manager, I try to be a technical
 leader. Organizations that understand the [Trident Career Model] have a great
-advantage because *"at scale, it is often hard to find people who have deep
+advantage because at scale, it is often hard to find people who have deep
 skills and experiences at both of these areas, and that it can be useful to
 discuss where someone’s focus, passion or development progression lies"*.
 
@@ -30,13 +30,17 @@ coding review than coding myself.
 **An architect?** A big part of my work is to improve systems and platforms.
 Listen to problems and propose solutions. But I don't feel like the guy who
 does a plan which must be blindly followed by others. I don't want to be
-a gatekeeper who says what can be used and what can't. I'm not saying here all
-architects are gatekeepers but it may happen some times. In enough big
-organizations is normal, even healthy, to have some duplicities. I see design
-and architecture as something more collaborative and myself as a facilitator.
-I usually share my experience doing similar things in the past and I help to
-make teams think out of the box or see their problems from a different
-perspective. I want teams working with me to find the right solution.
+a gatekeeper who says what can be used and what can't.
+
+As Miguel Garcia pointed reviewing the article, not all architects are
+gatekeepers. But it may happen some times so I prefer the role of Principal
+because I see it as something less theoretical. It's hard to visualize a real
+architect building a house with their own hands. It isn't so hard to imagine
+a skilled workman designing and building a house. I see design and architecture
+as something more collaborative and myself as a facilitator.  I usually share
+my experience doing similar things in the past and I help to make teams think
+out of the box or see their problems from a different perspective. I want teams
+working with me to find the right solution.
 
 I also like to be involved in global architecture. As I see systems design
 as a collaborative task, global architecture works exactly in the same way but
@@ -161,12 +165,15 @@ reasons you didn't become a manager in the first place. **At some point, you
 may sense you aren't learning as much as you did in the past. That's a warning
 signal for me: things have to change**.
 
-**Give you some space to experiment and do things that motivates you**
-is essential to be successful in the long term. They may be not the most urgent
+**Give you some space to experiment and do things that motivates you** is
+essential to be successful in the long term. They may be not the most urgent
 things for the company but, in my experience, that's exactly why they are
 important. **Principals should be able to see to the future and start that
 journey.** If you are stuck all the time in what's urgent, it's very difficult
-to do that.
+to do that. Nacho Garmilla, another of my mentors, wrote in [a comment] that
+the flexibility of the role can help on this: you don't have to limit yourself
+to your usual tasks but you can even contribute in other areas if it's
+something motivating.
 
 There is an excellent article about this: [Being glue]. It's from the
 perspective of a junior software engineer who wants to be promoted but it
@@ -258,4 +265,5 @@ disagree with me. Leave a comment on [GitHub] or just drop me a message on
 [Staff Engineer: Leadership beyond the management track]: https://www.goodreads.com/book/show/56481725-staff-engineer
 [Trident Career Model]: https://www.thekua.com/atwork/2019/02/the-trident-model-of-career-development/
 [Martín Pérez comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-831733828
+[a comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-835821073
 
