@@ -7,6 +7,8 @@ status=published
 
 ## What's a Principal Software Engineer?
 
+![Principal Software Engineer role](principal.jpg "Principal Software Engineer")
+
 One of the things I couldn't answer in the last 4-5 years was my role.
 
 **Am I a manager? No.** In some cases, people may report to me from an
