@@ -15,17 +15,19 @@ One of the things I couldn't answer in the last 4-5 years was my role.
 organisational point of view but my way to manage is "don't manage at all" and
 let the team self organize with my help. I tend to focus more on the team and
 processes and less on people. I'm not a manager, I try to be a technical
-leader. Organizations that understand the [Trident Career Model] have a great
+leader. Organizations that understand the [Trident Career Model] have *"a great
 advantage because at scale, it is often hard to find people who have deep
 skills and experiences at both of these areas, and that it can be useful to
-discuss where someone’s focus, passion or development progression lies"*.
+discuss where someone’s focus, passion or development progression lies"*. I
+think I could be a manager, but it wouldn't be so fun and, definitively, I
+don't want to be both things at the same time.
 
 **Am I a developer?** Well, coding is something I like to do but I spent a lot
 more time helping others to code than coding myself. Even more important,
-because of frequent interruptions, I don't enjoy too much coding new features.
-I prefer to work in proof of concepts or refactoring because it isn't so
-problematic if I have to stop and resume it later. I also spend more time doing
-coding review than coding myself.
+because of frequent interruptions, I don't enjoy too much coding new features
+with hard deadlines. I prefer to work in proof of concepts or refactoring code
+because it isn't so problematic if I have to stop and resume it later. I also
+spend more time doing coding review than coding myself.
 
 **An architect?** A big part of my work is to improve systems and platforms.
 Listen to problems and propose solutions. But I don't feel like the guy who
@@ -33,14 +35,14 @@ does a plan which must be blindly followed by others. I don't want to be
 a gatekeeper who says what can be used and what can't.
 
 As Miguel Garcia pointed reviewing the article, not all architects are
-gatekeepers. But it may happen some times so I prefer the role of Principal
+gatekeepers. But it may happen some times. I prefer the role of Principal
 because I see it as something less theoretical. It's hard to visualize a real
 architect building a house with their own hands. It isn't so hard to imagine
 a skilled workman designing and building a house. I see design and architecture
 as something more collaborative and myself as a facilitator.  I usually share
 my experience doing similar things in the past and I help to make teams think
-out of the box or see their problems from a different perspective. I want teams
-working with me to find the right solution.
+out of the box or see their problems from a different perspective. **I want
+teams working with me to find the right solution together**.
 
 I also like to be involved in global architecture. As I see systems design
 as a collaborative task, global architecture works exactly in the same way but
@@ -48,7 +50,8 @@ with other technical leaders and actors in the organization. When a C-level
 role defines the architecture without feedback from the technical leaders of
 the organization, it isn't only frustrating, it's also incomplete. Big
 organizations are too big to be designed by one individual (or a very small
-group): they need to be open and collaborative.
+group): they need to be open and collaborative. See [Before You Answer,
+Consider the Opposite Possibility] for more info.
 
 **Am I a product manager?** I work a lot with the roadmap and backlog of the
 platforms where I'm more involved. Evangelize the usage of the service is
@@ -85,10 +88,10 @@ Role]. Based on this article, it was clear to me:
 
 What a revelation! As explained in the article, I've been a Principal Software
 Engineer for years without being aware of it. Not only that, **it's what I want
-to do, what makes me happy**. It was great to know there is a name for my role
-and other people out there with the same motivations and struggles. It's for
-them, I wrote this article. I want to share my main challenges and experiences
-in this role.
+to do, what makes me happy** nowadays. It was great to know there is a name for
+my role and other people out there with the same motivations and struggles.
+It's for them, I wrote this article. I want to share my main challenges and
+experiences in this role.
 
 ## No clear definition of the role: the management trap
 
@@ -134,6 +137,12 @@ busy so they take shortcuts: decide now, explain to the team later. It's hard
 to deal with this because it's an organisational issue. **Managers should focus
 on people, engineers on systems. Processes should be the common ground.**
 
+Based in Eloy Coto's feedback, I'm going to stop here. Relation with managers
+is tricky and, in many cases, very dependant of the organization. If you have
+been working in big organization, you already know the relation with your
+manager is probably one of the main factors for success. I'm not particularly
+good on this so I need more advise than the advise I can give!
+
 ## Don't be a hero
 
 Another typical trap of the role is to become a hero. It may happen for many
@@ -154,7 +163,7 @@ etc.  [Senior Engineers build consensus]. Mentorship is one of my main tasks.
 
 You will have a better life, and which it's more important, you will focus on
 what's important. Your teams will grow and learn and they will be happy because
-of that. **Being a hero, you become the villain. Don't do that.**
+of that. **Being a hero, you become the villain.** Don't do that.
 
 ## Keep your optimism
 
@@ -162,8 +171,8 @@ Be a principal can be frustrating because your goals are now more aligned with
 your organization. It's a technical role but it's also oriented to people. You
 usually have a lot of meetings because of that, which it's probably one of the
 reasons you didn't become a manager in the first place. **At some point, you
-may sense you aren't learning as much as you did in the past. That's a warning
-signal for me: things have to change**.
+may sense you aren't learning as much as you did in the past.** That's
+a warning signal for me: things have to change.
 
 **Give you some space to experiment and do things that motivates you** is
 essential to be successful in the long term. They may be not the most urgent
@@ -172,8 +181,8 @@ important. **Principals should be able to see to the future and start that
 journey.** If you are stuck all the time in what's urgent, it's very difficult
 to do that. Nacho Garmilla, another of my mentors, wrote in [a comment] that
 the flexibility of the role can help on this: you don't have to limit yourself
-to your usual tasks but you can even contribute in other areas if it's
-something motivating.
+to your usual tasks: you can contribute in other areas if it's something
+motivating.
 
 There is an excellent article about this: [Being glue]. It's from the
 perspective of a junior software engineer who wants to be promoted but it
@@ -184,7 +193,7 @@ combined with Glue work.
 
 Finally, if you encounter toxic people, **don't let them make you lose your
 optimism.** In most cases, report it to my manager and ignore them after that
-worked well for me. There are a lot of wonderful people out there: focus on
+worked well for me. **There are a lot of wonderful people out there**: focus on
 them!.
 
 ## Don't stop coding
@@ -195,7 +204,7 @@ stop coding for a while, you lose a lot of fluency and it becomes very
 frustrating.  If you add the lack of enough long calendar slots and all
 the interruptions, it can be a nightmare. It's important for a Principal to
 feel confident when coding even if it isn't her primary task but it isn't easy
-to achieve it:
+to achieve it.
 
 Some tricks that help me with this:
 
@@ -214,9 +223,9 @@ Some tricks that help me with this:
   least I have it very present.
 - **Find something fun**: pet projects are a good way to stay motivated and
   learn. They also require some time and that's very personal. Don't get
-  frustrated if you don't have time for them, but if do and you have fun, go for
-  it.
-- Coding platforms are a great way to keep your skills. I recommend
+  frustrated if you don't have time for them, but if you do and you have fun,
+  go for it.
+- **Coding platforms** are a great way to keep your skills. I recommend
   [exercism.io].  It's open and the exercise can be done in your favourite IDE.
   The feeling is quite close to a real problem.
 
@@ -243,13 +252,16 @@ In summary, as Principal Software Engineer, promotions aren't going to be the
 goal so you need to find new ones and that's highly dependant on each person.
 In my case, it's to learn new things. It has been always my passion and the
 reason I'm a software engineer. **This role allows me to learn new things every
-day and help others. I can't ask for anything more.**
+day and help others.** I can't ask for anything more.
 
-This is article is already too long and I don't want to write a book. There is
-already one: [Staff Engineer: Leadership beyond the management track]. I would
-love to know what do you think about the Principal role, especially if you
-disagree with me. Leave a comment on [GitHub] or just drop me a message on
-[Twitter]!
+## Conclusions
+
+I didn't cover everything I would like but this is article is already too long
+and I don't want to write a book (there is already one: [Staff Engineer:
+Leadership beyond the management track]). I would love to know what do you
+think about the Principal role, especially if you disagree with me. Leave
+a comment on [GitHub] or just drop me a message on [Twitter], I'm always open
+to have a chat about the role or share my experiences.
 
 [GitHub]: https://github.com/antonmry/galiglobal/pull/40
 [Twitter]: https://twitter.com/antonmry
@@ -266,4 +278,4 @@ disagree with me. Leave a comment on [GitHub] or just drop me a message on
 [Trident Career Model]: https://www.thekua.com/atwork/2019/02/the-trident-model-of-career-development/
 [Martín Pérez comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-831733828
 [a comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-835821073
-
+[Before You Answer, Consider the Opposite Possibility]: https://www.theatlantic.com/ideas/archive/2021/04/case-disagreeing-yourself/618688/
