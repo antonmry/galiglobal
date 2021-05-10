@@ -21,7 +21,7 @@ I can help with governance, operation, performance, adoption, training and any
 task related to system administration or backend development.
 
 I have a strong sense of my goals as Principal Software Engineer which are
-very good summarized in [Some Thoughts on the Principal Role]:
+very good summarized in [My Thoughts on the Principal Role]:
 
 - **Help people get better at what they do**.
 - Be involved with architecture or other kinds of design, best practices,
@@ -62,7 +62,7 @@ I've received some awards during my career:
 - Sharing open source pet projects and geek ideas in [GitHub].
 - My professional experience in [LinkedIn].
 
-[Some Thoughts on the Principal Role]: https://margint.blog/2020/10/07/some-thoughts-on-the-principal-role/
+[My Thoughts on the Principal Role]: /blog/2021/20210313-The-principal-role.html
 [VigoJUG]: https://www.vigojug.org
 [CoruñaJUG]: https://www.corunajug.org
 [LaretasGeek]: https://twitter.com/laretasGeek
