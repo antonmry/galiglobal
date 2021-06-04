@@ -6,8 +6,8 @@
     <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Mon, 10 May 2021 13:56:17 +0200</pubDate>
-    <lastBuildDate>Mon, 10 May 2021 13:56:17 +0200</lastBuildDate>
+    <pubDate>Fri, 4 Jun 2021 08:56:59 +0200</pubDate>
+    <lastBuildDate>Fri, 4 Jun 2021 08:56:59 +0200</lastBuildDate>
 
     
     <item>
@@ -70,6 +70,8 @@
 &lt;p&gt;In summary, as Principal Software Engineer, promotions aren&apos;t going to be the goal so you need to find new ones and that&apos;s highly dependant on each person. In my case, it&apos;s to learn new things. It has been always my passion and the reason I&apos;m a software engineer. &lt;strong&gt;This role allows me to learn new things every day and help others.&lt;/strong&gt; I can&apos;t ask for anything more.&lt;/p&gt;
 &lt;h2&gt;Conclusions&lt;/h2&gt;
 &lt;p&gt;I didn&apos;t cover everything I would like but this is article is already too long and I don&apos;t want to write a book (there is already one: &lt;a href=&quot;https://www.goodreads.com/book/show/56481725-staff-engineer&quot;&gt;Staff Engineer: Leadership beyond the management track&lt;/a&gt;). I would love to know what do you think about the Principal role, especially if you disagree with me. Leave a comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/40&quot;&gt;GitHub&lt;/a&gt; or just drop me a message on &lt;a href=&quot;https://twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;, I&apos;m always open to have a chat about the role or share my experiences.&lt;/p&gt;
+&lt;h2&gt;Update&lt;/h2&gt;
+&lt;p&gt;This article made it to the top 5 articles in HackerNews! There are &lt;a href=&quot;https://news.ycombinator.com/item?id=27231521&quot;&gt;a lot of interesting comments&lt;/a&gt; covering very different points of view.&lt;/p&gt;
 
 	  </description>
     </item>
@@ -122,6 +124,7 @@
 &lt;h2&gt;Summary&lt;/h2&gt;
 &lt;p&gt;This is a list of only three things (but there are much more!) that may help to use Kafka properly and avoid the need to look for alternatives. They are based on my previous experience. They worked well for me until now but don&apos;t use them blindly. It&apos;s perfectly fine to break any of those rules, the point is to do it by being aware of the challenges and plan for the consequences.&lt;/p&gt;
 &lt;p&gt;Did I miss something? You can comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/39&quot;&gt;GitHub&lt;/a&gt; or just drop me a note on &lt;a href=&quot;https://twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;Update: this article made it to &lt;a href=&quot;https://dzone.com/articles/three-simple-ideas-to-make-your-life-easier-with-k&quot;&gt;DZone&lt;/a&gt;.&lt;/p&gt;
 
 	  </description>
     </item>
@@ -261,6 +264,7 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;Source code is on this &lt;a href=&quot;https://github.com/antonmry/flink-playground&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Did I miss something? You can leave a comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/38&quot;&gt;GitHub&lt;/a&gt; or just drop me a message on &lt;a href=&quot;https://twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;Update: this article made it to &lt;a href=&quot;https://dzone.com/articles/how-to-build-and-debug-a-flink-pipeline-based-in-e&quot;&gt;DZone&lt;/a&gt;.&lt;/p&gt;
 
 	  </description>
     </item>
@@ -564,6 +568,7 @@ key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;a
 &lt;p&gt;We have covered here the basics of &lt;a href=&quot;https://avro.apache.org/&quot;&gt;Apache Avro&lt;/a&gt; in an &lt;a href=&quot;https://kafka.apache.org/&quot;&gt;Apache Kafka&lt;/a&gt; architecture.  It has important advantages in terms of performance, reduction of message size and governance of the schemas.&lt;/p&gt;
 &lt;p&gt;But it also has some problems, especially when we are dealing with hybrid and/or multi-tenant architectures. In the following two parts of this series, we&apos;ll cover these problems in details and the different alternatives we have with Avro to deal with them.&lt;/p&gt;
 &lt;p&gt;Do you have comments? I would love to read them. &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/34&quot;&gt;Leave a message&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;Update: this article made it to &lt;a href=&quot;https://dzone.com/articles/gentle-and-practical-introduction-to-apache-avro-part-1&quot;&gt;DZone&lt;/a&gt;.&lt;/p&gt;
 
 	  </description>
     </item>
