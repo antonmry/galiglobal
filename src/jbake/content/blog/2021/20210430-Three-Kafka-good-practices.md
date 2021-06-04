@@ -166,6 +166,8 @@ do it by being aware of the challenges and plan for the consequences.
 Did I miss something? You can comment on [GitHub] or just drop me a note on
 [Twitter]!
 
+Update: this article made it to [DZone].
+
 [GitHub]: https://github.com/antonmry/galiglobal/pull/39
 [Twitter]: https://twitter.com/antonmry
 [message.max.bytes]: https://kafka.apache.org/documentation/#brokerconfigs_message.max.bytes
@@ -176,3 +178,4 @@ Did I miss something? You can comment on [GitHub] or just drop me a note on
 [specify a Regex]: https://kafka.apache.org/26/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html#subscribe-java.util.regex.Pattern-org.apache.kafka.clients.consumer.ConsumerRebalanceListener
 [this thread]: https://twitter.com/gunnarmorling/status/1384903606407729153
 [an article]: https://netflixtechblog.com/kafka-inside-keystone-pipeline-dd5aeabaf6bb
+[DZone]: https://dzone.com/articles/three-simple-ideas-to-make-your-life-easier-with-k

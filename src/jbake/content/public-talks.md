@@ -7,6 +7,7 @@ status=published
 
 ## 2021
 
+- Kafka Summit Europe - [Schema Management: the elephant in the Cloud room](https://www.kafka-summit.org/sessions/schema-management-the-elephant-in-the-cloud-room): [slides](https://docs.google.com/presentation/d/1e2T-KrOLMxIWK-AOq1i4rMPT0hu38Am_7wI6IU2xq2M/edit?usp=sharing)
 - LaretasGeek - [New Java 16 features special](https://www.meetup.com/CorunaJUG/events/277493329/): [video](https://www.youtube.com/watch?v=JoKTs_F4PTs)
 - MadridJUG - [APIs en arquitecturas híbridas orientadas a eventos sin morir en el intento](https://www.meetup.com/MadridJUG/events/276514609/): [video](https://www.youtube.com/watch?v=avSI_9Ex3QQ) and [slides](https://docs.google.com/presentation/d/1qYy6dUmJIr8KZtNXR5n9kS7FcgAU5oiXfKMGhkkqogI/edit?usp=sharing)
 - Oracledbacr - [Podcast Cita a Ciegas](https://open.spotify.com/episode/4Uyzyosb4kWvVEbkKqaavI?si=xjPHhf3sRV-2d39fKw0cAQ&nd=1)

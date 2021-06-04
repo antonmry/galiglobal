@@ -280,6 +280,8 @@ with Avro to deal with them.
 
 Do you have comments? I would love to read them. [Leave a message]!
 
+Update: this article made it to [DZone].
+
 [Apache Avro]: https://avro.apache.org/
 [Apache Kafka]: https://kafka.apache.org/
 [Dario Cazas]: https://github.com/dariocazas
@@ -291,3 +293,4 @@ Do you have comments? I would love to read them. [Leave a message]!
 [Schema Evolution and Compatibility]: https://docs.confluent.io/platform/current/schema-registry/avro.html
 [kafka-java-client-examples]: https://github.com/antonmry/kafka-java-client-examples
 [Leave a message]: https://github.com/antonmry/galiglobal/pull/34
+[DZone]: https://dzone.com/articles/gentle-and-practical-introduction-to-apache-avro-part-1

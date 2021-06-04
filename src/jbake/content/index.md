@@ -48,6 +48,7 @@ PosadaDev, etc.
 
 I've received some awards during my career:
 
+* 2021: [RedHat Accelerator]
 * 2020: [Confluent Community Catalyst].
 * 2015: [TADHack Global Winner]
 * 2015: [Oracle ACE Associate]
@@ -88,4 +89,6 @@ I've received some awards during my career:
 [Azure Stream Analytics]: https://azure.microsoft.com/en-us/services/stream-analytics/
 [Flink]: https://flink.apache.org/
 [Apache Pulsar]: https://pulsar.apache.org/
-[Streaming Annotated Newsletter]: https://lowlatency.substack.com/
+[Streaming Annotated Newsletter]: https://streamingannotated.substack.com/
+[RedHat Accelerator]: https://access.redhat.com/accelerators
+

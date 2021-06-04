@@ -315,6 +315,8 @@ Source code is on this [GitHub repository].
 Did I miss something? You can leave a comment on [GitHub] or just drop me
 a message on [Twitter]!
 
+Update: this article made it to [DZone].
+
 [GitHub repository]: https://github.com/antonmry/flink-playground
 [Apache Flink]: https://flink.apache.org/
 [GitHub]: https://github.com/antonmry/galiglobal/pull/38
@@ -342,4 +344,4 @@ a message on [Twitter]!
 [Timers not firing until stream end]: http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/Timers-not-firing-until-stream-end-td41015.html
 [assignTimestampsAndWatermarks not work after Keyed]: http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/assignTimestampsAndWatermarks-not-work-after-KeyedStream-process-td27364.html
 [The Dataflow Model]: https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43864.pdf
-
+[DZone]: https://dzone.com/articles/how-to-build-and-debug-a-flink-pipeline-based-in-e

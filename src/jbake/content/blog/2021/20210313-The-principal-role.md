@@ -263,6 +263,11 @@ think about the Principal role, especially if you disagree with me. Leave
 a comment on [GitHub] or just drop me a message on [Twitter], I'm always open
 to have a chat about the role or share my experiences.
 
+## Update
+
+This article made it to the top 5 articles in HackerNews! There are [a lot of
+interesting comments] covering very different points of view.
+
 [GitHub]: https://github.com/antonmry/galiglobal/pull/40
 [Twitter]: https://twitter.com/antonmry
 
@@ -279,3 +284,4 @@ to have a chat about the role or share my experiences.
 [Martín Pérez comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-831733828
 [a comment]: https://github.com/antonmry/galiglobal/pull/40#issuecomment-835821073
 [Before You Answer, Consider the Opposite Possibility]: https://www.theatlantic.com/ideas/archive/2021/04/case-disagreeing-yourself/618688/
+[a lot of interesting comments]: https://news.ycombinator.com/item?id=27231521
