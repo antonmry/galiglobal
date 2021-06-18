@@ -21,14 +21,7 @@ I can help with governance, operation, performance, adoption, training and any
 task related to system administration or backend development.
 
 I have a strong sense of my goals as Principal Software Engineer which are
-very good summarized in [My Thoughts on the Principal Role]:
-
-- **Help people get better at what they do**.
-- Be involved with architecture or other kinds of design, best practices,
-  CI/CD, testing, or whatever is necessary.
-- Make systems and global architectures technically better and more robust.
-- Be expandable. The whole team should be independent and continue improving
-  after I'm no longer with them.
+very good summarized in [My Thoughts on the Principal Role].
 
 ## Tech Community
 
@@ -42,16 +35,16 @@ I also like to organize technology events, groups and other activities:
 - [LaretasGeek] is a virtual panel and podcast about technology with focus on
   Java.
 
-Sometimes I speak at international [technology conferences] as Geecon, JBCNConf,
-Greach, SpringIO, CommitConf, TADSummit, AtlánticaConf, LicorcaConf, CoimbraJUG,
-PosadaDev, etc.
+Sometimes I speak at international [technology conferences] as Kafka Summit, 
+Pulsar Summit, Geecon, JBCNConf, JNation, Greach, SpringIO, CommitConf, etc.
 
 I've received some awards during my career:
 
-* 2021: [RedHat Accelerator]
+* 2021: [Google Developer Expert].
+* 2021: [RedHat Accelerator].
 * 2020: [Confluent Community Catalyst].
-* 2015: [TADHack Global Winner]
-* 2015: [Oracle ACE Associate]
+* 2015: [TADHack Global Winner].
+* 2015: [Oracle ACE Associate].
 
 ## Social profile
 
@@ -91,4 +84,5 @@ I've received some awards during my career:
 [Apache Pulsar]: https://pulsar.apache.org/
 [Streaming Annotated Newsletter]: https://streamingannotated.substack.com/
 [RedHat Accelerator]: https://access.redhat.com/accelerators
+[Google Developer Expert]: https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste
 
