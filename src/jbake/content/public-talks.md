@@ -7,9 +7,11 @@ status=published
 
 ## 2021
 
+- Java User Groups Panel - [Qué hemos aprendido del caso Log4j](https://www.meetup.com/es-ES/CorunaJUG/events/282806987/): [video](https://www.youtube.com/watch?v=3iCw7kUfmCc).
+- CampusMVP Interview - [Análisis masivo de datos en tiempo real](https://www.linkedin.com/feed/update/urn:li:activity:6863414766682161152/): [video](https://www.youtube.com/watch?v=CDs1Svbtb9s).
 - Devoxx UK - [Kafka and Pulsar: a gentle comparison](https://www.devoxx.co.uk/talk/?id=9709): [slides](https://docs.google.com/presentation/d/1-lJWwvtjyBrSckzAgr0B5srlbd0OKHMfjFHim9uhd7E/edit?usp=sharing).
 - JBCNConf - [Kafka y Pulsar: una comparación gentil](https://www.jbcnconf.com/2021/infoSpeaker.html?ref=2b14d512d954c54d2bce56f69c2a7e1b755bee2f): [slides](https://docs.google.com/presentation/d/11AIyMZ3GCG6-2krQYFI99gE4_unWPqpJM-fAkPGw8Vc/edit?usp=sharing) and [video](https://www.youtube.com/watch?v=9JbYPY4wW_o).
-- Pulsar Summit - [How Big Is Too Big? Message Size in Pulsar](https://www.na2021.pulsar-summit.org/all-talks/how-big-is-too-big%3F-message-size-in-pulsar): [slides](https://docs.google.com/presentation/d/17YzgJmjy32piWA72OrW88x329SF_1HHSJJtfdqhq0W8/edit?usp=sharing).
+- Pulsar Summit - [How Big Is Too Big? Message Size in Pulsar](https://www.na2021.pulsar-summit.org/all-talks/how-big-is-too-big%3F-message-size-in-pulsar): [slides](https://docs.google.com/presentation/d/17YzgJmjy32piWA72OrW88x329SF_1HHSJJtfdqhq0W8/edit?usp=sharing) and [video](https://www.youtube.com/watch?v=Mispc4z2OHg).
 - JNation - Schema Management: the elephant in the Cloud room: [video](https://youtu.be/qWRiblQkJeg?t=989) and [slides](https://docs.google.com/presentation/d/11AIyMZ3GCG6-2krQYFI99gE4_unWPqpJM-fAkPGw8Vc/edit?usp=sharing).
 - Kafka Summit Europe - [Schema Management: the elephant in the Cloud room](https://www.kafka-summit.org/sessions/schema-management-the-elephant-in-the-cloud-room): [slides](https://docs.google.com/presentation/d/1e2T-KrOLMxIWK-AOq1i4rMPT0hu38Am_7wI6IU2xq2M/edit?usp=sharing)
 - LaretasGeek - [New Java 16 features special](https://www.meetup.com/CorunaJUG/events/277493329/): [video](https://www.youtube.com/watch?v=JoKTs_F4PTs)
