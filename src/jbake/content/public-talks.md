@@ -5,8 +5,14 @@ tags=galiglobal
 status=published
 ---------
 
+## 2022
+
+- FOSDEM - [Monitoring Kafka without instrumentation with eBPF](https://fosdem.org/2022/schedule/event/monitoring_kafka_using_ebpf/): [video](https://ftp.osuosl.org/pub/fosdem/2022/D.monitoring/monitoring_kafka_using_ebpf.webm)
+- DevConf.cz - [Monitoring Kafka without instrumentation with eBPF](https://devconfcz2022.sched.com/event/siFD/monitoring-kafka-without-instrumentation-with-ebpf): [video](https://www.youtube.com/watch?v=42o5fURGXqI)
+
 ## 2021
 
+- JCP Java Education Interview: [video](https://jcp.org/files/initiatives/java-in-education/materials/2022_02_15/Anton_Rodriguez.mp4)
 - Java User Groups Panel - [Qué hemos aprendido del caso Log4j](https://www.meetup.com/es-ES/CorunaJUG/events/282806987/): [video](https://www.youtube.com/watch?v=3iCw7kUfmCc).
 - CampusMVP Interview - [Análisis masivo de datos en tiempo real](https://www.linkedin.com/feed/update/urn:li:activity:6863414766682161152/): [video](https://www.youtube.com/watch?v=CDs1Svbtb9s).
 - Devoxx UK - [Kafka and Pulsar: a gentle comparison](https://www.devoxx.co.uk/talk/?id=9709): [slides](https://docs.google.com/presentation/d/1-lJWwvtjyBrSckzAgr0B5srlbd0OKHMfjFHim9uhd7E/edit?usp=sharing) and [video](https://www.youtube.com/watch?v=ww59G2QXXxc).
