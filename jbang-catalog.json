@@ -1,0 +1,10 @@
+{
+  "catalogs": {},
+  "aliases": {
+    "kafka": {
+      "script-ref": "https://github.com/antonmry/kbang/blob/HEAD/Kafka.java",
+      "properties": {}
+    }
+  },
+  "templates": {}
+}
