@@ -7,6 +7,9 @@ status=published
 
 ## 2022
 
+- JonTheBeach - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.jonthebeach.com/home/22/Ant%C3%B3n+Rodr%C3%ADguez)
+- Kafka Summit EU - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.kafka-summit.org/sessions/monitoring-kafka-without-instrumentation-using-ebpf)
+- Streaming Audio Podcast - [Monitoring Extreme-Scale Apache Kafka Using eBPF at New Relic](https://developer.confluent.io/podcast/monitoring-extreme-scale-apache-kafka-using-ebpf-at-new-relic): [video](https://www.youtube.com/watch?v=GZ4Fb_TqvmM)
 - Codely - Moderniza tu aplicación con las nuevas funcionalidades de Java 18: [video](https://www.youtube.com/watch?v=LSYyXMRAVgs) and [code](https://github.com/antonmry/java-playground/blob/master/java18/Notes.md)
 - FOSDEM - [Monitoring Kafka without instrumentation with eBPF](https://fosdem.org/2022/schedule/event/monitoring_kafka_using_ebpf/): [video](https://ftp.osuosl.org/pub/fosdem/2022/D.monitoring/monitoring_kafka_using_ebpf.webm)
 - DevConf.cz - [Monitoring Kafka without instrumentation with eBPF](https://devconfcz2022.sched.com/event/siFD/monitoring-kafka-without-instrumentation-with-ebpf): [video](https://www.youtube.com/watch?v=42o5fURGXqI)
