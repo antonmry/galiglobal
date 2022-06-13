@@ -7,7 +7,8 @@ status=published
 
 ## 2022
 
-- FutureStack - Monitoring Kafka Without Instrumentation Using Pixie:  [slides](https://docs.google.com/presentation/d/1dFlBQZWUNCATg11xwZsqj0rqcOBtEpOgyUL_USGe7bU/edit?usp=sharing)
+- JNation - Monitoring Kafka Without Instrumentation Using eBPF: [video](https://www.youtube.com/watch?v=s-j6g6mWllU)
+- FutureStack - Monitoring Kafka Without Instrumentation Using Pixie: [slides](https://docs.google.com/presentation/d/1dFlBQZWUNCATg11xwZsqj0rqcOBtEpOgyUL_USGe7bU/edit?usp=sharing)
 - Factoria F5 - Docker and Kubernetes workshop with a Google Developer Expert: [code](https://gist.github.com/antonmry/c30df97e07e7003a8367cd90c02c8a03)
 - JonTheBeach - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.jonthebeach.com/home/22/Ant%C3%B3n+Rodr%C3%ADguez)
 - Kafka Summit EU - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.kafka-summit.org/sessions/monitoring-kafka-without-instrumentation-using-ebpf): [video and slides](https://www.confluent.io/resources/presentation/monitoring-kafka-without-instrumentation-using-ebpf/)
