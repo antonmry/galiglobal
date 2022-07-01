@@ -7,39 +7,29 @@ status=published
 
 <img align="right" style="  max-width: 30%;height: auto;  padding: 0px 10px;" src="/images/antonmry.jpg">
 
-I'm a Principal Software Engineer focused on **Event Streaming and Real-Time
-Processing**. I've experience working with different message brokers and event
-streaming platforms ([Apache Kafka], [Apache Pulsar], [Google Pub/Sub] and
-[Azure EventHub]) and real-time processing frameworks ([Flink], [Kafka
-Streams], [Spark Structured Streaming], [Google Dataflow], [Azure Stream
-Analytics], etc.).
+I have a passion for building high-throughput streaming systems and platforms
+that solve the challenges that come with them.
 
-During my career, **I specialized in building internal SaaS** in big
-corporations to make complex technologies easily used and adopted by teams so
-they can build solutions to real business use cases. From the very beginning,
-I can help with governance, operation, performance, adoption, training and any
-task related to system administration or backend development.
-
-I have a strong sense of my goals as Principal Software Engineer which are
-very good summarized in [My Thoughts on the Principal Role].
+I have a strong sense of my goals as Principal Software Engineer, summarized in
+[My Thoughts on the Principal Role] article.
 
 ## Tech Community
 
-I also like to organize technology events, groups and other activities:
+I know I've been very lucky so I try to contribute back sharing my learnings in
+[my blog], speaking at local and international [technology conferences] and
+organizing technology events, groups and other activities:
 
-- [Streaming Annotated Newsletter]: receive the last news and interesting
-  articles about streaming platforms and processing frameworks each month in
-  your mailbox.
 - [VigoJUG] co-organizer of the Vigo Java User Group since 2017.
 - [CoruñaJUG] co-organizer of the Coruña Java User Group since 2018.
 - [LaretasGeek] is a virtual panel and podcast about technology with focus on
-  Java.
-
-Sometimes I speak at international [technology conferences] as Kafka Summit, 
-Pulsar Summit, Geecon, JBCNConf, JNation, Greach, SpringIO, CommitConf, etc.
+  Java (discontinued).
+- [Streaming Annotated Newsletter]: the last news and interesting articles
+  about streaming platforms and processing frameworks each month in your
+  mailbox (discontinued).
 
 I've received some awards during my career:
 
+* 2022: [Java Champion].
 * 2021: [Google Developer Expert].
 * 2021: [RedHat Accelerator].
 * 2020: [Confluent Community Catalyst].
@@ -48,13 +38,11 @@ I've received some awards during my career:
 
 ## Social profile
 
-- Sharing my learnings in [my blog]. If you want to follow it, the easiest way
-  is using [RSS] and your favourite app, as for example, [Feedly].
+- Sharing open source side projects and ideas in [GitHub].
 - Tinkering with interactions on [Twitter].
-- Reading books on [Goodreads].
-- Sharping my coding skills on [Exercism].
-- Sharing open source pet projects and geek ideas in [GitHub].
 - My professional experience in [LinkedIn].
+- Sharping my coding skills on [Exercism].
+- Reading books on [Goodreads].
 
 [My Thoughts on the Principal Role]: /blog/2021/20210313-The-principal-role.html
 [VigoJUG]: https://www.vigojug.org
@@ -85,4 +73,5 @@ I've received some awards during my career:
 [Streaming Annotated Newsletter]: https://streamingannotated.substack.com/
 [RedHat Accelerator]: https://access.redhat.com/accelerators
 [Google Developer Expert]: https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste
-
+[Java Champion]: https://twitter.com/Java_Champions/status/1541467821619953665
+[Confluent Community Catalyst]: https://www.confluent.io/nominate/

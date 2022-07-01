@@ -7,11 +7,13 @@ status=published
 
 ## 2022
 
+- VigoJUG - [eBPF: cómo lo descubrí y por qué creo que lo va a petar muy fuerte](https://www.meetup.com/vigojug/events/286706842/)
+- CoruñaJUG - [eBPF: cómo lo descubrí y por qué creo que lo va a petar muy fuerte](https://www.meetup.com/corunajug/events/286706809/)
 - JNation - Monitoring Kafka Without Instrumentation Using eBPF: [video](https://www.youtube.com/watch?v=s-j6g6mWllU)
 - FutureStack - Monitoring Kafka Without Instrumentation Using Pixie: [slides](https://docs.google.com/presentation/d/1dFlBQZWUNCATg11xwZsqj0rqcOBtEpOgyUL_USGe7bU/edit?usp=sharing)
 - Factoria F5 - Docker and Kubernetes workshop with a Google Developer Expert: [code](https://gist.github.com/antonmry/c30df97e07e7003a8367cd90c02c8a03)
-- JonTheBeach - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.jonthebeach.com/home/22/Ant%C3%B3n+Rodr%C3%ADguez)
-- Kafka Summit EU - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.kafka-summit.org/sessions/monitoring-kafka-without-instrumentation-using-ebpf): [video and slides](https://www.confluent.io/resources/presentation/monitoring-kafka-without-instrumentation-using-ebpf/)
+- JonTheBeach - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.jonthebeach.com/home/22/Ant%C3%B3n+Rodr%C3%ADguez): [video](https://www.youtube.com/watch?v=fkSdVwIbbDA)
+- Kafka Summit EU - [Monitoring Kafka Without Instrumentation Using eBPF](https://www.kafka-summit.org/sessions/monitoring-kafka-without-instrumentation-using-ebpf): [video and slides](https://www.confluent.io/events/kafka-summit-london-2022/monitoring-kafka-without-instrumentation-using-ebpf/)
 - Streaming Audio Podcast - [Monitoring Extreme-Scale Apache Kafka Using eBPF at New Relic](https://developer.confluent.io/podcast/monitoring-extreme-scale-apache-kafka-using-ebpf-at-new-relic): [video](https://www.youtube.com/watch?v=GZ4Fb_TqvmM)
 - Nextail Tech Talk - The Principal's role: [slides](https://docs.google.com/presentation/d/1EJ29gFbxi6YRWu0vPU5dH3vv8Gt1WzL9SOnZGWyrQ1A/edit?usp=sharing)
 - Codely - Moderniza tu aplicación con las nuevas funcionalidades de Java 18: [video](https://www.youtube.com/watch?v=LSYyXMRAVgs) and [code](https://github.com/antonmry/java-playground/blob/master/java18/Notes.md)
