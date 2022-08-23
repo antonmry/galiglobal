@@ -66,29 +66,79 @@
 <p>Again we'll use <a href="https://github.com/antonmry/leanmanager">Leanmanager bot</a> but everything applies to any other system which needs to store configuration or data in a database. In the case of <a href="https://github.com/antonmry/leanmanager">Leanmanager</a> we are using <a href="https://github.com/boltdb/bolt">Boltdb</a>, a pure Go key/value store. <a href="https://github.com/boltdb/bolt">Boltdb</a> is great for development but it doesn't support to have more than one process opening the same database file, so it may be problematic if we want to have more than one Docker instance at the same time. Yet it's enough for our purposes and the process is similar for <a href="https://www.consul.io/">Consul</a> which it's already in the Roadmap.</p>
 <h2>Create your persistent disks</h2>
 <p>If we want to persist data, we are going to need a disk, that's common sense. In GCE we can do it very easily:</p>
-<p><code>sh gcloud compute disks create --size 1GB leanmanager-disk</code></p>
+<pre><code class="language-sh">gcloud compute disks create --size 1GB leanmanager-disk
+</code></pre>
 <p>But again, we want to do it in an automated way with Terraform. Use the following file <code>leanmanager-disk.tf</code>:</p>
-<p>``` variable &quot;disk_name&quot; { default = &quot;leanmanager-disk&quot; }</p>
-<p>resource &quot;google_compute_disk&quot; &quot;default&quot; { name  = &quot;${var.disk_name}&quot; type  = &quot;pd-ssd&quot; zone = &quot;${var.region}&quot; size  = &quot;1&quot; } ```</p>
+<pre><code>variable &quot;disk_name&quot; {
+  default = &quot;leanmanager-disk&quot;
+}
+
+resource &quot;google_compute_disk&quot; &quot;default&quot; {
+name  = &quot;${var.disk_name}&quot;
+  type  = &quot;pd-ssd&quot;
+  zone = &quot;${var.region}&quot;
+  size  = &quot;1&quot;
+}
+</code></pre>
 <p>If you want to know more about it, visit the <a href="https://www.terraform.io/docs/providers/google/r/compute_disk.html">Terraform Google_Compute_Disk reference documentation</a>.</p>
 <h2>Tell the container about the disk</h2>
 <p>In our previous post, we've launched the bot using <code>kubectl run</code>. This is OK for simple configuration but if we need to have something more complex, it doesn't scale. We can create a <a href="http://kubernetes.io/docs/user-guide/pods/">pod</a>, a group of one or more containers, using a YAML file like this:</p>
-<p><code>apiVersion: v1 kind: Pod metadata: name: leanmanager labels: name: leanmanager spec: containers: - image: antonmry/leanmanager:latest name: leanmanager env: - name: LEANMANAGER_TOKEN value: LEANMANAGER_TOKEN_TEMPLATE - name: LEANMANAGER_PATHDB value: /mnt volumeMounts: # This name must match the volumes.name below. - name: leanmanager-persistent-storage mountPath: /mnt volumes: - name: leanmanager-persistent-storage gcePersistentDisk: # This disk must already exist. pdName: leanmanager-disk fsType: ext4</code></p>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: leanmanager
+  labels:
+    name: leanmanager
+spec:
+  containers:
+    - image: antonmry/leanmanager:latest
+      name: leanmanager
+      env:
+        - name: LEANMANAGER_TOKEN
+          value: LEANMANAGER_TOKEN_TEMPLATE
+        - name: LEANMANAGER_PATHDB
+          value: /mnt
+      volumeMounts:
+          # This name must match the volumes.name below.
+        - name: leanmanager-persistent-storage
+          mountPath: /mnt
+  volumes:
+    - name: leanmanager-persistent-storage
+      gcePersistentDisk:
+        # This disk must already exist.
+        pdName: leanmanager-disk
+        fsType: ext4
+</code></pre>
 <p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I don't want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn't supported yet in K8s, see <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>.</p>
 <p>So I've created a YAML template and in the Terraform file changed the last <code>local-exec</code> to:</p>
-<p>``` provisioner &quot;local-exec&quot; { command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- 's/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g' leanmanager.tmp.yaml&quot; }</p>
-<p>provisioner &quot;local-exec&quot; { command = &quot;kubectl create -f leanmanager.tmp.yaml&quot; }</p>
-<p>provisioner &quot;local-exec&quot; { command = &quot;rm -f leanmanager.tmp.yaml&quot; } ```</p>
+<pre><code>  provisioner &quot;local-exec&quot; {
+    command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- 's/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g' leanmanager.tmp.yaml&quot;
+  }
+
+  provisioner &quot;local-exec&quot; {
+    command = &quot;kubectl create -f leanmanager.tmp.yaml&quot;
+  }
+
+  provisioner &quot;local-exec&quot; {
+    command = &quot;rm -f leanmanager.tmp.yaml&quot;
+  }
+</code></pre>
 <p>Basically, I'm replacing strings with <code>sed</code>. Other more sophisticate approaches are possible as K8s secrets or Ansible, but this is simple and enough for the task we want to do.</p>
 <h2>Create the pod and test</h2>
 <p>Time to create the cluster and the pod:</p>
-<p><code>sh terraform plan terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN</code></p>
+<pre><code class="language-sh">terraform plan
+terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
+</code></pre>
 <p>The bot should connect. Now we can do some changes in the configuration, delete the pod:</p>
-<p><code>sh kubectl delete pod leanmanager</code></p>
+<pre><code class="language-sh">kubectl delete pod leanmanager
+</code></pre>
 <p>Create it again:</p>
-<p><code>sh kubectl create -f leanmanager.yaml</code></p>
+<pre><code class="language-sh">kubectl create -f leanmanager.yaml
+</code></pre>
 <p>And check the status with the following commands and, once it's in <em>Running</em> state, see if everything has been persisted:</p>
-<p><code>sh kubectl get pod leanmanager kubectl logs leanmanager</code></p>
+<pre><code class="language-sh">kubectl get pod leanmanager
+kubectl logs leanmanager
+</code></pre>
 <h2>Conclusion</h2>
 <p>Persist data in Kubernetes is quite easy, even if you are going to do it automatically.</p>
 <p>If you want to check all the files, the full project and the associated PR are in <a href="https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0">Github</a>.</p>

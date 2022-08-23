@@ -69,21 +69,30 @@
 <p>If after the video, you think microservices fit your case, go ahead and may the Force be with you.</p>
 <h2>Go-kit addsvc example</h2>
 <p>First step, download Go-kit:</p>
-<p><code>sh go get github.com/go-kit/kit</code></p>
+<pre><code class="language-sh">go get github.com/go-kit/kit
+</code></pre>
 <p>Then, just copy the <a href="https://github.com/go-kit/kit/tree/master/examples/addsvc">addsvc example</a> and download the dependencies (this may take a while depending of what you've already in the GOPATH).</p>
-<p><code>sh cp -r ../../go-kit/kit/examples/addsvc/ . go get ./...</code></p>
+<pre><code class="language-sh">cp -r ../../go-kit/kit/examples/addsvc/ .
+go get ./...
+</code></pre>
 <p>The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let's try the example. Launch the server:</p>
-<p><code>sh cd cmd/addsvc/ go run main.go</code></p>
+<pre><code class="language-sh">cd cmd/addsvc/
+go run main.go
+</code></pre>
 <p>And in a different shell, launch the client:</p>
-<p><code>sh cd cmd/addcli/ go run main.go -http.addr=:8081 1 2</code></p>
+<pre><code class="language-sh">cd cmd/addcli/
+go run main.go -http.addr=:8081 1 2
+</code></pre>
 <p>If everything goes well, you will obtain something like:</p>
 <blockquote>
 <p>1 + 2 = 3</p>
 </blockquote>
 <p>Or you can use <code>curl</code> directly:</p>
-<p><code>sh curl -H &quot;Content-Type: application/json&quot; -X POST -d '{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}' http://localhost:8081/concat</code></p>
+<pre><code class="language-sh">curl -H &quot;Content-Type: application/json&quot; -X POST -d '{&quot;A&quot;:&quot;xyz&quot;,&quot;B&quot;:&quot;abc&quot;}' http://localhost:8081/concat
+</code></pre>
 <p>There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:</p>
-<p><code>sh go run main.go -grpc.addr=:8082 1 2</code></p>
+<pre><code class="language-sh">go run main.go -grpc.addr=:8082 1 2
+</code></pre>
 <h2>Show me the code!</h2>
 <p>It's time to go deeper. Open <code>service.go</code>. This is the file where the service definition is described and also implemented for this example.</p>
 <p>Note: I may continue this in the future if I resume my work with go-kit.</p>

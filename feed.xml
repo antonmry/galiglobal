@@ -2,17 +2,168 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>GaliGlobal</title>
-    <link>https://www.galiglobal.com</link>
-    <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
+    <link>http://localhost:8820/</link>
+    <atom:link href="http://localhost:8820//feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Fri, 1 Jul 2022 14:46:03 +0200</pubDate>
-    <lastBuildDate>Fri, 1 Jul 2022 14:46:03 +0200</lastBuildDate>
+    <pubDate>Tue, 23 Aug 2022 23:48:15 +0200</pubDate>
+    <lastBuildDate>Tue, 23 Aug 2022 23:48:15 +0200</lastBuildDate>
 
     
     <item>
+      <title>Using Pixie to monitor a Strimzi kafka cluster</title>
+      <link>http://localhost:8820//blog/2022/20220823-Using-Pixie-with-Strimzi.html</link>
+      <pubDate>Tue, 23 Aug 2022 00:00:00 +0200</pubDate>
+      <guid isPermaLink="false">blog/2022/20220823-Using-Pixie-with-Strimzi.html</guid>
+      <description>
+      &lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;In this article, we are going to see how to deploy a Kafka cluster in Kubernetes using &lt;a href=&quot;https://strimzi.io&quot;&gt;Strimzi&lt;/a&gt; and how to easily monitor it with &lt;a href=&quot;https://pixielabs.ai&quot;&gt;Pixie&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Kubernetes setup&lt;/h2&gt;
+&lt;p&gt;We are going to use Google Cloud but you can use any cloud provider or on-prem solution.&lt;/p&gt;
+&lt;p&gt;Let&apos;s create the k8s cluster:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;gcloud container clusters create antonmry-pixie-cluster  --num-nodes=2 --machine-type=e2-standard-8 --disk-size 300
+kubectl -n kafka run kafka-consumer1 -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic pixie  --consumer-property group.id=test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And make sure we can connect to it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud container clusters get-credentials antonmry-pixie-cluster
+kubectl get nodes
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note: kubectl doesn&apos;t work in some public WiFi when they are replacing TLS certificates.&lt;/p&gt;
+&lt;p&gt;See &lt;a href=&quot;https://docs.pixielabs.ai/installing-pixie/setting-up-k8s/gke-setup/&quot;&gt;Pixie&apos;s GKE setup&lt;/a&gt; official documentation for more info.&lt;/p&gt;
+&lt;h2&gt;Pixie deployment&lt;/h2&gt;
+&lt;p&gt;Let&apos;s deploy Pixie now! The first step is to install the CLI tool. There are several ways to do it (see the &lt;a href=&quot;https://docs.pixielabs.ai/installing-pixie/install-schemes/cli/&quot;&gt;CLI documentation&lt;/a&gt; for more info). The easiest way is:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;bash -c &amp;quot;$(curl -fsSL https://withpixie.ai/install.sh)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Deploy Pixie in the Kubernetes cluster:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl config current-context
+px deploy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It takes some time. Once it&apos;s completed, check all pods are running:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl get pods --all-namespaces
+px debug pods
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;See the &lt;a href=&quot;https://docs.pixielabs.ai/installing-pixie/install-guides/&quot;&gt;Pixie Install Guides&lt;/a&gt; for more info.&lt;/p&gt;
+&lt;p&gt;We should be able to see the cluster monitoring in the Pixie UI now:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;pixie/pixie-cluster-overview.png&quot; alt=&quot;Pixie Cluster Overview&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Strimzi deployment&lt;/h2&gt;
+&lt;p&gt;The first step is to deploy the operator in their own namespace:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl create namespace kafka
+kubectl create -f &apos;https://strimzi.io/install/latest?namespace=kafka&apos; -n kafka 
+kubectl get pods -n kafka
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Wait until the pod is healthy and then, let&apos;s create the cluster:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/0.30.0/examples/kafka/kafka-persistent-single.yaml -n kafka
+kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
+ kubectl get pods -n kafka
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We should be able to list, create and describe topics:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092  --list
+
+kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --create --topic pixie --replication-factor 1 --partitions 2
+
+kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092  --describe pixie
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It&apos;s possible to launch a consumer:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl -n kafka run kafka-producer-perf-3 -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-producer-perf-test.sh --topic pixie --throughput 1 --num-records 300000 --record-size 1024 --producer-props acks=all bootstrap.servers=my-cluster-kafka-bootstrap:9092
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And in a different terminal, a producer:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl -n kafka run kafka-consumer1 -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic pixie  --consumer-property group.id=test #con1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can see all Kafka resources in the UI selecting the Kafka Overview script:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;pixie/pixie-scripts.png&quot; alt=&quot;Pixie Scripts selector&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;It gives us the ability to identify consumers, producers, topics and the throughput between them:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;pixie/pixie-kafka-overview.jpg&quot; alt=&quot;Pixie Kafka Overview script&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;How Pixie is able to obtain that information without instrumenting the broker or the apps? Using &lt;a href=&quot;https://docs.px.dev/about-pixie/pixie-ebpf/&quot;&gt;eBPF&lt;/a&gt; to parse the Kafka protocol between brokers and clients. This is more clear in the script &lt;code&gt;kafka data&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;pixie/pixie-kafka-data.jpg&quot; alt=&quot;Pixie Kafka Data script&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;We can even access the messages: the request, the response and the time between them (latency).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+   &amp;quot;time_&amp;quot;:1661284918212,
+   &amp;quot;source&amp;quot;:{
+      &amp;quot;label&amp;quot;:kafka/kafka-producer-perf-3,
+      &amp;quot;script&amp;quot;:&amp;quot;px/pod&amp;quot;,
+      &amp;quot;args&amp;quot;:{
+         &amp;quot;start_time&amp;quot;:-15m,
+         &amp;quot;pod&amp;quot;:kafka/kafka-producer-perf-3
+      }
+   },
+   &amp;quot;destination&amp;quot;:{
+      &amp;quot;label&amp;quot;:kafka/my-cluster-kafka-0,
+      &amp;quot;script&amp;quot;:&amp;quot;px/pod&amp;quot;,
+      &amp;quot;args&amp;quot;:{
+         &amp;quot;start_time&amp;quot;:-15m,
+         &amp;quot;pod&amp;quot;:kafka/my-cluster-kafka-0
+      }
+   },
+   &amp;quot;remote_port&amp;quot;:33960,
+   &amp;quot;req_cmd&amp;quot;:&amp;quot;Produce&amp;quot;,
+   &amp;quot;req_body&amp;quot;:{
+      &amp;quot;transactional_id&amp;quot;:&amp;quot;(empty string)&amp;quot;,
+      &amp;quot;acks&amp;quot;:-1,
+      &amp;quot;timeout_ms&amp;quot;:30000,
+      &amp;quot;topics&amp;quot;:[
+         {
+            &amp;quot;name&amp;quot;:&amp;quot;pixie&amp;quot;,
+            &amp;quot;partitions&amp;quot;:[
+               {
+                  &amp;quot;index&amp;quot;:1,
+                  &amp;quot;message_set&amp;quot;:{
+                     &amp;quot;size&amp;quot;:2128
+                  }
+               }
+            ]
+         }
+      ]
+   },
+   &amp;quot;resp&amp;quot;:{
+      &amp;quot;topics&amp;quot;:[
+         {
+            &amp;quot;name&amp;quot;:&amp;quot;pixie&amp;quot;,
+            &amp;quot;partitions&amp;quot;:[
+               {
+                  &amp;quot;index&amp;quot;:1,
+                  &amp;quot;error_code&amp;quot;:&amp;quot;kNone&amp;quot;,
+                  &amp;quot;base_offset&amp;quot;:0,
+                  &amp;quot;log_append_time_ms&amp;quot;:-1,
+                  &amp;quot;log_start_offset&amp;quot;:0,
+                  &amp;quot;record_errors&amp;quot;:[
+                  ],
+                  &amp;quot;error_message&amp;quot;:&amp;quot;(empty string)&amp;quot;
+               }
+            ]
+         }
+      ],
+      &amp;quot;throttle_time_ms&amp;quot;:0
+   },
+   &amp;quot;latency&amp;quot;:3102207
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Consumer Lag&lt;/h2&gt;
+&lt;p&gt;Consumer Lag is one of the most important metrics for Kafka because it&apos;s a great indicator of problems. We can see it with the Kafka CLI tools:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl -n kafka run kafka-consumer-lag -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-consumer-groups.sh --bootstrap-server  my-cluster-kafka-bootstrap:9092 --describe --group test1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                          HOST            CLIENT-ID&lt;/p&gt;
+&lt;p&gt;test            pixie           0          653             654             1               consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23     consumer-test-1&lt;/p&gt;
+&lt;p&gt;test            pixie           1          653             654             1               consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23     consumer-test-1&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Consumer Lag is the difference between LOG-END-OFFSET and CURRENT-OFFSET. Consumer Lag in offsets is hard to understand, it&apos;s easier if we measure it in time. Pixie is able to do this with the script ``:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;pixie/pixie-consumer-lag.jpg&quot; alt=&quot;Pixie Kafka ConsumerLag script&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;This is very different compared to other ways to calculate Consumer Lag ([Introducing uGroup: Uber&apos;s Consumer Management Framework] is a great article covering most of them). Pixie is tracking the Kafka protocol messages and calculating the lag as the difference between a Produce request and a Fetch request. It&apos;s possible to see the code in the UI (or even modify it!) opening the editor or directly in GitHub: &lt;a href=&quot;https://github.com/pixie-io/pixie/blob/db0ad3a9b3c7229f8e3dd57d9eea5a372e4670f2/src/pxl_scripts/px/kafka_producer_consumer_latency/kafka_producer_consumer_latency.pxl#L130&quot;&gt;kafka_producer_consumer_latency.pxl&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Kafka consumer rebalances&lt;/h2&gt;
+&lt;p&gt;Kafka Consumer rebalances can be quite tricky. Kafka brokers and consumer instaces need to agree on the assignation of partitions and the throughput is affected during that process. Pixie provides a great way to identify rebalances with the &lt;a href=&quot;https://github.com/pixie-io/pixie/blob/main/src/pxl_scripts/px/kafka_consumer_rebalancing/kafka_consumer_rebalancing.pxl&quot;&gt;kafka_consumer_rebalancing.pxl&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;pixie/pixie-kafka-rebalancing.jpg&quot; alt=&quot;Pixie Kafka Rebalancing script&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Again, it&apos;s using the Kafka protocol parsing to identify the rebalances and measure the duration. In this case, the difference between JoinGroup and SyncGroup messages. If you would like to know more about Kafka Rebalances, &lt;a href=&quot;https://medium.com/streamthoughts/apache-kafka-rebalance-protocol-or-the-magic-behind-your-streams-applications-e94baf68e4f2&quot;&gt;Apache Kafka Rebalance Protocol, or the magic behind your streams applications&lt;/a&gt; is a great source of information.&lt;/p&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;In this article, we have covered how to use eBPF and Pixie to monitor Kafka in a different way. It&apos;s easy and it doesn&apos;t require redeployment of the applications. It uses a different approach (Kafka Protocol parsing) and it could be a great addition to your toolset if you are using Kubernetes.&lt;/p&gt;
+&lt;p&gt;There are more information in the &lt;a href=&quot;https://docs.pixielabs.ai/tutorials/pixie-101/kafka-monitoring/&quot;&gt;Pixie Kafka Monitoring&lt;/a&gt; tutorial and in this &lt;a href=&quot;https://www.confluent.io/events/kafka-summit-london-2022/monitoring-kafka-without-instrumentation-using-ebpf/&quot;&gt;Kafka Summit session&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Did I miss something? You can comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/41&quot;&gt;GitHub&lt;/a&gt; or just drop me a note on &lt;a href=&quot;https://www.twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;!&lt;/p&gt;
+
+	  </description>
+    </item>
+    
+    <item>
       <title>My thoughts about the Principal role</title>
-      <link>https://www.galiglobal.com/blog/2021/20210313-The-principal-role.html</link>
+      <link>http://localhost:8820//blog/2021/20210313-The-principal-role.html</link>
       <pubDate>Wed, 5 May 2021 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2021/20210313-The-principal-role.html</guid>
       <description>
@@ -78,7 +229,7 @@
     
     <item>
       <title>Three simple ideas to make your life easier with Kafka</title>
-      <link>https://www.galiglobal.com/blog/2021/20210430-Three-Kafka-good-practices.html</link>
+      <link>http://localhost:8820//blog/2021/20210430-Three-Kafka-good-practices.html</link>
       <pubDate>Fri, 30 Apr 2021 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2021/20210430-Three-Kafka-good-practices.html</guid>
       <description>
@@ -131,7 +282,7 @@
     
     <item>
       <title>How to build and debug a Flink pipeline based in Event Time</title>
-      <link>https://www.galiglobal.com/blog/2021/20210207-Flink-event-time.html</link>
+      <link>http://localhost:8820//blog/2021/20210207-Flink-event-time.html</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2021/20210207-Flink-event-time.html</guid>
       <description>
@@ -152,7 +303,12 @@
 &lt;h2&gt;Use case example&lt;/h2&gt;
 &lt;p&gt;Let&apos;s illustrate this with an example. Our flink job will receive readings from different sensors. Every sensor will send measures for each 100ms.  We would like to detect when a measure from a particular sensor is missing, for example, because it was off-line.&lt;/p&gt;
 &lt;p&gt;Sensors send a JSON file like this one:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;json { &amp;quot;id&amp;quot;: &amp;quot;sensor0&amp;quot;, &amp;quot;timestamp&amp;quot;: 0, &amp;quot;measure&amp;quot;: 0.1 }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+  &amp;quot;id&amp;quot;: &amp;quot;sensor0&amp;quot;,
+  &amp;quot;timestamp&amp;quot;: 0,
+  &amp;quot;measure&amp;quot;: 0.1
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The job will generate a normal event but the measure value will have value -1 when the event wasn&apos;t generated by the sensor or lost in the network.&lt;/p&gt;
 &lt;h2&gt;Initial implementation with periodic watermark generators&lt;/h2&gt;
 &lt;p&gt;We&apos;ll have to choose a &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/api/java/org/apache/flink/api/common/eventtime/WatermarkStrategy.html&quot;&gt;WatermarkStrategy&lt;/a&gt;. We have several options, let&apos;s start with Periodic WatermarkGenerator:&lt;/p&gt;
@@ -161,15 +317,32 @@
 &lt;li&gt;WatermarkStrategy.&lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamp_extractors.html#monotonously-increasing-timestamps&quot;&gt;forMonotonousTimestamps&lt;/a&gt;: this is the same as &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamp_extractors.html#fixed-amount-of-lateness&quot;&gt;forBoundedOutOfOrderness&lt;/a&gt; but the out-of-order tolerance is zero.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In both cases, the framework invokes periodically the Strategy which generates the watermark. &lt;code&gt;setAutoWatermarkInterval&lt;/code&gt; allows lo define that periodicity:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The problem with this approach is we are mixing processing and event time so the result won&apos;t be deterministic, or even correct depending on the circumstances.&lt;/p&gt;
 &lt;p&gt;For example, with &lt;a href=&quot;https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/BoundedOutOfOrdernessStrategyJob.java&quot;&gt;BoundedOutOfOrdernessStrategyJob&lt;/a&gt;, we start defining the watermark interval each 100 ms.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;env.getConfig().setAutoWatermarkInterval(Duration.ofMillis(100).toMillis());
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Then we create the DataStream with the watermarks:&lt;/p&gt;
-&lt;p&gt;```java DataStream&lt;SensorData&gt; sensorStream = env.addSource(source) .returns(TypeInformation.of(SensorData.class));&lt;/p&gt;
-&lt;p&gt;var sensorEventTimeStream = sensorStream.assignTimestampsAndWatermarks( WatermarkStrategy.&lt;SensorData&gt;forBoundedOutOfOrderness( Duration.ofMillis(100) ).withTimestampAssigner( (event, timestamp) -&amp;gt; event.getTimestamp() ) ); ```&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;DataStream&amp;lt;SensorData&amp;gt; sensorStream =
+    env.addSource(source)
+        .returns(TypeInformation.of(SensorData.class));
+
+var sensorEventTimeStream =
+    sensorStream.assignTimestampsAndWatermarks(
+        WatermarkStrategy.&amp;lt;SensorData&amp;gt;forBoundedOutOfOrderness(
+            Duration.ofMillis(100)
+        ).withTimestampAssigner(
+            (event, timestamp) -&amp;gt; event.getTimestamp()
+        )
+    );
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;To detect missing events, we used a timer so we need a keyed stream and a KeyedProcessFunction:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java sensorEventTimeStream .keyBy((event) -&amp;gt; event.getId()) .process(new TimeoutFunction()) .addSink(sink);&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;sensorEventTimeStream
+    .keyBy((event) -&amp;gt; event.getId())
+    .process(new TimeoutFunction())
+    .addSink(sink);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/TimeoutFunction.java&quot;&gt;TimeoutFunction&lt;/a&gt; stores each event in the state and creates a timer for each one. It cancels the timer if the next event arrives on time. If not, &lt;code&gt;onTimer&lt;/code&gt; should be invoked and the event in the state identifying the missing sensor is emitted.&lt;/p&gt;
 &lt;h2&gt;Testing and debugging the first implementation&lt;/h2&gt;
 &lt;p&gt;Let&apos;s create a simple test: two sensors and one of them misses one of the measures. When we launch the test &lt;a href=&quot;https://github.com/antonmry/flink-playground/blob/main/src/test/java/galiglobal/flink/eventTime/StreamingJobTest.java#L24&quot;&gt;testBoundedOutOfOrdernessStrategyJob&lt;/a&gt;, we obtain the following result:&lt;/p&gt;
@@ -201,7 +374,12 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
 &lt;li&gt;In the method &lt;code&gt;processWatermark&lt;/code&gt;, emit the watermark to be consumed for the next operator and print it for debugging purposes.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;We apply the new operator to the job:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java sensorEventTimeStream .transform(&amp;quot;debugFilter&amp;quot;, sensorEventTimeStream.getType(), new StreamWatermarkDebugFilter&amp;lt;&amp;gt;()) .keyBy((event) -&amp;gt; event.getId()) .process(new TimeoutFunction()) .addSink(sink);&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;sensorEventTimeStream
+    .transform(&amp;quot;debugFilter&amp;quot;, sensorEventTimeStream.getType(), new StreamWatermarkDebugFilter&amp;lt;&amp;gt;())
+    .keyBy((event) -&amp;gt; event.getId())
+    .process(new TimeoutFunction())
+    .addSink(sink);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We can see the watermarks generated executing the test again:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Watermark: 9223372036854775807&lt;/p&gt;
@@ -210,7 +388,30 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
 &lt;p&gt;So the Watermark generator isn&apos;t generating a watermark. The only reason I see for that it&apos;s because the job is ending before any watermark is generated. We could set the periodic generation with a smaller value but the problem remains: we are mixing processing and event time so it&apos;s really hard to know how the pipeline is going to proceed in some conditions.&lt;/p&gt;
 &lt;h2&gt;Final implementation with a Punctuated WatermarkGenerator&lt;/h2&gt;
 &lt;p&gt;We are going to create a generator which will be able to generate watermarks based in the elements of the stream: a &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/event_timestamps_watermarks.html#writing-a-punctuated-watermarkgenerator&quot;&gt;Punctuated WatermarkGenerator&lt;/a&gt;. So we create a new job &lt;a href=&quot;https://github.com/antonmry/flink-playground/blob/main/src/main/java/galiglobal/flink/eventTime/CustomStrategyJob.java&quot;&gt;CustomStrategyJob&lt;/a&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java var sensorEventTimeStream = sensorStream .assignTimestampsAndWatermarks( new WatermarkStrategy&amp;lt;SensorData&amp;gt;() { @Override public WatermarkGenerator&amp;lt;SensorData&amp;gt; createWatermarkGenerator( WatermarkGeneratorSupplier.Context context) { return new BoundedOutOfOrdernessWatermarks&amp;lt;&amp;gt;( Duration.ofMillis(0) ) { @Override public void onEvent( SensorData event, long eventTimestamp, WatermarkOutput output) { super.onEvent(event, eventTimestamp, output); super.onPeriodicEmit(output); } }; } } .withTimestampAssigner((event, timestamp) -&amp;gt; event.getTimestamp()) );&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;var sensorEventTimeStream =
+    sensorStream
+        .assignTimestampsAndWatermarks(
+            new WatermarkStrategy&amp;lt;SensorData&amp;gt;() {
+                @Override
+                public WatermarkGenerator&amp;lt;SensorData&amp;gt; createWatermarkGenerator(
+                    WatermarkGeneratorSupplier.Context context) {
+                    return new BoundedOutOfOrdernessWatermarks&amp;lt;&amp;gt;(
+                        Duration.ofMillis(0)
+                    ) {
+                        @Override
+                        public void onEvent(
+                            SensorData event,
+                            long eventTimestamp,
+                            WatermarkOutput output) {
+                            super.onEvent(event, eventTimestamp, output);
+                            super.onPeriodicEmit(output);
+                        }
+                    };
+                }
+            }
+                .withTimestampAssigner((event, timestamp) -&amp;gt; event.getTimestamp())
+        );
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It&apos;s similar to &lt;code&gt;BoundedOutOfOrdernessWatermarks&lt;/code&gt; but we modify the method &lt;code&gt;onEvent&lt;/code&gt; to invoke &lt;code&gt;onPeriodicEmit&lt;/code&gt; which emits the watermark. So, instead of being invoked by the framework, now it emits a new watermark each time it receives an event.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;eventtime-pipeline.png&quot; alt=&quot;Flink Pipeline with Punctuated Generator&quot; title=&quot;Flink Pipeline with Punctuated Generator&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The test produces the following output now:&lt;/p&gt;
@@ -271,7 +472,7 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
     
     <item>
       <title>Flink setup for development (and some IntelliJ Idea cool tricks)</title>
-      <link>https://www.galiglobal.com/blog/2021/20210130-Flink-setup.html</link>
+      <link>http://localhost:8820//blog/2021/20210130-Flink-setup.html</link>
       <pubDate>Sat, 30 Jan 2021 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2021/20210130-Flink-setup.html</guid>
       <description>
@@ -281,31 +482,49 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
 &lt;p&gt;The source code is available in this &lt;a href=&quot;https://github.com/antonmry/flink-playground&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Install Flink&lt;/h2&gt;
 &lt;p&gt;The first step is to install Flink. This is straightforward, just go to the Flink download page and download it:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh wget https://archive.apache.org/dist/flink/flink-1.12.0/flink-1.12.0-bin-scala_2.12.tgz tar -zxvf flink-1.12.0-bin-scala_2.12.tgz&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;wget https://archive.apache.org/dist/flink/flink-1.12.0/flink-1.12.0-bin-scala_2.12.tgz
+tar -zxvf flink-1.12.0-bin-scala_2.12.tgz
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Note: it&apos;s a good idea to create a variable $FLINK_HOME pointing to the Flink folder.&lt;/p&gt;
 &lt;p&gt;Start the cluster:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh $FLINK_HOME/bin/start-cluster.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;$FLINK_HOME/bin/start-cluster.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You can access the &lt;a href=&quot;http://localhost:8081/&quot;&gt;Flink Web Dashboard&lt;/a&gt; in your browser.&lt;/p&gt;
 &lt;p&gt;We aren&apos;t going to need it initially so it&apos;s better to stop it:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh $FLINK_HOME/bin/stop-cluster.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;$FLINK_HOME/bin/stop-cluster.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Bootstrap a Flink job&lt;/h2&gt;
 &lt;p&gt;To bootstrap the project, just execute the following Maven command:&lt;/p&gt;
-&lt;p&gt;```sh mvn archetype:generate                               &lt;br /&gt;
--DarchetypeGroupId=org.apache.flink &lt;br /&gt;
--DarchetypeArtifactId=flink-quickstart-java &lt;br /&gt;
--DarchetypeVersion=1.12.0 &lt;br /&gt;
--DgroupId=galiglobal &lt;br /&gt;
--DartifactId=flink-playground &lt;br /&gt;
--Dversion=0.1 &lt;br /&gt;
--Dpackage=galiglobal.flink &lt;br /&gt;
--DinteractiveMode=false&lt;/p&gt;
-&lt;p&gt;cd flink-playground ```&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;mvn archetype:generate                               \
+    -DarchetypeGroupId=org.apache.flink \
+    -DarchetypeArtifactId=flink-quickstart-java \
+    -DarchetypeVersion=1.12.0 \
+    -DgroupId=galiglobal \
+    -DartifactId=flink-playground \
+    -Dversion=0.1 \
+    -Dpackage=galiglobal.flink \
+    -DinteractiveMode=false
+
+cd flink-playground
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The structure of the project is quite simple:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;. ├── pom.xml └── src └── main ├── java │   └── galiglobal │   └── flink │   ├── BatchJob.java │   └── StreamingJob.java └── resources └── log4j2.properties&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── pom.xml
+└── src
+    └── main
+        ├── java
+        │   └── galiglobal
+        │       └── flink
+        │           ├── BatchJob.java
+        │           └── StreamingJob.java
+        └── resources
+            └── log4j2.properties
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We are going to focus only on &lt;code&gt;StreamingJob.java&lt;/code&gt;.&lt;/p&gt;
 &lt;h2&gt;Import and run the job in IntelliJ IDEA&lt;/h2&gt;
 &lt;p&gt;We are going only to cover my favourite Java IDE: IntelliJ IDEA. Other IDEs should work similarly. First of all, import in the IDE as a maven project. You can do it easily from the command-line.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh idea pom.xml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;idea pom.xml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You can go to &lt;code&gt;StreamingJob.java&lt;/code&gt; and execute it as a normal Java application using the Shift+F10 shortcut on Linux/Windows. An error like this should appear in the output:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Exception in thread &amp;quot;main&amp;quot; java.lang.NoClassDefFoundError: org/apache/flink/streaming/api/environment/StreamExecutionEnvironment at galiglobal.flink.StreamingJob.main(StreamingJob.java:39) Caused by: java.lang.ClassNotFoundException: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:418) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:352) at java.lang.ClassLoader.loadClass(ClassLoader.java:351) ... 1 more&lt;/p&gt;
@@ -319,68 +538,72 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
 &lt;p&gt;It&apos;s time to create our Flink job.&lt;/p&gt;
 &lt;h2&gt;Develop our first Flink job&lt;/h2&gt;
 &lt;p&gt;Let&apos;s add a new Java class to our project called &lt;code&gt;RandomLongSource&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;```java public class RandomLongSource extends RichParallelSourceFunction&lt;Long&gt; {&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;private volatile boolean cancelled = false;
-private Random random;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class RandomLongSource extends RichParallelSourceFunction&amp;lt;Long&amp;gt; {
 
-@Override
-public void open(Configuration parameters) throws Exception {
-    super.open(parameters);
-    random = new Random();
+    private volatile boolean cancelled = false;
+    private Random random;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        super.open(parameters);
+        random = new Random();
+    }
+
+    @Override
+    public void run(SourceContext&amp;lt;Long&amp;gt; ctx) throws Exception {
+        while (!cancelled) {
+            Long nextLong = random.nextLong();
+            synchronized (ctx.getCheckpointLock()) {
+                ctx.collect(nextLong);
+            }
+        }
+    }
+
+    @Override
+    public void cancel() {
+        cancelled = true;
+    }
 }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This class is just generating an infinite series of long numbers to feed our job.&lt;/p&gt;
+&lt;p&gt;Let&apos;s modify now &lt;code&gt;StreamingJob.java&lt;/code&gt; to process it and print the result:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class StreamingJob {
+    private SourceFunction&amp;lt;Long&amp;gt; source;
+    private SinkFunction&amp;lt;Long&amp;gt; sink;
 
-@Override
-public void run(SourceContext&amp;lt;Long&amp;gt; ctx) throws Exception {
-    while (!cancelled) {
-        Long nextLong = random.nextLong();
-        synchronized (ctx.getCheckpointLock()) {
-            ctx.collect(nextLong);
+    public StreamingJob(SourceFunction&amp;lt;Long&amp;gt; source, SinkFunction&amp;lt;Long&amp;gt; sink) {
+        this.source = source;
+        this.sink = sink;
+    }
+
+    public void execute() throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStream&amp;lt;Long&amp;gt; LongStream =
+            env.addSource(source)
+                .returns(TypeInformation.of(Long.class));
+
+        LongStream
+            .map(new IncrementMapFunction())
+            .addSink(sink);
+
+        env.execute();
+    }
+
+    public static void main(String[] args) throws Exception {
+        StreamingJob job = new StreamingJob(new RandomLongSource(), new PrintSinkFunction&amp;lt;&amp;gt;());
+        job.execute();
+    }
+
+    public class IncrementMapFunction implements MapFunction&amp;lt;Long, Long&amp;gt; {
+
+        @Override
+        public Long map(Long record) throws Exception {
+            return record + 1;
         }
     }
 }
-
-@Override
-public void cancel() {
-    cancelled = true;
-}
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;} ```&lt;/p&gt;
-&lt;p&gt;This class is just generating an infinite series of long numbers to feed our job.&lt;/p&gt;
-&lt;p&gt;Let&apos;s modify now &lt;code&gt;StreamingJob.java&lt;/code&gt; to process it and print the result:&lt;/p&gt;
-&lt;p&gt;```java public class StreamingJob { private SourceFunction&lt;Long&gt; source; private SinkFunction&lt;Long&gt; sink;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public StreamingJob(SourceFunction&amp;lt;Long&amp;gt; source, SinkFunction&amp;lt;Long&amp;gt; sink) {
-    this.source = source;
-    this.sink = sink;
-}
-
-public void execute() throws Exception {
-    StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-    DataStream&amp;lt;Long&amp;gt; LongStream =
-        env.addSource(source)
-            .returns(TypeInformation.of(Long.class));
-
-    LongStream
-        .map(new IncrementMapFunction())
-        .addSink(sink);
-
-    env.execute();
-}
-
-public static void main(String[] args) throws Exception {
-    StreamingJob job = new StreamingJob(new RandomLongSource(), new PrintSinkFunction&amp;lt;&amp;gt;());
-    job.execute();
-}
-
-public class IncrementMapFunction implements MapFunction&amp;lt;Long, Long&amp;gt; {
-
-    @Override
-    public Long map(Long record) throws Exception {
-        return record + 1;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;} ```&lt;/p&gt;
 &lt;p&gt;Note: this class is from the &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/&quot;&gt;Hands-on Training&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;If you execute it, you will see an infinite list of long numbers:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -395,9 +618,16 @@ public class IncrementMapFunction implements MapFunction&amp;lt;Long, Long&amp;g
 &lt;p&gt;Note: The 3&amp;gt;, 12&amp;gt;, 1&amp;gt; indicate which sub-task (i.e., thread) produced the output.&lt;/p&gt;
 &lt;p&gt;This is one of the most surprising things for Flink beginners: you don&apos;t need a cluster to develop a Flink job, you can easily do it locally from your IDE and it works quite well.&lt;/p&gt;
 &lt;p&gt;There are some minor differences. For example, to access the &lt;a href=&quot;http://localhost:8081/&quot;&gt;Flink Web Dashboard&lt;/a&gt; you will need to add the following dependency to maven:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;xml &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.flink&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;flink-runtime-web_2.11&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${flink.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.apache.flink&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;flink-runtime-web_2.11&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;${flink.version}&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And modify the &lt;code&gt;env&lt;/code&gt; variable with the following code:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java Configuration conf = new Configuration(); StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;Configuration conf = new Configuration();
+StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Note: credit goes to this &lt;a href=&quot;https://stackoverflow.com/questions/46988499/flink-webui-when-running-from-ide&quot;&gt;StackOverflow answer&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Re-run the job and you should be able to access the &lt;a href=&quot;http://localhost:8081/&quot;&gt;Flink Web Dashboard&lt;/a&gt; and see your job running:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;flink-dashboard.png&quot; alt=&quot;Flink Dashboard in local mode&quot; title=&quot;Flink Dashboard in local mode&quot; /&gt;&lt;/p&gt;
@@ -412,41 +642,66 @@ public class IncrementMapFunction implements MapFunction&amp;lt;Long, Long&amp;g
 &lt;h2&gt;Metrics&lt;/h2&gt;
 &lt;p&gt;Flink generates metrics exposed through different interfaces including JMX. See &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html#metrics&quot;&gt;Flink metrics&lt;/a&gt; for more info.&lt;/p&gt;
 &lt;p&gt;To activate it, add the following dependency to &lt;code&gt;pom.xml&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;xml &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.flink&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;flink-metrics-jmx_2.11&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${flink.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.apache.flink&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;flink-metrics-jmx_2.11&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;${flink.version}&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And change the &lt;code&gt;env&lt;/code&gt; variable to expose metrics in the JMX interface:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java Properties props = new Properties(); props.put(&amp;quot;metrics.reporter.jmx.factory.class&amp;quot;, &amp;quot;org.apache.flink.metrics.jmx.JMXReporterFactory&amp;quot;); Configuration conf = ConfigurationUtils.createConfiguration(props); StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);&lt;/code&gt; Run the job as usual and open it in VisualVM. You need to install the &lt;a href=&quot;https://visualvm.github.io/plugins.html&quot;&gt;VisualVM MBeans Browser&lt;/a&gt;. Metrics should be available in the MBeans tab:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;Properties props = new Properties();
+props.put(&amp;quot;metrics.reporter.jmx.factory.class&amp;quot;, &amp;quot;org.apache.flink.metrics.jmx.JMXReporterFactory&amp;quot;);
+Configuration conf = ConfigurationUtils.createConfiguration(props);
+StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Run the job as usual and open it in VisualVM. You need to install the &lt;a href=&quot;https://visualvm.github.io/plugins.html&quot;&gt;VisualVM MBeans Browser&lt;/a&gt;. Metrics should be available in the MBeans tab:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;flink-metrics.png&quot; alt=&quot;Flink metrics with VisualVM&quot; title=&quot;Flink metrics with VisualVM&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Logging&lt;/h2&gt;
 &lt;p&gt;Let&apos;s add some proper logging to our job. First of all, add the following field to &lt;code&gt;StreamingJob.java&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Let&apos;s delete the longStream variable and create a new one with some log messages:&lt;/p&gt;
-&lt;p&gt;```java LOG.debug(&amp;quot;Start Flink example job&amp;quot;);&lt;/p&gt;
-&lt;p&gt;DataStreamSink&lt;Long&gt; logTestStream = env.fromElements(0L, 1L, 2L) .map(new IncrementMapFunction()) .addSink(sink);&lt;/p&gt;
-&lt;p&gt;LOG.debug(&amp;quot;Stop Flink example job&amp;quot;); ```&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;LOG.debug(&amp;quot;Start Flink example job&amp;quot;);
+
+DataStreamSink&amp;lt;Long&amp;gt; logTestStream = env.fromElements(0L, 1L, 2L)
+    .map(new IncrementMapFunction())
+    .addSink(sink);
+
+LOG.debug(&amp;quot;Stop Flink example job&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Modify &lt;code&gt;src/main/resources/log4j2.properties&lt;/code&gt; to use the DEBUG log level:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;rootLogger.level = DEBUG&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;rootLogger.level = DEBUG
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Re-run the job and you should see the new log traces:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;flink-logtraces.png&quot; alt=&quot;Flink log messages&quot; title=&quot;Flink log messages&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;When running the job locally, the log level is quite verbose and it may be hard to find your messages between the Flink messages. Let&apos;s configure that. Edit &lt;code&gt;src/main/resources/log4j2.properties&lt;/code&gt; again to add the following lines:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;logger.flink.name = org.apache.flink logger.flink.level = warn&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;logger.flink.name = org.apache.flink
+logger.flink.level = warn
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Re-run the job and you should only see the proper logs messages.&lt;/p&gt;
 &lt;h2&gt;Tests&lt;/h2&gt;
 &lt;p&gt;One of the most important things when creating jobs is to have proper tests you can run from your IDE. It will make you go faster because you can make changes, run the test and be sure everything is working as it was before the change. That level of confidence in your changes worths the cost of writing the test from the very beginning.&lt;/p&gt;
 &lt;p&gt;Add the following dependency to your &lt;code&gt;pom.xml&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;xml &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.flink&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;flink-test-utils-junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${flink.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;dependency&amp;gt;
+	&amp;lt;groupId&amp;gt;org.apache.flink&amp;lt;/groupId&amp;gt;
+	&amp;lt;artifactId&amp;gt;flink-test-utils-junit&amp;lt;/artifactId&amp;gt;
+	&amp;lt;version&amp;gt;${flink.version}&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Move the inner class &lt;code&gt;IncrementMapFunction&lt;/code&gt; to their own file:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;flink-refactor.png&quot; alt=&quot;Refactor Map function&quot; title=&quot;Refactor Map function&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Now let&apos;s add a unit test to &lt;code&gt;src/test/java&lt;/code&gt; which tests this function:&lt;/p&gt;
-&lt;p&gt;```java public class StreamingJobTest {&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;@Test
-public void testMap() throws Exception {
-    IncrementMapFunction statelessMap = new IncrementMapFunction();
-    Long out = statelessMap.map(1L);
-    Assert.assertEquals(2L, out.longValue());
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class StreamingJobTest {
+
+    @Test
+    public void testMap() throws Exception {
+        IncrementMapFunction statelessMap = new IncrementMapFunction();
+        Long out = statelessMap.map(1L);
+        Assert.assertEquals(2L, out.longValue());
+    }
 }
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;p&gt;```&lt;/p&gt;
 &lt;p&gt;Run the test from the IDE and see the result:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;flink-unittest.png&quot; alt=&quot;Flink Unit Test&quot; title=&quot;Flink Unit test&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;For more information, see &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html&quot;&gt;Testing Flink Jobs&lt;/a&gt; in the official documentation. It&apos;s particularly interesting how to &lt;a href=&quot;https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html#testing-flink-jobs&quot;&gt;test complete jobs&lt;/a&gt;. You can find also good examples in the &lt;a href=&quot;https://github.com/apache/flink-training/blob/master/ride-cleansing/src/test/java/org/apache/flink/training/exercises/ridecleansing/RideCleansingTest.java&quot;&gt;official Flink training tests&lt;/a&gt;.&lt;/p&gt;
@@ -456,13 +711,17 @@ public void testMap() throws Exception {
 &lt;p&gt;rootLogger.level = DEBUG&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Start the cluster again:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh $FLINK_HOME/bin/start-cluster.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;$FLINK_HOME/bin/start-cluster.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We need to modify our source code to use a remote execution environment so you should replace the &lt;code&gt;env&lt;/code&gt; variable again:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Compile our job:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh mvn clean package -Pbuild-jar&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;mvn clean package -Pbuild-jar
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Run the job in the local cluster:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh $FLINK_HOME/bin/flink run target/flink-playground-0.1.jar&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;$FLINK_HOME/bin/flink run target/flink-playground-0.1.jar
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It should obtain an output similar to:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Job has been submitted with JobID bbea3ed5f5082a7267f85d92807b19dc&lt;br /&gt;
@@ -471,7 +730,8 @@ Job with JobID bbea3ed5f5082a7267f85d92807b19dc has finished.&lt;br /&gt;
 Job Runtime: 827 ms&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;If you check the logs, you should see your traces:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh grep -R &amp;quot;example job&amp;quot; $FLINK_HOME/log/&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;grep -R &amp;quot;example job&amp;quot; $FLINK_HOME/log/
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Summary and next steps&lt;/h2&gt;
 &lt;p&gt;In this article, we have covered the basics and some typical gotchas to work with Apache Flink in local environments. It&apos;s really important to invest time in your setup to be productive and have a pleasant experience building your jobs. Each minute you spent improving your workflow will pay off in the future.&lt;/p&gt;
 &lt;p&gt;Did I miss something? You can comment on &lt;a href=&quot;https://github.com/antonmry/galiglobal/pull/37&quot;&gt;GitHub&lt;/a&gt; or just drop me a note on &lt;a href=&quot;https://twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;!&lt;/p&gt;
@@ -481,7 +741,7 @@ Job Runtime: 827 ms&lt;/p&gt;
     
     <item>
       <title>Gentle (and practical) introduction to Apache Avro - Part 1</title>
-      <link>https://www.galiglobal.com/blog/2020/20200813-Gentle-and-practical-introduction-to-Apache-Avro-Part-1.html</link>
+      <link>http://localhost:8820//blog/2020/20200813-Gentle-and-practical-introduction-to-Apache-Avro-Part-1.html</link>
       <pubDate>Sat, 5 Dec 2020 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2020/20200813-Gentle-and-practical-introduction-to-Apache-Avro-Part-1.html</guid>
       <description>
@@ -502,9 +762,18 @@ Job Runtime: 827 ms&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;schema_registry.png&quot; alt=&quot;Schema Registry architecture&quot; title=&quot;Schema Registry architecture&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Environment setup&lt;/h2&gt;
 &lt;p&gt;Using the Confluent Avro serializer/deserializer, the process is quite straight-forward. Let&apos;s try it using the Confluent Community Docker version. The setup is documented in the &lt;a href=&quot;https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html&quot;&gt;Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)&lt;/a&gt; which it&apos;s summarized here:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git clone https://github.com/confluentinc/cp-all-in-one.git cd cp-all-in-one/cp-all-in-one-community/ docker-compose up -d&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git clone https://github.com/confluentinc/cp-all-in-one.git
+cd cp-all-in-one/cp-all-in-one-community/
+docker-compose up -d
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Let&apos;s start creating a topic:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker-compose exec broker kafka-topics \ --create \ --bootstrap-server localhost:9092 \ --replication-factor 1 \ --partitions 1 \ --topic test&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker-compose exec broker kafka-topics \
+  --create \
+  --bootstrap-server localhost:9092 \
+  --replication-factor 1 \
+  --partitions 1 \
+  --topic test
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The output should be:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Created topic test.&lt;/p&gt;
@@ -512,7 +781,16 @@ Job Runtime: 827 ms&lt;/p&gt;
 &lt;p&gt;To test it, we are going to create a Kafka Producer and a Kafka Consumer.&lt;/p&gt;
 &lt;h2&gt;Kafka Producer with Confluent Schema Registry&lt;/h2&gt;
 &lt;p&gt;Download the &lt;a href=&quot;https://github.com/antonmry/kafka-java-client-examples&quot;&gt;kafka-java-client-examples&lt;/a&gt; project and open it with your favourite IDE. We are going to work with a schema which it&apos;s located in the &lt;code&gt;src/main/resources&lt;/code&gt; folder:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;json { &amp;quot;namespace&amp;quot;: &amp;quot;com.galiglobal.examples.testavro&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;record&amp;quot;, &amp;quot;name&amp;quot;: &amp;quot;Test&amp;quot;, &amp;quot;fields&amp;quot;: [ {&amp;quot;name&amp;quot;: &amp;quot;id&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;}, {&amp;quot;name&amp;quot;: &amp;quot;test&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;} ] }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+ &amp;quot;namespace&amp;quot;: &amp;quot;com.galiglobal.examples.testavro&amp;quot;,
+ &amp;quot;type&amp;quot;: &amp;quot;record&amp;quot;,
+ &amp;quot;name&amp;quot;: &amp;quot;Test&amp;quot;,
+ &amp;quot;fields&amp;quot;: [
+     {&amp;quot;name&amp;quot;: &amp;quot;id&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;},
+     {&amp;quot;name&amp;quot;: &amp;quot;test&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;}
+ ]
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This Avro file is going to create a Test class you can use in your project.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Note for IntelliJ Idea users&lt;/strong&gt;: you need to generate the classes from the Avro file.  Right-click on your project and choose &lt;code&gt;Maven&lt;/code&gt; &amp;gt; &lt;code&gt;Generate sources and update folders&lt;/code&gt;. It&apos;s important to do it each time you change the schema.&lt;/p&gt;
 &lt;p&gt;You can run now the &lt;code&gt;ConfluentProducerExample&lt;/code&gt; and it should print:&lt;/p&gt;
@@ -520,12 +798,21 @@ Job Runtime: 827 ms&lt;/p&gt;
 &lt;p&gt;Successfully produced 10 messages to a topic called test&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;The more relevant parts are the properties of the producer:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class); props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &amp;quot;http://localhost:8081&amp;quot;);&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &amp;quot;http://localhost:8081&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We indicate how to connect to the SR and the serializer which it&apos;s publishing to the SR under the hood. In the class &lt;code&gt;io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient&lt;/code&gt; you can find the Rest client used to request schemas to the SR using http.&lt;/p&gt;
 &lt;p&gt;If you check in the SR, you can see the schema which has been created by the producer:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl http://localhost:8081/subjects/test-value/versions/1&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl http://localhost:8081/subjects/test-value/versions/1
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It should return:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;json { &amp;quot;subject&amp;quot;: &amp;quot;test-value&amp;quot;, &amp;quot;version&amp;quot;: 1, &amp;quot;id&amp;quot;: 1, &amp;quot;schema&amp;quot;: &amp;quot;{\&amp;quot;type\&amp;quot;:\&amp;quot;record\&amp;quot;,\&amp;quot;name\&amp;quot;:\&amp;quot;Test\&amp;quot;,\&amp;quot;namespace\&amp;quot;:\&amp;quot;com.galiglobal.examples.testavro\&amp;quot;,\&amp;quot;fields\&amp;quot;:[{\&amp;quot;name\&amp;quot;:\&amp;quot;id\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;string\&amp;quot;},{\&amp;quot;name\&amp;quot;:\&amp;quot;test\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;double\&amp;quot;}]}&amp;quot; }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+  &amp;quot;subject&amp;quot;: &amp;quot;test-value&amp;quot;,
+  &amp;quot;version&amp;quot;: 1,
+  &amp;quot;id&amp;quot;: 1,
+  &amp;quot;schema&amp;quot;: &amp;quot;{\&amp;quot;type\&amp;quot;:\&amp;quot;record\&amp;quot;,\&amp;quot;name\&amp;quot;:\&amp;quot;Test\&amp;quot;,\&amp;quot;namespace\&amp;quot;:\&amp;quot;com.galiglobal.examples.testavro\&amp;quot;,\&amp;quot;fields\&amp;quot;:[{\&amp;quot;name\&amp;quot;:\&amp;quot;id\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;string\&amp;quot;},{\&amp;quot;name\&amp;quot;:\&amp;quot;test\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;double\&amp;quot;}]}&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Kafka Consumer&lt;/h2&gt;
 &lt;p&gt;We are going to consume the messages using the Kafka Consumer just executing the &lt;code&gt;ConfluentConsumerExample&lt;/code&gt; class. It should print something similar to:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -537,33 +824,72 @@ key = id4, value = {&amp;quot;id&amp;quot;: &amp;quot;id4&amp;quot;, &amp;quot;a
 key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;amount&amp;quot;: 1000.0}&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;The relevant part is again the configuration of the SR and the deserializer:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;java props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class); props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &amp;quot;http://localhost:8081&amp;quot;); props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
+props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &amp;quot;http://localhost:8081&amp;quot;);
+props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The schema url and deserializer are equivalent to the producer. &lt;code&gt;SPECIFIC_AVRO_READER_CONFIG&lt;/code&gt; indicates we would like to deserialize to a Test object instead of a &lt;a href=&quot;https://avro.apache.org/docs/1.8.2/api/java/org/apache/avro/generic/GenericRecord.html&quot;&gt;GenericRecord&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;If we try to consume directly from the topic without use the Confluent deserializer, the result isn&apos;t quite legible:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker-compose exec broker kafka-console-consumer \ --topic test \ --bootstrap-server localhost:9092 \ --from-beginning \ --property print.key=true \ --property key.separator=&amp;quot; : &amp;quot; \ --key-deserializer &amp;quot;org.apache.kafka.common.serialization.StringDeserializer&amp;quot; \ --value-deserializer &amp;quot;org.apache.kafka.common.serialization.StringDeserializer&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker-compose exec broker kafka-console-consumer \
+ --topic test \
+ --bootstrap-server localhost:9092 \
+ --from-beginning \
+ --property print.key=true \
+ --property key.separator=&amp;quot; : &amp;quot; \
+ --key-deserializer &amp;quot;org.apache.kafka.common.serialization.StringDeserializer&amp;quot; \
+ --value-deserializer &amp;quot;org.apache.kafka.common.serialization.StringDeserializer&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;As you can see, it&apos;s a binary protocol and quite efficient! We aren&apos;t sending the schema with every record as we would do with JSON or any other based protocol and that&apos;s a good saving.&lt;/p&gt;
 &lt;h2&gt;Schema Compatibility&lt;/h2&gt;
 &lt;p&gt;Efficiency isn&apos;t the only positive point of this approach. One of the nice things you have with a Schema Registry is the possibility to govern schemas and make sure they are being used properly.&lt;/p&gt;
 &lt;p&gt;One of the big issues with asynchronous communications is how to evolve the schema without affect consumers of that particular topic. Schema Registry helps with that because it can check the changes in the schema and validate if they are breaking compatibility. They are different types of compatibility, you can read more on &lt;a href=&quot;https://docs.confluent.io/platform/current/schema-registry/avro.html&quot;&gt;Schema Evolution and Compatibility&lt;/a&gt;. Let&apos;s test it. First, we&apos;ll check what type of compatibility the SR is enforcing:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl -X GET http://localhost:8081/config&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl -X GET http://localhost:8081/config
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;By default, it should return:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;{&amp;quot;compatibilityLevel&amp;quot;:&amp;quot;BACKWARD&amp;quot;}&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Backward compatibility means new consumers can read old records but old consumers need to upgrade to the new version to be able to deserialize new messages.&lt;/p&gt;
 &lt;p&gt;We can test it using curl but it&apos;s a bit tricky because we have to scape the JSON file. Let&apos;s do it instead with the Producer adding one field to the schema:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;json { &amp;quot;namespace&amp;quot;: &amp;quot;com.galiglobal.examples.testavro&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;record&amp;quot;, &amp;quot;name&amp;quot;: &amp;quot;Test&amp;quot;, &amp;quot;fields&amp;quot;: [ {&amp;quot;name&amp;quot;: &amp;quot;id&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;}, {&amp;quot;name&amp;quot;: &amp;quot;test&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;}, {&amp;quot;name&amp;quot;: &amp;quot;boom&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;} ] }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+ &amp;quot;namespace&amp;quot;: &amp;quot;com.galiglobal.examples.testavro&amp;quot;,
+ &amp;quot;type&amp;quot;: &amp;quot;record&amp;quot;,
+ &amp;quot;name&amp;quot;: &amp;quot;Test&amp;quot;,
+ &amp;quot;fields&amp;quot;: [
+     {&amp;quot;name&amp;quot;: &amp;quot;id&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;},
+     {&amp;quot;name&amp;quot;: &amp;quot;test&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;},
+     {&amp;quot;name&amp;quot;: &amp;quot;boom&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;}
+ ]
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If we modify &lt;code&gt;ConfluentProducerExample&lt;/code&gt; and run it again, an exception will show:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;org.apache.kafka.common.errors.SerializationException: Error registering Avro schema: {&amp;quot;type&amp;quot;:&amp;quot;record&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;Test&amp;quot;,&amp;quot;namespace&amp;quot;:&amp;quot;com.galiglobal.examples.testavro&amp;quot;,&amp;quot;fields&amp;quot;:[{&amp;quot;name&amp;quot;:&amp;quot;id&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;string&amp;quot;},{&amp;quot;name&amp;quot;:&amp;quot;boom&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;string&amp;quot;}]} Caused by: io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException: Schema being registered is incompatible with an earlier schema for subject &amp;quot;test-value&amp;quot;; error code: 409&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Adding a new field isn&apos;t a backward compatible change because new consumers can&apos;t read old messages with that schema. They don&apos;t have a way to fill the new field which it&apos;s mandatory. One possibility to make this change backward compatible would be to give a default value to the new field, so consumers know what value give it when the field isn&apos;t present in the message.&lt;/p&gt;
 &lt;p&gt;Let&apos;s add a default value to the new field in the schema:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;json { &amp;quot;namespace&amp;quot;: &amp;quot;com.galiglobal.examples.testavro&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;record&amp;quot;, &amp;quot;name&amp;quot;: &amp;quot;Test&amp;quot;, &amp;quot;fields&amp;quot;: [ {&amp;quot;name&amp;quot;: &amp;quot;id&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;}, {&amp;quot;name&amp;quot;: &amp;quot;test&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;}, {&amp;quot;name&amp;quot;: &amp;quot;boom&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;, &amp;quot;default&amp;quot;: 0.0} ] }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+ &amp;quot;namespace&amp;quot;: &amp;quot;com.galiglobal.examples.testavro&amp;quot;,
+ &amp;quot;type&amp;quot;: &amp;quot;record&amp;quot;,
+ &amp;quot;name&amp;quot;: &amp;quot;Test&amp;quot;,
+ &amp;quot;fields&amp;quot;: [
+     {&amp;quot;name&amp;quot;: &amp;quot;id&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;},
+     {&amp;quot;name&amp;quot;: &amp;quot;test&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;},
+     {&amp;quot;name&amp;quot;: &amp;quot;boom&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;double&amp;quot;, &amp;quot;default&amp;quot;:  0.0}
+ ]
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If we make the proper changes and run &lt;code&gt;ConfluentProducerExample&lt;/code&gt; again, it will produce 10 new events and save a new version of the schema:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl http://localhost:8081/subjects/test-value/versions/2&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl http://localhost:8081/subjects/test-value/versions/2
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It should return:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;json { &amp;quot;subject&amp;quot;: &amp;quot;test-value&amp;quot;, &amp;quot;version&amp;quot;: 2, &amp;quot;id&amp;quot;: 2, &amp;quot;schema&amp;quot;: &amp;quot;{\&amp;quot;type\&amp;quot;:\&amp;quot;record\&amp;quot;,\&amp;quot;name\&amp;quot;:\&amp;quot;Test\&amp;quot;,\&amp;quot;namespace\&amp;quot;:\&amp;quot;com.galiglobal.examples.testavro\&amp;quot;,\&amp;quot;fields\&amp;quot;:[{\&amp;quot;name\&amp;quot;:\&amp;quot;id\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;string\&amp;quot;},{\&amp;quot;name\&amp;quot;:\&amp;quot;test\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;double\&amp;quot;},{\&amp;quot;name\&amp;quot;:\&amp;quot;boom\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;double\&amp;quot;,\&amp;quot;default\&amp;quot;:0.0}]}&amp;quot; }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+  &amp;quot;subject&amp;quot;: &amp;quot;test-value&amp;quot;,
+  &amp;quot;version&amp;quot;: 2,
+  &amp;quot;id&amp;quot;: 2,
+  &amp;quot;schema&amp;quot;: &amp;quot;{\&amp;quot;type\&amp;quot;:\&amp;quot;record\&amp;quot;,\&amp;quot;name\&amp;quot;:\&amp;quot;Test\&amp;quot;,\&amp;quot;namespace\&amp;quot;:\&amp;quot;com.galiglobal.examples.testavro\&amp;quot;,\&amp;quot;fields\&amp;quot;:[{\&amp;quot;name\&amp;quot;:\&amp;quot;id\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;string\&amp;quot;},{\&amp;quot;name\&amp;quot;:\&amp;quot;test\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;double\&amp;quot;},{\&amp;quot;name\&amp;quot;:\&amp;quot;boom\&amp;quot;,\&amp;quot;type\&amp;quot;:\&amp;quot;double\&amp;quot;,\&amp;quot;default\&amp;quot;:0.0}]}&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Summary and next steps&lt;/h2&gt;
 &lt;p&gt;We have covered here the basics of &lt;a href=&quot;https://avro.apache.org/&quot;&gt;Apache Avro&lt;/a&gt; in an &lt;a href=&quot;https://kafka.apache.org/&quot;&gt;Apache Kafka&lt;/a&gt; architecture.  It has important advantages in terms of performance, reduction of message size and governance of the schemas.&lt;/p&gt;
 &lt;p&gt;But it also has some problems, especially when we are dealing with hybrid and/or multi-tenant architectures. In the following two parts of this series, we&apos;ll cover these problems in details and the different alternatives we have with Avro to deal with them.&lt;/p&gt;
@@ -575,7 +901,7 @@ key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;a
     
     <item>
       <title>Thanks, Optare!</title>
-      <link>https://www.galiglobal.com/blog/2019/20190510-Good-bye-Optare.html</link>
+      <link>http://localhost:8820//blog/2019/20190510-Good-bye-Optare.html</link>
       <pubDate>Fri, 10 May 2019 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2019/20190510-Good-bye-Optare.html</guid>
       <description>
@@ -594,7 +920,7 @@ key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;a
     
     <item>
       <title>How to open your company to the tech community?</title>
-      <link>https://www.galiglobal.com/blog/2019/20190508-How-to-open-your-company-to-the-tech-community.html</link>
+      <link>http://localhost:8820//blog/2019/20190508-How-to-open-your-company-to-the-tech-community.html</link>
       <pubDate>Wed, 8 May 2019 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2019/20190508-How-to-open-your-company-to-the-tech-community.html</guid>
       <description>
@@ -651,7 +977,7 @@ key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;a
     
     <item>
       <title>Kubernetes installation with Route 53 DNS and HTTPS load balancer</title>
-      <link>https://www.galiglobal.com/blog/2019/20190404-Kubernetes-installation-with-route-53-dns-and-https-load-balancer.html</link>
+      <link>http://localhost:8820//blog/2019/20190404-Kubernetes-installation-with-route-53-dns-and-https-load-balancer.html</link>
       <pubDate>Thu, 4 Apr 2019 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2019/20190404-Kubernetes-installation-with-route-53-dns-and-https-load-balancer.html</guid>
       <description>
@@ -659,60 +985,194 @@ key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;a
 &lt;p&gt;This post explains how to deploy a Kubernetes cluster in Amazon. We want to automatically update Route 53 to use our own domain and use &lt;a href=&quot;https://aws.amazon.com/elasticloadbalancing/&quot;&gt;AWS ELB&lt;/a&gt; to have Load Balancing to our pods. We&apos;ll use also &lt;a href=&quot;https://aws.amazon.com/certificate-manager/&quot;&gt;AWS Certificate Manager (ACM)&lt;/a&gt; so our pods open internally HTTP endpoints but externally they expose HTTPS with a proper certificate.&lt;/p&gt;
 &lt;h2&gt;Installation&lt;/h2&gt;
 &lt;p&gt;Install awscli and &lt;a href=&quot;https://github.com/kubernetes/kops#installing&quot;&gt;kops&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;``` export bucket_name=test-kops export KOPS_CLUSTER_NAME=k8s.test.net export KOPS_STATE_STORE=s3://${bucket_name}&lt;/p&gt;
-&lt;p&gt;aws s3api create-bucket --bucket ${bucket_name} --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1 aws s3api put-bucket-versioning --bucket ${bucket_name} --versioning-configuration Status=Enabled&lt;/p&gt;
-&lt;p&gt;kops create cluster &lt;br /&gt;
---node-count=1 &lt;br /&gt;
---node-size=t2.medium &lt;br /&gt;
---zones=eu-west-1a &lt;br /&gt;
---dns-zone test.net &lt;br /&gt;
---cloud-labels=&amp;quot;Department=TEST&amp;quot; &lt;br /&gt;
---name=${KOPS_CLUSTER_NAME}&lt;/p&gt;
-&lt;p&gt;kops edit cluster --name ${KOPS_CLUSTER_NAME} ```&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export bucket_name=test-kops
+export KOPS_CLUSTER_NAME=k8s.test.net
+export KOPS_STATE_STORE=s3://${bucket_name}
+
+aws s3api create-bucket --bucket ${bucket_name} --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1
+aws s3api put-bucket-versioning --bucket ${bucket_name} --versioning-configuration Status=Enabled
+
+kops create cluster \
+--node-count=1 \
+--node-size=t2.medium \
+--zones=eu-west-1a \
+--dns-zone test.net \
+--cloud-labels=&amp;quot;Department=TEST&amp;quot; \
+--name=${KOPS_CLUSTER_NAME}
+
+kops edit cluster --name ${KOPS_CLUSTER_NAME}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Add to the end:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;yaml additionalPolicies: node: | [ { &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;, &amp;quot;Action&amp;quot;: &amp;quot;route53:ChangeResourceRecordSets&amp;quot;, &amp;quot;Resource&amp;quot;: &amp;quot;*&amp;quot; }, { &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;, &amp;quot;Action&amp;quot;: &amp;quot;route53:ListHostedZones&amp;quot;, &amp;quot;Resource&amp;quot;: &amp;quot;*&amp;quot; }, { &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;, &amp;quot;Action&amp;quot;: &amp;quot;route53:ListResourceRecordSets&amp;quot;, &amp;quot;Resource&amp;quot;: &amp;quot;*&amp;quot; } ]&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;  additionalPolicies:
+     node: |
+       [
+           {
+               &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
+               &amp;quot;Action&amp;quot;: &amp;quot;route53:ChangeResourceRecordSets&amp;quot;,
+               &amp;quot;Resource&amp;quot;: &amp;quot;*&amp;quot;
+           },
+           {
+               &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
+               &amp;quot;Action&amp;quot;: &amp;quot;route53:ListHostedZones&amp;quot;,
+               &amp;quot;Resource&amp;quot;: &amp;quot;*&amp;quot;
+           },
+           {
+               &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
+               &amp;quot;Action&amp;quot;: &amp;quot;route53:ListResourceRecordSets&amp;quot;,
+               &amp;quot;Resource&amp;quot;: &amp;quot;*&amp;quot;
+           }
+       ]
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;and create the cluster executing:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;kops update cluster --name ${KOPS_CLUSTER_NAME} --yes kops rolling-update cluster&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
+kops rolling-update cluster
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It takes some time. Use &lt;code&gt;kops validate cluster&lt;/code&gt; to validate it. More options:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;validate cluster: kops validate cluster&lt;/li&gt;
 &lt;li&gt;list nodes: kubectl get nodes --show-labels&lt;/li&gt;
-&lt;li&gt;ssh to the master: ssh -i ~/.ssh/id_rsa admin@api.k8s.test.net&lt;/li&gt;
+&lt;li&gt;ssh to the master: ssh -i ~/.ssh/id_rsa &lt;a href=&quot;&amp;#109;a&amp;#105;&amp;#x6c;&amp;#x74;&amp;#x6f;&amp;#x3a;&amp;#97;&amp;#x64;&amp;#x6d;i&amp;#110;&amp;#x40;&amp;#97;p&amp;#105;&amp;#46;&amp;#107;8&amp;#115;.&amp;#x74;&amp;#101;&amp;#x73;&amp;#x74;&amp;#46;&amp;#110;e&amp;#x74;&quot;&gt;&amp;#x61;d&amp;#109;&amp;#x69;&amp;#x6e;&amp;#64;&amp;#97;&amp;#112;&amp;#105;&amp;#46;&amp;#x6b;&amp;#x38;&amp;#115;&amp;#46;&amp;#116;&amp;#101;&amp;#x73;&amp;#116;&amp;#46;&amp;#110;&amp;#x65;&amp;#116;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;the admin user is specific to Debian. If not using Debian please use the appropriate user based on your OS.&lt;/li&gt;
-&lt;li&gt;read about installing addons at: https://github.com/kubernetes/kops/blob/master/docs/addons.md.&lt;/li&gt;
+&lt;li&gt;read about installing addons at: &lt;a href=&quot;https://github.com/kubernetes/kops/blob/master/docs/addons.md&quot;&gt;https://github.com/kubernetes/kops/blob/master/docs/addons.md&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;Deploy the dashboard&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml kubectl proxy &amp;amp; kops get secrets kube --type secret -oplaintext&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+kubectl proxy &amp;amp;
+kops get secrets kube --type secret -oplaintext
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Open &lt;a href=&quot;http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login&quot;&gt;http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Click on Token and introduce the following output:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;kops get secrets admin --type secret -oplaintext&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kops get secrets admin --type secret -oplaintext
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Configure DNS&lt;/h3&gt;
 &lt;p&gt;Note: avoid route53-mapper, it&apos;s deprecated. The kops documentation is outdated.&lt;/p&gt;
 &lt;p&gt;Obtain the zone ID for your Hosted Zone (you should create a new one if you don&apos;t have one, consult &lt;a href=&quot;https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone&quot;&gt;here&lt;/a&gt; how to do it):&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;aws route53 list-hosted-zones-by-name --output json --dns-name &amp;quot;test.net.&amp;quot; | jq -r &apos;.HostedZones[0].Id&apos;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws route53 list-hosted-zones-by-name --output json --dns-name &amp;quot;test.net.&amp;quot; | jq -r &apos;.HostedZones[0].Id&apos;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;In our case, it returns &lt;code&gt;/hostedzone/AAAAAA&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Create a new file external-dns.yml and update your data in the end:&lt;/p&gt;
-&lt;h2&gt;```yaml apiVersion: v1 kind: ServiceAccount metadata: name: external-dns&lt;/h2&gt;
-&lt;h2&gt;apiVersion: rbac.authorization.k8s.io/v1beta1 kind: ClusterRole metadata: name: external-dns rules: - apiGroups: [&amp;quot;&amp;quot;] resources: [&amp;quot;services&amp;quot;] verbs: [&amp;quot;get&amp;quot;,&amp;quot;watch&amp;quot;,&amp;quot;list&amp;quot;] - apiGroups: [&amp;quot;&amp;quot;] resources: [&amp;quot;pods&amp;quot;] verbs: [&amp;quot;get&amp;quot;,&amp;quot;watch&amp;quot;,&amp;quot;list&amp;quot;] - apiGroups: [&amp;quot;extensions&amp;quot;] resources: [&amp;quot;ingresses&amp;quot;] verbs: [&amp;quot;get&amp;quot;,&amp;quot;watch&amp;quot;,&amp;quot;list&amp;quot;] - apiGroups: [&amp;quot;&amp;quot;] resources: [&amp;quot;nodes&amp;quot;] verbs: [&amp;quot;list&amp;quot;]&lt;/h2&gt;
-&lt;h2&gt;apiVersion: rbac.authorization.k8s.io/v1beta1 kind: ClusterRoleBinding metadata: name: external-dns-viewer roleRef: apiGroup: rbac.authorization.k8s.io kind: ClusterRole name: external-dns subjects: - kind: ServiceAccount name: external-dns namespace: default&lt;/h2&gt;
-&lt;p&gt;apiVersion: extensions/v1beta1 kind: Deployment metadata: name: external-dns spec: strategy: type: Recreate template: metadata: labels: app: external-dns spec: serviceAccountName: external-dns containers: - name: external-dns image: registry.opensource.zalan.do/teapot/external-dns:latest args: - --source=service - --source=ingress - --domain-filter=test.net - --provider=aws #- --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both) - --registry=txt - --txt-owner-id=AAAAAA ```&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-dns
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: external-dns
+rules:
+- apiGroups: [&amp;quot;&amp;quot;]
+  resources: [&amp;quot;services&amp;quot;]
+  verbs: [&amp;quot;get&amp;quot;,&amp;quot;watch&amp;quot;,&amp;quot;list&amp;quot;]
+- apiGroups: [&amp;quot;&amp;quot;]
+  resources: [&amp;quot;pods&amp;quot;]
+  verbs: [&amp;quot;get&amp;quot;,&amp;quot;watch&amp;quot;,&amp;quot;list&amp;quot;]
+- apiGroups: [&amp;quot;extensions&amp;quot;] 
+  resources: [&amp;quot;ingresses&amp;quot;] 
+  verbs: [&amp;quot;get&amp;quot;,&amp;quot;watch&amp;quot;,&amp;quot;list&amp;quot;]
+- apiGroups: [&amp;quot;&amp;quot;]
+  resources: [&amp;quot;nodes&amp;quot;]
+  verbs: [&amp;quot;list&amp;quot;]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: external-dns-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: external-dns
+subjects:
+- kind: ServiceAccount
+  name: external-dns
+  namespace: default
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: external-dns
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      serviceAccountName: external-dns
+      containers:
+      - name: external-dns
+        image: registry.opensource.zalan.do/teapot/external-dns:latest
+        args:
+        - --source=service
+        - --source=ingress
+        - --domain-filter=test.net 
+        - --provider=aws
+          #- --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization
+        - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both)
+        - --registry=txt
+        - --txt-owner-id=AAAAAA
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;and deploy it:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;kubectl apply -f external-dns.yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kubectl apply -f external-dns.yml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Test your configuration with an example:&lt;/h2&gt;
 &lt;p&gt;Create an AWS certificate for the service:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;aws acm request-certificate \ --domain-name nginx.test.net \ --validation-method DNS \ --idempotency-token 1234&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aws acm request-certificate \
+--domain-name nginx.test.net \
+--validation-method DNS \
+--idempotency-token 1234 
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;and save the &lt;code&gt;CertificateArn&lt;/code&gt;. We&apos;ll use it later.&lt;/p&gt;
 &lt;p&gt;You will need to validate it. The easier way it&apos;s from the AWS web console as explained &lt;a href=&quot;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&quot;&gt;in the official documentation&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Create &lt;code&gt;nginx-d.yml&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;yaml apiVersion: extensions/v1beta1 kind: Deployment metadata: name: nginx spec: template: metadata: labels: app: nginx spec: containers: - image: nginx name: nginx ports: - containerPort: 80 name: http&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+          name: http
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;and &lt;code&gt;nginx-svc.yml&lt;/code&gt; with the domain you would like to use and the ACM certificate.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;yaml apiVersion: v1 kind: Service metadata: name: nginx annotations: external-dns.alpha.kubernetes.io/hostname: nginx.test.net. service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:888888:certificate/AAAAAA-BBBBB-CCCCC-DDDDD service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http service.beta.kubernetes.io/aws-load-balancer-ssl-ports: &amp;quot;443&amp;quot; spec: type: LoadBalancer ports: - port: 80 name: http targetPort: 80 - name: https port: 443 targetPort: http selector: app: nginx&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: nginx.test.net.
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:888888:certificate/AAAAAA-BBBBB-CCCCC-DDDDD
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: &amp;quot;443&amp;quot;
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    name: http
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: http
+  selector:
+    app: nginx
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;and deploy them:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;kubectl apply -f nginx-d.yml -d nginx-svc-yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kubectl apply -f nginx-d.yml -d nginx-svc-yml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It would take some minutes. Once the pods are ready, you should be able to open in your browser on &lt;code&gt;http://nginx.test.net&lt;/code&gt; and &lt;code&gt;https://nginx.test.net&lt;/code&gt; and see the nginx welcome page.&lt;/p&gt;
 &lt;h2&gt;Clean everything&lt;/h2&gt;
 &lt;p&gt;Delete the ACM certificate and execute:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;kops delete cluster --name k8s.test.net --yes&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kops delete cluster --name k8s.test.net --yes
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Resources&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/kubernetes/kops/blob/master/docs/iam_roles.md&quot;&gt;Kops IAM roles&lt;/a&gt;&lt;/li&gt;
@@ -726,7 +1186,7 @@ key = id5, value = {&amp;quot;id&amp;quot;: &amp;quot;id5&amp;quot;, &amp;quot;a
     
     <item>
       <title>JUnit4, JUnit5 and Spock framework comparison</title>
-      <link>https://www.galiglobal.com/blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</link>
+      <link>http://localhost:8820//blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</guid>
       <description>
@@ -1035,7 +1495,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Speaking about Jython in Python Vigo</title>
-      <link>https://www.galiglobal.com/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</link>
+      <link>http://localhost:8820//blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</link>
       <pubDate>Sat, 1 Apr 2017 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</guid>
       <description>
@@ -1063,7 +1523,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>My experience in Refugal</title>
-      <link>https://www.galiglobal.com/blog/2017/20170306-My-experience-in-the-Refugal.html</link>
+      <link>http://localhost:8820//blog/2017/20170306-My-experience-in-the-Refugal.html</link>
       <pubDate>Mon, 6 Mar 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170306-My-experience-in-the-Refugal.html</guid>
       <description>
@@ -1088,7 +1548,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Vim as Java and Groovy IDE (again) but now with Neovim</title>
-      <link>https://www.galiglobal.com/blog/2017/20170226-Vim-as-Java-IDE-again.html</link>
+      <link>http://localhost:8820//blog/2017/20170226-Vim-as-Java-IDE-again.html</link>
       <pubDate>Sun, 26 Feb 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170226-Vim-as-Java-IDE-again.html</guid>
       <description>
@@ -1096,27 +1556,74 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Some weeks ago I&apos;ve discovered this blog post &lt;a href=&quot;https://spacevim.org/use-vim-as-a-java-ide/&quot;&gt;Use Vim as a Java IDE&lt;/a&gt; and I want to give it another opportunity. Let&apos;s start.&lt;/p&gt;
 &lt;h2&gt;Neovim in Fedora&lt;/h2&gt;
 &lt;p&gt;This is straight-forward:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sudo dnf -y copr enable dperson/neovim sudo dnf -y install neovim sudo dnf -y install python3-neovim python3-neovim-gui&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf -y copr enable dperson/neovim
+sudo dnf -y install neovim
+sudo dnf -y install python3-neovim python3-neovim-gui
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;For Fedora 25 is even easier:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sudo dnf -y install neovim sudo dnf -y install python2-neovim python3-neovim&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf -y install neovim
+sudo dnf -y install python2-neovim python3-neovim
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;For other systems, just check &lt;a href=&quot;https://github.com/neovim/neovim/wiki/Installing-Neovim&quot;&gt;the official Neovim documentation&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;We&apos;ll need some other plugins:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sudo dnf -y install astyle&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf -y install astyle
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Install vim-plug&lt;/h2&gt;
 &lt;p&gt;Again, this is straight-forward following &lt;a href=&quot;https://github.com/junegunn/vim-plug&quot;&gt;the official instructions&lt;/a&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Install plugins&lt;/h2&gt;
 &lt;p&gt;This is when things become messy. Start editing &lt;code&gt;~/.config/nvim/init.vim&lt;/code&gt; to add the plugins:&lt;/p&gt;
-&lt;p&gt;``` &amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;    vim-plug     &amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; call plug#begin(&apos;~/.local/share/nvim/plugged&apos;)&lt;/p&gt;
-&lt;p&gt;&amp;quot; Others&lt;/p&gt;
-&lt;p&gt;Plug &apos;scrooloose/nerdtree&apos;, { &apos;on&apos;:  &apos;NERDTreeToggle&apos; } Plug &apos;majutsushi/tagbar&apos;&lt;/p&gt;
-&lt;p&gt;&amp;quot; Java development&lt;/p&gt;
-&lt;p&gt;Plug &apos;sbdchd/neoformat&apos; Plug &apos;artur-shaik/vim-javacomplete2&apos; Plug &apos;Shougo/deoplete.nvim&apos;, { &apos;do&apos;: &apos;:UpdateRemotePlugins&apos; } Plug &apos;neomake/neomake&apos;&lt;/p&gt;
-&lt;p&gt;&amp;quot; Initialize plugin system call plug#end()&lt;/p&gt;
-&lt;p&gt;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;    deoplete     &amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; let g:deoplete#enable_at_startup = 1 let g:deoplete#omni_patterns = {} let g:deoplete#omni_patterns.java = &apos;[^. *\t].\w*&apos; let g:deoplete#sources = {} let g:deoplete#sources._ = [] let g:deoplete#file#enable_buffer_path = 1&lt;/p&gt;
-&lt;p&gt;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;  Java Complete  &amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; autocmd FileType java setlocal omnifunc=javacomplete#Complete&lt;/p&gt;
-&lt;p&gt;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;     neomake     &amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; autocmd! BufWritePost,BufEnter * Neomake&lt;/p&gt;
-&lt;p&gt;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;     neoformat   &amp;quot;&amp;quot;&amp;quot;&amp;quot; &amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot; augroup astyle autocmd! autocmd BufWritePre * Neoformat augroup END ```&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;    vim-plug     &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+call plug#begin(&apos;~/.local/share/nvim/plugged&apos;)
+
+&amp;quot; Others
+
+Plug &apos;scrooloose/nerdtree&apos;, { &apos;on&apos;:  &apos;NERDTreeToggle&apos; }
+Plug &apos;majutsushi/tagbar&apos;
+
+&amp;quot; Java development
+
+Plug &apos;sbdchd/neoformat&apos;
+Plug &apos;artur-shaik/vim-javacomplete2&apos;
+Plug &apos;Shougo/deoplete.nvim&apos;, { &apos;do&apos;: &apos;:UpdateRemotePlugins&apos; }
+Plug &apos;neomake/neomake&apos;
+
+&amp;quot; Initialize plugin system
+call plug#end()
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;    deoplete     &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.java = &apos;[^. *\t]\.\w*&apos;
+let g:deoplete#sources = {}
+let g:deoplete#sources._ = []
+let g:deoplete#file#enable_buffer_path = 1
+
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;  Java Complete  &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;     neomake     &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+autocmd! BufWritePost,BufEnter * Neomake
+
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;     neoformat   &amp;quot;&amp;quot;&amp;quot;&amp;quot;
+&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;&amp;quot;
+augroup astyle
+  autocmd!
+  autocmd BufWritePre * Neoformat
+augroup END
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Open &lt;code&gt;nvim&lt;/code&gt; and type &lt;code&gt;:PlugInstall&lt;/code&gt;.&lt;/p&gt;
 &lt;h2&gt;Done!&lt;/h2&gt;
 &lt;p&gt;Now, if you open a Java project, you should have auto completion, auto format and lint capabilities.&lt;/p&gt;
@@ -1132,7 +1639,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>How to persist your configuration in GKE</title>
-      <link>https://www.galiglobal.com/blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</link>
+      <link>http://localhost:8820//blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</link>
       <pubDate>Mon, 9 Jan 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</guid>
       <description>
@@ -1140,29 +1647,79 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Again we&apos;ll use &lt;a href=&quot;https://github.com/antonmry/leanmanager&quot;&gt;Leanmanager bot&lt;/a&gt; but everything applies to any other system which needs to store configuration or data in a database. In the case of &lt;a href=&quot;https://github.com/antonmry/leanmanager&quot;&gt;Leanmanager&lt;/a&gt; we are using &lt;a href=&quot;https://github.com/boltdb/bolt&quot;&gt;Boltdb&lt;/a&gt;, a pure Go key/value store. &lt;a href=&quot;https://github.com/boltdb/bolt&quot;&gt;Boltdb&lt;/a&gt; is great for development but it doesn&apos;t support to have more than one process opening the same database file, so it may be problematic if we want to have more than one Docker instance at the same time. Yet it&apos;s enough for our purposes and the process is similar for &lt;a href=&quot;https://www.consul.io/&quot;&gt;Consul&lt;/a&gt; which it&apos;s already in the Roadmap.&lt;/p&gt;
 &lt;h2&gt;Create your persistent disks&lt;/h2&gt;
 &lt;p&gt;If we want to persist data, we are going to need a disk, that&apos;s common sense. In GCE we can do it very easily:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud compute disks create --size 1GB leanmanager-disk&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud compute disks create --size 1GB leanmanager-disk
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;But again, we want to do it in an automated way with Terraform. Use the following file &lt;code&gt;leanmanager-disk.tf&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;``` variable &amp;quot;disk_name&amp;quot; { default = &amp;quot;leanmanager-disk&amp;quot; }&lt;/p&gt;
-&lt;p&gt;resource &amp;quot;google_compute_disk&amp;quot; &amp;quot;default&amp;quot; { name  = &amp;quot;${var.disk_name}&amp;quot; type  = &amp;quot;pd-ssd&amp;quot; zone = &amp;quot;${var.region}&amp;quot; size  = &amp;quot;1&amp;quot; } ```&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;variable &amp;quot;disk_name&amp;quot; {
+  default = &amp;quot;leanmanager-disk&amp;quot;
+}
+
+resource &amp;quot;google_compute_disk&amp;quot; &amp;quot;default&amp;quot; {
+name  = &amp;quot;${var.disk_name}&amp;quot;
+  type  = &amp;quot;pd-ssd&amp;quot;
+  zone = &amp;quot;${var.region}&amp;quot;
+  size  = &amp;quot;1&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If you want to know more about it, visit the &lt;a href=&quot;https://www.terraform.io/docs/providers/google/r/compute_disk.html&quot;&gt;Terraform Google_Compute_Disk reference documentation&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Tell the container about the disk&lt;/h2&gt;
 &lt;p&gt;In our previous post, we&apos;ve launched the bot using &lt;code&gt;kubectl run&lt;/code&gt;. This is OK for simple configuration but if we need to have something more complex, it doesn&apos;t scale. We can create a &lt;a href=&quot;http://kubernetes.io/docs/user-guide/pods/&quot;&gt;pod&lt;/a&gt;, a group of one or more containers, using a YAML file like this:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;apiVersion: v1 kind: Pod metadata: name: leanmanager labels: name: leanmanager spec: containers: - image: antonmry/leanmanager:latest name: leanmanager env: - name: LEANMANAGER_TOKEN value: LEANMANAGER_TOKEN_TEMPLATE - name: LEANMANAGER_PATHDB value: /mnt volumeMounts: # This name must match the volumes.name below. - name: leanmanager-persistent-storage mountPath: /mnt volumes: - name: leanmanager-persistent-storage gcePersistentDisk: # This disk must already exist. pdName: leanmanager-disk fsType: ext4&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;apiVersion: v1
+kind: Pod
+metadata:
+  name: leanmanager
+  labels:
+    name: leanmanager
+spec:
+  containers:
+    - image: antonmry/leanmanager:latest
+      name: leanmanager
+      env:
+        - name: LEANMANAGER_TOKEN
+          value: LEANMANAGER_TOKEN_TEMPLATE
+        - name: LEANMANAGER_PATHDB
+          value: /mnt
+      volumeMounts:
+          # This name must match the volumes.name below.
+        - name: leanmanager-persistent-storage
+          mountPath: /mnt
+  volumes:
+    - name: leanmanager-persistent-storage
+      gcePersistentDisk:
+        # This disk must already exist.
+        pdName: leanmanager-disk
+        fsType: ext4
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The file is auto-explanatory except the value &lt;code&gt;LEANMANAGER_TOKEN_TEMPLATE&lt;/code&gt;. I don&apos;t want to hardcode the Token here because the file will be uploaded to Github. Instead of that, I want to use my local environment variable LEANMANAGER_TOKEN but this isn&apos;t supported yet in K8s, see &lt;a href=&quot;http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker&quot;&gt;Kubernetes equivalent of env-file in Docker&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;So I&apos;ve created a YAML template and in the Terraform file changed the last &lt;code&gt;local-exec&lt;/code&gt; to:&lt;/p&gt;
-&lt;p&gt;``` provisioner &amp;quot;local-exec&amp;quot; { command = &amp;quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;amp;&amp;amp; sed -i -- &apos;s/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g&apos; leanmanager.tmp.yaml&amp;quot; }&lt;/p&gt;
-&lt;p&gt;provisioner &amp;quot;local-exec&amp;quot; { command = &amp;quot;kubectl create -f leanmanager.tmp.yaml&amp;quot; }&lt;/p&gt;
-&lt;p&gt;provisioner &amp;quot;local-exec&amp;quot; { command = &amp;quot;rm -f leanmanager.tmp.yaml&amp;quot; } ```&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  provisioner &amp;quot;local-exec&amp;quot; {
+    command = &amp;quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;amp;&amp;amp; sed -i -- &apos;s/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g&apos; leanmanager.tmp.yaml&amp;quot;
+  }
+
+  provisioner &amp;quot;local-exec&amp;quot; {
+    command = &amp;quot;kubectl create -f leanmanager.tmp.yaml&amp;quot;
+  }
+
+  provisioner &amp;quot;local-exec&amp;quot; {
+    command = &amp;quot;rm -f leanmanager.tmp.yaml&amp;quot;
+  }
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Basically, I&apos;m replacing strings with &lt;code&gt;sed&lt;/code&gt;. Other more sophisticate approaches are possible as K8s secrets or Ansible, but this is simple and enough for the task we want to do.&lt;/p&gt;
 &lt;h2&gt;Create the pod and test&lt;/h2&gt;
 &lt;p&gt;Time to create the cluster and the pod:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh terraform plan terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;terraform plan
+terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The bot should connect. Now we can do some changes in the configuration, delete the pod:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh kubectl delete pod leanmanager&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl delete pod leanmanager
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Create it again:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh kubectl create -f leanmanager.yaml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl create -f leanmanager.yaml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And check the status with the following commands and, once it&apos;s in &lt;em&gt;Running&lt;/em&gt; state, see if everything has been persisted:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh kubectl get pod leanmanager kubectl logs leanmanager&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl get pod leanmanager
+kubectl logs leanmanager
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 &lt;p&gt;Persist data in Kubernetes is quite easy, even if you are going to do it automatically.&lt;/p&gt;
 &lt;p&gt;If you want to check all the files, the full project and the associated PR are in &lt;a href=&quot;https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0&quot;&gt;Github&lt;/a&gt;.&lt;/p&gt;
@@ -1177,7 +1734,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Introduction to Go kit</title>
-      <link>https://www.galiglobal.com/blog/2017/20170108-introduction-to-go-kit.html</link>
+      <link>http://localhost:8820//blog/2017/20170108-introduction-to-go-kit.html</link>
       <pubDate>Sun, 8 Jan 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170108-introduction-to-go-kit.html</guid>
       <description>
@@ -1188,21 +1745,30 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If after the video, you think microservices fit your case, go ahead and may the Force be with you.&lt;/p&gt;
 &lt;h2&gt;Go-kit addsvc example&lt;/h2&gt;
 &lt;p&gt;First step, download Go-kit:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh go get github.com/go-kit/kit&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;go get github.com/go-kit/kit
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Then, just copy the &lt;a href=&quot;https://github.com/go-kit/kit/tree/master/examples/addsvc&quot;&gt;addsvc example&lt;/a&gt; and download the dependencies (this may take a while depending of what you&apos;ve already in the GOPATH).&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cp -r ../../go-kit/kit/examples/addsvc/ . go get ./...&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cp -r ../../go-kit/kit/examples/addsvc/ .
+go get ./...
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The plan is simple, modify it to fit your use case while you are becoming more familiar with go-kit. But first, let&apos;s try the example. Launch the server:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd cmd/addsvc/ go run main.go&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd cmd/addsvc/
+go run main.go
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And in a different shell, launch the client:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd cmd/addcli/ go run main.go -http.addr=:8081 1 2&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd cmd/addcli/
+go run main.go -http.addr=:8081 1 2
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If everything goes well, you will obtain something like:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;1 + 2 = 3&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Or you can use &lt;code&gt;curl&lt;/code&gt; directly:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl -H &amp;quot;Content-Type: application/json&amp;quot; -X POST -d &apos;{&amp;quot;A&amp;quot;:&amp;quot;xyz&amp;quot;,&amp;quot;B&amp;quot;:&amp;quot;abc&amp;quot;}&apos; http://localhost:8081/concat&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl -H &amp;quot;Content-Type: application/json&amp;quot; -X POST -d &apos;{&amp;quot;A&amp;quot;:&amp;quot;xyz&amp;quot;,&amp;quot;B&amp;quot;:&amp;quot;abc&amp;quot;}&apos; http://localhost:8081/concat
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;There are some things to note now. First, the example has two methods, one for add numbers and another one to concat strings. Also, it supports many transport protocols, not only http, so you can launch the client using gRPC:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh go run main.go -grpc.addr=:8082 1 2&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;go run main.go -grpc.addr=:8082 1 2
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Show me the code!&lt;/h2&gt;
 &lt;p&gt;It&apos;s time to go deeper. Open &lt;code&gt;service.go&lt;/code&gt;. This is the file where the service definition is described and also implemented for this example.&lt;/p&gt;
 &lt;p&gt;Note: I may continue this in the future if I resume my work with go-kit.&lt;/p&gt;
@@ -1212,7 +1778,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Deploy on kubernetes GKE with Terraform</title>
-      <link>https://www.galiglobal.com/blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</link>
+      <link>http://localhost:8820//blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</link>
       <pubDate>Fri, 6 Jan 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</guid>
       <description>
@@ -1221,29 +1787,44 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I want to deploy my &lt;a href=&quot;https://hub.docker.com/r/antonmry/leanmanager&quot;&gt;leanmanager Docker image&lt;/a&gt; so the bot is available all the time for the team, but you can choose any Docker image you want to use. I want to use &lt;a href=&quot;https://cloud.google.com/container-engine/docs/quickstart&quot;&gt;Google Container Engine&lt;/a&gt; Kubernetes implementation and do it everything as much automatic as possible using Terraform.&lt;/p&gt;
 &lt;h2&gt;GCE installation&lt;/h2&gt;
 &lt;p&gt;First step, make sure you&apos;ve created previously a project in the Google Cloud console. If you don&apos;t have the Cloud SDK, you are going to need it. It&apos;s quite easy to install following &lt;a href=&quot;https://cloud.google.com/sdk/docs/quickstart-linux&quot;&gt;the Google instructions&lt;/a&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd ~/Software curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz tar -zxvf google-cloud-sdk-138.0.0-linux-x86_64.tar.gz rm google-cloud-sdk-138.0.0-linux-x86_64.tar.gz ./google-cloud-sdk/install.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd ~/Software
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
+tar -zxvf google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
+rm google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
+./google-cloud-sdk/install.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: be careful, last command modifies your .bashrc and it may cause problems.&lt;/p&gt;
 &lt;p&gt;Now, it&apos;s time to log in:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud init&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud init
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And now, install kubectl, the client to manage kubernetes:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud components install kubectl&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud components install kubectl
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Launching the service&lt;/h2&gt;
 &lt;p&gt;The first step is to create the cluster. It may take some time.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud container clusters create leanmanager-cluster&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud container clusters create leanmanager-cluster
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Ensure kubectl can access to the service:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud auth application-default login&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud auth application-default login
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And now, it&apos;s time to launch the leanmanager image:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&amp;quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&amp;quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; I have an environment variable &lt;code&gt;LEANMANAGER_TOKEN&lt;/code&gt; with the token to authenticate to Slack. The bot automatically connects using Websocket but if you want to expose any service, add &lt;code&gt;--port=8080&lt;/code&gt; to allow access to it. You will need also to create a Load Balancer, the steps are explained &lt;a href=&quot;https://cloud.google.com/container-engine/docs/quickstart&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Clean the service&lt;/h2&gt;
 &lt;p&gt;To stop the service and delete the cluster:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud container clusters delete leanmanager-cluster&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud container clusters delete leanmanager-cluster
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Install Terraform&lt;/h2&gt;
 &lt;p&gt;Our next step it&apos;s going to be to automate all the process. To do it, we&apos;ll use &lt;a href=&quot;https://www.terraform.io&quot;&gt;Terraform&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;If you don&apos;t have it, first step is download it from &lt;a href=&quot;https://www.terraform.io/downloads.html&quot;&gt;here&lt;/a&gt; and install it. For linux:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl -O https://releases.hashicorp.com/terraform/0.8.2/terraform_0.8.2_linux_amd64.zip unzip terraform_0.8.2_linux_amd64.zip&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl -O https://releases.hashicorp.com/terraform/0.8.2/terraform_0.8.2_linux_amd64.zip
+unzip terraform_0.8.2_linux_amd64.zip
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now move it to a folder which is in your PATH, in my case:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh terraform ~/bin/ echo terraform &amp;gt;&amp;gt; ~/bin/.gitignore&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;terraform ~/bin/
+echo terraform &amp;gt;&amp;gt; ~/bin/.gitignore
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Last command is executed because I&apos;ve &lt;code&gt;~/bin&lt;/code&gt; in github but I don&apos;t want upload a so big file as &lt;code&gt;terraform&lt;/code&gt; executable.&lt;/p&gt;
 &lt;p&gt;Now you should be able to use &lt;code&gt;terraform&lt;/code&gt; in your system. If you&apos;ve never used before, it&apos;s a good moment to read the &lt;a href=&quot;https://www.terraform.io/intro/getting-started/build.html&quot;&gt;Getting started guide&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Download GKE credentials&lt;/h2&gt;
@@ -1257,38 +1838,80 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;/ol&gt;
 &lt;h2&gt;Create the cluster using Terraform&lt;/h2&gt;
 &lt;p&gt;In the same folder you have your &lt;code&gt;account.json&lt;/code&gt;, create a Terraform file like &lt;code&gt;leanmanager.tf&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;``` variable &amp;quot;region&amp;quot; { default = &amp;quot;europe-west1-d&amp;quot; }&lt;/p&gt;
-&lt;p&gt;provider &amp;quot;google&amp;quot; { credentials = &amp;quot;${file(&amp;quot;account.json&amp;quot;)}&amp;quot; project     = &amp;quot;wwwleanmanagereu&amp;quot; region      = &amp;quot;${var.region}&amp;quot; }&lt;/p&gt;
-&lt;p&gt;resource &amp;quot;google_container_cluster&amp;quot; &amp;quot;primary&amp;quot; { name = &amp;quot;leanmanager-cluster&amp;quot; zone = &amp;quot;${var.region}&amp;quot; initial_node_count = 1&lt;/p&gt;
-&lt;p&gt;master_auth { username = &amp;quot;mr.yoda&amp;quot; password = &amp;quot;testTest1&amp;quot; }&lt;/p&gt;
-&lt;p&gt;node_config { oauth_scopes = [ &amp;quot;https://www.googleapis.com/auth/compute&amp;quot;, &amp;quot;https://www.googleapis.com/auth/devstorage.read_only&amp;quot;, &amp;quot;https://www.googleapis.com/auth/logging.write&amp;quot;, &amp;quot;https://www.googleapis.com/auth/monitoring&amp;quot;     ] } } ```&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;variable &amp;quot;region&amp;quot; {
+  default = &amp;quot;europe-west1-d&amp;quot;
+}
+
+provider &amp;quot;google&amp;quot; {
+  credentials = &amp;quot;${file(&amp;quot;account.json&amp;quot;)}&amp;quot;
+  project     = &amp;quot;wwwleanmanagereu&amp;quot;
+  region      = &amp;quot;${var.region}&amp;quot;
+}
+
+resource &amp;quot;google_container_cluster&amp;quot; &amp;quot;primary&amp;quot; {
+  name = &amp;quot;leanmanager-cluster&amp;quot;
+  zone = &amp;quot;${var.region}&amp;quot;
+  initial_node_count = 1
+
+  master_auth {
+    username = &amp;quot;mr.yoda&amp;quot;
+    password = &amp;quot;testTest1&amp;quot;
+  }
+
+  node_config {
+    oauth_scopes = [
+      &amp;quot;https://www.googleapis.com/auth/compute&amp;quot;,
+      &amp;quot;https://www.googleapis.com/auth/devstorage.read_only&amp;quot;,
+      &amp;quot;https://www.googleapis.com/auth/logging.write&amp;quot;,
+      &amp;quot;https://www.googleapis.com/auth/monitoring&amp;quot;
+    ]
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Check what it&apos;s going to create:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh terraform plan&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;terraform plan
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Review the output and if it&apos;s ok, launch it!.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh terraform apply&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;terraform apply
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If everything goes well, you will see a message like this:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Apply complete! Resources: 1 added, 0 changed, 0 destroyed.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;And you can check it with:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh gcloud container clusters list&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;gcloud container clusters list
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If you want to access with &lt;code&gt;kubectl&lt;/code&gt; you need to login first:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;gcloud container clusters get-credentials leanmanager-cluster --zone europe-west1-d kubectl cluster-info&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;gcloud container clusters get-credentials leanmanager-cluster --zone europe-west1-d
+kubectl cluster-info
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This step can be added to the &lt;code&gt;leanmanager.tf&lt;/code&gt; inside the &lt;code&gt;resource&lt;/code&gt; block:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;provisioner &amp;quot;local-exec&amp;quot; { command = &amp;quot;gcloud container clusters get-credentials ${var.cluster_name} --zone ${google_container_cluster.primary.zone}&amp;quot; }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;provisioner &amp;quot;local-exec&amp;quot; {
+    command = &amp;quot;gcloud container clusters get-credentials ${var.cluster_name} --zone ${google_container_cluster.primary.zone}&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Launch our Docker instance&lt;/h2&gt;
 &lt;p&gt;Once you are logged in with &lt;code&gt;kubectl&lt;/code&gt;, it&apos;s exactly the same as before:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&amp;quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=&amp;quot;LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;But you can also do it with Terraform adding this snippet in the beginning:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;variable &amp;quot;LEANMANAGER_TOKEN&amp;quot; { default = &amp;quot;USE YOUR OWN TOKEN&amp;quot; }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;variable &amp;quot;LEANMANAGER_TOKEN&amp;quot; {
+      default = &amp;quot;USE YOUR OWN TOKEN&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And after the previous &lt;code&gt;local-exec&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;provisioner &amp;quot;local-exec&amp;quot; { command = &amp;quot;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=LEANMANAGER_TOKEN=${var.LEANMANAGER_TOKEN}&amp;quot; }&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;provisioner &amp;quot;local-exec&amp;quot; {
+    command = &amp;quot;kubectl run leanmanager-node --image=antonmry/leanmanager:latest --env=LEANMANAGER_TOKEN=${var.LEANMANAGER_TOKEN}&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And executing terraform passing the variable:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Other option would be read the variable directly but you have to change the name to fit the terraform requirements and I&apos;m using it for other things. More info &lt;a href=&quot;https://www.terraform.io/docs/configuration/variables.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Clean everything&lt;/h2&gt;
 &lt;p&gt;With Terraform is really easy, just:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh terraform destroy&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;terraform destroy
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Not already linked but useful resources&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://container-solutions.com/simple-gce-setup-terraform/&quot;&gt;Simple GCE setup Terraform&lt;/a&gt;&lt;/li&gt;
@@ -1302,7 +1925,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Time to start a Go blog with Hugo</title>
-      <link>https://www.galiglobal.com/blog/2016/20160616-first-blog-post-with-hugo.html</link>
+      <link>http://localhost:8820//blog/2016/20160616-first-blog-post-with-hugo.html</link>
       <pubDate>Thu, 16 Jun 2016 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2016/20160616-first-blog-post-with-hugo.html</guid>
       <description>
@@ -1311,33 +1934,55 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Six months ago I&apos;ve started to learn and use &lt;a href=&quot;https://golang.org/&quot;&gt;Go&lt;/a&gt;. I was very impressed with the simplicity of the language and I&apos;ve started to read a lot of articles, books, etc., watch videos and develop some projects. I discovered &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;, a site generator similar to JBake but written in Go. I was tempted to migrate my previous blog, but today I&apos;m going to continue writing about not Go subjects, so it&apos;s simpler to open a new one only for Go, bots, DevOps, concurrency and perfomance. In another post I will write more about Go and why I find it so interesting.&lt;/p&gt;
 &lt;p&gt;As the first post, let&apos;s see how to configure &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;. I&apos;ve to say it was really easy, I really impressed with piece of software. I can compare with other site generators as Jekyll, Hexo or JBake, and I have to say Hugo is my favourite.&lt;/p&gt;
 &lt;p&gt;First of all, I&apos;ve created a new repo in my Gihub account and cloned it in my laptop:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git clone git@github.com:antonmry/antonmry.github.io.git cd antonmry.github.io&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git clone git@github.com:antonmry/antonmry.github.io.git
+cd antonmry.github.io
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Because I&apos;m going to use my github user page, the source code of the page must be in master branch. For your Hugo code, you can have a separate repo or just a different branch. I choose the second option with a branch named source, I prefer it in that way, it&apos;s simpler and this is the main difference with the procedure you can find in &lt;a href=&quot;https://gohugo.io/tutorials/github-pages-blog&quot;&gt;the excellent Hugo documentation&lt;/a&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git checkout -b source git push -u origin source&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git checkout -b source
+git push -u origin source
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Inside the source code folder, we are going to create a folder linking to the master branch:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash
+git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It&apos;s time to generate the site. First you have to install Hugo, plenty of options in the &lt;a href=&quot;https://gohugo.io/overview/installing/&quot;&gt;the Hugo website&lt;/a&gt;. I&apos;ve chosen the Fedora package, updates will be easier.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh hugo new site antonmry.github.io mv antonmry.github.io/* . rm -r antonmry.github.io&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;hugo new site antonmry.github.io
+mv antonmry.github.io/* .
+rm -r antonmry.github.io
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Choose your theme, there are very nice options, I&apos;ve chosen beatifulhugo:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd themes git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo cd .. echo &amp;quot;theme = \&amp;quot;beautifulhugo\&amp;quot;&amp;quot; &amp;gt;&amp;gt; config.toml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd themes
+git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo
+cd ..
+echo &amp;quot;theme = \&amp;quot;beautifulhugo\&amp;quot;&amp;quot; &amp;gt;&amp;gt; config.toml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Create your first blog and start the server:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh hugo new post/hugo-site-created.md hugo server --buildDrafts&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Open in your browser http://localhost:1313/ and enjoy your first post with Hugo ;-)&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;hugo new post/hugo-site-created.md
+hugo server --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Open in your browser &lt;a href=&quot;http://localhost:1313/&quot;&gt;http://localhost:1313/&lt;/a&gt; and enjoy your first post with Hugo ;-)&lt;/p&gt;
 &lt;p&gt;Let&apos;s move the post from draft to publised: edit the file content/post/hugo-site-created.md and change the draft line from true to false if exists.&lt;/p&gt;
 &lt;p&gt;Now it&apos;s time to upload it to Gihub and make it public:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh hugo git add -A git commit -m &amp;quot;Initial version&amp;quot; git push git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git master&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Oh, really, can it be so easy?. Just go to https://antonmry.github.io (or your equivalent site)&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;hugo
+git add -A
+git commit -m &amp;quot;Initial version&amp;quot;
+git push
+git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Oh, really, can it be so easy?. Just go to &lt;a href=&quot;https://antonmry.github.io&quot;&gt;https://antonmry.github.io&lt;/a&gt; (or your equivalent site)&lt;/p&gt;
 &lt;p&gt;I was thinking in create a travis job to do the publishing in master (I did it before for jbake) but to be honest, this method is simple enough. I&apos;ve added to my .bash_alias the last command and that&apos;s all I need.&lt;/p&gt;
 &lt;p&gt;Enjoy!&lt;/p&gt;
 &lt;p&gt;PS: if you do a rebase in &lt;code&gt;source&lt;/code&gt;, you will need to do it a bit more tricky to push to master because you can&apos;t use &lt;code&gt;--force&lt;/code&gt; with the &lt;code&gt;subtree&lt;/code&gt; option:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git push origin `git subtree split --prefix public source`:master --force&lt;/code&gt; More info can be found in Stackoverflow &lt;a href=&quot;http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push&quot;&gt;Git subtree - subtree up-to-date but can&apos;t push&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git push origin `git subtree split --prefix public source`:master --force
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;More info can be found in Stackoverflow &lt;a href=&quot;http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push&quot;&gt;Git subtree - subtree up-to-date but can&apos;t push&lt;/a&gt;.&lt;/p&gt;
 
 	  </description>
     </item>
     
     <item>
       <title>Developing in RestComm? Docker to the rescue</title>
-      <link>https://www.galiglobal.com/blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</link>
+      <link>http://localhost:8820//blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</link>
       <pubDate>Sun, 8 May 2016 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</guid>
       <description>
@@ -1352,53 +1997,109 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;So, what is the first step to become a RestComm maniac?&lt;/p&gt;
 &lt;h2&gt;Download the source code&lt;/h2&gt;
 &lt;p&gt;The easy part, I love github:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git clone git@github.com:antonmry/Restcomm-Connect.git git clone git@github.com:antonmry/Restcomm-Docker.git cd Restcomm-Docker/ git remote add upstream git@github.com:RestComm/Restcomm-Docker.git cd ../Restcomm-Connect/ git remote add upstream git@github.com:RestComm/Restcomm-Connect.git&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git clone git@github.com:antonmry/Restcomm-Connect.git
+git clone git@github.com:antonmry/Restcomm-Docker.git
+cd Restcomm-Docker/
+git remote add upstream git@github.com:RestComm/Restcomm-Docker.git
+cd ../Restcomm-Connect/
+git remote add upstream git@github.com:RestComm/Restcomm-Connect.git
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If you&apos;ve done it previously, it&apos;s a good moment to sync with the official respository:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git fetch upstream git checkout master git merge upstream/master git push&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git fetch upstream
+git checkout master
+git merge upstream/master
+git push
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;RestComm-Docker&lt;/h2&gt;
 &lt;p&gt;Now we are going to set up the RestComm environment: docker to the rescue!&lt;/p&gt;
 &lt;p&gt;I always create a local branch to do my work:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd ../Restcomm-Docker/ git checkout -b s3bucketRegion#1 git push -u origin s3bucketRegion#1&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;```sh docker build -t restcomm/yourname:latest -f Dockerfile .&lt;/p&gt;
-&lt;p&gt;docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -e VOICERSS_KEY=&amp;quot;CREATE A NEW ONE&amp;quot; -e S3_ACCESS_KEY=&amp;quot;ONLY IF YOU USE IT&amp;quot; -e S3_SECURITY_KEY=&amp;quot;ONLY IF YOU USE IT&amp;quot; -e S3_BUCKET_NAME=&amp;quot;ONLY IF YOU USE IT&amp;quot; -e STATIC_ADDRESS=&amp;quot;YOUR ETH0 IP?&amp;quot; -e ENVCONFURL=&amp;quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&amp;quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest ```&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd ../Restcomm-Docker/
+git checkout -b s3bucketRegion#1
+git push -u origin s3bucketRegion#1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker build -t restcomm/yourname:latest -f Dockerfile .
+
+docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -e VOICERSS_KEY=&amp;quot;CREATE A NEW ONE&amp;quot; -e S3_ACCESS_KEY=&amp;quot;ONLY IF YOU USE IT&amp;quot; -e S3_SECURITY_KEY=&amp;quot;ONLY IF YOU USE IT&amp;quot; -e S3_BUCKET_NAME=&amp;quot;ONLY IF YOU USE IT&amp;quot; -e STATIC_ADDRESS=&amp;quot;YOUR ETH0 IP?&amp;quot; -e ENVCONFURL=&amp;quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&amp;quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We &amp;quot;enter&amp;quot; inside the docker instance:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker ps docker exec -it bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933 /bin/bash&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker ps
+docker exec -it bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933 /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;To copy the deployments folder:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd /opt/Restcomm-JBoss-AS7/standalone/deployments/ tar -cvf /tmp/deployments.tar * exit&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd /opt/Restcomm-JBoss-AS7/standalone/deployments/
+tar -cvf /tmp/deployments.tar *
+exit
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;REPLACE_WITH_READ_MORE&lt;/p&gt;
 &lt;p&gt;We leave the container and extract the deployment folder in your system:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker cp bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933:/tmp/deployments.tar . mkdir deployments mv deployments.tar deployments rm deployments.tar&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker cp bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933:/tmp/deployments.tar .
+mkdir deployments 
+mv deployments.tar deployments
+rm deployments.tar
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Launch docker with the new folder as its deployment folder:&lt;/p&gt;
-&lt;p&gt;```sh docker stop bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933&lt;/p&gt;
-&lt;p&gt;docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&amp;quot;xxx&amp;quot; -e S3_ACCESS_KEY=&amp;quot;xxx&amp;quot; -e S3_SECURITY_KEY=&amp;quot;xxx&amp;quot; -e S3_BUCKET_NAME=&amp;quot;xxx&amp;quot; -e STATIC_ADDRESS=&amp;quot;your eth0 IP?&amp;quot; -e ENVCONFURL=&amp;quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&amp;quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest&lt;/p&gt;
-&lt;p&gt;```&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker stop bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933
+
+docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&amp;quot;xxx&amp;quot; -e S3_ACCESS_KEY=&amp;quot;xxx&amp;quot; -e S3_SECURITY_KEY=&amp;quot;xxx&amp;quot; -e S3_BUCKET_NAME=&amp;quot;xxx&amp;quot; -e STATIC_ADDRESS=&amp;quot;your eth0 IP?&amp;quot; -e ENVCONFURL=&amp;quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&amp;quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
+
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Time to make your changes in the Dockerfile. Once they are done, build the image and test. To upload it to github, first upload to your repository:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git add file1 file2 git commit -m &amp;quot;Descriptive message please&amp;quot; git push&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git add file1 file2
+git commit -m &amp;quot;Descriptive message please&amp;quot;
+git push
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;In github, open a Request using as Base the official repository and as a Head Fork your branch. Usually I add a &amp;quot;Closes #xx&amp;quot; to the end of the title, where xx is the number of the issue you are solving. It helps if you are using &lt;a href=&quot;http://www.waffle.io&quot;&gt;Waffle&lt;/a&gt;, a great service to organize your issues following agile methodologies.&lt;/p&gt;
 &lt;h2&gt;RestComm-Connect&lt;/h2&gt;
 &lt;p&gt;Ok, we have our Restcomm-docker PR, let&apos;s got with ResComm-Connect. First you need to create a file:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd ../Restcomm-Connect/ vim restcomm-connect-build.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd ../Restcomm-Connect/
+vim restcomm-connect-build.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;with the following content (change to your own values):&lt;/p&gt;
-&lt;p&gt;```&lt;/p&gt;
-&lt;h1&gt;!/bin/bash&lt;/h1&gt;
-&lt;p&gt;export RESTCOMM_HOME=/home/antonmry/Workspace/Telestax/Restcomm-Connect export MAJOR_VERSION_NUMBER=7.6 export BUILD_NUMBER=0&lt;/p&gt;
-&lt;p&gt;JAVA_HOME=/home/antonmry/Software/jdk/jdk1.7.0_80 export JAVA_HOME&lt;/p&gt;
-&lt;p&gt;export WORKSPACE=$RESTCOMM_HOME mkdir $WORKSPACE/dependencies export DEPENDENCIES_HOME=$WORKSPACE/dependencies&lt;/p&gt;
-&lt;p&gt;ant release -f ./release/build.xml -Drestcomm.release.version=$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Drestcomm.branch.name=restcomm-release-$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Dcheckout.restcomm.dir=$RESTCOMM_HOME -Dworkspace.restcomm.dir=$RESTCOMM_HOME/restcomm -Dcheckout.dir=$DEPENDENCIES_HOME ```&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+export RESTCOMM_HOME=/home/antonmry/Workspace/Telestax/Restcomm-Connect
+export MAJOR_VERSION_NUMBER=7.6
+export BUILD_NUMBER=0
+
+JAVA_HOME=/home/antonmry/Software/jdk/jdk1.7.0_80
+export JAVA_HOME
+
+export WORKSPACE=$RESTCOMM_HOME
+mkdir $WORKSPACE/dependencies
+export DEPENDENCIES_HOME=$WORKSPACE/dependencies
+
+ant release -f ./release/build.xml -Drestcomm.release.version=$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Drestcomm.branch.name=restcomm-release-$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Dcheckout.restcomm.dir=$RESTCOMM_HOME -Dworkspace.restcomm.dir=$RESTCOMM_HOME/restcomm -Dcheckout.dir=$DEPENDENCIES_HOME
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Execute it:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh chmod +x restcomm-connect-build.sh ./restcomm-connect-build.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;chmod +x restcomm-connect-build.sh
+./restcomm-connect-build.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Time to wait 5 minutes in a good laptop... after that, we should have our customozied JBoss ready to be launched:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh ls ./release/Restcomm-JBoss-AS7-7.6.0.zip&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ls ./release/Restcomm-JBoss-AS7-7.6.0.zip
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now you can unzip it and start to play with it... but how to start to develop?&lt;/p&gt;
 &lt;p&gt;In the Intellij Idea, you can import the project as a Maven project. I&apos;ve imported the route &lt;strong&gt;Restcomm-Connect/restcomm&lt;/strong&gt; which has the root pom.xml and created a local branch as usual:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git checkout -b initTimeRVD#1 git push -u origin initTimeRVD#1&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git checkout -b initTimeRVD#1
+git push -u origin initTimeRVD#1
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now you can develop as much as you want. To build it:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cd restcomm mvn install&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd restcomm
+mvn install
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here you can do it with the different modules, you don&apos;t need to build everything each time but the specific module you&apos;ve changed. To deploy it and test it:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker ps docker stop 06b117547bc5726fc74c42a61c6826342f04b9b194ebc0029f70be4ad1ef1a4f rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm.war rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm-rvd.war cp -r restcomm.application/target/restcomm/ ~/Workspace/Telestax/deployments/restcomm.war cp -r restcomm.application/target/restcomm.rvd/ ~/Workspace/Telestax/deployments/restcomm-rvd.war&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&amp;quot;xxx&amp;quot; -e S3_ACCESS_KEY=&amp;quot;xxx&amp;quot; -e S3_SECURITY_KEY=&amp;quot;xxx&amp;quot; -e S3_BUCKET_NAME=&amp;quot;xxx&amp;quot; -e STATIC_ADDRESS=&amp;quot;YOUR ETH0 IP?&amp;quot; -e ENVCONFURL=&amp;quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&amp;quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Know, just open RestComm as usual in https://eth0-ip or https://eth0-ip/olympus and test. Once you have finished your changes, upload them to Github:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh git add file1 file2 git commit &amp;quot;A good message #yourIssue&amp;quot; git push&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker ps
+docker stop 06b117547bc5726fc74c42a61c6826342f04b9b194ebc0029f70be4ad1ef1a4f
+rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm.war
+rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm-rvd.war
+cp -r restcomm.application/target/restcomm/ ~/Workspace/Telestax/deployments/restcomm.war
+cp -r restcomm.application/target/restcomm.rvd/ ~/Workspace/Telestax/deployments/restcomm-rvd.war
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&amp;quot;xxx&amp;quot; -e S3_ACCESS_KEY=&amp;quot;xxx&amp;quot; -e S3_SECURITY_KEY=&amp;quot;xxx&amp;quot; -e S3_BUCKET_NAME=&amp;quot;xxx&amp;quot; -e STATIC_ADDRESS=&amp;quot;YOUR ETH0 IP?&amp;quot; -e ENVCONFURL=&amp;quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&amp;quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Know, just open RestComm as usual in &lt;a href=&quot;https://eth0-ip&quot;&gt;https://eth0-ip&lt;/a&gt; or &lt;a href=&quot;https://eth0-ip/olympus&quot;&gt;https://eth0-ip/olympus&lt;/a&gt; and test. Once you have finished your changes, upload them to Github:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;git add file1 file2
+git commit &amp;quot;A good message #yourIssue&amp;quot;
+git push
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Create the PR in github and wait for the approbation ;-)&lt;/p&gt;
 &lt;h1&gt;Reference documentation&lt;/h1&gt;
 &lt;ul&gt;
@@ -1411,55 +2112,103 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>How to setup your environment for Kubernetes development</title>
-      <link>https://www.galiglobal.com/blog/2016/20160430-how-to-develop-in-Kubernetes.html</link>
+      <link>http://localhost:8820//blog/2016/20160430-how-to-develop-in-Kubernetes.html</link>
       <pubDate>Sat, 30 Apr 2016 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2016/20160430-how-to-develop-in-Kubernetes.html</guid>
       <description>
       &lt;p&gt;In this post I&apos;m going to show how to create a Kubernetes Development Environment and deploy RestComm (a quite complex software) on it for testing. If you want just deploy RestComm, it&apos;s better for you use the &lt;a href=&quot;http://kubernetes.io/docs/getting-started-guides/docker/&quot;&gt;Kubernetes Docker option&lt;/a&gt;, instead of doing all this process.&lt;/p&gt;
 &lt;h1&gt;Install Go Development Environment&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;sh curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz tar -zxvf go1.6.linux-amd64.tar.gz mv go ~/Software/ echo &amp;quot;GOROOT=~/Software/go&amp;quot; &amp;gt;&amp;gt; .bash_profile echo &amp;quot;export GOROOT&amp;quot; &amp;gt;&amp;gt; .bash_profile echo &amp;quot;PATH=\$GOROOT/bin:\$PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile echo &amp;quot;export PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile echo &amp;quot;GOPATH=~/Workspace/Telestax/go_kubernetes&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile echo &amp;quot;export GOPATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile source ~/.bash_profile mkdir -p $GOPATH&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+tar -zxvf go1.6.linux-amd64.tar.gz
+mv go ~/Software/
+echo &amp;quot;GOROOT=~/Software/go&amp;quot; &amp;gt;&amp;gt; .bash_profile 
+echo &amp;quot;export GOROOT&amp;quot; &amp;gt;&amp;gt; .bash_profile 
+echo &amp;quot;PATH=\$GOROOT/bin:\$PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
+echo &amp;quot;export PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
+echo &amp;quot;GOPATH=~/Workspace/Telestax/go_kubernetes&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
+echo &amp;quot;export GOPATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
+source ~/.bash_profile
+mkdir -p $GOPATH
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Basic Kubernetes installation&lt;/h1&gt;
 &lt;h2&gt;Clone and download&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;sh mkdir -p $GOPATH/src/k8s.io cd $GOPATH/src/k8s.io git clone https://github.com/antonmry/kubernetes.git cd kubernetes git remote add upstream &apos;https://github.com/kubernetes/kubernetes.git&apos;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;mkdir -p $GOPATH/src/k8s.io
+cd $GOPATH/src/k8s.io
+git clone https://github.com/antonmry/kubernetes.git
+cd kubernetes
+git remote add upstream &apos;https://github.com/kubernetes/kubernetes.git&apos;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Build and unit test&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;sh ./hack/build-go.sh &amp;amp;&amp;amp; notify-send &amp;quot;Compilation done&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;./hack/build-go.sh &amp;amp;&amp;amp; notify-send &amp;quot;Compilation done&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Note! Integration test take a long time.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh ./hack/test-go.sh &amp;amp;&amp;amp; notify-send &amp;quot;Test done&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;./hack/test-go.sh &amp;amp;&amp;amp; notify-send &amp;quot;Test done&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Integration test&lt;/h2&gt;
 &lt;p&gt;We need etcd to run the integration test, Docker to the rescue?&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker run -d --name etcd quay.io/coreos/etcd:v2.3.3 alias etcdctl=&amp;quot;docker exec etcd /etcdctl&amp;quot; alias etcd=&amp;quot;docker exec etcd /etcd&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker run -d --name etcd quay.io/coreos/etcd:v2.3.3
+alias etcdctl=&amp;quot;docker exec etcd /etcdctl&amp;quot;
+alias etcd=&amp;quot;docker exec etcd /etcd&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Nop, it fails because kubernetes look for it in the PATH :-(&lt;/p&gt;
 &lt;p&gt;So,&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl -O https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz tar xzvf etcd-v2.3.3-linux-amd64.tar.gz mv etcd-v2.3.3-linux-amd64/ ~/Software/ echo &amp;quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile echo &amp;quot;export PATH&amp;quot; &amp;gt;&amp;gt; ~./bash_profile source ~./bash_profile&lt;/code&gt; And now, time to test. Be careful, I think it uses your Google Cloud account :-S&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh go run hack/e2e.go -v --build --up --test --down &amp;amp;&amp;amp; notify-send &amp;quot;Integration test done&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl -O  https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz 
+tar xzvf etcd-v2.3.3-linux-amd64.tar.gz
+mv etcd-v2.3.3-linux-amd64/ ~/Software/
+echo &amp;quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile
+echo &amp;quot;export PATH&amp;quot; &amp;gt;&amp;gt; ~./bash_profile
+source ~./bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now, time to test. Be careful, I think it uses your Google Cloud account :-S&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;go run hack/e2e.go -v --build --up --test --down &amp;amp;&amp;amp; notify-send &amp;quot;Integration test done&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Running the Restcomm image&lt;/h1&gt;
 &lt;h2&gt;Creating and launching the cluster&lt;/h2&gt;
 &lt;p&gt;It will ask for sudo permission, you have to be quick, or relaunch.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh hack/local-up-cluster.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;hack/local-up-cluster.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Let this terminal open and create a new one (tmux&apos;s time?)&lt;/p&gt;
 &lt;h2&gt;Running the container&lt;/h2&gt;
 &lt;p&gt;We don&apos;t have any container running:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cluster/kubectl.sh get pods cluster/kubectl.sh get services cluster/kubectl.sh get deployments&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cluster/kubectl.sh get pods
+cluster/kubectl.sh get services
+cluster/kubectl.sh get deployments
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Time to launch RestComm:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml vim restcomm_rc.yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml
+vim restcomm_rc.yml 
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Change STATIC_ADDRESS to your own IP address.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cluster/kubectl.sh create -f restcomm_rc.yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cluster/kubectl.sh create -f restcomm_rc.yml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now we should be able to see our docker instance working, pods and so on.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cluster/kubectl.sh get services cluster/kubectl.sh get deployments cluster/kubectl.sh get pods&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cluster/kubectl.sh get services
+cluster/kubectl.sh get deployments
+cluster/kubectl.sh get pods
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We have to wait the STATUS pod become running instead of ContainerCreating.&lt;/p&gt;
 &lt;p&gt;After that, we can see our RestComm containers running:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh docker images docker ps&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;docker images
+docker ps
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Once it&apos;s running, we can expose the ports to access our instance:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml vim restcomm_service.yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml
+vim restcomm_service.yml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Change externalIPs to your own IP address.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh cluster/kubectl.sh create -f restcomm_service.yml&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cluster/kubectl.sh create -f restcomm_service.yml
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;With the following command we can check the status:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sh ./cluster/kubectl.sh get svc&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;./cluster/kubectl.sh get svc
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Test Restcomm!&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;sh chromium-browser https://CHANGE_WITH_YOUR_IP/olympus&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Login as alice, call +1234 and you should listen the message ;-)&lt;/p&gt;
 &lt;h1&gt;Stop all&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;sh ./cluster/kubectl.sh delete service restcomm-service ./cluster/kubectl.sh delete rc restcomm-core-controller&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;./cluster/kubectl.sh delete service restcomm-service
+./cluster/kubectl.sh delete rc restcomm-core-controller
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And Ctrl+C in the terminal running the cluster.&lt;/p&gt;
 &lt;h1&gt;Reference documentation&lt;/h1&gt;
 &lt;ul&gt;
@@ -1474,7 +2223,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>First year as ACE Associate and 2016 goals</title>
-      <link>https://www.galiglobal.com/blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</link>
+      <link>http://localhost:8820//blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</link>
       <pubDate>Sat, 2 Jan 2016 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</guid>
       <description>
@@ -1495,7 +2244,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Oracle Pre-conference and TADSummit 2015</title>
-      <link>https://www.galiglobal.com/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</link>
+      <link>http://localhost:8820//blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</link>
       <pubDate>Tue, 17 Nov 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</guid>
       <description>
@@ -1507,7 +2256,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 2</title>
-      <link>https://www.galiglobal.com/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.html</link>
+      <link>http://localhost:8820//blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.html</link>
       <pubDate>Sun, 30 Aug 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.html</guid>
       <description>
@@ -1524,7 +2273,9 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Unzip the file and execute the installer:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;sh unzip V73999-01.zip java -jar ocsg_pte_generic.jar&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;unzip V73999-01.zip
+java -jar ocsg_pte_generic.jar
+&lt;/code&gt;&lt;/pre&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;In the first window, accept the default Inventory Directory pressing &lt;strong&gt;OK&lt;/strong&gt;.&lt;/p&gt;
@@ -1546,7 +2297,9 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;ol&gt;
 &lt;li&gt;Open a new Terminal and execute the following commands.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;sh cd /opt/ocsg6/ocsg_pte/ ./run.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd /opt/ocsg6/ocsg_pte/
+./run.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;ol&gt;
 &lt;li&gt;The PTE should appear:&lt;/li&gt;
 &lt;/ol&gt;
@@ -1615,7 +2368,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>We are TADHack 2015 winners :-)</title>
-      <link>https://www.galiglobal.com/blog/2015/We-are-TADHack-2015-winners.html</link>
+      <link>http://localhost:8820//blog/2015/We-are-TADHack-2015-winners.html</link>
       <pubDate>Fri, 31 Jul 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/We-are-TADHack-2015-winners.html</guid>
       <description>
@@ -1639,7 +2392,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>A look back to Geecon 2015</title>
-      <link>https://www.galiglobal.com/blog/2015/A-look-back-to-Geecon-2015.html</link>
+      <link>http://localhost:8820//blog/2015/A-look-back-to-Geecon-2015.html</link>
       <pubDate>Tue, 30 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/A-look-back-to-Geecon-2015.html</guid>
       <description>
@@ -1657,7 +2410,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>TMCnet Newsroom Interview with Anton R. Yuste</title>
-      <link>https://www.galiglobal.com/blog/2015/TMCnet-Newsroom-Interview-with-Anton-R-Yuste.html</link>
+      <link>http://localhost:8820//blog/2015/TMCnet-Newsroom-Interview-with-Anton-R-Yuste.html</link>
       <pubDate>Sun, 21 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/TMCnet-Newsroom-Interview-with-Anton-R-Yuste.html</guid>
       <description>
@@ -1670,7 +2423,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>The Oracle ACE Associate award</title>
-      <link>https://www.galiglobal.com/blog/2015/The-Oracle-ACE-Associate-award.html</link>
+      <link>http://localhost:8820//blog/2015/The-Oracle-ACE-Associate-award.html</link>
       <pubDate>Tue, 16 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/The-Oracle-ACE-Associate-award.html</guid>
       <description>
@@ -1693,7 +2446,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Introductory videos to OCSG, OCCAS and OCWSC</title>
-      <link>https://www.galiglobal.com/blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html</link>
+      <link>http://localhost:8820//blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html</link>
       <pubDate>Thu, 11 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html</guid>
       <description>
@@ -1713,7 +2466,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Summary of the last news in the Oracle Communications Service Delivery Platform</title>
-      <link>https://www.galiglobal.com/blog/2015/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.html</link>
+      <link>http://localhost:8820//blog/2015/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.html</link>
       <pubDate>Thu, 21 May 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.html</guid>
       <description>
@@ -1763,7 +2516,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>SpringIO 2015: a great event for a great community</title>
-      <link>https://www.galiglobal.com/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html</link>
+      <link>http://localhost:8820//blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html</link>
       <pubDate>Thu, 14 May 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html</guid>
       <description>
@@ -1780,7 +2533,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 1</title>
-      <link>https://www.galiglobal.com/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html</link>
+      <link>http://localhost:8820//blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html</link>
       <pubDate>Thu, 30 Apr 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html</guid>
       <description>
@@ -1806,11 +2559,15 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Open a Terminal and execute:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;sh sudo mkdir /opt/ocsg6 sudo chown oracle:oracle /opt/ocsg6&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;sudo mkdir /opt/ocsg6
+sudo chown oracle:oracle /opt/ocsg6
+&lt;/code&gt;&lt;/pre&gt;
 &lt;ol&gt;
 &lt;li&gt;Unzip the file and execute the installer:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;sh unzip V73995-01.zip java -jar ocsg_generic.jar&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;unzip V73995-01.zip
+java -jar ocsg_generic.jar
+&lt;/code&gt;&lt;/pre&gt;
 &lt;ol&gt;
 &lt;li&gt;In the first window, accept the default Inventory Directory pressing &lt;strong&gt;OK&lt;/strong&gt;.&lt;/li&gt;
 &lt;/ol&gt;
@@ -1856,12 +2613,17 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;ol&gt;
 &lt;li&gt;Open a Terminal and execute:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;sh cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain ./startWebLogic.sh&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain
+./startWebLogic.sh
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;When it asks for username and password, introduce &lt;em&gt;weblogic&lt;/em&gt; and &lt;em&gt;welcome1&lt;/em&gt;. After a while, a &lt;em&gt;The server started in RUNNING mode.&lt;/em&gt; message should appear.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Open a Terminal (or a tab in the previous one) and execute:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;sh cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain/bin ./startGatekeeper.sh&lt;/code&gt; When it asks for username and password, introduce &lt;em&gt;weblogic&lt;/em&gt; and &lt;em&gt;welcome1&lt;/em&gt;. After a while, &lt;em&gt;The server started in RUNNING mode.&lt;/em&gt; message should appear.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain/bin
+./startGatekeeper.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When it asks for username and password, introduce &lt;em&gt;weblogic&lt;/em&gt; and &lt;em&gt;welcome1&lt;/em&gt;. After a while, &lt;em&gt;The server started in RUNNING mode.&lt;/em&gt; message should appear.&lt;/p&gt;
 &lt;h2&gt;Account configuration&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;Open Firefox and go to &lt;a href=&quot;http://ocsg:7001/console&quot;&gt;http://ocsg:7001/console&lt;/a&gt; , login as &lt;strong&gt;weblogic&lt;/strong&gt; with password &lt;strong&gt;welcome1&lt;/strong&gt;. In the Domain Structure (left), go to &lt;strong&gt;OCSG&lt;/strong&gt; -&amp;gt; &lt;strong&gt;Server 1&lt;/strong&gt;. In the Oracle Communications Services Gatekeeper box, click on &lt;strong&gt;Container Services&lt;/strong&gt; and &lt;strong&gt;PluginManager&lt;/strong&gt;.&lt;/li&gt;
@@ -1935,7 +2697,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>TADHack 2015: Oracle environment ready for your hack</title>
-      <link>https://www.galiglobal.com/blog/2015/TADHack-2015-Oracle-environment-ready-for-your-hack.html</link>
+      <link>http://localhost:8820//blog/2015/TADHack-2015-Oracle-environment-ready-for-your-hack.html</link>
       <pubDate>Thu, 23 Apr 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/TADHack-2015-Oracle-environment-ready-for-your-hack.html</guid>
       <description>
@@ -1958,7 +2720,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Oracle's demos in the MWC2015 review</title>
-      <link>https://www.galiglobal.com/blog/2015/Oracle-s-demos-in-the-MWC2015-review.html</link>
+      <link>http://localhost:8820//blog/2015/Oracle-s-demos-in-the-MWC2015-review.html</link>
       <pubDate>Wed, 15 Apr 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Oracle-s-demos-in-the-MWC2015-review.html</guid>
       <description>
@@ -1981,7 +2743,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Access OCSG EDR JMS Topic with Talend Open Studio</title>
-      <link>https://www.galiglobal.com/blog/2015/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.html</link>
+      <link>http://localhost:8820//blog/2015/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.html</link>
       <pubDate>Fri, 13 Feb 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.html</guid>
       <description>
@@ -2018,7 +2780,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Ramblings about OCCAS and the Oracle Communications roadmap</title>
-      <link>https://www.galiglobal.com/blog/2015/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap.html</link>
+      <link>http://localhost:8820//blog/2015/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap.html</link>
       <pubDate>Wed, 11 Feb 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap.html</guid>
       <description>
@@ -2043,7 +2805,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>OCSG 6.0v1 generally available: new features introduction</title>
-      <link>https://www.galiglobal.com/blog/2015/OCSG-6-0v1-generally-available-new-features-introduction.html</link>
+      <link>http://localhost:8820//blog/2015/OCSG-6-0v1-generally-available-new-features-introduction.html</link>
       <pubDate>Fri, 23 Jan 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/OCSG-6-0v1-generally-available-new-features-introduction.html</guid>
       <description>
@@ -2074,7 +2836,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Accessing Weblogic Runtime Information with WLST</title>
-      <link>https://www.galiglobal.com/blog/2015/Accessing-Weblogic-Runtime-Information-with-WLST.html</link>
+      <link>http://localhost:8820//blog/2015/Accessing-Weblogic-Runtime-Information-with-WLST.html</link>
       <pubDate>Mon, 19 Jan 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Accessing-Weblogic-Runtime-Information-with-WLST.html</guid>
       <description>
@@ -2082,10 +2844,13 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here I provide two interesting ways to check the JVM configuration:&lt;/p&gt;
 &lt;script src=&quot;https://gist.github.com/antonmry/efe307a587388c3ecdfb.js&quot;&gt;&lt;/script&gt;
 &lt;p&gt;For example, perhaps we could want to increase the PermSize, so we edit the  &amp;lt;Domain dir &amp;gt;/ &amp;lt;Server Name &amp;gt;/bin/setDomainEnv.sh to add something like this in the beginning:&lt;/p&gt;
-&lt;p&gt;```&lt;/p&gt;
-&lt;h1&gt;USER_MEM_ARGS   - The variable to override the standard memory arguments&lt;/h1&gt;
-&lt;h1&gt;passed to java.&lt;/h1&gt;
-&lt;p&gt;USER_MEM_ARGS=&amp;quot;-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=256m&amp;quot; export USER_MEM_ARGS ``` Now it&apos;s time to reboot the weblogic and check everything again using the same commands I showed previously.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# USER_MEM_ARGS   - The variable to override the standard memory arguments
+#                   passed to java.
+
+USER_MEM_ARGS=&amp;quot;-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=256m&amp;quot;
+export USER_MEM_ARGS
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now it&apos;s time to reboot the weblogic and check everything again using the same commands I showed previously.&lt;/p&gt;
 &lt;p&gt;More info: - &lt;a href=&quot;http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/using_WLST.html#wp1093952&quot;&gt;Invoking WLST&lt;/a&gt; - &lt;a href=&quot;http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/monitoring.html&quot;&gt;Getting Runtime Information&lt;/a&gt; - &lt;a href=&quot;https://blogs.oracle.com/practicalbpm/entry/wlst_scripting_to_get_weblogic&quot;&gt;WLST Scripting Introduction&lt;/a&gt;&lt;/p&gt;
 
 	  </description>
@@ -2093,7 +2858,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Oracle Pre-conference TADSummit Workshop 2014</title>
-      <link>https://www.galiglobal.com/blog/2014/Oracle-Preworkshop-TADSummit-2014.html</link>
+      <link>http://localhost:8820//blog/2014/Oracle-Preworkshop-TADSummit-2014.html</link>
       <pubDate>Mon, 17 Nov 2014 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2014/Oracle-Preworkshop-TADSummit-2014.html</guid>
       <description>
@@ -2113,11 +2878,11 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>WebRTC as key part of Service Exposure</title>
-      <link>https://www.galiglobal.com/blog/2014/WebRTC-as-key-part-of-Service-Exposure.html</link>
+      <link>http://localhost:8820//blog/2014/WebRTC-as-key-part-of-Service-Exposure.html</link>
       <pubDate>Wed, 1 Oct 2014 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2014/WebRTC-as-key-part-of-Service-Exposure.html</guid>
       <description>
-      &lt;p&gt;Some weeks ago, Oracle has proposed us to write an article about WebRTC to be published in its blog: http://blog.webrtc-solutions.com. I was in charge of the main edition, with some colleges helping in the revision (thanks Sandra, Eva and Nacho!).  It was a good time to review why WebRTC is so important to us. There are a lot of companies involved today with WebRTC, different sectors, different sizes and types as you can see in the &lt;a href=&quot;http://www.cio2cmo.com/webrtc-landscape-infographic-june-2014/&quot;&gt;The WebRTC Landscape Infographic&lt;/a&gt; from Brad Bush.&lt;/p&gt;
+      &lt;p&gt;Some weeks ago, Oracle has proposed us to write an article about WebRTC to be published in its blog: &lt;a href=&quot;http://blog.webrtc-solutions.com&quot;&gt;http://blog.webrtc-solutions.com&lt;/a&gt;. I was in charge of the main edition, with some colleges helping in the revision (thanks Sandra, Eva and Nacho!).  It was a good time to review why WebRTC is so important to us. There are a lot of companies involved today with WebRTC, different sectors, different sizes and types as you can see in the &lt;a href=&quot;http://www.cio2cmo.com/webrtc-landscape-infographic-june-2014/&quot;&gt;The WebRTC Landscape Infographic&lt;/a&gt; from Brad Bush.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://www.cio2cmo.com/wp-content/uploads/2014/06/WebRTC-Landscape-Infographic-2014-06.png&quot; alt=&quot;The WebRTC Landscape Infographic – June 2014&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;WebRTC is so exciting for us because very specific reasons... so  I&apos;ve developed our motivations in the article: as expert in telecom service exposure, WebRTC is the perfect choice to expose one of the main telecom assets: voice, and with less importance yet, video. In fact, I see WebRTC as a key part of the Service Delivery Platforms of the near future.&lt;/p&gt;
 &lt;p&gt;The article: &lt;a href=&quot;http://blog.webrtc-solutions.com/webrtc-as-key-part-of-service-exposure/&quot;&gt;WebRTC as key part of Service Exposure&lt;/a&gt;&lt;/p&gt;
@@ -2127,7 +2892,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Introduction to OCSG SDK</title>
-      <link>https://www.galiglobal.com/blog/2014/Introduction-to-OCSG-SDK.html</link>
+      <link>http://localhost:8820//blog/2014/Introduction-to-OCSG-SDK.html</link>
       <pubDate>Mon, 26 May 2014 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2014/Introduction-to-OCSG-SDK.html</guid>
       <description>
@@ -2141,7 +2906,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Oracle TADHack Webinar</title>
-      <link>https://www.galiglobal.com/blog/2014/Oracle-TADHack-Webinar.html</link>
+      <link>http://localhost:8820//blog/2014/Oracle-TADHack-Webinar.html</link>
       <pubDate>Thu, 15 May 2014 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2014/Oracle-TADHack-Webinar.html</guid>
       <description>

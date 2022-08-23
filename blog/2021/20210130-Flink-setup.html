@@ -68,31 +68,49 @@
 <p>The source code is available in this <a href="https://github.com/antonmry/flink-playground">GitHub repository</a>.</p>
 <h2>Install Flink</h2>
 <p>The first step is to install Flink. This is straightforward, just go to the Flink download page and download it:</p>
-<p><code>sh wget https://archive.apache.org/dist/flink/flink-1.12.0/flink-1.12.0-bin-scala_2.12.tgz tar -zxvf flink-1.12.0-bin-scala_2.12.tgz</code></p>
+<pre><code class="language-sh">wget https://archive.apache.org/dist/flink/flink-1.12.0/flink-1.12.0-bin-scala_2.12.tgz
+tar -zxvf flink-1.12.0-bin-scala_2.12.tgz
+</code></pre>
 <p>Note: it's a good idea to create a variable $FLINK_HOME pointing to the Flink folder.</p>
 <p>Start the cluster:</p>
-<p><code>sh $FLINK_HOME/bin/start-cluster.sh</code></p>
+<pre><code class="language-sh">$FLINK_HOME/bin/start-cluster.sh
+</code></pre>
 <p>You can access the <a href="http://localhost:8081/">Flink Web Dashboard</a> in your browser.</p>
 <p>We aren't going to need it initially so it's better to stop it:</p>
-<p><code>sh $FLINK_HOME/bin/stop-cluster.sh</code></p>
+<pre><code class="language-sh">$FLINK_HOME/bin/stop-cluster.sh
+</code></pre>
 <h2>Bootstrap a Flink job</h2>
 <p>To bootstrap the project, just execute the following Maven command:</p>
-<p>```sh mvn archetype:generate                               <br />
--DarchetypeGroupId=org.apache.flink <br />
--DarchetypeArtifactId=flink-quickstart-java <br />
--DarchetypeVersion=1.12.0 <br />
--DgroupId=galiglobal <br />
--DartifactId=flink-playground <br />
--Dversion=0.1 <br />
--Dpackage=galiglobal.flink <br />
--DinteractiveMode=false</p>
-<p>cd flink-playground ```</p>
+<pre><code class="language-sh">mvn archetype:generate                               \
+    -DarchetypeGroupId=org.apache.flink \
+    -DarchetypeArtifactId=flink-quickstart-java \
+    -DarchetypeVersion=1.12.0 \
+    -DgroupId=galiglobal \
+    -DartifactId=flink-playground \
+    -Dversion=0.1 \
+    -Dpackage=galiglobal.flink \
+    -DinteractiveMode=false
+
+cd flink-playground
+</code></pre>
 <p>The structure of the project is quite simple:</p>
-<p><code>. ├── pom.xml └── src └── main ├── java │   └── galiglobal │   └── flink │   ├── BatchJob.java │   └── StreamingJob.java └── resources └── log4j2.properties</code></p>
+<pre><code>.
+├── pom.xml
+└── src
+    └── main
+        ├── java
+        │   └── galiglobal
+        │       └── flink
+        │           ├── BatchJob.java
+        │           └── StreamingJob.java
+        └── resources
+            └── log4j2.properties
+</code></pre>
 <p>We are going to focus only on <code>StreamingJob.java</code>.</p>
 <h2>Import and run the job in IntelliJ IDEA</h2>
 <p>We are going only to cover my favourite Java IDE: IntelliJ IDEA. Other IDEs should work similarly. First of all, import in the IDE as a maven project. You can do it easily from the command-line.</p>
-<p><code>sh idea pom.xml</code></p>
+<pre><code class="language-sh">idea pom.xml
+</code></pre>
 <p>You can go to <code>StreamingJob.java</code> and execute it as a normal Java application using the Shift+F10 shortcut on Linux/Windows. An error like this should appear in the output:</p>
 <blockquote>
 <p>Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: org/apache/flink/streaming/api/environment/StreamExecutionEnvironment at galiglobal.flink.StreamingJob.main(StreamingJob.java:39) Caused by: java.lang.ClassNotFoundException: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:418) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:352) at java.lang.ClassLoader.loadClass(ClassLoader.java:351) ... 1 more</p>
@@ -106,68 +124,72 @@
 <p>It's time to create our Flink job.</p>
 <h2>Develop our first Flink job</h2>
 <p>Let's add a new Java class to our project called <code>RandomLongSource</code>:</p>
-<p>```java public class RandomLongSource extends RichParallelSourceFunction<Long> {</p>
-<pre><code>private volatile boolean cancelled = false;
-private Random random;
+<pre><code class="language-java">public class RandomLongSource extends RichParallelSourceFunction&lt;Long&gt; {
 
-@Override
-public void open(Configuration parameters) throws Exception {
-    super.open(parameters);
-    random = new Random();
+    private volatile boolean cancelled = false;
+    private Random random;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        super.open(parameters);
+        random = new Random();
+    }
+
+    @Override
+    public void run(SourceContext&lt;Long&gt; ctx) throws Exception {
+        while (!cancelled) {
+            Long nextLong = random.nextLong();
+            synchronized (ctx.getCheckpointLock()) {
+                ctx.collect(nextLong);
+            }
+        }
+    }
+
+    @Override
+    public void cancel() {
+        cancelled = true;
+    }
 }
+</code></pre>
+<p>This class is just generating an infinite series of long numbers to feed our job.</p>
+<p>Let's modify now <code>StreamingJob.java</code> to process it and print the result:</p>
+<pre><code class="language-java">public class StreamingJob {
+    private SourceFunction&lt;Long&gt; source;
+    private SinkFunction&lt;Long&gt; sink;
 
-@Override
-public void run(SourceContext&lt;Long&gt; ctx) throws Exception {
-    while (!cancelled) {
-        Long nextLong = random.nextLong();
-        synchronized (ctx.getCheckpointLock()) {
-            ctx.collect(nextLong);
+    public StreamingJob(SourceFunction&lt;Long&gt; source, SinkFunction&lt;Long&gt; sink) {
+        this.source = source;
+        this.sink = sink;
+    }
+
+    public void execute() throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStream&lt;Long&gt; LongStream =
+            env.addSource(source)
+                .returns(TypeInformation.of(Long.class));
+
+        LongStream
+            .map(new IncrementMapFunction())
+            .addSink(sink);
+
+        env.execute();
+    }
+
+    public static void main(String[] args) throws Exception {
+        StreamingJob job = new StreamingJob(new RandomLongSource(), new PrintSinkFunction&lt;&gt;());
+        job.execute();
+    }
+
+    public class IncrementMapFunction implements MapFunction&lt;Long, Long&gt; {
+
+        @Override
+        public Long map(Long record) throws Exception {
+            return record + 1;
         }
     }
 }
-
-@Override
-public void cancel() {
-    cancelled = true;
-}
 </code></pre>
-<p>} ```</p>
-<p>This class is just generating an infinite series of long numbers to feed our job.</p>
-<p>Let's modify now <code>StreamingJob.java</code> to process it and print the result:</p>
-<p>```java public class StreamingJob { private SourceFunction<Long> source; private SinkFunction<Long> sink;</p>
-<pre><code>public StreamingJob(SourceFunction&lt;Long&gt; source, SinkFunction&lt;Long&gt; sink) {
-    this.source = source;
-    this.sink = sink;
-}
-
-public void execute() throws Exception {
-    StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-    DataStream&lt;Long&gt; LongStream =
-        env.addSource(source)
-            .returns(TypeInformation.of(Long.class));
-
-    LongStream
-        .map(new IncrementMapFunction())
-        .addSink(sink);
-
-    env.execute();
-}
-
-public static void main(String[] args) throws Exception {
-    StreamingJob job = new StreamingJob(new RandomLongSource(), new PrintSinkFunction&lt;&gt;());
-    job.execute();
-}
-
-public class IncrementMapFunction implements MapFunction&lt;Long, Long&gt; {
-
-    @Override
-    public Long map(Long record) throws Exception {
-        return record + 1;
-    }
-}
-</code></pre>
-<p>} ```</p>
 <p>Note: this class is from the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/">Hands-on Training</a>.</p>
 <p>If you execute it, you will see an infinite list of long numbers:</p>
 <blockquote>
@@ -182,9 +204,16 @@ public class IncrementMapFunction implements MapFunction&lt;Long, Long&gt; {
 <p>Note: The 3&gt;, 12&gt;, 1&gt; indicate which sub-task (i.e., thread) produced the output.</p>
 <p>This is one of the most surprising things for Flink beginners: you don't need a cluster to develop a Flink job, you can easily do it locally from your IDE and it works quite well.</p>
 <p>There are some minor differences. For example, to access the <a href="http://localhost:8081/">Flink Web Dashboard</a> you will need to add the following dependency to maven:</p>
-<p><code>xml &lt;dependency&gt; &lt;groupId&gt;org.apache.flink&lt;/groupId&gt; &lt;artifactId&gt;flink-runtime-web_2.11&lt;/artifactId&gt; &lt;version&gt;${flink.version}&lt;/version&gt; &lt;/dependency&gt;</code></p>
+<pre><code class="language-xml">&lt;dependency&gt;
+	&lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+	&lt;artifactId&gt;flink-runtime-web_2.11&lt;/artifactId&gt;
+	&lt;version&gt;${flink.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 <p>And modify the <code>env</code> variable with the following code:</p>
-<p><code>java Configuration conf = new Configuration(); StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);</code></p>
+<pre><code class="language-java">Configuration conf = new Configuration();
+StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
+</code></pre>
 <p>Note: credit goes to this <a href="https://stackoverflow.com/questions/46988499/flink-webui-when-running-from-ide">StackOverflow answer</a>.</p>
 <p>Re-run the job and you should be able to access the <a href="http://localhost:8081/">Flink Web Dashboard</a> and see your job running:</p>
 <p><img src="flink-dashboard.png" alt="Flink Dashboard in local mode" title="Flink Dashboard in local mode" /></p>
@@ -199,41 +228,66 @@ public class IncrementMapFunction implements MapFunction&lt;Long, Long&gt; {
 <h2>Metrics</h2>
 <p>Flink generates metrics exposed through different interfaces including JMX. See <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html#metrics">Flink metrics</a> for more info.</p>
 <p>To activate it, add the following dependency to <code>pom.xml</code>:</p>
-<p><code>xml &lt;dependency&gt; &lt;groupId&gt;org.apache.flink&lt;/groupId&gt; &lt;artifactId&gt;flink-metrics-jmx_2.11&lt;/artifactId&gt; &lt;version&gt;${flink.version}&lt;/version&gt; &lt;/dependency&gt;</code></p>
+<pre><code class="language-xml">&lt;dependency&gt;
+	&lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+	&lt;artifactId&gt;flink-metrics-jmx_2.11&lt;/artifactId&gt;
+	&lt;version&gt;${flink.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 <p>And change the <code>env</code> variable to expose metrics in the JMX interface:</p>
-<p><code>java Properties props = new Properties(); props.put(&quot;metrics.reporter.jmx.factory.class&quot;, &quot;org.apache.flink.metrics.jmx.JMXReporterFactory&quot;); Configuration conf = ConfigurationUtils.createConfiguration(props); StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);</code> Run the job as usual and open it in VisualVM. You need to install the <a href="https://visualvm.github.io/plugins.html">VisualVM MBeans Browser</a>. Metrics should be available in the MBeans tab:</p>
+<pre><code class="language-java">Properties props = new Properties();
+props.put(&quot;metrics.reporter.jmx.factory.class&quot;, &quot;org.apache.flink.metrics.jmx.JMXReporterFactory&quot;);
+Configuration conf = ConfigurationUtils.createConfiguration(props);
+StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
+</code></pre>
+<p>Run the job as usual and open it in VisualVM. You need to install the <a href="https://visualvm.github.io/plugins.html">VisualVM MBeans Browser</a>. Metrics should be available in the MBeans tab:</p>
 <p><img src="flink-metrics.png" alt="Flink metrics with VisualVM" title="Flink metrics with VisualVM" /></p>
 <h2>Logging</h2>
 <p>Let's add some proper logging to our job. First of all, add the following field to <code>StreamingJob.java</code>:</p>
-<p><code>java private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);</code></p>
+<pre><code class="language-java">private static final Logger LOG = LoggerFactory.getLogger(StreamingJob.class);
+</code></pre>
 <p>Let's delete the longStream variable and create a new one with some log messages:</p>
-<p>```java LOG.debug(&quot;Start Flink example job&quot;);</p>
-<p>DataStreamSink<Long> logTestStream = env.fromElements(0L, 1L, 2L) .map(new IncrementMapFunction()) .addSink(sink);</p>
-<p>LOG.debug(&quot;Stop Flink example job&quot;); ```</p>
+<pre><code class="language-java">LOG.debug(&quot;Start Flink example job&quot;);
+
+DataStreamSink&lt;Long&gt; logTestStream = env.fromElements(0L, 1L, 2L)
+    .map(new IncrementMapFunction())
+    .addSink(sink);
+
+LOG.debug(&quot;Stop Flink example job&quot;);
+</code></pre>
 <p>Modify <code>src/main/resources/log4j2.properties</code> to use the DEBUG log level:</p>
-<p><code>rootLogger.level = DEBUG</code></p>
+<pre><code>rootLogger.level = DEBUG
+</code></pre>
 <p>Re-run the job and you should see the new log traces:</p>
 <p><img src="flink-logtraces.png" alt="Flink log messages" title="Flink log messages" /></p>
 <p>When running the job locally, the log level is quite verbose and it may be hard to find your messages between the Flink messages. Let's configure that. Edit <code>src/main/resources/log4j2.properties</code> again to add the following lines:</p>
-<p><code>logger.flink.name = org.apache.flink logger.flink.level = warn</code></p>
+<pre><code>logger.flink.name = org.apache.flink
+logger.flink.level = warn
+</code></pre>
 <p>Re-run the job and you should only see the proper logs messages.</p>
 <h2>Tests</h2>
 <p>One of the most important things when creating jobs is to have proper tests you can run from your IDE. It will make you go faster because you can make changes, run the test and be sure everything is working as it was before the change. That level of confidence in your changes worths the cost of writing the test from the very beginning.</p>
 <p>Add the following dependency to your <code>pom.xml</code>:</p>
-<p><code>xml &lt;dependency&gt; &lt;groupId&gt;org.apache.flink&lt;/groupId&gt; &lt;artifactId&gt;flink-test-utils-junit&lt;/artifactId&gt; &lt;version&gt;${flink.version}&lt;/version&gt; &lt;/dependency&gt;</code></p>
+<pre><code class="language-xml">&lt;dependency&gt;
+	&lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+	&lt;artifactId&gt;flink-test-utils-junit&lt;/artifactId&gt;
+	&lt;version&gt;${flink.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 <p>Move the inner class <code>IncrementMapFunction</code> to their own file:</p>
 <p><img src="flink-refactor.png" alt="Refactor Map function" title="Refactor Map function" /></p>
 <p>Now let's add a unit test to <code>src/test/java</code> which tests this function:</p>
-<p>```java public class StreamingJobTest {</p>
-<pre><code>@Test
-public void testMap() throws Exception {
-    IncrementMapFunction statelessMap = new IncrementMapFunction();
-    Long out = statelessMap.map(1L);
-    Assert.assertEquals(2L, out.longValue());
+<pre><code class="language-java">public class StreamingJobTest {
+
+    @Test
+    public void testMap() throws Exception {
+        IncrementMapFunction statelessMap = new IncrementMapFunction();
+        Long out = statelessMap.map(1L);
+        Assert.assertEquals(2L, out.longValue());
+    }
 }
+
 </code></pre>
-<p>}</p>
-<p>```</p>
 <p>Run the test from the IDE and see the result:</p>
 <p><img src="flink-unittest.png" alt="Flink Unit Test" title="Flink Unit test" /></p>
 <p>For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html">Testing Flink Jobs</a> in the official documentation. It's particularly interesting how to <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/testing.html#testing-flink-jobs">test complete jobs</a>. You can find also good examples in the <a href="https://github.com/apache/flink-training/blob/master/ride-cleansing/src/test/java/org/apache/flink/training/exercises/ridecleansing/RideCleansingTest.java">official Flink training tests</a>.</p>
@@ -243,13 +297,17 @@ public void testMap() throws Exception {
 <p>rootLogger.level = DEBUG</p>
 </blockquote>
 <p>Start the cluster again:</p>
-<p><code>sh $FLINK_HOME/bin/start-cluster.sh</code></p>
+<pre><code class="language-sh">$FLINK_HOME/bin/start-cluster.sh
+</code></pre>
 <p>We need to modify our source code to use a remote execution environment so you should replace the <code>env</code> variable again:</p>
-<p><code>java StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</code></p>
+<pre><code class="language-java">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+</code></pre>
 <p>Compile our job:</p>
-<p><code>sh mvn clean package -Pbuild-jar</code></p>
+<pre><code class="language-sh">mvn clean package -Pbuild-jar
+</code></pre>
 <p>Run the job in the local cluster:</p>
-<p><code>sh $FLINK_HOME/bin/flink run target/flink-playground-0.1.jar</code></p>
+<pre><code class="language-sh">$FLINK_HOME/bin/flink run target/flink-playground-0.1.jar
+</code></pre>
 <p>It should obtain an output similar to:</p>
 <blockquote>
 <p>Job has been submitted with JobID bbea3ed5f5082a7267f85d92807b19dc<br />
@@ -258,7 +316,8 @@ Job with JobID bbea3ed5f5082a7267f85d92807b19dc has finished.<br />
 Job Runtime: 827 ms</p>
 </blockquote>
 <p>If you check the logs, you should see your traces:</p>
-<p><code>sh grep -R &quot;example job&quot; $FLINK_HOME/log/</code></p>
+<pre><code class="language-sh">grep -R &quot;example job&quot; $FLINK_HOME/log/
+</code></pre>
 <h2>Summary and next steps</h2>
 <p>In this article, we have covered the basics and some typical gotchas to work with Apache Flink in local environments. It's really important to invest time in your setup to be productive and have a pleasant experience building your jobs. Each minute you spent improving your workflow will pay off in the future.</p>
 <p>Did I miss something? You can comment on <a href="https://github.com/antonmry/galiglobal/pull/37">GitHub</a> or just drop me a note on <a href="https://twitter.com/antonmry">Twitter</a>!</p>

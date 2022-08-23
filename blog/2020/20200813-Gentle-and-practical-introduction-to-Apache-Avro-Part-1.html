@@ -79,9 +79,18 @@
 <p><img src="schema_registry.png" alt="Schema Registry architecture" title="Schema Registry architecture" /></p>
 <h2>Environment setup</h2>
 <p>Using the Confluent Avro serializer/deserializer, the process is quite straight-forward. Let's try it using the Confluent Community Docker version. The setup is documented in the <a href="https://docs.confluent.io/6.0.0/quickstart/cos-docker-quickstart.html">Quick Start for Apache Kafka using Confluent Platform Community Components (Docker)</a> which it's summarized here:</p>
-<p><code>sh git clone https://github.com/confluentinc/cp-all-in-one.git cd cp-all-in-one/cp-all-in-one-community/ docker-compose up -d</code></p>
+<pre><code class="language-sh">git clone https://github.com/confluentinc/cp-all-in-one.git
+cd cp-all-in-one/cp-all-in-one-community/
+docker-compose up -d
+</code></pre>
 <p>Let's start creating a topic:</p>
-<p><code>sh docker-compose exec broker kafka-topics \ --create \ --bootstrap-server localhost:9092 \ --replication-factor 1 \ --partitions 1 \ --topic test</code></p>
+<pre><code class="language-sh">docker-compose exec broker kafka-topics \
+  --create \
+  --bootstrap-server localhost:9092 \
+  --replication-factor 1 \
+  --partitions 1 \
+  --topic test
+</code></pre>
 <p>The output should be:</p>
 <blockquote>
 <p>Created topic test.</p>
@@ -89,7 +98,16 @@
 <p>To test it, we are going to create a Kafka Producer and a Kafka Consumer.</p>
 <h2>Kafka Producer with Confluent Schema Registry</h2>
 <p>Download the <a href="https://github.com/antonmry/kafka-java-client-examples">kafka-java-client-examples</a> project and open it with your favourite IDE. We are going to work with a schema which it's located in the <code>src/main/resources</code> folder:</p>
-<p><code>json { &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;, &quot;type&quot;: &quot;record&quot;, &quot;name&quot;: &quot;Test&quot;, &quot;fields&quot;: [ {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;}, {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;} ] }</code></p>
+<pre><code class="language-json">{
+ &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;,
+ &quot;type&quot;: &quot;record&quot;,
+ &quot;name&quot;: &quot;Test&quot;,
+ &quot;fields&quot;: [
+     {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;},
+     {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;}
+ ]
+}
+</code></pre>
 <p>This Avro file is going to create a Test class you can use in your project.</p>
 <p><strong>Note for IntelliJ Idea users</strong>: you need to generate the classes from the Avro file.  Right-click on your project and choose <code>Maven</code> &gt; <code>Generate sources and update folders</code>. It's important to do it each time you change the schema.</p>
 <p>You can run now the <code>ConfluentProducerExample</code> and it should print:</p>
@@ -97,12 +115,21 @@
 <p>Successfully produced 10 messages to a topic called test</p>
 </blockquote>
 <p>The more relevant parts are the properties of the producer:</p>
-<p><code>java props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class); props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &quot;http://localhost:8081&quot;);</code></p>
+<pre><code class="language-java">props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &quot;http://localhost:8081&quot;);
+</code></pre>
 <p>We indicate how to connect to the SR and the serializer which it's publishing to the SR under the hood. In the class <code>io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient</code> you can find the Rest client used to request schemas to the SR using http.</p>
 <p>If you check in the SR, you can see the schema which has been created by the producer:</p>
-<p><code>sh curl http://localhost:8081/subjects/test-value/versions/1</code></p>
+<pre><code class="language-sh">curl http://localhost:8081/subjects/test-value/versions/1
+</code></pre>
 <p>It should return:</p>
-<p><code>json { &quot;subject&quot;: &quot;test-value&quot;, &quot;version&quot;: 1, &quot;id&quot;: 1, &quot;schema&quot;: &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;Test\&quot;,\&quot;namespace\&quot;:\&quot;com.galiglobal.examples.testavro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;test\&quot;,\&quot;type\&quot;:\&quot;double\&quot;}]}&quot; }</code></p>
+<pre><code class="language-json">{
+  &quot;subject&quot;: &quot;test-value&quot;,
+  &quot;version&quot;: 1,
+  &quot;id&quot;: 1,
+  &quot;schema&quot;: &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;Test\&quot;,\&quot;namespace\&quot;:\&quot;com.galiglobal.examples.testavro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;test\&quot;,\&quot;type\&quot;:\&quot;double\&quot;}]}&quot;
+}
+</code></pre>
 <h2>Kafka Consumer</h2>
 <p>We are going to consume the messages using the Kafka Consumer just executing the <code>ConfluentConsumerExample</code> class. It should print something similar to:</p>
 <blockquote>
@@ -114,33 +141,72 @@ key = id4, value = {&quot;id&quot;: &quot;id4&quot;, &quot;amount&quot;: 1000.0}
 key = id5, value = {&quot;id&quot;: &quot;id5&quot;, &quot;amount&quot;: 1000.0}</p>
 </blockquote>
 <p>The relevant part is again the configuration of the SR and the deserializer:</p>
-<p><code>java props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class); props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &quot;http://localhost:8081&quot;); props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);</code></p>
+<pre><code class="language-java">props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
+props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, &quot;http://localhost:8081&quot;);
+props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
+</code></pre>
 <p>The schema url and deserializer are equivalent to the producer. <code>SPECIFIC_AVRO_READER_CONFIG</code> indicates we would like to deserialize to a Test object instead of a <a href="https://avro.apache.org/docs/1.8.2/api/java/org/apache/avro/generic/GenericRecord.html">GenericRecord</a>.</p>
 <p>If we try to consume directly from the topic without use the Confluent deserializer, the result isn't quite legible:</p>
-<p><code>sh docker-compose exec broker kafka-console-consumer \ --topic test \ --bootstrap-server localhost:9092 \ --from-beginning \ --property print.key=true \ --property key.separator=&quot; : &quot; \ --key-deserializer &quot;org.apache.kafka.common.serialization.StringDeserializer&quot; \ --value-deserializer &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;</code></p>
+<pre><code class="language-sh">docker-compose exec broker kafka-console-consumer \
+ --topic test \
+ --bootstrap-server localhost:9092 \
+ --from-beginning \
+ --property print.key=true \
+ --property key.separator=&quot; : &quot; \
+ --key-deserializer &quot;org.apache.kafka.common.serialization.StringDeserializer&quot; \
+ --value-deserializer &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;
+</code></pre>
 <p>As you can see, it's a binary protocol and quite efficient! We aren't sending the schema with every record as we would do with JSON or any other based protocol and that's a good saving.</p>
 <h2>Schema Compatibility</h2>
 <p>Efficiency isn't the only positive point of this approach. One of the nice things you have with a Schema Registry is the possibility to govern schemas and make sure they are being used properly.</p>
 <p>One of the big issues with asynchronous communications is how to evolve the schema without affect consumers of that particular topic. Schema Registry helps with that because it can check the changes in the schema and validate if they are breaking compatibility. They are different types of compatibility, you can read more on <a href="https://docs.confluent.io/platform/current/schema-registry/avro.html">Schema Evolution and Compatibility</a>. Let's test it. First, we'll check what type of compatibility the SR is enforcing:</p>
-<p><code>sh curl -X GET http://localhost:8081/config</code></p>
+<pre><code class="language-sh">curl -X GET http://localhost:8081/config
+</code></pre>
 <p>By default, it should return:</p>
 <blockquote>
 <p>{&quot;compatibilityLevel&quot;:&quot;BACKWARD&quot;}</p>
 </blockquote>
 <p>Backward compatibility means new consumers can read old records but old consumers need to upgrade to the new version to be able to deserialize new messages.</p>
 <p>We can test it using curl but it's a bit tricky because we have to scape the JSON file. Let's do it instead with the Producer adding one field to the schema:</p>
-<p><code>json { &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;, &quot;type&quot;: &quot;record&quot;, &quot;name&quot;: &quot;Test&quot;, &quot;fields&quot;: [ {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;}, {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;}, {&quot;name&quot;: &quot;boom&quot;, &quot;type&quot;: &quot;double&quot;} ] }</code></p>
+<pre><code class="language-json">{
+ &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;,
+ &quot;type&quot;: &quot;record&quot;,
+ &quot;name&quot;: &quot;Test&quot;,
+ &quot;fields&quot;: [
+     {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;},
+     {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;},
+     {&quot;name&quot;: &quot;boom&quot;, &quot;type&quot;: &quot;double&quot;}
+ ]
+}
+</code></pre>
 <p>If we modify <code>ConfluentProducerExample</code> and run it again, an exception will show:</p>
 <blockquote>
 <p>org.apache.kafka.common.errors.SerializationException: Error registering Avro schema: {&quot;type&quot;:&quot;record&quot;,&quot;name&quot;:&quot;Test&quot;,&quot;namespace&quot;:&quot;com.galiglobal.examples.testavro&quot;,&quot;fields&quot;:[{&quot;name&quot;:&quot;id&quot;,&quot;type&quot;:&quot;string&quot;},{&quot;name&quot;:&quot;boom&quot;,&quot;type&quot;:&quot;string&quot;}]} Caused by: io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException: Schema being registered is incompatible with an earlier schema for subject &quot;test-value&quot;; error code: 409</p>
 </blockquote>
 <p>Adding a new field isn't a backward compatible change because new consumers can't read old messages with that schema. They don't have a way to fill the new field which it's mandatory. One possibility to make this change backward compatible would be to give a default value to the new field, so consumers know what value give it when the field isn't present in the message.</p>
 <p>Let's add a default value to the new field in the schema:</p>
-<p><code>json { &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;, &quot;type&quot;: &quot;record&quot;, &quot;name&quot;: &quot;Test&quot;, &quot;fields&quot;: [ {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;}, {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;}, {&quot;name&quot;: &quot;boom&quot;, &quot;type&quot;: &quot;double&quot;, &quot;default&quot;: 0.0} ] }</code></p>
+<pre><code class="language-json">{
+ &quot;namespace&quot;: &quot;com.galiglobal.examples.testavro&quot;,
+ &quot;type&quot;: &quot;record&quot;,
+ &quot;name&quot;: &quot;Test&quot;,
+ &quot;fields&quot;: [
+     {&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;string&quot;},
+     {&quot;name&quot;: &quot;test&quot;, &quot;type&quot;: &quot;double&quot;},
+     {&quot;name&quot;: &quot;boom&quot;, &quot;type&quot;: &quot;double&quot;, &quot;default&quot;:  0.0}
+ ]
+}
+</code></pre>
 <p>If we make the proper changes and run <code>ConfluentProducerExample</code> again, it will produce 10 new events and save a new version of the schema:</p>
-<p><code>sh curl http://localhost:8081/subjects/test-value/versions/2</code></p>
+<pre><code class="language-sh">curl http://localhost:8081/subjects/test-value/versions/2
+</code></pre>
 <p>It should return:</p>
-<p><code>json { &quot;subject&quot;: &quot;test-value&quot;, &quot;version&quot;: 2, &quot;id&quot;: 2, &quot;schema&quot;: &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;Test\&quot;,\&quot;namespace\&quot;:\&quot;com.galiglobal.examples.testavro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;test\&quot;,\&quot;type\&quot;:\&quot;double\&quot;},{\&quot;name\&quot;:\&quot;boom\&quot;,\&quot;type\&quot;:\&quot;double\&quot;,\&quot;default\&quot;:0.0}]}&quot; }</code></p>
+<pre><code class="language-json">{
+  &quot;subject&quot;: &quot;test-value&quot;,
+  &quot;version&quot;: 2,
+  &quot;id&quot;: 2,
+  &quot;schema&quot;: &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;Test\&quot;,\&quot;namespace\&quot;:\&quot;com.galiglobal.examples.testavro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;test\&quot;,\&quot;type\&quot;:\&quot;double\&quot;},{\&quot;name\&quot;:\&quot;boom\&quot;,\&quot;type\&quot;:\&quot;double\&quot;,\&quot;default\&quot;:0.0}]}&quot;
+}
+</code></pre>
 <h2>Summary and next steps</h2>
 <p>We have covered here the basics of <a href="https://avro.apache.org/">Apache Avro</a> in an <a href="https://kafka.apache.org/">Apache Kafka</a> architecture.  It has important advantages in terms of performance, reduction of message size and governance of the schemas.</p>
 <p>But it also has some problems, especially when we are dealing with hybrid and/or multi-tenant architectures. In the following two parts of this series, we'll cover these problems in details and the different alternatives we have with Avro to deal with them.</p>

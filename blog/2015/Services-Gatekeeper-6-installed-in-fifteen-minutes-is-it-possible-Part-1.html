@@ -84,11 +84,15 @@
 <p>Open a Terminal and execute:</p>
 </li>
 </ol>
-<p><code>sh sudo mkdir /opt/ocsg6 sudo chown oracle:oracle /opt/ocsg6</code></p>
+<pre><code class="language-sh">sudo mkdir /opt/ocsg6
+sudo chown oracle:oracle /opt/ocsg6
+</code></pre>
 <ol>
 <li>Unzip the file and execute the installer:</li>
 </ol>
-<p><code>sh unzip V73995-01.zip java -jar ocsg_generic.jar</code></p>
+<pre><code class="language-sh">unzip V73995-01.zip
+java -jar ocsg_generic.jar
+</code></pre>
 <ol>
 <li>In the first window, accept the default Inventory Directory pressing <strong>OK</strong>.</li>
 </ol>
@@ -134,12 +138,17 @@
 <ol>
 <li>Open a Terminal and execute:</li>
 </ol>
-<p><code>sh cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain ./startWebLogic.sh</code></p>
+<pre><code class="language-sh">cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain
+./startWebLogic.sh
+</code></pre>
 <p>When it asks for username and password, introduce <em>weblogic</em> and <em>welcome1</em>. After a while, a <em>The server started in RUNNING mode.</em> message should appear.</p>
 <ol>
 <li>Open a Terminal (or a tab in the previous one) and execute:</li>
 </ol>
-<p><code>sh cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain/bin ./startGatekeeper.sh</code> When it asks for username and password, introduce <em>weblogic</em> and <em>welcome1</em>. After a while, <em>The server started in RUNNING mode.</em> message should appear.</p>
+<pre><code class="language-sh">cd /opt/ocsg6/user_projects/domains/services-gatekeeper-domain/bin
+./startGatekeeper.sh
+</code></pre>
+<p>When it asks for username and password, introduce <em>weblogic</em> and <em>welcome1</em>. After a while, <em>The server started in RUNNING mode.</em> message should appear.</p>
 <h2>Account configuration</h2>
 <ol>
 <li>Open Firefox and go to <a href="http://ocsg:7001/console">http://ocsg:7001/console</a> , login as <strong>weblogic</strong> with password <strong>welcome1</strong>. In the Domain Structure (left), go to <strong>OCSG</strong> -&gt; <strong>Server 1</strong>. In the Oracle Communications Services Gatekeeper box, click on <strong>Container Services</strong> and <strong>PluginManager</strong>.</li>

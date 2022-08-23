@@ -73,53 +73,109 @@
 <p>So, what is the first step to become a RestComm maniac?</p>
 <h2>Download the source code</h2>
 <p>The easy part, I love github:</p>
-<p><code>sh git clone git@github.com:antonmry/Restcomm-Connect.git git clone git@github.com:antonmry/Restcomm-Docker.git cd Restcomm-Docker/ git remote add upstream git@github.com:RestComm/Restcomm-Docker.git cd ../Restcomm-Connect/ git remote add upstream git@github.com:RestComm/Restcomm-Connect.git</code></p>
+<pre><code class="language-sh">git clone git@github.com:antonmry/Restcomm-Connect.git
+git clone git@github.com:antonmry/Restcomm-Docker.git
+cd Restcomm-Docker/
+git remote add upstream git@github.com:RestComm/Restcomm-Docker.git
+cd ../Restcomm-Connect/
+git remote add upstream git@github.com:RestComm/Restcomm-Connect.git
+</code></pre>
 <p>If you've done it previously, it's a good moment to sync with the official respository:</p>
-<p><code>sh git fetch upstream git checkout master git merge upstream/master git push</code></p>
+<pre><code class="language-sh">git fetch upstream
+git checkout master
+git merge upstream/master
+git push
+</code></pre>
 <h2>RestComm-Docker</h2>
 <p>Now we are going to set up the RestComm environment: docker to the rescue!</p>
 <p>I always create a local branch to do my work:</p>
-<p><code>sh cd ../Restcomm-Docker/ git checkout -b s3bucketRegion#1 git push -u origin s3bucketRegion#1</code></p>
-<p>```sh docker build -t restcomm/yourname:latest -f Dockerfile .</p>
-<p>docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -e VOICERSS_KEY=&quot;CREATE A NEW ONE&quot; -e S3_ACCESS_KEY=&quot;ONLY IF YOU USE IT&quot; -e S3_SECURITY_KEY=&quot;ONLY IF YOU USE IT&quot; -e S3_BUCKET_NAME=&quot;ONLY IF YOU USE IT&quot; -e STATIC_ADDRESS=&quot;YOUR ETH0 IP?&quot; -e ENVCONFURL=&quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest ```</p>
+<pre><code class="language-sh">cd ../Restcomm-Docker/
+git checkout -b s3bucketRegion#1
+git push -u origin s3bucketRegion#1
+</code></pre>
+<pre><code class="language-sh">docker build -t restcomm/yourname:latest -f Dockerfile .
+
+docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -e VOICERSS_KEY=&quot;CREATE A NEW ONE&quot; -e S3_ACCESS_KEY=&quot;ONLY IF YOU USE IT&quot; -e S3_SECURITY_KEY=&quot;ONLY IF YOU USE IT&quot; -e S3_BUCKET_NAME=&quot;ONLY IF YOU USE IT&quot; -e STATIC_ADDRESS=&quot;YOUR ETH0 IP?&quot; -e ENVCONFURL=&quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
+</code></pre>
 <p>We &quot;enter&quot; inside the docker instance:</p>
-<p><code>sh docker ps docker exec -it bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933 /bin/bash</code></p>
+<pre><code class="language-sh">docker ps
+docker exec -it bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933 /bin/bash
+</code></pre>
 <p>To copy the deployments folder:</p>
-<p><code>sh cd /opt/Restcomm-JBoss-AS7/standalone/deployments/ tar -cvf /tmp/deployments.tar * exit</code></p>
+<pre><code class="language-sh">cd /opt/Restcomm-JBoss-AS7/standalone/deployments/
+tar -cvf /tmp/deployments.tar *
+exit
+</code></pre>
 <p></p>
 <p>We leave the container and extract the deployment folder in your system:</p>
-<p><code>sh docker cp bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933:/tmp/deployments.tar . mkdir deployments mv deployments.tar deployments rm deployments.tar</code></p>
+<pre><code class="language-sh">docker cp bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933:/tmp/deployments.tar .
+mkdir deployments 
+mv deployments.tar deployments
+rm deployments.tar
+</code></pre>
 <p>Launch docker with the new folder as its deployment folder:</p>
-<p>```sh docker stop bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933</p>
-<p>docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&quot;xxx&quot; -e S3_ACCESS_KEY=&quot;xxx&quot; -e S3_SECURITY_KEY=&quot;xxx&quot; -e S3_BUCKET_NAME=&quot;xxx&quot; -e STATIC_ADDRESS=&quot;your eth0 IP?&quot; -e ENVCONFURL=&quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest</p>
-<p>```</p>
+<pre><code class="language-sh">docker stop bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933
+
+docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&quot;xxx&quot; -e S3_ACCESS_KEY=&quot;xxx&quot; -e S3_SECURITY_KEY=&quot;xxx&quot; -e S3_BUCKET_NAME=&quot;xxx&quot; -e STATIC_ADDRESS=&quot;your eth0 IP?&quot; -e ENVCONFURL=&quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
+
+</code></pre>
 <p>Time to make your changes in the Dockerfile. Once they are done, build the image and test. To upload it to github, first upload to your repository:</p>
-<p><code>sh git add file1 file2 git commit -m &quot;Descriptive message please&quot; git push</code></p>
+<pre><code class="language-sh">git add file1 file2
+git commit -m &quot;Descriptive message please&quot;
+git push
+</code></pre>
 <p>In github, open a Request using as Base the official repository and as a Head Fork your branch. Usually I add a &quot;Closes #xx&quot; to the end of the title, where xx is the number of the issue you are solving. It helps if you are using <a href="http://www.waffle.io">Waffle</a>, a great service to organize your issues following agile methodologies.</p>
 <h2>RestComm-Connect</h2>
 <p>Ok, we have our Restcomm-docker PR, let's got with ResComm-Connect. First you need to create a file:</p>
-<p><code>sh cd ../Restcomm-Connect/ vim restcomm-connect-build.sh</code></p>
+<pre><code class="language-sh">cd ../Restcomm-Connect/
+vim restcomm-connect-build.sh
+</code></pre>
 <p>with the following content (change to your own values):</p>
-<p>```</p>
-<h1>!/bin/bash</h1>
-<p>export RESTCOMM_HOME=/home/antonmry/Workspace/Telestax/Restcomm-Connect export MAJOR_VERSION_NUMBER=7.6 export BUILD_NUMBER=0</p>
-<p>JAVA_HOME=/home/antonmry/Software/jdk/jdk1.7.0_80 export JAVA_HOME</p>
-<p>export WORKSPACE=$RESTCOMM_HOME mkdir $WORKSPACE/dependencies export DEPENDENCIES_HOME=$WORKSPACE/dependencies</p>
-<p>ant release -f ./release/build.xml -Drestcomm.release.version=$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Drestcomm.branch.name=restcomm-release-$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Dcheckout.restcomm.dir=$RESTCOMM_HOME -Dworkspace.restcomm.dir=$RESTCOMM_HOME/restcomm -Dcheckout.dir=$DEPENDENCIES_HOME ```</p>
+<pre><code>#!/bin/bash
+export RESTCOMM_HOME=/home/antonmry/Workspace/Telestax/Restcomm-Connect
+export MAJOR_VERSION_NUMBER=7.6
+export BUILD_NUMBER=0
+
+JAVA_HOME=/home/antonmry/Software/jdk/jdk1.7.0_80
+export JAVA_HOME
+
+export WORKSPACE=$RESTCOMM_HOME
+mkdir $WORKSPACE/dependencies
+export DEPENDENCIES_HOME=$WORKSPACE/dependencies
+
+ant release -f ./release/build.xml -Drestcomm.release.version=$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Drestcomm.branch.name=restcomm-release-$MAJOR_VERSION_NUMBER.$BUILD_NUMBER -Dcheckout.restcomm.dir=$RESTCOMM_HOME -Dworkspace.restcomm.dir=$RESTCOMM_HOME/restcomm -Dcheckout.dir=$DEPENDENCIES_HOME
+</code></pre>
 <p>Execute it:</p>
-<p><code>sh chmod +x restcomm-connect-build.sh ./restcomm-connect-build.sh</code></p>
+<pre><code class="language-sh">chmod +x restcomm-connect-build.sh
+./restcomm-connect-build.sh
+</code></pre>
 <p>Time to wait 5 minutes in a good laptop... after that, we should have our customozied JBoss ready to be launched:</p>
-<p><code>sh ls ./release/Restcomm-JBoss-AS7-7.6.0.zip</code></p>
+<pre><code class="language-sh">ls ./release/Restcomm-JBoss-AS7-7.6.0.zip
+</code></pre>
 <p>Now you can unzip it and start to play with it... but how to start to develop?</p>
 <p>In the Intellij Idea, you can import the project as a Maven project. I've imported the route <strong>Restcomm-Connect/restcomm</strong> which has the root pom.xml and created a local branch as usual:</p>
-<p><code>sh git checkout -b initTimeRVD#1 git push -u origin initTimeRVD#1</code></p>
+<pre><code class="language-sh">git checkout -b initTimeRVD#1
+git push -u origin initTimeRVD#1
+</code></pre>
 <p>Now you can develop as much as you want. To build it:</p>
-<p><code>sh cd restcomm mvn install</code></p>
+<pre><code class="language-sh">cd restcomm
+mvn install
+</code></pre>
 <p>Here you can do it with the different modules, you don't need to build everything each time but the specific module you've changed. To deploy it and test it:</p>
-<p><code>sh docker ps docker stop 06b117547bc5726fc74c42a61c6826342f04b9b194ebc0029f70be4ad1ef1a4f rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm.war rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm-rvd.war cp -r restcomm.application/target/restcomm/ ~/Workspace/Telestax/deployments/restcomm.war cp -r restcomm.application/target/restcomm.rvd/ ~/Workspace/Telestax/deployments/restcomm-rvd.war</code></p>
-<p><code>sh docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&quot;xxx&quot; -e S3_ACCESS_KEY=&quot;xxx&quot; -e S3_SECURITY_KEY=&quot;xxx&quot; -e S3_BUCKET_NAME=&quot;xxx&quot; -e STATIC_ADDRESS=&quot;YOUR ETH0 IP?&quot; -e ENVCONFURL=&quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest</code></p>
-<p>Know, just open RestComm as usual in https://eth0-ip or https://eth0-ip/olympus and test. Once you have finished your changes, upload them to Github:</p>
-<p><code>sh git add file1 file2 git commit &quot;A good message #yourIssue&quot; git push</code></p>
+<pre><code class="language-sh">docker ps
+docker stop 06b117547bc5726fc74c42a61c6826342f04b9b194ebc0029f70be4ad1ef1a4f
+rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm.war
+rm -r /home/antonmry/Workspace/Telestax/deployments/restcomm-rvd.war
+cp -r restcomm.application/target/restcomm/ ~/Workspace/Telestax/deployments/restcomm.war
+cp -r restcomm.application/target/restcomm.rvd/ ~/Workspace/Telestax/deployments/restcomm-rvd.war
+</code></pre>
+<pre><code class="language-sh">docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY=&quot;xxx&quot; -e S3_ACCESS_KEY=&quot;xxx&quot; -e S3_SECURITY_KEY=&quot;xxx&quot; -e S3_BUCKET_NAME=&quot;xxx&quot; -e STATIC_ADDRESS=&quot;YOUR ETH0 IP?&quot; -e ENVCONFURL=&quot;https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh&quot; -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
+</code></pre>
+<p>Know, just open RestComm as usual in <a href="https://eth0-ip">https://eth0-ip</a> or <a href="https://eth0-ip/olympus">https://eth0-ip/olympus</a> and test. Once you have finished your changes, upload them to Github:</p>
+<pre><code class="language-sh">git add file1 file2
+git commit &quot;A good message #yourIssue&quot;
+git push
+</code></pre>
 <p>Create the PR in github and wait for the approbation ;-)</p>
 <h1>Reference documentation</h1>
 <ul>

@@ -67,26 +67,48 @@
 <p>Six months ago I've started to learn and use <a href="https://golang.org/">Go</a>. I was very impressed with the simplicity of the language and I've started to read a lot of articles, books, etc., watch videos and develop some projects. I discovered <a href="https://gohugo.io/">Hugo</a>, a site generator similar to JBake but written in Go. I was tempted to migrate my previous blog, but today I'm going to continue writing about not Go subjects, so it's simpler to open a new one only for Go, bots, DevOps, concurrency and perfomance. In another post I will write more about Go and why I find it so interesting.</p>
 <p>As the first post, let's see how to configure <a href="https://gohugo.io/">Hugo</a>. I've to say it was really easy, I really impressed with piece of software. I can compare with other site generators as Jekyll, Hexo or JBake, and I have to say Hugo is my favourite.</p>
 <p>First of all, I've created a new repo in my Gihub account and cloned it in my laptop:</p>
-<p><code>sh git clone git@github.com:antonmry/antonmry.github.io.git cd antonmry.github.io</code></p>
+<pre><code class="language-sh">git clone git@github.com:antonmry/antonmry.github.io.git
+cd antonmry.github.io
+</code></pre>
 <p>Because I'm going to use my github user page, the source code of the page must be in master branch. For your Hugo code, you can have a separate repo or just a different branch. I choose the second option with a branch named source, I prefer it in that way, it's simpler and this is the main difference with the procedure you can find in <a href="https://gohugo.io/tutorials/github-pages-blog">the excellent Hugo documentation</a>:</p>
-<p><code>sh git checkout -b source git push -u origin source</code></p>
+<pre><code class="language-sh">git checkout -b source
+git push -u origin source
+</code></pre>
 <p>Inside the source code folder, we are going to create a folder linking to the master branch:</p>
-<p><code>sh git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master</code></p>
+<pre><code class="language-sh">git subtree add --prefix=public git@github.com:antonmry/antonmry.github.io.git master --squash
+git subtree pull --prefix=public git@github.com:antonmry/antonmry.github.io.git master
+</code></pre>
 <p>It's time to generate the site. First you have to install Hugo, plenty of options in the <a href="https://gohugo.io/overview/installing/">the Hugo website</a>. I've chosen the Fedora package, updates will be easier.</p>
-<p><code>sh hugo new site antonmry.github.io mv antonmry.github.io/* . rm -r antonmry.github.io</code></p>
+<pre><code class="language-sh">hugo new site antonmry.github.io
+mv antonmry.github.io/* .
+rm -r antonmry.github.io
+</code></pre>
 <p>Choose your theme, there are very nice options, I've chosen beatifulhugo:</p>
-<p><code>sh cd themes git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo cd .. echo &quot;theme = \&quot;beautifulhugo\&quot;&quot; &gt;&gt; config.toml</code></p>
+<pre><code class="language-sh">cd themes
+git clone https://github.com/halogenica/Hugo-BeautifulHugo.git beautifulhugo
+cd ..
+echo &quot;theme = \&quot;beautifulhugo\&quot;&quot; &gt;&gt; config.toml
+</code></pre>
 <p>Create your first blog and start the server:</p>
-<p><code>sh hugo new post/hugo-site-created.md hugo server --buildDrafts</code></p>
-<p>Open in your browser http://localhost:1313/ and enjoy your first post with Hugo ;-)</p>
+<pre><code class="language-sh">hugo new post/hugo-site-created.md
+hugo server --buildDrafts
+</code></pre>
+<p>Open in your browser <a href="http://localhost:1313/">http://localhost:1313/</a> and enjoy your first post with Hugo ;-)</p>
 <p>Let's move the post from draft to publised: edit the file content/post/hugo-site-created.md and change the draft line from true to false if exists.</p>
 <p>Now it's time to upload it to Gihub and make it public:</p>
-<p><code>sh hugo git add -A git commit -m &quot;Initial version&quot; git push git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git master</code></p>
-<p>Oh, really, can it be so easy?. Just go to https://antonmry.github.io (or your equivalent site)</p>
+<pre><code class="language-sh">hugo
+git add -A
+git commit -m &quot;Initial version&quot;
+git push
+git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git master
+</code></pre>
+<p>Oh, really, can it be so easy?. Just go to <a href="https://antonmry.github.io">https://antonmry.github.io</a> (or your equivalent site)</p>
 <p>I was thinking in create a travis job to do the publishing in master (I did it before for jbake) but to be honest, this method is simple enough. I've added to my .bash_alias the last command and that's all I need.</p>
 <p>Enjoy!</p>
 <p>PS: if you do a rebase in <code>source</code>, you will need to do it a bit more tricky to push to master because you can't use <code>--force</code> with the <code>subtree</code> option:</p>
-<p><code>sh git push origin `git subtree split --prefix public source`:master --force</code> More info can be found in Stackoverflow <a href="http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push">Git subtree - subtree up-to-date but can't push</a>.</p>
+<pre><code class="language-sh">git push origin `git subtree split --prefix public source`:master --force
+</code></pre>
+<p>More info can be found in Stackoverflow <a href="http://stackoverflow.com/questions/13756055/git-subtree-subtree-up-to-date-but-cant-push">Git subtree - subtree up-to-date but can't push</a>.</p>
 </p>
 
 	<hr />
