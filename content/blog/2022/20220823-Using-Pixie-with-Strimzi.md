@@ -17,7 +17,7 @@ solution.
 
 Let's create the k8s cluster:
 
-```sh
+```bash
 gcloud container clusters create antonmry-pixie-cluster  --num-nodes=2 --machine-type=e2-standard-8 --disk-size 300
 kubectl -n kafka run kafka-consumer1 -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic pixie  --consumer-property group.id=test
 ```
