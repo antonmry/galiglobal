@@ -202,8 +202,9 @@ kubectl -n kafka run kafka-consumer-lag -ti --image=quay.io/strimzi/kafka:0.25.0
 > test            pixie           1          653             654             1               consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23     consumer-test-1
 
 Consumer Lag is the difference between LOG-END-OFFSET and CURRENT-OFFSET.
-Consumer Lag in offsets is hard to understand, it's easier if we measure it
-in time. Pixie is able to do this with the script ``:
+Consumer Lag in offsets is hard to understand, it's easier if we measure it in
+time. Pixie is able to do this with the script
+`kafka_producer_consumer_latency`:
 
 ![Pixie Kafka ConsumerLag script](pixie/pixie-consumer-lag.jpg)
 
