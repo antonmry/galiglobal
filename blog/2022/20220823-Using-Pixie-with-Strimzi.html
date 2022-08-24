@@ -100,7 +100,7 @@ kubectl get pods -n kafka
 <p>Wait until the pod is healthy and then, let's create the cluster:</p>
 <pre><code class="language-sh">kubectl apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/0.30.0/examples/kafka/kafka-persistent-single.yaml -n kafka
 kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
- kubectl get pods -n kafka
+kubectl get pods -n kafka
 </code></pre>
 <p>We should be able to list, create and describe topics:</p>
 <pre><code class="language-sh">kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092  --list
@@ -192,7 +192,7 @@ kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka
 <p>test            pixie           0          653             654             1               consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23     consumer-test-1</p>
 <p>test            pixie           1          653             654             1               consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23     consumer-test-1</p>
 </blockquote>
-<p>Consumer Lag is the difference between LOG-END-OFFSET and CURRENT-OFFSET. Consumer Lag in offsets is hard to understand, it's easier if we measure it in time. Pixie is able to do this with the script ``:</p>
+<p>Consumer Lag is the difference between LOG-END-OFFSET and CURRENT-OFFSET. Consumer Lag in offsets is hard to understand, it's easier if we measure it in time. Pixie is able to do this with the script <code>kafka_producer_consumer_latency</code>:</p>
 <p><img src="pixie/pixie-consumer-lag.jpg" alt="Pixie Kafka ConsumerLag script" /></p>
 <p>This is very different compared to other ways to calculate Consumer Lag ([Introducing uGroup: Uber's Consumer Management Framework] is a great article covering most of them). Pixie is tracking the Kafka protocol messages and calculating the lag as the difference between a Produce request and a Fetch request. It's possible to see the code in the UI (or even modify it!) opening the editor or directly in GitHub: <a href="https://github.com/pixie-io/pixie/blob/db0ad3a9b3c7229f8e3dd57d9eea5a372e4670f2/src/pxl_scripts/px/kafka_producer_consumer_latency/kafka_producer_consumer_latency.pxl#L130">kafka_producer_consumer_latency.pxl</a>.</p>
 <h2>Kafka consumer rebalances</h2>
