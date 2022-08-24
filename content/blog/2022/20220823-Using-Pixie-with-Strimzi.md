@@ -79,7 +79,7 @@ Wait until the pod is healthy and then, let's create the cluster:
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/0.30.0/examples/kafka/kafka-persistent-single.yaml -n kafka
 kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
- kubectl get pods -n kafka
+kubectl get pods -n kafka
 ```
 
 We should be able to list, create and describe topics:
