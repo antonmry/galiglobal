@@ -7,6 +7,10 @@ status=published
 
 ## 2022
 
+- Codely - TOP 5 Novedades de JAVA 19: [video](https://www.youtube.com/watch?v=OvRkH1zUAJA&t=1s)
+- AWS Build On Live - Intro to eBPF: Explain to Me As if I Was Five: [video](https://dev.to/aws/build-on-live-observability-show-notes-b48/#ebpfs)
+- Current - Key Metrics To Uncover the Root Cause of Kafka Performance Anomalies: [video and slides](https://www.confluent.io/events/current-2022/key-metrics-to-uncover-the-root-cause-of-kafka-performance-anomalies/)
+- P99 Conf - Measuring P99 Latency in Event-Driven Architectures with OpenTelemetry: [video and slides](https://www.p99conf.io/session/measuring-p99-latency-in-event-driven-architectures-with-opentelemetry/)
 - VigoJUG - [eBPF: cómo lo descubrí y por qué creo que lo va a petar muy fuerte](https://www.meetup.com/vigojug/events/286706842/)
 - CoruñaJUG - [eBPF: cómo lo descubrí y por qué creo que lo va a petar muy fuerte](https://www.meetup.com/corunajug/events/286706809/)
 - JNation - Monitoring Kafka Without Instrumentation Using eBPF: [video](https://www.youtube.com/watch?v=s-j6g6mWllU)
