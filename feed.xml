@@ -2,34 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>GaliGlobal</title>
-    <link>http://localhost:8820/</link>
-    <atom:link href="http://localhost:8820//feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://www.galiglobal.com</link>
+    <atom:link href="https://www.galiglobal.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Wed, 16 Nov 2022 21:14:13 +0100</pubDate>
-    <lastBuildDate>Wed, 16 Nov 2022 21:14:13 +0100</lastBuildDate>
+    <pubDate>Wed, 16 Nov 2022 21:17:09 +0100</pubDate>
+    <lastBuildDate>Wed, 16 Nov 2022 21:17:09 +0100</lastBuildDate>
 
-    
-    <item>
-      <title>Career path for Indivitual Contributors (ICs)</title>
-      <link>http://localhost:8820//blog/2022/20221025-CTO.html</link>
-      <pubDate>Tue, 25 Oct 2022 00:00:00 +0200</pubDate>
-      <guid isPermaLink="false">blog/2022/20221025-CTO.html</guid>
-      <description>
-      &lt;p&gt;I like to take a break in the morning to do a virtual coffee break with some friends. Most of them are very senior engineers, and even more important, they are good people, or how we say in Spain, buena gente buena.&lt;/p&gt;
-&lt;p&gt;Sometimes we use that time to ask for advise. Today it was interesting. One engineer was thinking about how to deal with a difficult meeting. The dilemma was about being honest and sharing his real opinion about one project, or saying everything is ok and moving forward. He wanted to help, but he had doubts about how useful was that meeting and how it could impact his aspirations to be promoted. Why to make his life harder if, in the end, nothing is going to change anyway? It&apos;s a fair dilemma.&lt;/p&gt;
-&lt;p&gt;It made me think about the Distinguised Engineers, Chief Architects, CTOs, etc. that I met during my career. In all big companies, there was something in common between them: they were really good selling their ideas to other C-level executives, VPs, global managers, etc. I remember one particular case. This particular person always had his laptop with him and a powerpoint full of slides about microservices, automation, kubernetes and plenty of tecnologies logos.&lt;/p&gt;
-&lt;p&gt;Of course, the reality was totally different. His teams were very slow delivering: the deadly combination of technical debt and overengineered complexity. But he never mentioned technical debt, or how to migrate very old legacy code, or how to reduce costs. Even if he wanted to speak about those things, he was so disconnected of the real enviroment, that he couldn&apos;t do it anyway. He only had promises of a better future using Cloud, Kubernetes, AI, Blockchain, etc. And it worked. This person was promoted again and again.&lt;/p&gt;
-&lt;p&gt;Why? Because C-level executives don&apos;t want to hear about technical debt, problems or whatever. They don&apos;t want more problems, they want solutions. And they are fustrated, because technology is very expensive and they don&apos;t see advances. The smallest change in a big company can cost a fortune. That&apos;s why agile, Scrum or whatever new management technique is so popular in big companies. They are so desperate for solutions, they buy whatever others are doing and it has a chance to be succesful.&lt;/p&gt;
-&lt;p&gt;This may be surprising for many out there. Managers are always asking for feedback, the truth, what to change. And most of us provide that info. I remember a manager thanking me after each 1:1 for keep him honest. I know he was sincere, it&apos;s good to know when you are mistaken, just in case. I also know I would have more opportunities of a promotion keeping my mouth shut and smiling.&lt;/p&gt;
-&lt;p&gt;In summary, to be promoted to senior IC roles is hard because they are less positions in the Technical path than in the Management path. Indeed, most of us promote changing between companies. If you want to try, smile and don&apos;t speak about problems, only about solutions. If you don&apos;t care about a promotion, but you care about the company you are working for, speak up. But be smart, don&apos;t waste energies trying to improve impossible things. Choose your battles.&lt;/p&gt;
-
-	  </description>
-    </item>
     
     <item>
       <title>Using Pixie to monitor a Strimzi kafka cluster</title>
-      <link>http://localhost:8820//blog/2022/20220823-Using-Pixie-with-Strimzi.html</link>
+      <link>https://www.galiglobal.com/blog/2022/20220823-Using-Pixie-with-Strimzi.html</link>
       <pubDate>Tue, 23 Aug 2022 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2022/20220823-Using-Pixie-with-Strimzi.html</guid>
       <description>
@@ -180,7 +163,7 @@ kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka
     
     <item>
       <title>My thoughts about the Principal role</title>
-      <link>http://localhost:8820//blog/2021/20210313-The-principal-role.html</link>
+      <link>https://www.galiglobal.com/blog/2021/20210313-The-principal-role.html</link>
       <pubDate>Wed, 5 May 2021 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2021/20210313-The-principal-role.html</guid>
       <description>
@@ -246,7 +229,7 @@ kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka
     
     <item>
       <title>Three simple ideas to make your life easier with Kafka</title>
-      <link>http://localhost:8820//blog/2021/20210430-Three-Kafka-good-practices.html</link>
+      <link>https://www.galiglobal.com/blog/2021/20210430-Three-Kafka-good-practices.html</link>
       <pubDate>Fri, 30 Apr 2021 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2021/20210430-Three-Kafka-good-practices.html</guid>
       <description>
@@ -299,7 +282,7 @@ kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka
     
     <item>
       <title>How to build and debug a Flink pipeline based in Event Time</title>
-      <link>http://localhost:8820//blog/2021/20210207-Flink-event-time.html</link>
+      <link>https://www.galiglobal.com/blog/2021/20210207-Flink-event-time.html</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2021/20210207-Flink-event-time.html</guid>
       <description>
@@ -489,7 +472,7 @@ SensorData{id=&apos;sensor1&apos;, timestamp=500, measure=-1.0}&lt;/p&gt;
     
     <item>
       <title>Flink setup for development (and some IntelliJ Idea cool tricks)</title>
-      <link>http://localhost:8820//blog/2021/20210130-Flink-setup.html</link>
+      <link>https://www.galiglobal.com/blog/2021/20210130-Flink-setup.html</link>
       <pubDate>Sat, 30 Jan 2021 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2021/20210130-Flink-setup.html</guid>
       <description>
@@ -758,7 +741,7 @@ Job Runtime: 827 ms&lt;/p&gt;
     
     <item>
       <title>Gentle (and practical) introduction to Apache Avro - Part 1</title>
-      <link>http://localhost:8820//blog/2020/20200813-Gentle-and-practical-introduction-to-Apache-Avro-Part-1.html</link>
+      <link>https://www.galiglobal.com/blog/2020/20200813-Gentle-and-practical-introduction-to-Apache-Avro-Part-1.html</link>
       <pubDate>Sat, 5 Dec 2020 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2020/20200813-Gentle-and-practical-introduction-to-Apache-Avro-Part-1.html</guid>
       <description>
@@ -918,7 +901,7 @@ props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
     
     <item>
       <title>Thanks, Optare!</title>
-      <link>http://localhost:8820//blog/2019/20190510-Good-bye-Optare.html</link>
+      <link>https://www.galiglobal.com/blog/2019/20190510-Good-bye-Optare.html</link>
       <pubDate>Fri, 10 May 2019 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2019/20190510-Good-bye-Optare.html</guid>
       <description>
@@ -937,7 +920,7 @@ props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
     
     <item>
       <title>How to open your company to the tech community?</title>
-      <link>http://localhost:8820//blog/2019/20190508-How-to-open-your-company-to-the-tech-community.html</link>
+      <link>https://www.galiglobal.com/blog/2019/20190508-How-to-open-your-company-to-the-tech-community.html</link>
       <pubDate>Wed, 8 May 2019 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2019/20190508-How-to-open-your-company-to-the-tech-community.html</guid>
       <description>
@@ -994,7 +977,7 @@ props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
     
     <item>
       <title>Kubernetes installation with Route 53 DNS and HTTPS load balancer</title>
-      <link>http://localhost:8820//blog/2019/20190404-Kubernetes-installation-with-route-53-dns-and-https-load-balancer.html</link>
+      <link>https://www.galiglobal.com/blog/2019/20190404-Kubernetes-installation-with-route-53-dns-and-https-load-balancer.html</link>
       <pubDate>Thu, 4 Apr 2019 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2019/20190404-Kubernetes-installation-with-route-53-dns-and-https-load-balancer.html</guid>
       <description>
@@ -1048,7 +1031,7 @@ kops rolling-update cluster
 &lt;ul&gt;
 &lt;li&gt;validate cluster: kops validate cluster&lt;/li&gt;
 &lt;li&gt;list nodes: kubectl get nodes --show-labels&lt;/li&gt;
-&lt;li&gt;ssh to the master: ssh -i ~/.ssh/id_rsa &lt;a href=&quot;&amp;#109;&amp;#x61;&amp;#105;&amp;#x6c;&amp;#x74;&amp;#x6f;&amp;#x3a;&amp;#97;&amp;#x64;&amp;#109;&amp;#105;n&amp;#64;&amp;#x61;&amp;#x70;i&amp;#x2e;&amp;#107;&amp;#56;&amp;#115;&amp;#x2e;&amp;#116;e&amp;#x73;&amp;#116;&amp;#46;&amp;#x6e;&amp;#101;&amp;#x74;&quot;&gt;&amp;#97;&amp;#100;&amp;#109;&amp;#x69;&amp;#x6e;&amp;#x40;&amp;#97;&amp;#112;&amp;#105;&amp;#x2e;&amp;#x6b;&amp;#56;&amp;#115;.&amp;#x74;e&amp;#115;&amp;#116;.&amp;#x6e;&amp;#x65;&amp;#x74;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;ssh to the master: ssh -i ~/.ssh/id_rsa &lt;a href=&quot;&amp;#109;a&amp;#105;&amp;#x6c;&amp;#x74;&amp;#x6f;&amp;#x3a;&amp;#97;&amp;#x64;&amp;#x6d;i&amp;#110;&amp;#x40;&amp;#97;p&amp;#105;&amp;#46;&amp;#107;8&amp;#115;.&amp;#x74;&amp;#101;&amp;#x73;&amp;#x74;&amp;#46;&amp;#110;e&amp;#x74;&quot;&gt;&amp;#x61;d&amp;#109;&amp;#x69;&amp;#x6e;&amp;#64;&amp;#97;&amp;#112;&amp;#105;&amp;#46;&amp;#x6b;&amp;#x38;&amp;#115;&amp;#46;&amp;#116;&amp;#101;&amp;#x73;&amp;#116;&amp;#46;&amp;#110;&amp;#x65;&amp;#116;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;the admin user is specific to Debian. If not using Debian please use the appropriate user based on your OS.&lt;/li&gt;
 &lt;li&gt;read about installing addons at: &lt;a href=&quot;https://github.com/kubernetes/kops/blob/master/docs/addons.md&quot;&gt;https://github.com/kubernetes/kops/blob/master/docs/addons.md&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1203,7 +1186,7 @@ spec:
     
     <item>
       <title>JUnit4, JUnit5 and Spock framework comparison</title>
-      <link>http://localhost:8820//blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</link>
+      <link>https://www.galiglobal.com/blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2018/20180111-JUnit4-JUnit5-Spock-Comparisson.html</guid>
       <description>
@@ -1512,7 +1495,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Speaking about Jython in Python Vigo</title>
-      <link>http://localhost:8820//blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</link>
+      <link>https://www.galiglobal.com/blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</link>
       <pubDate>Sat, 1 Apr 2017 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2017/20170401-Speaking-about-jython-in-Python-Vigo.html</guid>
       <description>
@@ -1540,7 +1523,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>My experience in Refugal</title>
-      <link>http://localhost:8820//blog/2017/20170306-My-experience-in-the-Refugal.html</link>
+      <link>https://www.galiglobal.com/blog/2017/20170306-My-experience-in-the-Refugal.html</link>
       <pubDate>Mon, 6 Mar 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170306-My-experience-in-the-Refugal.html</guid>
       <description>
@@ -1565,7 +1548,7 @@ Actual   :2&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Vim as Java and Groovy IDE (again) but now with Neovim</title>
-      <link>http://localhost:8820//blog/2017/20170226-Vim-as-Java-IDE-again.html</link>
+      <link>https://www.galiglobal.com/blog/2017/20170226-Vim-as-Java-IDE-again.html</link>
       <pubDate>Sun, 26 Feb 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170226-Vim-as-Java-IDE-again.html</guid>
       <description>
@@ -1656,7 +1639,7 @@ augroup END
     
     <item>
       <title>How to persist your configuration in GKE</title>
-      <link>http://localhost:8820//blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</link>
+      <link>https://www.galiglobal.com/blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</link>
       <pubDate>Mon, 9 Jan 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170109-how-to-persist-your-configuration-in-gke.html</guid>
       <description>
@@ -1751,7 +1734,7 @@ kubectl logs leanmanager
     
     <item>
       <title>Introduction to Go kit</title>
-      <link>http://localhost:8820//blog/2017/20170108-introduction-to-go-kit.html</link>
+      <link>https://www.galiglobal.com/blog/2017/20170108-introduction-to-go-kit.html</link>
       <pubDate>Sun, 8 Jan 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170108-introduction-to-go-kit.html</guid>
       <description>
@@ -1795,7 +1778,7 @@ go run main.go -http.addr=:8081 1 2
     
     <item>
       <title>Deploy on kubernetes GKE with Terraform</title>
-      <link>http://localhost:8820//blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</link>
+      <link>https://www.galiglobal.com/blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</link>
       <pubDate>Fri, 6 Jan 2017 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2017/20170106-deploy-on-kubernetes-gke-with-terraform.html</guid>
       <description>
@@ -1942,7 +1925,7 @@ kubectl cluster-info
     
     <item>
       <title>Time to start a Go blog with Hugo</title>
-      <link>http://localhost:8820//blog/2016/20160616-first-blog-post-with-hugo.html</link>
+      <link>https://www.galiglobal.com/blog/2016/20160616-first-blog-post-with-hugo.html</link>
       <pubDate>Thu, 16 Jun 2016 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2016/20160616-first-blog-post-with-hugo.html</guid>
       <description>
@@ -1999,7 +1982,7 @@ git subtree push --prefix=public git@github.com:antonmry/antonmry.github.io.git 
     
     <item>
       <title>Developing in RestComm? Docker to the rescue</title>
-      <link>http://localhost:8820//blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</link>
+      <link>https://www.galiglobal.com/blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</link>
       <pubDate>Sun, 8 May 2016 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2016/20160508-Developing-in-RestComm-Docker-to-the-rescue.html</guid>
       <description>
@@ -2129,7 +2112,7 @@ git push
     
     <item>
       <title>How to setup your environment for Kubernetes development</title>
-      <link>http://localhost:8820//blog/2016/20160430-how-to-develop-in-Kubernetes.html</link>
+      <link>https://www.galiglobal.com/blog/2016/20160430-how-to-develop-in-Kubernetes.html</link>
       <pubDate>Sat, 30 Apr 2016 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2016/20160430-how-to-develop-in-Kubernetes.html</guid>
       <description>
@@ -2240,7 +2223,7 @@ vim restcomm_service.yml
     
     <item>
       <title>First year as ACE Associate and 2016 goals</title>
-      <link>http://localhost:8820//blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</link>
+      <link>https://www.galiglobal.com/blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</link>
       <pubDate>Sat, 2 Jan 2016 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2016/20160102-First-year-as-ACE-Associate-and-2016-goals.html</guid>
       <description>
@@ -2261,7 +2244,7 @@ vim restcomm_service.yml
     
     <item>
       <title>Oracle Pre-conference and TADSummit 2015</title>
-      <link>http://localhost:8820//blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</link>
       <pubDate>Tue, 17 Nov 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Oracle-Preworkshop-and-TADSummit-2015.html</guid>
       <description>
@@ -2273,7 +2256,7 @@ vim restcomm_service.yml
     
     <item>
       <title>Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 2</title>
-      <link>http://localhost:8820//blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.html</link>
       <pubDate>Sun, 30 Aug 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.html</guid>
       <description>
@@ -2385,7 +2368,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>We are TADHack 2015 winners :-)</title>
-      <link>http://localhost:8820//blog/2015/We-are-TADHack-2015-winners.html</link>
+      <link>https://www.galiglobal.com/blog/2015/We-are-TADHack-2015-winners.html</link>
       <pubDate>Fri, 31 Jul 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/We-are-TADHack-2015-winners.html</guid>
       <description>
@@ -2409,7 +2392,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>A look back to Geecon 2015</title>
-      <link>http://localhost:8820//blog/2015/A-look-back-to-Geecon-2015.html</link>
+      <link>https://www.galiglobal.com/blog/2015/A-look-back-to-Geecon-2015.html</link>
       <pubDate>Tue, 30 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/A-look-back-to-Geecon-2015.html</guid>
       <description>
@@ -2427,7 +2410,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>TMCnet Newsroom Interview with Anton R. Yuste</title>
-      <link>http://localhost:8820//blog/2015/TMCnet-Newsroom-Interview-with-Anton-R-Yuste.html</link>
+      <link>https://www.galiglobal.com/blog/2015/TMCnet-Newsroom-Interview-with-Anton-R-Yuste.html</link>
       <pubDate>Sun, 21 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/TMCnet-Newsroom-Interview-with-Anton-R-Yuste.html</guid>
       <description>
@@ -2440,7 +2423,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>The Oracle ACE Associate award</title>
-      <link>http://localhost:8820//blog/2015/The-Oracle-ACE-Associate-award.html</link>
+      <link>https://www.galiglobal.com/blog/2015/The-Oracle-ACE-Associate-award.html</link>
       <pubDate>Tue, 16 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/The-Oracle-ACE-Associate-award.html</guid>
       <description>
@@ -2463,7 +2446,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>Introductory videos to OCSG, OCCAS and OCWSC</title>
-      <link>http://localhost:8820//blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html</link>
       <pubDate>Thu, 11 Jun 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Introductory-videos-to-OCSG-OCCAS-and-OCWSC.html</guid>
       <description>
@@ -2483,7 +2466,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>Summary of the last news in the Oracle Communications Service Delivery Platform</title>
-      <link>http://localhost:8820//blog/2015/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.html</link>
       <pubDate>Thu, 21 May 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.html</guid>
       <description>
@@ -2533,7 +2516,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>SpringIO 2015: a great event for a great community</title>
-      <link>http://localhost:8820//blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html</link>
+      <link>https://www.galiglobal.com/blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html</link>
       <pubDate>Thu, 14 May 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/SpringIO-2015-a-great-event-for-a-great-community.html</guid>
       <description>
@@ -2550,7 +2533,7 @@ java -jar ocsg_pte_generic.jar
     
     <item>
       <title>Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 1</title>
-      <link>http://localhost:8820//blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html</link>
       <pubDate>Thu, 30 Apr 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html</guid>
       <description>
@@ -2714,7 +2697,7 @@ java -jar ocsg_generic.jar
     
     <item>
       <title>TADHack 2015: Oracle environment ready for your hack</title>
-      <link>http://localhost:8820//blog/2015/TADHack-2015-Oracle-environment-ready-for-your-hack.html</link>
+      <link>https://www.galiglobal.com/blog/2015/TADHack-2015-Oracle-environment-ready-for-your-hack.html</link>
       <pubDate>Thu, 23 Apr 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/TADHack-2015-Oracle-environment-ready-for-your-hack.html</guid>
       <description>
@@ -2737,7 +2720,7 @@ java -jar ocsg_generic.jar
     
     <item>
       <title>Oracle's demos in the MWC2015 review</title>
-      <link>http://localhost:8820//blog/2015/Oracle-s-demos-in-the-MWC2015-review.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Oracle-s-demos-in-the-MWC2015-review.html</link>
       <pubDate>Wed, 15 Apr 2015 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2015/Oracle-s-demos-in-the-MWC2015-review.html</guid>
       <description>
@@ -2760,7 +2743,7 @@ java -jar ocsg_generic.jar
     
     <item>
       <title>Access OCSG EDR JMS Topic with Talend Open Studio</title>
-      <link>http://localhost:8820//blog/2015/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.html</link>
       <pubDate>Fri, 13 Feb 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.html</guid>
       <description>
@@ -2797,7 +2780,7 @@ java -jar ocsg_generic.jar
     
     <item>
       <title>Ramblings about OCCAS and the Oracle Communications roadmap</title>
-      <link>http://localhost:8820//blog/2015/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap.html</link>
       <pubDate>Wed, 11 Feb 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Ramblings-about-OCCAS-and-the-Oracle-Communications-roadmap.html</guid>
       <description>
@@ -2822,7 +2805,7 @@ java -jar ocsg_generic.jar
     
     <item>
       <title>OCSG 6.0v1 generally available: new features introduction</title>
-      <link>http://localhost:8820//blog/2015/OCSG-6-0v1-generally-available-new-features-introduction.html</link>
+      <link>https://www.galiglobal.com/blog/2015/OCSG-6-0v1-generally-available-new-features-introduction.html</link>
       <pubDate>Fri, 23 Jan 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/OCSG-6-0v1-generally-available-new-features-introduction.html</guid>
       <description>
@@ -2853,7 +2836,7 @@ java -jar ocsg_generic.jar
     
     <item>
       <title>Accessing Weblogic Runtime Information with WLST</title>
-      <link>http://localhost:8820//blog/2015/Accessing-Weblogic-Runtime-Information-with-WLST.html</link>
+      <link>https://www.galiglobal.com/blog/2015/Accessing-Weblogic-Runtime-Information-with-WLST.html</link>
       <pubDate>Mon, 19 Jan 2015 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2015/Accessing-Weblogic-Runtime-Information-with-WLST.html</guid>
       <description>
@@ -2875,7 +2858,7 @@ export USER_MEM_ARGS
     
     <item>
       <title>Oracle Pre-conference TADSummit Workshop 2014</title>
-      <link>http://localhost:8820//blog/2014/Oracle-Preworkshop-TADSummit-2014.html</link>
+      <link>https://www.galiglobal.com/blog/2014/Oracle-Preworkshop-TADSummit-2014.html</link>
       <pubDate>Mon, 17 Nov 2014 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2014/Oracle-Preworkshop-TADSummit-2014.html</guid>
       <description>
@@ -2895,7 +2878,7 @@ export USER_MEM_ARGS
     
     <item>
       <title>WebRTC as key part of Service Exposure</title>
-      <link>http://localhost:8820//blog/2014/WebRTC-as-key-part-of-Service-Exposure.html</link>
+      <link>https://www.galiglobal.com/blog/2014/WebRTC-as-key-part-of-Service-Exposure.html</link>
       <pubDate>Wed, 1 Oct 2014 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2014/WebRTC-as-key-part-of-Service-Exposure.html</guid>
       <description>
@@ -2909,7 +2892,7 @@ export USER_MEM_ARGS
     
     <item>
       <title>Introduction to OCSG SDK</title>
-      <link>http://localhost:8820//blog/2014/Introduction-to-OCSG-SDK.html</link>
+      <link>https://www.galiglobal.com/blog/2014/Introduction-to-OCSG-SDK.html</link>
       <pubDate>Mon, 26 May 2014 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2014/Introduction-to-OCSG-SDK.html</guid>
       <description>
@@ -2923,7 +2906,7 @@ export USER_MEM_ARGS
     
     <item>
       <title>Oracle TADHack Webinar</title>
-      <link>http://localhost:8820//blog/2014/Oracle-TADHack-Webinar.html</link>
+      <link>https://www.galiglobal.com/blog/2014/Oracle-TADHack-Webinar.html</link>
       <pubDate>Thu, 15 May 2014 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2014/Oracle-TADHack-Webinar.html</guid>
       <description>
