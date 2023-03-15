@@ -5,6 +5,11 @@ tags=galiglobal
 status=published
 ---------
 
+## 2023
+
+- Codely - TOP 5 Novedades de JAVA 20: [video](https://www.youtube.com/watch?v=czTaREvXrVU) and [code](https://github.com/antonmry/java-playground/blob/master/java20/Notes.md)
+- JChampions Conference - Instrumenting Java applications with OpenTelemetry: [video](https://www.youtube.com/watch?v=RKTzXIZ9VvU)
+
 ## 2022
 
 - Codely - TOP 5 Novedades de JAVA 19: [video](https://www.youtube.com/watch?v=OvRkH1zUAJA&t=1s)
