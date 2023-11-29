@@ -12,6 +12,11 @@
     </url>
 
     <url>
+    	<loc>http://localhost:8820//blog/2023/20231129-monitoring-apache-kafka-for-cloud-cost-reduction.html</loc>
+    	<lastmod>2023-10-29</lastmod>
+    </url>
+
+    <url>
     	<loc>http://localhost:8820//blog/2022/20220823-Using-Pixie-with-Strimzi.html</loc>
     	<lastmod>2022-08-23</lastmod>
     </url>

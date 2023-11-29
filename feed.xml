@@ -6,9 +6,22 @@
     <atom:link href="http://localhost:8820//feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Wed, 15 Mar 2023 17:55:20 +0100</pubDate>
-    <lastBuildDate>Wed, 15 Mar 2023 17:55:20 +0100</lastBuildDate>
+    <pubDate>Wed, 29 Nov 2023 22:25:48 +0100</pubDate>
+    <lastBuildDate>Wed, 29 Nov 2023 22:25:48 +0100</lastBuildDate>
 
+    
+    <item>
+      <title>Monitoring Apache Kafka for cloud cost reduction</title>
+      <link>http://localhost:8820//blog/2023/20231129-monitoring-apache-kafka-for-cloud-cost-reduction.html</link>
+      <pubDate>Sun, 29 Oct 2023 00:00:00 +0200</pubDate>
+      <guid isPermaLink="false">blog/2023/20231129-monitoring-apache-kafka-for-cloud-cost-reduction.html</guid>
+      <description>
+      &lt;p&gt;I&apos;ve published my first article in the New Relic blog! &lt;a href=&quot;https://newrelic.com/blog/how-to-relic/monitoring-apache-kafka-for-cloud-cost-reduction&quot;&gt;Monitoring Apache Kafka for cloud cost reduction&lt;/a&gt; is a summary of some of the initiatives I&apos;ve been working on since I joined New Relic 2.5 years ago.&lt;/p&gt;
+&lt;p&gt;It has been a very interesting journey and I&apos;ve learnt a lot in the process. In particular about Cloud providers and how to tune Kafka servers and huge workloads for them.&lt;/p&gt;
+&lt;p&gt;Enjoy the article and let me know your thoughts on &lt;a href=&quot;https://www.twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt;.&lt;/p&gt;
+
+	  </description>
+    </item>
     
     <item>
       <title>Using Pixie to monitor a Strimzi kafka cluster</title>
