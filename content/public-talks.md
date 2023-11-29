@@ -7,6 +7,9 @@ status=published
 
 ## 2023
 
+- Codely - Novedades en GraalVM: ¿La JVM definitiva para Java?: [video](https://www.youtube.com/watch?v=23VMoxYWXlM) and [code](https://github.com/antonmry/java-playground/blob/master/graalvm/Notes.md
+)
+- Codely - TOP 5 Novedades de JAVA 21: [video](https://www.youtube.com/watch?v=vVoVzCf1ffc) and [code](https://github.com/antonmry/java-playground/blob/master/java21/Notes.md)
 - Codely - TOP 5 Novedades de JAVA 20: [video](https://www.youtube.com/watch?v=czTaREvXrVU) and [code](https://github.com/antonmry/java-playground/blob/master/java20/Notes.md)
 - JChampions Conference - Instrumenting Java applications with OpenTelemetry: [video](https://www.youtube.com/watch?v=RKTzXIZ9VvU)
 
