@@ -5,12 +5,19 @@ tags=galiglobal
 status=published
 ---------
 
+## 2024
+
+- Datolada - Sistemas de datos: de 0 a ingestar petabytes diarios: [video](https://www.youtube.com/live/5kOry4FJTnQ?feature=shared&t=5687) and [slides](https://docs.google.com/presentation/d/1x9u74TlluxP6JWebcSXSKC6bK-rwd3vvVRxGtJDdvlM/edit?usp=sharing)
+- Codely - Novedades en Java 22 con ejemplos: Stream Gatherers, Foreign Function & Memory API: [video](https://www.youtube.com/watch?v=57JuvUlfzh0) and [code](https://github.com/antonmry/java-playground/blob/master/java22/Notes.md)
+- Kafka Summit - Keep Your Kafka Cloud Costs in Check with Showbacks: [video and slides](https://www.confluent.io/events/kafka-summit-london-2024/keep-your-kafka-cloud-costs-in-check-with-showbacks/)
+- Codely - "El reto del billón de filas": Hacks para procesar más de 12GB en 2 segundos: [video](https://www.youtube.com/watch?v=yRTZnTQ-fog)
+
 ## 2023
 
 - Codely - Novedades en GraalVM: ¿La JVM definitiva para Java?: [video](https://www.youtube.com/watch?v=23VMoxYWXlM) and [code](https://github.com/antonmry/java-playground/blob/master/graalvm/Notes.md
 )
-- Codely - TOP 5 Novedades de JAVA 21: [video](https://www.youtube.com/watch?v=vVoVzCf1ffc) and [code](https://github.com/antonmry/java-playground/blob/master/java21/Notes.md)
-- Codely - TOP 5 Novedades de JAVA 20: [video](https://www.youtube.com/watch?v=czTaREvXrVU) and [code](https://github.com/antonmry/java-playground/blob/master/java20/Notes.md)
+- Codely - TOP 5 Novedades de JAVA 21: Unnamed Pattern, Instance Main Method, Seq Collections…: [video](https://www.youtube.com/watch?v=vVoVzCf1ffc) and [code](https://github.com/antonmry/java-playground/blob/master/java21/Notes.md)
+- Codely - TOP 5 Novedades de JAVA 20: Pattern Matching v4 + Record Patterns v2…[video](https://www.youtube.com/watch?v=czTaREvXrVU) and [code](https://github.com/antonmry/java-playground/blob/master/java20/Notes.md)
 - JChampions Conference - Instrumenting Java applications with OpenTelemetry: [video](https://www.youtube.com/watch?v=RKTzXIZ9VvU)
 
 ## 2022
