@@ -12,6 +12,11 @@
     </url>
 
     <url>
+    	<loc>http://localhost:8820//blog/2024/20240606-kip-714-monitoring-kafka-clients.html</loc>
+    	<lastmod>2024-06-06</lastmod>
+    </url>
+
+    <url>
     	<loc>http://localhost:8820//blog/2023/20231129-monitoring-apache-kafka-for-cloud-cost-reduction.html</loc>
     	<lastmod>2023-10-29</lastmod>
     </url>

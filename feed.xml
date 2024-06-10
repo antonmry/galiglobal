@@ -6,9 +6,111 @@
     <atom:link href="http://localhost:8820//feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Thu, 9 May 2024 23:32:43 +0200</pubDate>
-    <lastBuildDate>Thu, 9 May 2024 23:32:43 +0200</lastBuildDate>
+    <pubDate>Mon, 10 Jun 2024 18:11:48 +0200</pubDate>
+    <lastBuildDate>Mon, 10 Jun 2024 18:11:48 +0200</lastBuildDate>
 
+    
+    <item>
+      <title>Monitoring Kafka clients with KIP-714</title>
+      <link>http://localhost:8820//blog/2024/20240606-kip-714-monitoring-kafka-clients.html</link>
+      <pubDate>Thu, 6 Jun 2024 00:00:00 +0200</pubDate>
+      <guid isPermaLink="false">blog/2024/20240606-kip-714-monitoring-kafka-clients.html</guid>
+      <description>
+      &lt;p&gt;One of my favourite Kafka KIPs is &lt;a href=&quot;https://cwiki.apache.org/confluence/display/KAFKA/KIP-714%3A+Client+metrics+and+observability&quot;&gt;KIP-714&lt;/a&gt;, which adds a new way to monitor Kafka client metrics. This is a very important feature for anyone running Kafka in production, as it allows you to monitor the health of your clients and the impact they have on the Kafka cluster.&lt;/p&gt;
+&lt;p&gt;It also uses the OpenTelemetry standard, which is great for integrating this feature with many monitoring tools and services.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;kip714.png&quot; alt=&quot;KIP-714 Architecture&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;In this article, we&apos;ll take a look at how this new feature works and how you can use it to monitor your Kafka clients.&lt;/p&gt;
+&lt;h2&gt;Kafka cluster setup&lt;/h2&gt;
+&lt;p&gt;To use KIP-714, you need to have a Kafka cluster running with at least version 3.7.0. It also requires Kraft mode to be enabled, which is the new mode to run Kafka brokers without requiring Zookeeper.&lt;/p&gt;
+&lt;p&gt;You can download the latest version of Kafka from the &lt;a href=&quot;https://kafka.apache.org/downloads&quot;&gt;Apache Kafka website&lt;/a&gt;. It&apos;s very easy to set up a Kafka cluster with Kraft following the official documentation, in particular the &lt;a href=&quot;https://kafka.apache.org/quickstart&quot;&gt;Quickstart&lt;/a&gt; guide.&lt;/p&gt;
+&lt;p&gt;The first step is to start a Kafka broker with the following commands:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;KAFKA_CLUSTER_ID=&amp;quot;$(bin/kafka-storage.sh random-uuid)&amp;quot;
+bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+bin/kafka-server-start.sh config/kraft/server.properties
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The next step is to configure the broker to retrieve the client metrics. This is the command to do it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;bin/kafka-client-metrics.sh --bootstrap-server localhost:9092 --alter --generate-name \
+  --metrics org.apache.kafka.producer. \
+  --interval 5000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For this example, we are monitoring only the producer metrics every 5 seconds.&lt;/p&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://cwiki.apache.org/confluence/display/KAFKA/KIP-1000%3A+List+Client+Metrics+Configuration+Resources&quot;&gt;KIP-1000&lt;/a&gt;, it&apos;s possible to list the client metrics configuration resources introduced by &lt;a href=&quot;https://cwiki.apache.org/confluence/display/KAFKA/KIP-714%3A+Client+metrics+and+observability&quot;&gt;KIP-714&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;bin/kafka-client-metrics.sh --bootstrap-server localhost:9092 --list
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It should return the generated name, in this case, a random string of characters. It&apos;s important to understand that processing all client metrics through the Kafka broker can have a performance impact. In that sense, it can be handy only dynamically enable the required metrics and filter the clients that we want to monitor. &lt;code&gt;kafka-client-metrics.sh&lt;/code&gt; can filter by:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;client_instance_id&lt;/li&gt;
+&lt;li&gt;client_id&lt;/li&gt;
+&lt;li&gt;client_software_name&lt;/li&gt;
+&lt;li&gt;client_software_version&lt;/li&gt;
+&lt;li&gt;client_source_address&lt;/li&gt;
+&lt;li&gt;client_source_port&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Add a metric reporter&lt;/h2&gt;
+&lt;p&gt;There are different ways to report Kafka cluster metrics, but there&apos;s one in particular that it&apos;s a hidden gem, it isn&apos;t even mentioned in the &lt;a href=&quot;https://kafka.apache.org/documentation/#monitoring&quot;&gt;Monitoring section of the official Kafka documentation&lt;/a&gt;: Yammer metrics custom reporters.&lt;/p&gt;
+&lt;p&gt;They can be configured with the &lt;a href=&quot;https://kafka.apache.org/documentation/#brokerconfigs&quot;&gt;kafka.metrics.reporters&lt;/a&gt; property:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A list of classes to use as Yammer metrics custom reporters. The reporters should implement kafka.metrics.KafkaMetricsReporter trait. If a client wants to expose JMX operations on a custom reporter, the custom reporter needs to additionally implement an MBean trait that extends kafka.metrics.KafkaMetricsReporterMBean trait so that the registered MBean is compliant with the standard MBean convention.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To use create a MetricsReporter, we need to create a class that implements the &lt;a href=&quot;https://kafka.apache.org/37/javadoc/org/apache/kafka/common/metrics/MetricsReporter.html&quot;&gt;org.apache.kafka.common.metrics.MetricsReporter&lt;/a&gt; interface. We don&apos;t need to add any logic to the methods, as we aren&apos;t interested in the cluster metrics for this article.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/KAFKA/KIP-714%3A+Client+metrics+and+observability&quot;&gt;KIP-714&lt;/a&gt; has added a new interface that needs to be implemented to report the client metrics: &lt;a href=&quot;https://kafka.apache.org/37/javadoc/org/apache/kafka/server/telemetry/ClientTelemetry.html&quot;&gt;org.apache.kafka.server.telemetry.ClientTelemetry&lt;/a&gt;. Our MetricsReporter also has to implement this new interface. It has just one method, &lt;code&gt;clientReceiver&lt;/code&gt;, that returns a &lt;code&gt;ClientTelemetryReceiver&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;@Evolving
+public interface ClientTelemetry {
+    ClientTelemetryReceiver clientReceiver();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this particular example, we are going to send the metrics to an OpenTelemetry collector running in the same machine. This feature is very interesting because this KIP uses the OpenTelemetry format for the metrics. We don&apos;t need to change the format of the metrics if the monitoring tool we are using supports OpenTelemetry, as they should do. We can just to forward the metrics without any transformation.&lt;/p&gt;
+&lt;p&gt;You can see a demo implementation of the &lt;code&gt;MetricsReporter&lt;/code&gt; in this &lt;a href=&quot;https://github.com/antonmry/kafka-playground/tree/main/otel-kip714-demo&quot;&gt;GitHub repository&lt;/a&gt;. It&apos;s ugly and inefficient, but it&apos;s to show how to work with this new feature. Otel/GRPC would be a better choice.&lt;/p&gt;
+&lt;p&gt;The next step is to build the project and copy the JAR file to the Kafka broker lib directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;./gradlew build
+cp build/libs/lib/build/libs/demo-kip714-0.1.0.jar $KAFKA_HOME/libs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, we need to add the &lt;code&gt;metrics.reporters&lt;/code&gt; property to the &lt;code&gt;$KAFKA_HOME/config/kraft/server.properties&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-properties&quot;&gt;metric.reporters=com.galiglobal.CustomMetricsReporter
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will require a restart of the Kafka broker:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;bin/kafka-server-stop.sh
+bin/kafka-server-start.sh config/kraft/server.properties
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Test the setup with a Kafka producer&lt;/h2&gt;
+&lt;p&gt;It&apos;s time to see if it&apos;s working. Let&apos;s start a Kafka producer:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;bin/kafka-producer-perf-test.sh \
+    --throughput 2 \
+    --record-size 1000 \
+    --num-records 300000 \
+    --topic perf-test-topic \
+    --producer-props bootstrap.servers=localhost:9092 linger.ms=100 batch.size=16384 \
+    --print-metrics | grep \
+&amp;quot;3000 records sent\|\
+producer-metrics:outgoing-byte-rate\|\
+producer-metrics:bufferpool-wait-ratio\|\
+producer-metrics:record-queue-time-avg\|\
+producer-metrics:request-latency-avg\|\
+producer-metrics:batch-size-avg&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The kafka-producer-perf-test.sh script is perfect to send a bunch of random messages to a Kafka topic. We are using the &lt;code&gt;--print-metrics&lt;/code&gt; flag to print metrics to the console. We are also using the &lt;code&gt;grep&lt;/code&gt; command to filter the metrics we are interested in.&lt;/p&gt;
+&lt;p&gt;In the terminal of the broker, we should start seeing messages like this:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[2024-06-07 21:50:58,999] INFO CustomTelemetryReceiver: E6-tEjUcRJClUJpf-woDOA: OTLP (com.galiglobal.CustomMetricsReporter) [2024-06-07 21:50:59,007] ERROR Error sending the request: null (com.galiglobal.CustomMetricsReporter)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;They show the clientId of the producer and the format of the metrics (OTLP). It also shows an error message because we don&apos;t have a service to receive the metrics yet. Let&apos;s fix that.&lt;/p&gt;
+&lt;h2&gt;Start an OpenTelemetry collector&lt;/h2&gt;
+&lt;p&gt;The OpenTelemetry collector is a service that receives metrics, traces and logs to process them. For this example, we are going to configure it to receive metrics from the Kafka broker and send them to New Relic. Detailed instructions can be found in the &lt;a href=&quot;https://docs.newrelic.com/docs/more-integrations/open-source-telemetry-integrations/opentelemetry/get-started/collector-processing/opentelemetry-collector-processing-intro/&quot;&gt;New Relic documentation&lt;/a&gt; and the &lt;a href=&quot;https://github.com/antonmry/kafka-playground/blob/main/otel-kip714-demo/collector.yaml&quot;&gt;example Otel collector configuration&lt;/a&gt; in the &lt;a href=&quot;https://github.com/antonmry/kafka-playground/tree/main/otel-kip714-demo&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The OpenTelemetry collector can be started with the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;docker run --rm -e NEW_RELIC_API_KEY=$NEW_RELIC_API_KEY \
+  -v &amp;quot;${PWD}/collector.yaml&amp;quot;:/etc/otelcol/config.yaml \
+  -p 127.0.0.1:4317:4317 \
+  -p 127.0.0.1:4318:4318 \
+  -p 127.0.0.1:55679:55679 \
+  otel/opentelemetry-collector:0.102.1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Metrics should be available in the New Relic dashboard after a few seconds. An &lt;a href=&quot;https://github.com/antonmry/kafka-playground/blob/main/otel-kip714-demo/dashboard.json&quot;&gt;example of the dashboard&lt;/a&gt; is available in the &lt;a href=&quot;https://github.com/antonmry/kafka-playground/tree/main/otel-kip714-demo&quot;&gt;GitHub repository&lt;/a&gt; and it can be easily imported to your New Relic account following the &lt;a href=&quot;https://docs.newrelic.com/docs/query-your-data/explore-query-data/dashboards/introduction-dashboards/&quot;&gt;New Relic dashboard documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;demo.gif&quot; alt=&quot;New Relic dashboard&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;I hope you enjoyed this article and that it helps you to monitor your Kafka. If you have any questions or comments, please let me know.You can reach me on &lt;a href=&quot;https://www.twitter.com/antonmry&quot;&gt;Twitter&lt;/a&gt; or &lt;a href=&quot;https://github.com/antonmry/galiglobal/discussions&quot;&gt;GithHub&lt;/a&gt;.&lt;/p&gt;
+
+	  </description>
+    </item>
     
     <item>
       <title>Monitoring Apache Kafka for cloud cost reduction</title>
