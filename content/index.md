@@ -10,11 +10,12 @@ status=published
 I'm a data infrastructure engineer who gets a real kick out of building
 scalable data platforms that solve complex problems. I've spent years diving
 deep into Kafka, Flink, and Java, along with all the cloud tools we use to make
-these systems hum. I love tackling big challenges - like building distributed
-systems to ingest hundreds of Gigabytes per second, or optimizing performance
-to handle massive data volumes - and I thrive on collaborating with smart teams
-to bring those solutions to life. I'm particularly passionate about leveraging
-data to drive positive impact in environmental sustainability.
+these systems hum. I love tackling big challenges - like building reliable and
+scalable distributed systems that handle massive data volumes or optimizing
+performance to reduce cloud costs and minimize environmental impact- and I
+thrive on collaborating with smart teams to bring those solutions to life. I'm
+particularly passionate about leveraging data to drive positive impact in
+environmental sustainability.
 
 ## Tech Community
 
