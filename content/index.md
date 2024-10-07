@@ -7,11 +7,14 @@ status=published
 
 <img align="right" style="  max-width: 30%;height: auto;  padding: 0px 10px;" src="/images/antonmry.jpg">
 
-I have a passion for building high-throughput streaming systems and platforms
-that solve the challenges that come with them.
-
-I have a strong sense of my goals as Principal Software Engineer, summarized in
-[My Thoughts on the Principal Role] article.
+I'm a data infrastructure engineer who gets a real kick out of building
+scalable data platforms that solve complex problems. I've spent years diving
+deep into Kafka, Flink, and Java, along with all the cloud tools we use to make
+these systems hum. I love tackling big challenges - like building distributed
+systems to ingest hundreds of Gigabytes per second, or optimizing performance
+to handle massive data volumes - and I thrive on collaborating with smart teams
+to bring those solutions to life. I'm particularly passionate about leveraging
+data to drive positive impact in environmental sustainability.
 
 ## Tech Community
 
