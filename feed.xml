@@ -6,9 +6,83 @@
     <atom:link href="http://localhost:8820//feed.xml" rel="self" type="application/rss+xml" />
     <description>GaliGlobal - Antón Rodríguez Blog</description>
     <language>en-us</language>
-    <pubDate>Wed, 15 Jan 2025 23:23:57 +0100</pubDate>
-    <lastBuildDate>Wed, 15 Jan 2025 23:23:57 +0100</lastBuildDate>
+    <pubDate>Tue, 4 Feb 2025 23:14:58 +0100</pubDate>
+    <lastBuildDate>Tue, 4 Feb 2025 23:14:58 +0100</lastBuildDate>
 
+    
+    <item>
+      <title>Monitoring MinIO requests with the OpenTelemetry Collector</title>
+      <link>http://localhost:8820//blog/2025/20250204-monitoring-requests-with-minio.html</link>
+      <pubDate>Tue, 4 Feb 2025 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2025/20250204-monitoring-requests-with-minio.html</guid>
+      <description>
+      &lt;p&gt;I&apos;ve been working on using Object Storage with Apache Flink to replace Kafka compacted topics or cross-VPC/AZ communication as explained in this &lt;a href=&quot;https://www.ververica.academy/courses/3d163483-5040-4d60-b5b3-755c3277edf7/activities/45b8d081-140a-48f0-b385-8dd2edb8647d&quot;&gt;Flink Forward talk&lt;/a&gt;. The more we use it, the more important is to optimize the cost of the solution. It&apos;s usually driven by the number of requests to S3 so it&apos;s very important to me being able to quickly test different approaches to validate what&apos;s working well.&lt;/p&gt;
+&lt;p&gt;I typically use AWS S3 directly for that, but it&apos;s a bit cumbersome to monitor it. There&apos;s lag in the metrics and it&apos;s not easy to correlate the requests with the application logs. So I started using MinIO for local development. I was surprised to find how hard is to monitor it locally. In the UI, there&apos;s a note about metrics not being available:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;minio-metrics.jpg&quot; alt=&quot;MinIO UI Metrics&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;I followed the documentation and it isn&apos;t straightforward. I tried with Claude/Gemini but both of them failed. It took me far more than I expected. In this article, I&apos;ll show you how to monitor MinIO requests with the OpenTelemetry Collector or Prometheus, or at least, how I do it now.&lt;/p&gt;
+&lt;h2&gt;Run MinIO&lt;/h2&gt;
+&lt;p&gt;It&apos;s pretty easy to run MinIO locally. You can use the Docker image and run it with the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;docker run -d \
+    -p &amp;quot;$MINIO_PORT:9000&amp;quot; \
+    -p &amp;quot;$MINIO_CONSOLE_PORT:9001&amp;quot; \
+    -v &amp;quot;$MINIO_DATA_DIR:/mnt/data&amp;quot; \
+    -v &amp;quot;$MINIO_CONFIG_DIR:/root/.minio.sys&amp;quot; \
+    -e &amp;quot;MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY&amp;quot; \
+    -e &amp;quot;MINIO_SECRET_KEY=$MINIO_SECRET_KEY&amp;quot; \
+    --name &amp;quot;$MINIO_CONTAINER_NAME&amp;quot; \
+    minio/minio server \
+    --console-address &amp;quot;:9001&amp;quot; /mnt/data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can use this script &lt;a href=&quot;https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-minio-sh&quot;&gt;minio.sh&lt;/a&gt; to run MinIO with the environment variables and proper configuration.&lt;/p&gt;
+&lt;p&gt;Once it&apos;s running, you can access the UI at &lt;code&gt;http://localhost:9001&lt;/code&gt;. You can create a bucket and upload some files to test it.&lt;/p&gt;
+&lt;h2&gt;MinIO metrics&lt;/h2&gt;
+&lt;p&gt;The next step is to enable Prometheus metrics in MinIO. You can do it by using the &lt;code&gt;mc&lt;/code&gt; command line tool.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;docker exec &amp;quot;$MINIO_CONTAINER_NAME&amp;quot; mc alias set &apos;myminio&apos; &amp;quot;http://localhost:9000&amp;quot; &amp;quot;$MINIO_ACCESS_KEY&amp;quot; &amp;quot;$MINIO_SECRET_KEY&amp;quot;
+
+docker exec &amp;quot;$MINIO_CONTAINER_NAME&amp;quot; mc admin prometheus metrics play system --api-version v3
+
+docker exec &amp;quot;$MINIO_CONTAINER_NAME&amp;quot; mc admin prometheus generate myminio bucket &amp;gt; &amp;quot;$PROMETHEUS_CONFIG_FILE&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first &lt;code&gt;mc&lt;/code&gt; command creates an alias to the MinIO server with proper authentication. The second command shows the Prometheus metrics for the system and the third command generates the Prometheus configuration to be able to scrape the metrics with the proper key.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;scrape_configs:
+- job_name: minio-job-bucket
+  bearer_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  metrics_path: /minio/v2/metrics/bucket
+  scheme: http
+  static_configs:
+  - targets: [&apos;localhost:9002&apos;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Using that Prometheus file, you can configure Prometheus to scrape the metrics running the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;prometheus --config.file=prometheus.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you aren&apos;t using the same port in the container to connect, you need to change the &lt;code&gt;prometheus.yml&lt;/code&gt; file to use the proper port. You can access the Prometheus UI at &lt;code&gt;http://localhost:9090&lt;/code&gt; to validate that the metrics are being scraped.&lt;/p&gt;
+&lt;p&gt;This script &lt;a href=&quot;https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-prometheus-sh&quot;&gt;prometheus.sh&lt;/a&gt; automate the process of activating the metrics and generating the config file.&lt;/p&gt;
+&lt;h2&gt;Otel Collector &amp;amp; New Relic&lt;/h2&gt;
+&lt;p&gt;The OpenTelemetry Collector is a powerful tool to collect, process, and export telemetry data. It&apos;s very easy to use and it has a lot of exporters to send the data to different backends. You can use it to collect the MinIO metrics and send them to New Relic or any other backend.&lt;/p&gt;
+&lt;p&gt;The script &lt;a href=&quot;https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-prometheus-sh&quot;&gt;prometheus.sh&lt;/a&gt; generate the configuration file for the Otel and you can run it with the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;otelcol-contrib  --config=config.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It&apos;s very easy to add more exporters to the configuration file. In my case, I use New Relic to monitor the applications, so I added the New Relic exporter to the configuration file.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;exporters:
+  otlphttp:
+    endpoint: &amp;lt;INSERT_NEW_RELIC_OTLP_ENDPOINT&amp;gt;
+    headers:
+      api-key: &amp;lt;INSERT_NEW_RELIC_LICENSE_KEY&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can find more information about the Otel Collector in the &lt;a href=&quot;https://docs.newrelic.com/docs/opentelemetry/get-started/collector-processing/opentelemetry-collector-processing-intro/#minimal-example&quot;&gt;New Relic Otel Collector documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Once the collector is running, you can access the New Relic UI to see the metrics. You can create a dashboard to monitor the MinIO requests and correlate them with the application logs.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;minio-dashboard.jpg&quot; alt=&quot;New Relic MinIO Dashboard&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The dashboard can be imported using the provided JSON template &lt;a href=&quot;https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-newrelic_dashboard-json&quot;&gt;minio-dashboard.json&lt;/a&gt;. The most critical metrics to monitor are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Request counts by operation type, particularly &lt;code&gt;ListObjectsV2&lt;/code&gt; operations since these don&apos;t transfer data but can significantly impact costs. Monitoring these requests helps identify potential optimization opportunities in your application&apos;s listing behavior.&lt;/li&gt;
+&lt;li&gt;The PutObject operation count provides insights into your batching efficiency. By correlating this metric with your job&apos;s configuration parameters, you can fine-tune batch sizes and intervals for optimal performance.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;End-to-end latency is another crucial metric that we monitor. However, since this involves a different monitoring approach and setup, I&apos;ll cover it in detail in an upcoming article focused on latency tracking.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;If you use object storage in your streaming pipelines, it&apos;s very important to minimize the number of requests to the storage. MinIO with proper monitoring will help you to validate the optimizations and reduce the cost of the solution. If you have any questions or comments, please let me know. You can reach me on &lt;a href=&quot;https://bsky.app/profile/galiglobal.com&quot;&gt;BlueSky&lt;/a&gt; or &lt;a href=&quot;https://github.com/antonmry/galiglobal/discussions&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+
+	  </description>
+    </item>
     
     <item>
       <title>Monitoring Kafka clients with KIP-714</title>
@@ -1145,7 +1219,7 @@ kops rolling-update cluster
 &lt;ul&gt;
 &lt;li&gt;validate cluster: kops validate cluster&lt;/li&gt;
 &lt;li&gt;list nodes: kubectl get nodes --show-labels&lt;/li&gt;
-&lt;li&gt;ssh to the master: ssh -i ~/.ssh/id_rsa &lt;a href=&quot;ma&amp;#105;l&amp;#x74;&amp;#111;&amp;#x3a;&amp;#x61;&amp;#x64;m&amp;#105;n&amp;#x40;&amp;#x61;&amp;#112;&amp;#x69;&amp;#46;&amp;#x6b;&amp;#x38;&amp;#x73;&amp;#46;t&amp;#101;&amp;#x73;&amp;#116;&amp;#x2e;&amp;#110;e&amp;#x74;&quot;&gt;&amp;#x61;d&amp;#109;&amp;#105;&amp;#x6e;&amp;#64;ap&amp;#x69;.k&amp;#x38;&amp;#x73;&amp;#46;&amp;#116;e&amp;#115;&amp;#116;.&amp;#x6e;e&amp;#x74;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;ssh to the master: ssh -i ~/.ssh/id_rsa &lt;a href=&quot;&amp;#x6d;a&amp;#105;&amp;#108;t&amp;#x6f;&amp;#58;&amp;#x61;&amp;#x64;&amp;#109;&amp;#x69;&amp;#110;@a&amp;#112;&amp;#x69;&amp;#x2e;&amp;#107;&amp;#56;&amp;#x73;&amp;#46;&amp;#x74;&amp;#x65;&amp;#x73;&amp;#116;.n&amp;#x65;t&quot;&gt;&amp;#97;&amp;#x64;&amp;#109;&amp;#105;&amp;#x6e;&amp;#64;&amp;#97;&amp;#x70;&amp;#x69;.&amp;#x6b;8&amp;#115;&amp;#x2e;&amp;#x74;&amp;#x65;&amp;#x73;&amp;#116;&amp;#x2e;&amp;#x6e;e&amp;#116;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;the admin user is specific to Debian. If not using Debian please use the appropriate user based on your OS.&lt;/li&gt;
 &lt;li&gt;read about installing addons at: &lt;a href=&quot;https://github.com/kubernetes/kops/blob/master/docs/addons.md&quot;&gt;https://github.com/kubernetes/kops/blob/master/docs/addons.md&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;

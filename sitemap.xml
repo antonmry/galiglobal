@@ -12,6 +12,11 @@
     </url>
 
     <url>
+    	<loc>http://localhost:8820//blog/2025/20250204-monitoring-requests-with-minio.html</loc>
+    	<lastmod>2025-02-04</lastmod>
+    </url>
+
+    <url>
     	<loc>http://localhost:8820//blog/2024/20240606-kip-714-monitoring-kafka-clients.html</loc>
     	<lastmod>2024-06-06</lastmod>
     </url>
