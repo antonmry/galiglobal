@@ -21,15 +21,7 @@ environmental sustainability.
 
 I know I've been very lucky so I try to contribute back sharing my learnings in
 [my blog], speaking at local and international [technology conferences] and
-organizing technology events, groups and other activities:
-
-- [VigoJUG] co-organizer of the Vigo Java User Group since 2017.
-- [CoruñaJUG] co-organizer of the Coruña Java User Group since 2018.
-- [LaretasGeek] is a virtual panel and podcast about technology with focus on
-  Java (discontinued).
-- [Streaming Annotated Newsletter]: the last news and interesting articles
-  about streaming platforms and processing frameworks each month in your
-  mailbox (discontinued).
+organizing technology events, groups and other activities.
 
 I've received some awards during my career:
 
@@ -43,18 +35,14 @@ I've received some awards during my career:
 ## Social profile
 
 - Sharing open source side projects and ideas in [GitHub].
-- Tinkering with interactions on [Twitter].
+- Tinkering with interactions on [BlueSky].
 - My professional experience in [LinkedIn].
 - Sharping my coding skills on [Exercism].
 - Reading books on [Goodreads].
 
 [My Thoughts on the Principal Role]: /blog/2021/20210313-The-principal-role.html
-[VigoJUG]: https://www.vigojug.org
-[CoruñaJUG]: https://www.corunajug.org
-[LaretasGeek]: https://twitter.com/laretasGeek
-[Twitter]: https://www.twitter.com/antonmry
-[Twitch]: https://www.twitch.com/antonmry
 [my blog]: https://www.galiglobal.com
+[BlueSky]: https://bsky.app/profile/galiglobal.com
 [Goodreads]: http://www.goodreads.com/antonmry
 [Exercism]: https://exercism.io/profiles/antonmry
 [RSS]: /feed.xml

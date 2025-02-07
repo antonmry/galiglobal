@@ -7,6 +7,9 @@ status=published
 
 ## 2024
 
+- Flink Forward - Cost-Effective Streaming Pipelines with Apache Paimon: [video](https://www.ververica.academy/courses/3d163483-5040-4d60-b5b3-755c3277edf7/activities/45b8d081-140a-48f0-b385-8dd2edb8647d)
+- Factorial - "The cell architecture: deep dive": [tweet](https://x.com/antonmry/status/1851357850662019159)
+- Current - Scaling Data Ingestion: Overcoming Challenges with Cell Architecture: [video and slides](https://current.confluent.io/2024-sessions/scaling-data-ingestion-overcoming-challenges-with-cell-architecture)
 - Datolada - Sistemas de datos: de 0 a ingestar petabytes diarios: [video](https://www.youtube.com/live/5kOry4FJTnQ?feature=shared&t=5687) and [slides](https://docs.google.com/presentation/d/1x9u74TlluxP6JWebcSXSKC6bK-rwd3vvVRxGtJDdvlM/edit?usp=sharing)
 - Codely - Novedades en Java 22 con ejemplos: Stream Gatherers, Foreign Function & Memory API: [video](https://www.youtube.com/watch?v=57JuvUlfzh0) and [code](https://github.com/antonmry/java-playground/blob/master/java22/Notes.md)
 - Kafka Summit - Keep Your Kafka Cloud Costs in Check with Showbacks: [video and slides](https://www.confluent.io/events/kafka-summit-london-2024/keep-your-kafka-cloud-costs-in-check-with-showbacks/)
