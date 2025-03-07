@@ -141,4 +141,4 @@ Metrics should be available in the New Relic dashboard after a few seconds. An [
 
 ## Conclusion
 
-I hope you enjoyed this article and that it helps you to monitor your Kafka. If you have any questions or comments, please let me know.You can reach me on [Twitter](https://www.twitter.com/antonmry) or [GithHub](https://github.com/antonmry/galiglobal/discussions).
+I hope you enjoyed this article and that it helps you to monitor your Kafka. If you have any questions or comments, please let me know.You can reach me on [BlueSky](https://bsky.app/profile/galiglobal.com) or [GithHub](https://github.com/antonmry/galiglobal/discussions).

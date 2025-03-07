@@ -376,4 +376,4 @@ grep -R "example job" $FLINK_HOME/log/
 
 In this article, we have covered the basics and some typical gotchas to work with Apache Flink in local environments. It's really important to invest time in your setup to be productive and have a pleasant experience building your jobs. Each minute you spent improving your workflow will pay off in the future.
 
-Did I miss something? You can comment on [GitHub](https://github.com/antonmry/galiglobal/pull/37) or just drop me a note on [Twitter](https://twitter.com/antonmry)!
+Did I miss something? You can comment on [GitHub](https://github.com/antonmry/galiglobal/pull/37) or just drop me a note on [BlueSky](https://bsky.app/profile/galiglobal.com)!

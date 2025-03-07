@@ -6,4 +6,4 @@ I've published my first article in the New Relic blog! [Monitoring Apache Kafka 
 
 It has been a very interesting journey and I've learnt a lot in the process. In particular about Cloud providers and how to tune Kafka servers and huge workloads for them.
 
-Enjoy the article and let me know your thoughts on [Twitter](https://www.twitter.com/antonmry).
+Enjoy the article and let me know your thoughts on [BlueSky](https://bsky.app/profile/galiglobal.com).

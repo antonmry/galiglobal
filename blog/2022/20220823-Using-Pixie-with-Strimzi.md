@@ -206,4 +206,4 @@ In this article, we have covered how to use eBPF and Pixie to monitor Kafka in a
 
 There are more information in the [Pixie Kafka Monitoring](https://docs.pixielabs.ai/tutorials/pixie-101/kafka-monitoring/) tutorial and in this [Kafka Summit session](https://www.confluent.io/events/kafka-summit-london-2022/monitoring-kafka-without-instrumentation-using-ebpf/).
 
-Did I miss something? You can comment on [GitHub](https://github.com/antonmry/galiglobal/pull/41) or just drop me a note on [Twitter](https://www.twitter.com/antonmry)!
+Did I miss something? You can comment on [GitHub](https://github.com/antonmry/galiglobal/pull/41) or just drop me a note on [BlueSky](https://bsky.app/profile/galiglobal.com)!

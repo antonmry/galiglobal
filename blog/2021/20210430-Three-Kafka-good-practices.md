@@ -59,6 +59,6 @@ One of the problems with small clusters is when you want to join data from diffe
 
 This is a list of only three things (but there are much more!) that may help to use Kafka properly and avoid the need to look for alternatives. They are based on my previous experience. They worked well for me until now but don't use them blindly. It's perfectly fine to break any of those rules, the point is to do it by being aware of the challenges and plan for the consequences.
 
-Did I miss something? You can comment on [GitHub](https://github.com/antonmry/galiglobal/pull/39) or just drop me a note on [Twitter](https://twitter.com/antonmry)!
+Did I miss something? You can comment on [GitHub](https://github.com/antonmry/galiglobal/pull/39) or just drop me a note on [BlueSky](https://bsky.app/profile/galiglobal.com)!
 
 Update: this article made it to [DZone](https://dzone.com/articles/three-simple-ideas-to-make-your-life-easier-with-k).

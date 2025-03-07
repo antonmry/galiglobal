@@ -94,7 +94,7 @@ In summary, as Principal Software Engineer, promotions aren't going to be the go
 
 ## Conclusions
 
-I didn't cover everything I would like but this is article is already too long and I don't want to write a book (there is already one: [Staff Engineer: Leadership beyond the management track](https://www.goodreads.com/book/show/56481725-staff-engineer)). I would love to know what do you think about the Principal role, especially if you disagree with me. Leave a comment on [GitHub](https://github.com/antonmry/galiglobal/pull/40) or just drop me a message on [Twitter](https://twitter.com/antonmry), I'm always open to have a chat about the role or share my experiences.
+I didn't cover everything I would like but this is article is already too long and I don't want to write a book (there is already one: [Staff Engineer: Leadership beyond the management track](https://www.goodreads.com/book/show/56481725-staff-engineer)). I would love to know what do you think about the Principal role, especially if you disagree with me. Leave a comment on [GitHub](https://github.com/antonmry/galiglobal/pull/40) or just drop me a message on [BlueSky](https://bsky.app/profile/galiglobal.com), I'm always open to have a chat about the role or share my experiences.
 
 ## Update
 
