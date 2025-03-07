@@ -23,364 +23,65 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>JUnit4, JUnit5 and Spock framework comparison</h1>
-	</div>
-
-	<p><em>11 January 2018</em></p>
-
-	<p><div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>This article has been published on <a href="https://dzone.com/articles/junit4-junit5-and-spock-framework-comparison">DZone</a> with editor revision so I recommend you to read it there.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_introduction_and_motivation">Introduction and motivation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Recently I gave a talk in my local Java User Group about unit testing. Some of the content of the talk was about some popular libraries you can use in your Java project. I&#8217;ve reviewed <a href="http://junit.org/junit4/">JUnit4</a>, <a href="http://junit.org/junit5/">JUnit5</a> and <a href="http://spockframework.org/">Spock framework</a>. Many of the attendees were quite surprised with the differences. In this post, I will summarize the most commented: assert, parametrized tests and mocking.</p>
-</div>
-<div class="paragraph">
-<p>I always like to demonstrate the concepts with examples and live coding so I chose a simple algorithm: <a href="https://en.wikipedia.org/wiki/Fibonacci">Fibonacci number calculator</a>. If you don&#8217;t know it, it&#8217;s just to generate numbers which are the sum of the two previous ones in the series: <code>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377</code>.</p>
-</div>
-<div class="paragraph">
-<p>I used the typical (and with very bad performance) implementation:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    private static int fibonacci(int n) {
-        if (n &lt;= 1) return n; else
-            return fibonacci(n-1) + fibonacci(n-2);
-    }</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_junit4">JUnit4</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>I started explaining JUnit4. It makes sense because it&#8217;s the most popular library and the base for many others. I started explaining <code>assertTrue</code> and then, more advances usages, including <code>assertEquals</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    @Test
-    public void improvedFibonacciTestSimple() {
-        FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
-        assertEquals(f.fibonacci(4), 3);
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If it&#8217;s false, it would give you an error like:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>java.lang.AssertionError:
-Expected :3
-Actual   :2</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Not very spectacular but quite useful.</p>
-</div>
-<div class="paragraph">
-<p>The next thing was to show how to write a parametrized test, a nice feature very useful for test algorithms. In JUnit4 is quite tricky. You need to create a Collection with the annotation <code>@Parameters</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    @Parameters
-    public static Collection&lt;Object[]&gt; data() {
-        return Arrays.asList(new Object[][]{
-                {0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}, {6, 8}
-        });
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then we create some local variables and a constructor:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    private int fInput;
-    private int fExpected;
-
-    public ParametrizedFibonacciJUnit4(int input, int expected) {
-        fInput = input;
-        fExpected = expected;
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and finally, we can use the <code>assertEquals</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    @Test
-    public void test() {
-        FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
-        assertEquals(fExpected, f.fibonacci(fInput));
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It&#8217;s quite verbose and if the test fails, you would obtain a message which doesn&#8217;t indicate clearly the order or the parameters used (but your IDE probably will help on that):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>java.lang.AssertionError:
-Expected :0
-Actual   :1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>I didn&#8217;t explain mocking here because an external library as <a href="http://site.mockito.org/">Mockito</a> is usually required when you want to use mocking with JUnit4. Mockito is great but I didn&#8217;t have enough time to explain it.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_junit5">JUnit5</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Since September 2017, JUnit5 is considered stable and it should be your choice over JUnit4 for several reasons. It has better support for Java 8 and Lambdas, it&#8217;s compatible with JUnit4 (you can have both which it&#8217;s great to migrate in a progressive way) and it provides new runners and better integrations.</p>
-</div>
-<div class="paragraph">
-<p>I repeated the same process. First, show an <code>assertEquals</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    @Test
-    public void bestFibonacciTestSimple() {
-        FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
-        Assertions.assertEquals(f.fibonacci(4), 3);
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>There are important advances in other <code>assert</code>, for instance the timeout, but for <code>assertEqual</code> with integers, it&#8217;s practically the same. Also the message is similar if there is an error:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>org.opentest4j.AssertionFailedError:
-Expected :3
-Actual   :2</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Where we can find important changes is in the parametrized test. First, we need to use the <code>@ParametrizedTest</code> annotation and we can specify a name using <code>{</code> and <code>}</code> to indicate important parameters as <code>index</code> as <code>arguments</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    @ParameterizedTest(name = "run #{index} with [{arguments}]")</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now we can define our test. We start defining the entries to test function with the annotation <code>@CsvSource</code>. Each item will replace the parameters in the test function, in this case, <code>input</code> and <code>expected</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="java">    @CsvSource({"1, 1", "4, 3"})
-        public void test2(int input , int expected) {
-                FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
-             	Assertions.assertEquals(f.fibonacci(input), expected);
-         }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This is lot better than the JUnit4 implementation. Also, if there is a fail in the test, we obtain a better message indicating the difference, the index causing the fail and the used parameters.</p>
-</div>
-<div class="paragraph">
-<p>Finally, it&#8217;s the same for mocking as JUnit4: you normally use an external library so I didn&#8217;t explained it.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_spock_framework">Spock framework</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The last one was the Spock framework. It&#8217;s based in <a href="http://groovy-lang.org/">Apache Groovy</a>. If you don&#8217;t know Groovy, it&#8217;s a language which you can use with the JVM and it interact very well with Java. It allows write less code in a more clear way. It&#8217;s very powerful. Some years ago we started to use it for "non critical" development: tests, dependency management, Continuous Integration, load testing and in any place where we need some configuration file avoiding XML, JSON or any format like that. We continue to develop in Java the core of our software and it isn&#8217;t a problem because both languages play very well together. If you know Java, you know Groovy&#8230;&#8203; so we have the best of both worlds.</p>
-</div>
-<div class="paragraph">
-<p>Write a test in Spock is quite different, it would be like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">    def "Simple test"() {
-        setup:
-        BadFibonacci f = new BadFibonacci()
-
-        expect:
-        f.fibonacci(1) == 1
-        assert f.fibonacci(4) == 3
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Basically, we can use <code>def</code> where we don&#8217;t care about the type. The name of the function can be defined between quotation marks, which allow us to use better naming for our tests. We have some special words as <code>setup</code>, <code>when</code>, <code>expect</code>, <code>and</code>, etc. to define our test in a more descriptive and structured way. And we have a power assert, which is part of the language itself, proving nice messages:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>Condition not satisfied:
-
-f.fibonacci(4) == 2
-| |            |
-| 3            false
-BadFibonacci@23c30a20
-
-Expected :2
-
-Actual   :3</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It provides all the information: the returned value (actual), the expected value, the function, the parameter, etc. <code>assert</code> is Groovy is really handy.</p>
-</div>
-<div class="paragraph">
-<p>Now it&#8217;s the turn for the parametrized test. It would be something like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">    def "parametrized test"() {
-        setup:
-        BadFibonacci f = new BadFibonacci()
-
-        expect:
-        f.fibonacci(index) == fibonacciNumber
-
-        where:
-        index | fibonacciNumber
-        1     | 1
-        2     | 1
-        3     | 2
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>After show this I heard some 'oooh' in the audience. The magic of this code is: you don&#8217;t need to explain it! There is a table in the <code>where:</code> section and the values in <code>expect:</code> are automagically replace it in each iteration. If there is a fail, the message is crystal clear:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>Condition not satisfied:
-
-f.fibonacci(index) == fibonacciNumber
-| |         |      |  |
-| 2         3      |  4
-|                  false
-BadFibonacci@437da279
-
-Expected :4
-
-Actual   :2</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then I&#8217;ve introduced very shortly mocks and stubs. <a href="https://en.wikipedia.org/wiki/Mock_object">A mock</a> is a object you create in your test to avoid to use a real object. For example, you don&#8217;t want to do real web requests or print a page in your tests, so you can use a mock from an interface or another object.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">    Subscriber subscriber = Mock()
-
-    def "mock example"() {
-        when:
-        publisher.send("hello")
-
-        then:
-        1 * subscriber.receive("hello")</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Basically, you create the <code>subscriber</code> interface as Mock and then you can invoke the methods. The <code>1 *</code> is another nice feature of Spock, it specify how many messages you should receive. Cool, right?.</p>
-</div>
-<div class="paragraph">
-<p>In some occasions, you need to define what return the methods of your mocks. For that, you can create <a href="https://en.wikipedia.org/wiki/Method_stub">a stub</a>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">    def "stub example"() {
-        setup:
-        subscriber.receive(_) &gt;&gt; "ok"
-
-        when:
-        publisher.send("message1")
-
-        then:
-        subscriber.receive("message1") == 'ok'
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this case, with the <code>&gt;&gt;</code> notation we are defining the method <code>receive</code> should return <code>ok</code> independently of the parameter (<code>_</code> means any value). The test pass without any problem.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_conclusions">Conclusions</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>I don&#8217;t like to recommend one library or another: all of the them have their use cases. It&#8217;s pretty clear we have great options in Java and I just give some examples. Now it&#8217;s your turn to decide which it&#8217;s better for you. The only thing I can say: write test and master your library of choice, it would make you a better developer!</p>
-</div>
-<div class="paragraph">
-<p>If you want to take a deeper look to the examples, you will find them in <a href="https://github.com/vigojug/developer-vago-1-unit-testing">this GitHub repository</a>. Enjoy!</p>
-</div>
-<div class="paragraph">
-<p><a href="https://github.com/antonmry/galiglobal/pull/28">Comments</a></p>
-</div>
-</div>
-</div></p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
+
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
+    </script>
+
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('20180111-JUnit4-JUnit5-Spock-Comparisson.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
 
     <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
         document.write('<script src="http://'
@@ -396,9 +97,6 @@ Actual   :2</code></pre>
 
       ga('create', 'UA-57796882-1', 'auto');
       ga('send', 'pageview');
-
     </script>
-
   </body>
 </html>
-

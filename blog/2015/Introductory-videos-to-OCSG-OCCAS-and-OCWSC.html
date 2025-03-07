@@ -23,93 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Introductory videos to OCSG, OCCAS and OCWSC</h1>
-	</div>
-
-	<p><em>11 June 2015</em></p>
-
-	<p><p>Tomorrow I will be travelling to <a href="http://tadhack.com/2015/">TADHack</a> in Lisbon and I am so excited! It's going to be great! As part of the initiatives we've done to promote <a href="http://tadhack.optaresolutions.com/">the Oracle sandbox</a> and help the developers, I've recorded three videos to introduce the three Oracle SDP applications. Even if they are oriented to the TADHack, they are a good resource for anyone interested in the products.</p>
-<h2>Oracle Communications WebRTC Session Controller</h2>
-<p>In this video, we are going to introduce Oracle Communications WebRTC Session Controller and how to use it to add audio, video and data communications to web and mobile applications. It provides an introduction to a sample application, a good starting point to develop more complex services. It ends explaining how to add a widget which allows developers to add Real-time communication in a very easy way.</p>
-<iframe width="420" height="315" src="https://www.youtube.com/embed/PBUyris2GUA" frameborder="0" allowfullscreen></iframe>
-<h2>Oracle Communications Service Gatekeeper</h2>
-<p>In this video, we are going to introduce the Telecom APIs available in the Oracle Communications sandbox: Messaging, Payment and Location. Developers will learn how to start to work with those APIs and how to add them to their own applications and hacks.</p>
-<iframe width="420" height="315" src="https://www.youtube.com/embed/e6W3Dpx4Rsc" frameborder="0" allowfullscreen></iframe>
-<h2>Oracle Communications Converged Application Server</h2>
-<p>In this video, we are going to introduce Oracle Communications Converged Application Server and how to design and build applications able to manage HTTP and SIP protocols at the same time. We'll review also the new SIP Servlet 2.0 specification and the JSR-359 recently approved. We'll end the video reviewing a B2BUA application and learning to modify it to build more complex applications.</p>
-<iframe width="420" height="315" src="https://www.youtube.com/embed/50fZ1-3dpnE" frameborder="0" allowfullscreen></iframe>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('Introductory-videos-to-OCSG-OCCAS-and-OCWSC.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

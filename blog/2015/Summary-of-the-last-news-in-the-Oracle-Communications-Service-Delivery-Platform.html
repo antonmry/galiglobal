@@ -23,123 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Summary of the last news in the Oracle Communications Service Delivery Platform</h1>
-	</div>
-
-	<p><em>21 May 2015</em></p>
-
-	<p><p>When I've started this blog, my main motivation was to provide a central place with information about Service Delivery Platforms, mainly related to the Oracle Communication suite because it's what I know. But I am failing in this goal. I am very busy from the beginning of the year and I don't find time enough to write posts and articles. Excuses. I should keep in mind the original idea and don't miss the opportunity to keep readers updated with the last news.</p>
-<p>So, this post is going to be a summary of the releases and news in the Oracle Comms SDP.... and there are a lot!. Even a new product!.</p>
-<h1>Oracle Communications Services Gatekeeper (aka Gatekeeper)</h1>
-<p>I wrote about the new 6.0 version <a href="/2015/01/23/OCSG-6-0v1-generally-available-new-features-introduction/">here</a> and even I've published <a href="/2015/04/30/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1/">the first part of a how-to explaining the installation</a>. But there are two very interesting updates.</p>
-<h2>Oracle Communications Services Gatekeeper 6.0 Patch Set 1 Released</h2>
-<p>New patch solving more than 20 bugs: <a href="https://support.oracle.com/epmos/faces/DocumentDisplay?_afrLoop=447946421774684&amp;id=1993751.1&amp;_afrWindowMode=0&amp;_adf.ctrl-state=1de1letpct_4">Doc ID 1993751.1</a>. Whatever you are doing with OCSG, the installation of this patch should be mandatory.</p>
-<p>It provides also patches for JDK <a href="https://support.oracle.com/epmos/faces/ui/patch/PatchDetail.jspx?parent=DOCUMENT&amp;sourceId=1993751.1&amp;patchId=20347164">Patch 20347164</a>, Weblogic <a href="https://support.oracle.com/epmos/faces/ui/patch/PatchDetail.jspx?parent=DOCUMENT&amp;sourceId=1993751.1&amp;patchId=19637454">Patch 19637454</a> and Coherence <a href="https://support.oracle.com/epmos/faces/ui/patch/PatchDetail.jspx?parent=DOCUMENT&amp;sourceId=1993751.1&amp;patchId=20164069">Patch 20164069</a>, be sure to apply them!</p>
-<h2>Oracle Communications Services Gatekeeper Statement of Direction - May 2015</h2>
-<p>Oracle has published recently a SoD for OCSG. It's always interesting to know what Oracle is working on. Here, <a href="https://support.oracle.com/epmos/faces/DocumentDisplay?_afrLoop=448644669159009&amp;id=1081178.1&amp;_afrWindowMode=0&amp;_adf.ctrl-state=1de1letpct_78">Doc ID 1081178.1</a>, you can find it. The document deserves a special post for it!.</p>
-<h1>Oracle Communications Application Server (aka OCCAS)</h1>
-<p>A new version for our favorite AS... from 5.1 to 7.0. A lot of new changes!. The most important item, it's the first implementation of the recently released <a href="https://www.jcp.org/en/jsr/detail?id=359">JSR 359: SIP Servlet 2.0</a>. There are also other things, for instance, new (and more modern!) versions of the JDK and Weblogic. This is not a release with a lot of new features but with a lot of improvements for developers. Here it's the announcement:</p>
-<blockquote>
-<p>Oracle Communications Converged Application Server (OCCAS) 7.0 release is now available to customers/partners for download. OCCAS 7.0 is the industry’s first JSR 359 (SIP Servlet 2.0) compliant SIP Application Server/Communications Middleware based on Java EE 6/Java EE 7.  OCCAS 7.0 also introduces Coherence based in-memory, distributed cache data architecture that enables the customers to dynamically scale mission-critical applications.  OCCAS 7.0 also introduces a flexible overload framework and monitoring functions which along with the auto scaling capabilities makes it Cloud/NFV ready.</p>
-<p>Here are some key capabilities of the release:</p>
-<p>** SIP Servlet 2.0/ JSR 359 Compliance ** * Makes SIP Servlet Development more agile  (Java EE 6/7, CDI, POJOs, Annotations etc) * Meets most demanding requirements of communications middleware (Converged container, abstraction, portability, standards compliance etc) * Fosters decentralized ecosystem  (Extensibility, Pluggability etc)</p>
-<p>** Coherence based data architecture ** * Elasticity – Scale in/out * Reliability/fault tolerance/HA * Performance</p>
-<p>** Monitoring and Overload Protection ** * Overload Framework/ Custom KPI policies and threshold configuration * Memory Based Overload Protection</p>
-<p>** Enhanced Diameter Support ** * SIP Application Interworking with Diameter</p>
-<p>** Virtualization Technologies Support ** * OVM &amp; KVM Certification</p>
-<p>** Platform Upgrade ** * Based on WebLogic 12.1.3  (latest release)</p>
-</blockquote>
-<p>Source: <a href="https://community.oracle.com/docs/DOC-913298?sr=inbox&amp;ru=831131">Oracle Community</a></p>
-<h1>Oracle Communications WebRTC Session Controller (aka WSC)</h1>
-<h2>New version of Oracle Communications WebRTC Session Controller</h2>
-<p>WSC 7.1 was announced on December 2014 <a href="http://www.oracle.com/us/corporate/press/2391012?rssid=rss_ocom_pr">here</a> but it wasn't Generally Available until March 2015. Bugs fixed and some interesting features as invoke REST interfaces from the Groovy scripts or some improvements in the registrar. Check the <a href="http://docs.oracle.com/cd/E55119_01/doc.71/e55133/toc.htm">Release note</a> for more info.</p>
-<h2>iOS SDK and Android SDK finally available</h2>
-<p>Recently the SDKs for Android and iOS have been published. You can find them <a href="http://www.oracle.com/technetwork/developer-tools/webrtc-2525637.html">here</a>. Also there are some excellent how-to wrote by Leif Lourie <a href="https://apexapps.oracle.com/pls/apex/f?p=44785:2:109737384896297:::2,CIR,RIR:P2_PRODUCT_ID,P2_RELEASE_ID:3479">here</a>. As usual, great work from Leif.</p>
-<h1>Oracle Communications Evolved Communications Application Server (aka eCAS)</h1>
-<p>The most important news for the end: a new product based in OCCAS. Here the note:</p>
-<blockquote>
-<p>As mobile operators drive their networks toward an all-IP and virtualized state, they require the means to design and deliver compelling high definition voice, video and multimedia offers via Voice over LTE (VoLTE) and Voice over WiFi (VoWiFi). Oracle Communications Evolved Communications Application Server (OCECAS) brings a sophisticated, yet easy-to-use network service design and delivery product to satisfy that need. OCECAS works out of the box; it is NFV-enabled and standards compliant; and it provides network-grade speed and reliability with the cost profile of an IT product.</p>
-<p>Beyond service delivery, OCECAS accelerates the operator's move to better network cost performance by driving subscribers to offers that engage IP assets, allowing the operator to retire more traditional components. This drive toward the single IP network also facilitates spectrum reuse for increased monetization opportunity. OCECAS is a significant step forward in the journey to the all-IP, virtualized network destination.</p>
-<p>Operators will also enjoy lower service update costs as the flexible user interface allows service changes to be implemented without costly, time-consuming software coding or vendor customizations.</p>
-<p>The Oracle Communications Evolved Communications Application Server includes:</p>
-<p>** Key Capabilities ** - Out of the box VoLTE and VoWiFi application designed for GSMA standards for immediate productivity - Built from the ground up to support NFV - Standards-compliant IMS interfaces built with SIP, Diameter and Java - Easy to use, yet powerful session design center providing intuitive drag and drop application configuration - Continuous design-time validation enforcement and version control to ensure quality - Automated deployment across testing, staging and production environments - Flexible data federation across multiple sources to prevent costly custom integrations - Productized integration with Oracle Communications Core Session Manager (OCCSM) - Runtime powered by the Oracle Communications Converged Application Server (OCCAS) 7.0 - Interoperability testing underway with Radisys and Dialogic Media Resource Functions - Integration of inbound third-party services, enabling differentiated offers</p>
-<p>** Benefits ** - Productive from the first day - Delivers true service agility for improved time to market - Enables attractive, differentiated offer creation - Freedom from vendor-specific customizations - Virtualized, interoperable, standards-compliant - Robust, network-grade operation on industry-standard platforms - Low TCO</p>
-</blockquote>
-<p>Source: <a href="https://community.oracle.com/docs/DOC-913067?sr=inbox&amp;ru=831131">Oracle Community</a> and also check the Press note <a href="http://www.oracle.com/us/corporate/press/2526355?rssid=rss_ocom_pr">here</a>. There is also a <a href="https://eventreg.oracle.com/profile/web/index.cfm?PKwebID=0x22479021e2&amp;varPage=home">webinar</a>, don't miss it if you are interested.</p>
-<p>For me it's really good to have a release like this. Being OCCAS based, it's very easy for us to learn the new product and there are some interesting integration with ACME products. I will build a laboratory very soon and I hope to find time to write more about this new product.</p>
-<p>Stay tunned!</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('Summary-of-the-last-news-in-the-Oracle-Communications-Service-Delivery-Platform.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

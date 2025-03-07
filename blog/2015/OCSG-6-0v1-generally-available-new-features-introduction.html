@@ -23,104 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>OCSG 6.0v1 generally available: new features introduction</h1>
-	</div>
-
-	<p><em>23 January 2015</em></p>
-
-	<p><p>The new OCSG version is available and there are a lot of new interesting things, starting with a Documentation reorganization.</p>
-<p><img src="/images/OCSG-doc-v6.png" alt="OCSG v6 documentation" /></p>
-<p>This is the press note (source <a href="https://community.oracle.com/docs/DOC-894950?sr=stream#comment-897214">Oracle Community</a>):</p>
-<blockquote>
-<p>Oracle Communications is pleased to announce that as of Thursday, 22 January 2015, we ntroduced the most comprehensive API exposure platform in the industry with the release of Oracle Communications Services Gatekeeper 6.0 (OCSG 6.0).</p>
-<p>OCSG 6.0 introduces expansive API Management capabilities to manage the entire API lifecycle enabling enterprises and CSPs to accelerate internal development, engage with partners and monetize assets. OCSG 6.0 delivers this alongside industry leading SLA management, analytics and an extensive array of built-in communications services.</p>
-<p>As part of the OCSG 6.0 release, a new OCSG-based solution, called “Network Policy as a Service” (NPaaS), was launched by integrating the Oracle Communications Policy Management (OCPM) PCRF to provide out-of-the-box exposure of network policy for both telephony and cable networks. This allows CSPs and partners to align the data bandwidth with the digital service being delivered, ensuring a higher rate of customer satisfaction. OCSG 6.0’s API Management, simplified configuration and lightweight deployment features enable new  API exposure use cases for enterprise IT integration, including: * Contact center application enablement * API exposure for Communications Enabled Business Processes (CEBP) and Unified Communications (UC)</p>
-<p>** KEY FEATURES OF THE OCSG 6.0 RELEASE ** * API Management made powerful and simple * Web Service API generation in the Portal allows APIs to be built in minutes * API catalog and versioning * Onboard and manage partners * API Monitoring, analytics, metering and charging * Management and partner portals * Simplified configuration and deployment with installation in 15 minutes * Lightweight single tier deployment option * Integration with the Oracle Communications Policy Management (OCPM) PCRF to safely and securely expose network policy through the Parlay X and Restful QoS APIs * Enhanced Oauth integration simplifies integration with SSO and IDM * Enterprise Manager Cloud Control integration facilitates cloud-based deployments * Advanced API firewall provides protection against a multitude of security threats * Integration with OCCAS Service Controller provides a broad array of SS7 interface options</p>
-<p>Product releases are available for download from the <a href="https://edelivery.oracle.com/">Oracle Software Delivery Cloud</a>.</p>
-<p>More documentation can be found via Services <a href="http://docs.oracle.com/cd/E50778_01/index.htm">Gatekeeper 6.0 Documentation</a></p>
-</blockquote>
-<p>It's soon yet to write a detailed analysis but I would like to highlight some takeaways. This is not the typical release.. in fact, there isn't an official  announcement as we've seen previously. There are a lot of small improvements to help operators and system integrators to work with OCSG which it's great. Some of them:</p>
-<ol>
-<li>** <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e54151/toc.htm">New Default Single-system Installation Option and Getting Started Guide</a>:** everything in a single package (database included), it's going to save us a lot of time and PoCs will be easier. Great point.</li>
-<li>** <a href="http://docs.oracle.com/cd/E50778_01/index.htm">Documentation Improvements</a>:** I've to check them yet but the new structure looks better and, for sure, some sections in the 5.1 documentation could be improved/corrected.</li>
-<li>** <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e55395/ipl_pcrf.htm#SGIPL700">PCRF Integration Example</a>:** This is something I really appreciate because I was working on that and it's really hard because of the lack of information and references to the Tekelec product. I will do it very soon but after a first look, it lacks a bit more of detail in the Tekelec PCRF setup.</li>
-<li>** <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50764/prm_intro.htm#SGPRM106">Extending the Portal User Interfaces and Portal Developer's Guide</a>: ** I know there are a lot of improvements in this part. An easier installation and customization, for sure, one of the points everybody asked with the previous version.</li>
-<li>** <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e54898/toc.htm">New API Management Features</a>: ** OCSG competes some times (but not always) with more general products as API gateways. Improvements in this part are warmly welcomed.</li>
-</ol>
-<p>I miss some things as more Geographic redundancy improvements and more debugging options but it's soon yet to know if they're or not in this release. Anyway, there are more interesting improvements, consult the <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50775/toc.htm">Release Note</a> for detailed information.</p>
-<p>I will try to write some specific articles showing the new features. Just <a href="http://www.serviceandnetworkevolution.com/">subscribe to the blog</a> to keep yourself informed.</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('OCSG-6-0v1-generally-available-new-features-introduction.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

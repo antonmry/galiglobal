@@ -62,3 +62,32 @@ body h2 {
 body {
   font-size: 1.8em;
 }
+
+/* Custom font definitions */
+@font-face {
+    font-family: 'ComicShanns';
+    src: url('../fonts/ComicShannsMonoNerdFont-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ComicShanns';
+    src: url('../fonts/ComicShannsMonoNerdFont-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Override default font-family settings */
+html, body {
+    font-family: 'ComicShanns', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'ComicShanns', sans-serif;
+}
+
+/* For code blocks, use the mono version */
+code, kbd, pre, samp {
+    font-family: 'ComicShanns', monospace;
+}

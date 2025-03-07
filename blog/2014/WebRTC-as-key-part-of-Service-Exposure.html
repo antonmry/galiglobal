@@ -23,87 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>WebRTC as key part of Service Exposure</h1>
-	</div>
-
-	<p><em>01 October 2014</em></p>
-
-	<p><p>Some weeks ago, Oracle has proposed us to write an article about WebRTC to be published in its blog: <a href="http://blog.webrtc-solutions.com">http://blog.webrtc-solutions.com</a>. I was in charge of the main edition, with some colleges helping in the revision (thanks Sandra, Eva and Nacho!).  It was a good time to review why WebRTC is so important to us. There are a lot of companies involved today with WebRTC, different sectors, different sizes and types as you can see in the <a href="http://www.cio2cmo.com/webrtc-landscape-infographic-june-2014/">The WebRTC Landscape Infographic</a> from Brad Bush.</p>
-<p><img src="http://www.cio2cmo.com/wp-content/uploads/2014/06/WebRTC-Landscape-Infographic-2014-06.png" alt="The WebRTC Landscape Infographic – June 2014" /></p>
-<p>WebRTC is so exciting for us because very specific reasons... so  I've developed our motivations in the article: as expert in telecom service exposure, WebRTC is the perfect choice to expose one of the main telecom assets: voice, and with less importance yet, video. In fact, I see WebRTC as a key part of the Service Delivery Platforms of the near future.</p>
-<p>The article: <a href="http://blog.webrtc-solutions.com/webrtc-as-key-part-of-service-exposure/">WebRTC as key part of Service Exposure</a></p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('WebRTC-as-key-part-of-Service-Exposure.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

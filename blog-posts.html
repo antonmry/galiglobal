@@ -62,8 +62,8 @@
       document.addEventListener('DOMContentLoaded', async () => {
         try {
           // Load components
-          await loadContent('navbar.html', 'navbar-container');
-          await loadContent('footer.html', 'footer-container');
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
 
           // Load markdown content
           const response = await fetch('blog-posts.md');

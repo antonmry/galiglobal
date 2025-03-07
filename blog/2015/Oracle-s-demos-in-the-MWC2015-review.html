@@ -23,96 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Oracle's demos in the MWC2015 review</h1>
-	</div>
-
-	<p><em>15 April 2015</em></p>
-
-	<p><p>This March has been crazy. Starting with the Mobile World Congress and next week flying to Brazil for three weeks because of an Oracle Comms project... Impossible to find time to tweet, blog or whatever, and it's a pity because there a lot of news!</p>
-<p>Let me start from the beginning: the Mobile World Congress. I always like to assist to this event. Everybody is there, so it's very tired but also very productive. I've participated in more than 20 meetings, some conferences, the amazing <a href="http://www.meetup.com/WebRTC-Barcelona/">WebRTC Meetup</a> organized by our friends Quobis (don't miss the <a href="https://www.youtube.com/watch?v=B-81k_pDU24">Stefano Gioia presentation</a>) and, this year for first time, I was able to find some time slot to see demos.</p>
-<p>When I've arrived to the Oracle booth, I quickly noticed the key topic of this year: Network Function Virtualization (NFV). So, it's not strange most of the demos were related to this in some way. I've started with a demo using the <a href="http://www.oracle.com/us/products/applications/communications/diameter-signaling-router/index.html">Diameter Signaling Router</a>, a Tekelec product. The demo was mainly showing how they are able to add new nodes to increase the processing capacity dynamically. They defined it as NFV compliant and well.. I was a bit disappointed with this. For me, NFV is not to be able to add new nodes to a cluster system.. it's the capacity to increase the resources dynamically.... and always in the same way, a centralized way. And this should be the point. NFV shouldn't be virtualization, clustering or geographic-redundancy... they were invented some time ago. The other thing I didn't like: the solutions wasn't based in Coherence or even Weblogic... which it should be pointless when you are in an Oracle booth. Anyway, the product looks very interesting, robust and well-designed.. and the people in the booth were really professional and skilled with diameter.</p>
-<p>I jumped to the next demo and I was very pleased to see <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html">Services Gatekeeper</a> integrated with the Oracle Tekelec PCRF... very interesting use case. I've to try it but I don't know the Tekelec PCRF and it's not easy to find documentation about it (I mean, a simple how-to). There are good documentation in the OCSG side, <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e55395/ipl_pcrf.htm#SGIPL700">Integrating Services Gatekeeper with a PCRF</a>, but it lacks the PCRF steps.</p>
-<p>I continued with a huge demo involving <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html">Services Gatekeeper</a>, <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/converged-application-server-edition/overview/index.html">Converged Application Server</a> and <a href="http://www.oracle.com/us/products/applications/siebel/overview/index.html">Siebel</a>. The use case is very well designed: the subscriber can browse the Siebel front-end where he has a lot of information available and now, he has also an interface to watch movies (or whatever) in streaming.. something like Netflix but linked to the CSP account. The subscriber choose a movie to watch and he can choose between pay the total amount (using his billing account in the CSP) or save some money watching some advertisement sponsored by Service Providers/Third parties (very clever use of the OCSG PRM interface!). The demo is very visual and the <a href="https://twitter.com/SteveNorthridge">@SteveNorthridge</a> explanations very clear to understand the use case and possibilities. I am sure we'll speak a lot about this demo.</p>
-<p>The next demo it's well know: the WebRTC Real state demo. I was in the event where it was showed the first time and I am never tired of it. Here it's the video, I am sure <a href="https://twitter.com/Doug_Tait">@Doug_Tait</a> explains it better than me :-)</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/t2CZxyR3ftw" frameborder="0" allowfullscreen></iframe>
-<p>There was also a demo showing <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/overview/index.html">Oracle Communications Unified Communications Suite</a> enhanced with WebRTC capabilities. It makes sense combine <a href="http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html">WebRTC Session Controller</a> with different Oracle products, and UCS is the logical first step. In the <a href="https://wikis.oracle.com/display/CommSuite/Overview+of+Convergence+with+WebRTC">Oracle wiki</a> there a lot of good information about it.</p>
-<p>I spend some time in the Analytics demo. It's not my area but the use case are pretty interesting, specially related to churn detection and some of the systems I work with are a good source of information. Furthermore the company where I work, Optare Solutions, is doing <a href="http://optaresolutions.com/innovacion/">some interesting things</a> related to this and the guy in the stand was really kind and skilled in the subject.</p>
-<p>After that I jumped to the most interesting demo for me: the whole NFV solution. I didn't have luck this time because the main analyst (someone I had previous meeting with) was busy all the time and I didn't have the opportunity to have all my questions answered. Anyway, I found out some interesting points: * The solutions look good, very complete and mature, using a mix of Oracle technologies including virtualization, Oracle OSS (an old friend of mine, UIM) and Oracle ACME products. Oracle has a huge portfolio so it makes sense to use them instead of reinvent the wheel. * It's very flexible and powerful but it has a cost: it's complex because it involves some big products. Very good for carriers but no so good for small companies. * Openstack as cloud computing platform software but it's not mandatory, you can choose Oracle VM Server, for example.</p>
-<p>And for me the most important point, Oracle is starting to include Network functions. And it's easy, because the Oracle technologies are based in Java / Weblogic and they have some interesting Network applications, as for example <a href="http://www.oracle.com/us/products/applications/communications/unified-communications/converged-application-server-edition/overview/index.html">Oracle Communications Converged Application Server (OCCAS)</a> or the <a href="http://www.oracle.com/us/products/applications/communications/application-session-controller/index.html">Oracle Communications Application Session Controller</a>. I expect very interesting news in the next months related to this and it's going to be big, because this is something only Oracle can provide so easily, so a good competitive advantage over their competitors in the NFV area. Also don't miss [the demo with Intel](Oracle Communications Advances Network Function Virtualization by Delivering Carrier-Grade Data Center Performance) announced some days ago.</p>
-<p>I ended the tour with a visit to Connected Vehicle demo. It's not related to any Oracle Comms product but I worked in a similar project some months ago and Oracle solutions are always interesting. The demo isn't very impressive but it's amazing how they are using Java to build it. I thought a lot on it and how to use it for other use cases. Here it's <a href="http://www.oracle.com/us/solutions/internetofthings/java-iot-connected-vehicle-wp-2401533.pdf">the whitepaper with all the information about the Connected Vehicle</a>.</p>
-<p>In short, MWC2015 was a great event and I am not going anymore to miss the opportunity to review a demo .</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('Oracle-s-demos-in-the-MWC2015-review.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

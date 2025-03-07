@@ -23,147 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Monitoring MinIO requests with the OpenTelemetry Collector</h1>
-	</div>
-
-	<p><em>04 February 2025</em></p>
-
-	<p><p>I've been working on using Object Storage with Apache Flink to replace Kafka compacted topics or cross-VPC/AZ communication as explained in this <a href="https://www.ververica.academy/courses/3d163483-5040-4d60-b5b3-755c3277edf7/activities/45b8d081-140a-48f0-b385-8dd2edb8647d">Flink Forward talk</a>. The more we use it, the more important is to optimize the cost of the solution. It's usually driven by the number of requests to S3 so it's very important to me being able to quickly test different approaches to validate what's working well.</p>
-<p>I typically use AWS S3 directly for that, but it's a bit cumbersome to monitor it. There's lag in the metrics and it's not easy to correlate the requests with the application logs. So I started using MinIO for local development. I was surprised to find how hard is to monitor it locally. In the UI, there's a note about metrics not being available:</p>
-<p><img src="minio-metrics.jpg" alt="MinIO UI Metrics" /></p>
-<p>I followed the documentation and it isn't straightforward. I tried with Claude/Gemini but both of them failed. It took me far more than I expected. In this article, I'll show you how to monitor MinIO requests with the OpenTelemetry Collector or Prometheus, or at least, how I do it now.</p>
-<h2>Run MinIO</h2>
-<p>It's pretty easy to run MinIO locally. You can use the Docker image and run it with the following command:</p>
-<pre><code class="language-bash">docker run -d \
-    -p &quot;$MINIO_PORT:9000&quot; \
-    -p &quot;$MINIO_CONSOLE_PORT:9001&quot; \
-    -v &quot;$MINIO_DATA_DIR:/mnt/data&quot; \
-    -v &quot;$MINIO_CONFIG_DIR:/root/.minio.sys&quot; \
-    -e &quot;MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY&quot; \
-    -e &quot;MINIO_SECRET_KEY=$MINIO_SECRET_KEY&quot; \
-    --name &quot;$MINIO_CONTAINER_NAME&quot; \
-    minio/minio server \
-    --console-address &quot;:9001&quot; /mnt/data
-</code></pre>
-<p>You can use this script <a href="https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-minio-sh">minio.sh</a> to run MinIO with the environment variables and proper configuration.</p>
-<p>Once it's running, you can access the UI at <code>http://localhost:9001</code>. You can create a bucket and upload some files to test it.</p>
-<h2>MinIO metrics</h2>
-<p>The next step is to enable Prometheus metrics in MinIO. You can do it by using the <code>mc</code> command line tool.</p>
-<pre><code class="language-bash">docker exec &quot;$MINIO_CONTAINER_NAME&quot; mc alias set 'myminio' &quot;http://localhost:9000&quot; &quot;$MINIO_ACCESS_KEY&quot; &quot;$MINIO_SECRET_KEY&quot;
-
-docker exec &quot;$MINIO_CONTAINER_NAME&quot; mc admin prometheus metrics play system --api-version v3
-
-docker exec &quot;$MINIO_CONTAINER_NAME&quot; mc admin prometheus generate myminio bucket &gt; &quot;$PROMETHEUS_CONFIG_FILE&quot;
-</code></pre>
-<p>The first <code>mc</code> command creates an alias to the MinIO server with proper authentication. The second command shows the Prometheus metrics for the system and the third command generates the Prometheus configuration to be able to scrape the metrics with the proper key.</p>
-<pre><code class="language-yaml">scrape_configs:
-- job_name: minio-job-bucket
-  bearer_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  metrics_path: /minio/v2/metrics/bucket
-  scheme: http
-  static_configs:
-  - targets: ['localhost:9002']
-</code></pre>
-<p>Using that Prometheus file, you can configure Prometheus to scrape the metrics running the following command:</p>
-<pre><code class="language-bash">prometheus --config.file=prometheus.yml
-</code></pre>
-<p>If you aren't using the same port in the container to connect, you need to change the <code>prometheus.yml</code> file to use the proper port. You can access the Prometheus UI at <code>http://localhost:9090</code> to validate that the metrics are being scraped.</p>
-<p>This script <a href="https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-prometheus-sh">prometheus.sh</a> automate the process of activating the metrics and generating the config file.</p>
-<h2>Otel Collector &amp; New Relic</h2>
-<p>The OpenTelemetry Collector is a powerful tool to collect, process, and export telemetry data. It's very easy to use and it has a lot of exporters to send the data to different backends. You can use it to collect the MinIO metrics and send them to New Relic or any other backend.</p>
-<p>The script <a href="https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-prometheus-sh">prometheus.sh</a> generate the configuration file for the Otel and you can run it with the following command:</p>
-<pre><code class="language-bash">otelcol-contrib  --config=config.yml
-</code></pre>
-<p>It's very easy to add more exporters to the configuration file. In my case, I use New Relic to monitor the applications, so I added the New Relic exporter to the configuration file.</p>
-<pre><code class="language-yaml">exporters:
-  otlphttp:
-    endpoint: &lt;INSERT_NEW_RELIC_OTLP_ENDPOINT&gt;
-    headers:
-      api-key: &lt;INSERT_NEW_RELIC_LICENSE_KEY&gt;
-</code></pre>
-<p>You can find more information about the Otel Collector in the <a href="https://docs.newrelic.com/docs/opentelemetry/get-started/collector-processing/opentelemetry-collector-processing-intro/#minimal-example">New Relic Otel Collector documentation</a>.</p>
-<p>Once the collector is running, you can access the New Relic UI to see the metrics. You can create a dashboard to monitor the MinIO requests and correlate them with the application logs.</p>
-<p><img src="minio-dashboard.jpg" alt="New Relic MinIO Dashboard" /></p>
-<p>The dashboard can be imported using the provided JSON template <a href="https://gist.github.com/antonmry/535c62cae03bb2df089d1d6e858371b2#file-newrelic_dashboard-json">minio-dashboard.json</a>. The most critical metrics to monitor are:</p>
-<ul>
-<li>Request counts by operation type, particularly <code>ListObjectsV2</code> operations since these don't transfer data but can significantly impact costs. Monitoring these requests helps identify potential optimization opportunities in your application's listing behavior.</li>
-<li>The PutObject operation count provides insights into your batching efficiency. By correlating this metric with your job's configuration parameters, you can fine-tune batch sizes and intervals for optimal performance.</li>
-</ul>
-<p>End-to-end latency is another crucial metric that we monitor. However, since this involves a different monitoring approach and setup, I'll cover it in detail in an upcoming article focused on latency tracking.</p>
-<h2>Conclusion</h2>
-<p>If you use object storage in your streaming pipelines, it's very important to minimize the number of requests to the storage. MinIO with proper monitoring will help you to validate the optimizations and reduce the cost of the solution. If you have any questions or comments, please let me know. You can reach me on <a href="https://bsky.app/profile/galiglobal.com">BlueSky</a> or <a href="https://github.com/antonmry/galiglobal/discussions">GitHub</a>.</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('20250204-monitoring-requests-with-minio.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

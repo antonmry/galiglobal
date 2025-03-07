@@ -23,90 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Career path for Indivitual Contributors (ICs)</h1>
-	</div>
-
-	<p><em>25 October 2022</em></p>
-
-	<p><p>I like to take a break in the morning to do a virtual coffee break with some friends. Most of them are very senior engineers, and even more important, they are good people, or how we say in Spain, buena gente buena.</p>
-<p>Sometimes we use that time to ask for advise. Today it was interesting. One engineer was thinking about how to deal with a difficult meeting. The dilemma was about being honest and sharing his real opinion about one project, or saying everything is ok and moving forward. He wanted to help, but he had doubts about how useful was that meeting and how it could impact his aspirations to be promoted. Why to make his life harder if, in the end, nothing is going to change anyway? It's a fair dilemma.</p>
-<p>It made me think about the Distinguised Engineers, Chief Architects, CTOs, etc. that I met during my career. In all big companies, there was something in common between them: they were really good selling their ideas to other C-level executives, VPs, global managers, etc. I remember one particular case. This particular person always had his laptop with him and a powerpoint full of slides about microservices, automation, kubernetes and plenty of tecnologies logos.</p>
-<p>Of course, the reality was totally different. His teams were very slow delivering: the deadly combination of technical debt and overengineered complexity. But he never mentioned technical debt, or how to migrate very old legacy code, or how to reduce costs. Even if he wanted to speak about those things, he was so disconnected of the real enviroment, that he couldn't do it anyway. He only had promises of a better future using Cloud, Kubernetes, AI, Blockchain, etc. And it worked. This person was promoted again and again.</p>
-<p>Why? Because C-level executives don't want to hear about technical debt, problems or whatever. They don't want more problems, they want solutions. And they are fustrated, because technology is very expensive and they don't see advances. The smallest change in a big company can cost a fortune. That's why agile, Scrum or whatever new management technique is so popular in big companies. They are so desperate for solutions, they buy whatever others are doing and it has a chance to be succesful.</p>
-<p>This may be surprising for many out there. Managers are always asking for feedback, the truth, what to change. And most of us provide that info. I remember a manager thanking me after each 1:1 for keep him honest. I know he was sincere, it's good to know when you are mistaken, just in case. I also know I would have more opportunities of a promotion keeping my mouth shut and smiling.</p>
-<p>In summary, to be promoted to senior IC roles is hard because they are less positions in the Technical path than in the Management path. Indeed, most of us promote changing between companies. If you want to try, smile and don't speak about problems, only about solutions. If you don't care about a promotion, but you care about the company you are working for, speak up. But be smart, don't waste energies trying to improve impossible things. Choose your battles.</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('20221025-CTO.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

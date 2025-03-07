@@ -23,110 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Access OCSG EDR JMS Topic with Talend Open Studio</h1>
-	</div>
-
-	<p><em>13 February 2015</em></p>
-
-	<p><p>I've been using <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14">Talend Open Studio</a> for a long time. It's an impressive software to do automated tasks, it works well and the development is quite fast. Furthermore, the TtHW (Time to Hello World) is really short. As you can see, I like it.</p>
-<p>In this tutorial, I am going to show how to use it Talend Open Studio to access the JMS Topic where OCSG shows all the runtime information: the Event Data Records (EDRs). This is the main place for debugging so it's really important. The article is based in the offical documentation <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627">Creating EDR Listeners</a> but adapted to TOS.</p>
-<h2>Pre-requisites</h2>
-<p>You will need an OCSG 6 or 5.1 running and also the <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download">TOS Data Integration</a> installed in your computer.</p>
-<h2>Talend Open Studio development</h2>
-<p>Drop a tJMSInput component in the canvas and double click over it.</p>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput.png" alt="tJMSInput component" /></p>
-<p>Configure all the fields as you can see in the following picture:</p>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/tJMSInput_form.png" alt="tJMSInput fields" /></p>
-<p>Some important notes:</p>
-<ul>
-<li>You have to import the library <em>wlthint3client.jar</em> before to use the component. You can find it in <em><OCSG Installation folder>/wlserver/server/lib/wlthint3client.jar</em>. To import it, there are several ways, for instance, the tLibraryLoad component.</li>
-<li>Change the <strong>Server URL</strong> to your environment configuration. It must be a Node, not an Admin. In this case it's an standalone configuration with Admin and Node in the same Weblogic instance.</li>
-<li>Change the <strong>Message from</strong> to your environment configuration. If you don't know it, go to the Console,in the Domain Structure, <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.</li>
-</ul>
-<h2>Weblogic configuration</h2>
-<p>There is a missing point, and it's the key. In the Weblogic console:</p>
-<ol>
-<li>Go to the Domain Structure and Select <strong>Services -&gt; Messaging -&gt; JMS-Modules</strong>.</li>
-<li>Click on <strong>WLNGJMSResource -&gt; EdrTopic -&gt; Advanced</strong>.</li>
-<li>Find <strong>Create Destination Identifier</strong> and introduce <em>com.bea.wlcp.wlng.edr.EdrTopic</em> and Save.</li>
-<li>Reboot the Weblogic.</li>
-</ol>
-<p><img src="/images/Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio/WeblogicJMSConfiguration.png" alt="Weblogic JMS Configuration" /></p>
-<p>This step is mandatory because of the tJMSInput component but it can be avoided if you are accessing the JMS Topic in another way.</p>
-<h2>The end</h2>
-<p>That's all. Click on Run in the Talend Open Studio and you should be subscribed to the Topic. Send an SMS from the PTE and you should start to generate EDRs. The next step would be create the Java classes to access the EDR information and start to work with it.</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-

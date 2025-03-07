@@ -23,175 +23,64 @@
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="../../favicon.ico">
   </head>
-  <body onload="prettyPrint()">
+  <body>
     <div id="wrap">
-
-
-
-	<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="../../">GaliGlobal</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="../../index.html">Home</a>
-                </li>
-                <li><a href="../../archive.html">Blog Posts</a></li>
-                <li><a href="../../public-talks.html">Public Talks</a>
-            </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="container">
-
-
-	<div class="page-header">
-		<h1>Monitoring Kafka clients with KIP-714</h1>
-	</div>
-
-	<p><em>06 June 2024</em></p>
-
-	<p><p>One of my favourite Kafka KIPs is <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-714%3A+Client+metrics+and+observability">KIP-714</a>, which adds a new way to monitor Kafka client metrics. This is a very important feature for anyone running Kafka in production, as it allows you to monitor the health of your clients and the impact they have on the Kafka cluster.</p>
-<p>It also uses the OpenTelemetry standard, which is great for integrating this feature with many monitoring tools and services.</p>
-<p><img src="kip714.png" alt="KIP-714 Architecture" /></p>
-<p>In this article, we'll take a look at how this new feature works and how you can use it to monitor your Kafka clients.</p>
-<h2>Kafka cluster setup</h2>
-<p>To use KIP-714, you need to have a Kafka cluster running with at least version 3.7.0. It also requires Kraft mode to be enabled, which is the new mode to run Kafka brokers without requiring Zookeeper.</p>
-<p>You can download the latest version of Kafka from the <a href="https://kafka.apache.org/downloads">Apache Kafka website</a>. It's very easy to set up a Kafka cluster with Kraft following the official documentation, in particular the <a href="https://kafka.apache.org/quickstart">Quickstart</a> guide.</p>
-<p>The first step is to start a Kafka broker with the following commands:</p>
-<pre><code class="language-bash">KAFKA_CLUSTER_ID=&quot;$(bin/kafka-storage.sh random-uuid)&quot;
-bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
-bin/kafka-server-start.sh config/kraft/server.properties
-</code></pre>
-<p>The next step is to configure the broker to retrieve the client metrics. This is the command to do it:</p>
-<pre><code class="language-bash">bin/kafka-client-metrics.sh --bootstrap-server localhost:9092 --alter --generate-name \
-  --metrics org.apache.kafka.producer. \
-  --interval 5000
-</code></pre>
-<p>For this example, we are monitoring only the producer metrics every 5 seconds.</p>
-<p>Thanks to <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-1000%3A+List+Client+Metrics+Configuration+Resources">KIP-1000</a>, it's possible to list the client metrics configuration resources introduced by <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-714%3A+Client+metrics+and+observability">KIP-714</a>.</p>
-<pre><code class="language-bash">bin/kafka-client-metrics.sh --bootstrap-server localhost:9092 --list
-</code></pre>
-<p>It should return the generated name, in this case, a random string of characters. It's important to understand that processing all client metrics through the Kafka broker can have a performance impact. In that sense, it can be handy only dynamically enable the required metrics and filter the clients that we want to monitor. <code>kafka-client-metrics.sh</code> can filter by:</p>
-<ul>
-<li>client_instance_id</li>
-<li>client_id</li>
-<li>client_software_name</li>
-<li>client_software_version</li>
-<li>client_source_address</li>
-<li>client_source_port</li>
-</ul>
-<h2>Add a metric reporter</h2>
-<p>There are different ways to report Kafka cluster metrics, but there's one in particular that it's a hidden gem, it isn't even mentioned in the <a href="https://kafka.apache.org/documentation/#monitoring">Monitoring section of the official Kafka documentation</a>: Yammer metrics custom reporters.</p>
-<p>They can be configured with the <a href="https://kafka.apache.org/documentation/#brokerconfigs">kafka.metrics.reporters</a> property:</p>
-<blockquote>
-<p>A list of classes to use as Yammer metrics custom reporters. The reporters should implement kafka.metrics.KafkaMetricsReporter trait. If a client wants to expose JMX operations on a custom reporter, the custom reporter needs to additionally implement an MBean trait that extends kafka.metrics.KafkaMetricsReporterMBean trait so that the registered MBean is compliant with the standard MBean convention.</p>
-</blockquote>
-<p>To use create a MetricsReporter, we need to create a class that implements the <a href="https://kafka.apache.org/37/javadoc/org/apache/kafka/common/metrics/MetricsReporter.html">org.apache.kafka.common.metrics.MetricsReporter</a> interface. We don't need to add any logic to the methods, as we aren't interested in the cluster metrics for this article.</p>
-<p><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-714%3A+Client+metrics+and+observability">KIP-714</a> has added a new interface that needs to be implemented to report the client metrics: <a href="https://kafka.apache.org/37/javadoc/org/apache/kafka/server/telemetry/ClientTelemetry.html">org.apache.kafka.server.telemetry.ClientTelemetry</a>. Our MetricsReporter also has to implement this new interface. It has just one method, <code>clientReceiver</code>, that returns a <code>ClientTelemetryReceiver</code>:</p>
-<pre><code class="language-java">@Evolving
-public interface ClientTelemetry {
-    ClientTelemetryReceiver clientReceiver();
-}
-</code></pre>
-<p>In this particular example, we are going to send the metrics to an OpenTelemetry collector running in the same machine. This feature is very interesting because this KIP uses the OpenTelemetry format for the metrics. We don't need to change the format of the metrics if the monitoring tool we are using supports OpenTelemetry, as they should do. We can just to forward the metrics without any transformation.</p>
-<p>You can see a demo implementation of the <code>MetricsReporter</code> in this <a href="https://github.com/antonmry/kafka-playground/tree/main/otel-kip714-demo">GitHub repository</a>. It's ugly and inefficient, but it's to show how to work with this new feature. Otel/GRPC would be a better choice.</p>
-<p>The next step is to build the project and copy the JAR file to the Kafka broker lib directory:</p>
-<pre><code class="language-bash">./gradlew build
-cp build/libs/lib/build/libs/demo-kip714-0.1.0.jar $KAFKA_HOME/libs
-</code></pre>
-<p>Finally, we need to add the <code>metrics.reporters</code> property to the <code>$KAFKA_HOME/config/kraft/server.properties</code> file:</p>
-<pre><code class="language-properties">metric.reporters=com.galiglobal.CustomMetricsReporter
-</code></pre>
-<p>This will require a restart of the Kafka broker:</p>
-<pre><code class="language-bash">bin/kafka-server-stop.sh
-bin/kafka-server-start.sh config/kraft/server.properties
-</code></pre>
-<h2>Test the setup with a Kafka producer</h2>
-<p>It's time to see if it's working. Let's start a Kafka producer:</p>
-<pre><code class="language-bash">bin/kafka-producer-perf-test.sh \
-    --throughput 2 \
-    --record-size 1000 \
-    --num-records 300000 \
-    --topic perf-test-topic \
-    --producer-props bootstrap.servers=localhost:9092 linger.ms=100 batch.size=16384 \
-    --print-metrics | grep \
-&quot;3000 records sent\|\
-producer-metrics:outgoing-byte-rate\|\
-producer-metrics:bufferpool-wait-ratio\|\
-producer-metrics:record-queue-time-avg\|\
-producer-metrics:request-latency-avg\|\
-producer-metrics:batch-size-avg&quot;
-</code></pre>
-<p>The kafka-producer-perf-test.sh script is perfect to send a bunch of random messages to a Kafka topic. We are using the <code>--print-metrics</code> flag to print metrics to the console. We are also using the <code>grep</code> command to filter the metrics we are interested in.</p>
-<p>In the terminal of the broker, we should start seeing messages like this:</p>
-<blockquote>
-<p>[2024-06-07 21:50:58,999] INFO CustomTelemetryReceiver: E6-tEjUcRJClUJpf-woDOA: OTLP (com.galiglobal.CustomMetricsReporter) [2024-06-07 21:50:59,007] ERROR Error sending the request: null (com.galiglobal.CustomMetricsReporter)</p>
-</blockquote>
-<p>They show the clientId of the producer and the format of the metrics (OTLP). It also shows an error message because we don't have a service to receive the metrics yet. Let's fix that.</p>
-<h2>Start an OpenTelemetry collector</h2>
-<p>The OpenTelemetry collector is a service that receives metrics, traces and logs to process them. For this example, we are going to configure it to receive metrics from the Kafka broker and send them to New Relic. Detailed instructions can be found in the <a href="https://docs.newrelic.com/docs/more-integrations/open-source-telemetry-integrations/opentelemetry/get-started/collector-processing/opentelemetry-collector-processing-intro/">New Relic documentation</a> and the <a href="https://github.com/antonmry/kafka-playground/blob/main/otel-kip714-demo/collector.yaml">example Otel collector configuration</a> in the <a href="https://github.com/antonmry/kafka-playground/tree/main/otel-kip714-demo">GitHub repository</a>.</p>
-<p>The OpenTelemetry collector can be started with the following command:</p>
-<pre><code class="language-bash">docker run --rm -e NEW_RELIC_API_KEY=$NEW_RELIC_API_KEY \
-  -v &quot;${PWD}/collector.yaml&quot;:/etc/otelcol/config.yaml \
-  -p 127.0.0.1:4317:4317 \
-  -p 127.0.0.1:4318:4318 \
-  -p 127.0.0.1:55679:55679 \
-  otel/opentelemetry-collector:0.102.1
-</code></pre>
-<p>Metrics should be available in the New Relic dashboard after a few seconds. An <a href="https://github.com/antonmry/kafka-playground/blob/main/otel-kip714-demo/dashboard.json">example of the dashboard</a> is available in the <a href="https://github.com/antonmry/kafka-playground/tree/main/otel-kip714-demo">GitHub repository</a> and it can be easily imported to your New Relic account following the <a href="https://docs.newrelic.com/docs/query-your-data/explore-query-data/dashboards/introduction-dashboards/">New Relic dashboard documentation</a>.</p>
-<p><img src="demo.gif" alt="New Relic dashboard" /></p>
-<h2>Conclusion</h2>
-<p>I hope you enjoyed this article and that it helps you to monitor your Kafka. If you have any questions or comments, please let me know.You can reach me on <a href="https://www.twitter.com/antonmry">Twitter</a> or <a href="https://github.com/antonmry/galiglobal/discussions">GithHub</a>.</p>
-</p>
-
-	<hr />
-
-		</div>
-		<div id="push"></div>
-    </div>
-
-    <div id="footer">
+      <div id="navbar-container"></div>
       <div class="container">
-        <p class="muted credit"><span class="small"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"/></a>&nbsp;&nbsp;This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></p>
+        <div id="content"></div>
       </div>
+      <div id="push"></div>
     </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
     <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/prettify.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
 
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
-
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
     </script>
 
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('20240606-kip-714-monitoring-kafka-clients.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
   </body>
 </html>
-
