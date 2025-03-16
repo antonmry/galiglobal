@@ -55,7 +55,7 @@ preference for a browser.
 
 ## Terminal and shell
 
-In the past I used Alacrity, but I'm using WezTerm now and I love it. There are three important things for me:
+In the past I used Alacritty, but I'm using WezTerm now and I love it. There are three important things for me:
 
 - I don't want to see anything except the $.
 - I want to configure everything with a single file.
@@ -66,6 +66,9 @@ In addition, WezTerm will allow me to remove Tmux from my setup, that's still in
 with a particular workflow: I usually have multiple windows and I rename them (Ctrl+b+,). Then, when I want to switch to
 a window, I use Ctrl+b+' and type the first letters of the name. This works very well for me because I never use tabs,
 so I can easily switch between windows and I don't care about the order of them.
+
+I use the same workflow everywhere: I don't use tabs, I don't reorder windows, etc. I just switch between windows,
+files, webpages, conversations, etc. using shortcuts and Fuzzy Search.
 
 TODO: chezmoi, fzf 
 

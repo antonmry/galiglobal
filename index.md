@@ -2,32 +2,34 @@
 
 # About me
 
-I'm a data infrastructure engineer who gets a real kick out of building scalable data platforms that solve complex
-problems. I've spent years diving deep into Kafka, Flink, and Java, along with all the cloud tools we use to make these
-systems hum. I love tackling big challenges - like building reliable and scalable distributed systems that handle
-massive data volumes or optimizing performance to reduce cloud costs and minimize environmental impact- and I thrive on
-collaborating with smart teams to bring those solutions to life. I'm particularly passionate about leveraging data to
-drive positive impact in environmental sustainability.
+My name is Anton Rodriguez. I live in the middle of the [Coast of Death] in the north-west corner of Spain surrounded by
+greenhouses and cow farms. The [end of the world] is literally less than 1 hour away from my house. I live in such a
+unusual place because my kids love it, and I love my kids. When I'm not with them (or working), I enjoy
+practicing sports (mostly, running and [padel tennis] these days) and reading books.
 
-#### Tech Community
+I'm very passionate about technology since I was 8 years old and I started coding in a MSX computer. While titles aren't
+my primary focus, I usually define myself as Senior Data Infrastructure Engineer for the following reasons:
 
-I know I've been very lucky, so I try to contribute back sharing my learnings in [my blog](https://www.galiglobal.com),
-speaking at local and international [technology conferences](/public-talks.html) and organizing technology events,
-groups and other activities.
+- **Senior**: I've been working in the tech industry enough to appreciate ["boring technology"].
+- **Data**: at scale. Anything over 150GB/s and 3 million of Kafka messages per second gets me interested.
+- **Infrastructure**: I prefer the "Designing Data-Intensive Applications" book over "Domain-Driven Design" but I like
+  coding, in particular debugging and performance optimizations.
+- **Engineer**: specifically, a [1x engineer] who leverages his impact [through others to create ten times the influence that they could have exerted on their own](https://www.billeager.com/the-true-10x-engineer/).
 
-I've received some awards during my career:
+In terms of technologies, I'm a big fan of the JVM ecosystem and a [Java Champion]. I've always liked to learn other
+languages (Groovy, Scala, Go) and these days I'm having fun with Rust. I have a strong background in distributed systems
+and, in particular, with Apache Kafka and Apache Flink for the last 5 years. I've been working with cloud technologies
+across all the major providers. I was named a [Google Developer Expert] in 2021.
 
-- 2022: [Java Champion](https://twitter.com/Java_Champions/status/1541467821619953665).
-- 2021: [Google Developer Expert](https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste).
-- 2021: [RedHat Accelerator](https://access.redhat.com/accelerators).
-- 2020: [Confluent Community Catalyst](https://www.confluent.io/nominate/).
-- 2015: [TADHack Global Winner](/blog/2015/We-are-TADHack-2015-winners.html).
-- 2015: [Oracle ACE Associate](/blog/2015/The-Oracle-ACE-Associate-award.html).
+My social media activity is limited to [BlueSky] and [GitHub]. Feel free to ping me there; I'm always happy to engage in
+meaningful conversations about technology and career development.
 
-#### Social profile
-
-- Sharing open source side projects and ideas in [GitHub](https://github.com/antonmry).
-- Tinkering with interactions on [BlueSky](https://bsky.app/profile/galiglobal.com).
-- My professional experience in [LinkedIn](https://www.linkedin.com/in/antonmry/).
-- Sharping my coding skills on [Exercism](https://exercism.io/profiles/antonmry).
-- Reading books on [Goodreads](http://www.goodreads.com/antonmry).
+[Coast of Death]: https://en.wikipedia.org/wiki/Costa_da_Morte
+[end of the world]: https://en.wikipedia.org/wiki/Fisterra
+[padel tennis]: https://en.wikipedia.org/wiki/Padel
+["boring technology" club]: https://boringtechnology.club/
+[1x engineer]: https://1x.engineer/
+[Java Champion]: https://javachampions.org/members.html
+[Google Developer Expert]: https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste
+[BlueSky]: https://bsky.app/profile/galiglobal.com 
+[GitHub]: https://github.com/antonmry
