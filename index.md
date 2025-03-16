@@ -10,7 +10,7 @@ practicing sports (mostly, running and [padel tennis] these days) and reading bo
 I'm very passionate about technology since I was 8 years old and I started coding in a MSX computer. While titles aren't
 my primary focus, I usually define myself as Senior Data Infrastructure Engineer for the following reasons:
 
-- **Senior**: I've been working in the tech industry enough to appreciate ["boring technology"].
+- **Senior**: I've been working in the tech industry enough to appreciate [boring technology].
 - **Data**: at scale. Anything over 150GB/s and 3 million of Kafka messages per second gets me interested.
 - **Infrastructure**: I prefer the "Designing Data-Intensive Applications" book over "Domain-Driven Design" but I like
   coding, in particular debugging and performance optimizations.
@@ -27,7 +27,7 @@ meaningful conversations about technology and career development.
 [Coast of Death]: https://en.wikipedia.org/wiki/Costa_da_Morte
 [end of the world]: https://en.wikipedia.org/wiki/Fisterra
 [padel tennis]: https://en.wikipedia.org/wiki/Padel
-["boring technology" club]: https://boringtechnology.club/
+[boring technology]: https://boringtechnology.club/
 [1x engineer]: https://1x.engineer/
 [Java Champion]: https://javachampions.org/members.html
 [Google Developer Expert]: https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste
