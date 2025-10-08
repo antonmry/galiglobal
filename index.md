@@ -48,3 +48,4 @@ technology and career development.
 [Google Developer Expert]: https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste
 [BlueSky]: https://bsky.app/profile/galiglobal.com
 [GitHub]: https://github.com/antonmry
+[my blog]: https://www.galiglobal.com/blog-posts.html
