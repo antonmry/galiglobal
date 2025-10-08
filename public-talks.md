@@ -1,5 +1,9 @@
 # Public talks
 
+## 2025
+
+- Kafka Summit/Current - The Latency-Cost equation for Disaggregated Architectures: [video and slides](https://current.confluent.io/post-conference-videos-2025/the-latency-cost-equation-for-disaggregated-architectures-lnd25)
+
 ## 2024
 
 - Flink Forward - Cost-Effective Streaming Pipelines with Apache Paimon: [video](https://www.ververica.academy/courses/3d163483-5040-4d60-b5b3-755c3277edf7/activities/45b8d081-140a-48f0-b385-8dd2edb8647d)
