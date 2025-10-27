@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Intervalos de carrera</title>
+  <style>
+    :root {
+      --bg:#0f172a;
+      --card:#1e253a;
+      --text:#f8fafc;
+      --sub:#94a3b8;
+      --accent:#38bdf8;
+      --good:#4ade80;
+      --hard:#facc15;
+    }
+
+    * {
+      box-sizing:border-box;
+      -webkit-font-smoothing: antialiased;
+      font-family: system-ui,-apple-system, BlinkMacSystemFont,"Inter","Roboto","Segoe UI",sans-serif;
+    }
+
+    body {
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      display:flex;
+      min-height:100vh;
+      align-items:center;
+      justify-content:center;
+      padding:1.5rem;
+    }
+
+    .card {
+      background:var(--card);
+      width:100%;
+      max-width:420px;
+      border-radius:1rem;
+      padding:1.5rem 1.5rem 2rem;
+      box-shadow:0 30px 80px rgba(0,0,0,.6);
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+    }
+
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+    }
+
+    .title-block {
+      display:flex;
+      flex-direction:column;
+      gap:.25rem;
+    }
+
+    .title {
+      font-size:1rem;
+      font-weight:600;
+      color:var(--text);
+      line-height:1.2;
+    }
+
+    .phase {
+      font-size:.875rem;
+      line-height:1.2;
+      color:var(--sub);
+    }
+
+    .bpm-chip {
+      background:rgba(56,189,248,.1);
+      color:var(--accent);
+      font-size:.875rem;
+      line-height:1.2;
+      font-weight:500;
+      padding:.5rem .75rem;
+      border-radius:.5rem;
+      min-width:88px;
+      text-align:center;
+    }
+
+    .timer-block {
+      text-align:center;
+    }
+
+    .time-display {
+      font-size:3.5rem;
+      font-weight:600;
+      line-height:1;
+      letter-spacing:-.05em;
+      color:var(--text);
+    }
+
+    .subrow {
+      margin-top:.5rem;
+      font-size:.875rem;
+      color:var(--sub);
+      line-height:1.2;
+      display:flex;
+      justify-content:center;
+      gap:.5rem;
+      flex-wrap:wrap;
+    }
+
+    .progress-wrapper {
+      background:rgba(148,163,184,.15);
+      height:6px;
+      border-radius:999px;
+      overflow:hidden;
+      margin-top:1rem;
+    }
+
+    .progress-bar {
+      background:var(--accent);
+      height:100%;
+      width:0%;
+      transition:width .2s linear;
+    }
+
+    .controls {
+      display:flex;
+      gap:.75rem;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:.5rem;
+    }
+
+    .footer-actions {
+      margin-top:auto;
+      display:flex;
+      gap:.75rem;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    button.footer-btn {
+      flex:1;
+      min-width:140px;
+      background:#334155;
+      color:var(--text);
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:.75rem;
+      padding:.75rem 1rem;
+      font-size:.95rem;
+      font-weight:500;
+      cursor:pointer;
+      box-shadow:0 10px 30px rgba(0,0,0,.45);
+      transition:background .2s ease, color .2s ease;
+    }
+
+    button.footer-btn.primary {
+      background:rgba(56,189,248,.15);
+      color:var(--accent);
+      border-color:rgba(56,189,248,.4);
+    }
+
+    button.footer-btn.primary:hover {
+      background:rgba(56,189,248,.3);
+    }
+
+    button.footer-btn:active {
+      transform:scale(.98);
+    }
+
+    button.ctrl {
+      flex:1;
+      min-width:90px;
+      background:#334155;
+      color:var(--text);
+      border:0;
+      border-radius:.75rem;
+      padding:.75rem 1rem;
+      font-size:1rem;
+      font-weight:500;
+      line-height:1.2;
+      cursor:pointer;
+      box-shadow:0 10px 30px rgba(0,0,0,.6);
+    }
+    button.ctrl.main {
+      background:var(--accent);
+      color:#0f172a;
+      font-weight:600;
+    }
+    button.ctrl:active {
+      transform:scale(.98);
+    }
+
+    .plan {
+      background:#0f172a;
+      border-radius:.75rem;
+      padding:1rem;
+      font-size:.875rem;
+      line-height:1.4;
+      color:var(--sub);
+    }
+
+    .plan-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      margin-bottom:.5rem;
+    }
+    .plan-left {
+      display:flex;
+      flex-direction:column;
+    }
+    .plan-phase {
+      font-weight:500;
+      color:var(--text);
+      font-size:.9rem;
+      line-height:1.3;
+    }
+    .plan-desc {
+      color:var(--sub);
+      font-size:.8rem;
+      line-height:1.3;
+    }
+    .plan-right {
+      text-align:right;
+      min-width:4rem;
+      font-size:.8rem;
+      line-height:1.3;
+      color:var(--sub);
+    }
+    .badge-fast{
+      color:var(--hard);
+    }
+    .badge-easy{
+      color:var(--good);
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <header>
+      <div class="title-block">
+        <div class="title" id="sessionTitle">Sesión de intervalos</div>
+        <div class="phase" id="currentPhaseLabel">Listo</div>
+      </div>
+      <div class="bpm-chip" id="bpmTarget">-- bpm</div>
+    </header>
+
+    <section class="timer-block">
+      <div class="time-display" id="timeDisplay">00:00</div>
+      <div class="subrow">
+        <span id="subStatus">Pulsa Iniciar</span>
+        <span id="intervalCount"></span>
+      </div>
+
+      <div class="progress-wrapper">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="controls">
+        <button class="ctrl main" id="startPauseBtn">Iniciar</button>
+        <button class="ctrl" id="skip10Btn">Saltar 10s</button>
+        <button class="ctrl" id="skipBtn">Saltar fase</button>
+      </div>
+    </section>
+
+    <section class="plan">
+      <div class="plan-row">
+        <div class="plan-left">
+          <div class="plan-phase">Calentamiento</div>
+          <div class="plan-desc">4 min a 120 bpm</div>
+        </div>
+        <div class="plan-right">1×4:00</div>
+      </div>
+
+      <div class="plan-row">
+        <div class="plan-left">
+          <div class="plan-phase">Trabajo rápido <span class="badge-fast">(160 bpm)</span></div>
+          <div class="plan-desc">2 min rápido + 2 min andar lento</div>
+        </div>
+        <div class="plan-right">5×4:00</div>
+      </div>
+
+      <div class="plan-row">
+        <div class="plan-left">
+          <div class="plan-phase">Enfriamiento <span class="badge-easy">(120 bpm)</span></div>
+          <div class="plan-desc">4 min suaves</div>
+        </div>
+        <div class="plan-right">1×4:00</div>
+      </div>
+    </section>
+
+    <footer class="footer-actions">
+      <button class="footer-btn" id="resetBtn">Reiniciar</button>
+      <button class="footer-btn primary" id="fullscreenToggleBtn">Pantalla completa</button>
+    </footer>
+  </main>
+
+  <script>
+    // Definimos el plan como una lista de segmentos secuenciales.
+    // Cada segmento tiene:
+    // - label: texto para mostrar
+    // - durationSec: duración en segundos
+    // - bpm: objetivo de pulsaciones
+    // - type: "warmup" | "fast" | "rest" | "cooldown"
+    // - intervalIndex y intervalTotal para los bloques rápido/descanso
+
+    function buildWorkoutPlan() {
+      const plan = [];
+
+      // 1. Calentamiento 4 min a 120
+      plan.push({
+        label: "Calentamiento",
+        durationSec: 4 * 60,
+        bpm: 120,
+        type: "warmup",
+        intervalIndex: null,
+        intervalTotal: null
+      });
+
+      // 2. 5 repeticiones de (2 min rápido 160 bpm + 2 min descanso andar lento)
+      const reps = 5;
+      for (let i = 1; i <= reps; i++) {
+        // rápido
+        plan.push({
+          label: "Intervalo rápido",
+          durationSec: 2 * 60,
+          bpm: 160,
+          type: "fast",
+          intervalIndex: i,
+          intervalTotal: reps
+        });
+        // descanso
+        plan.push({
+          label: "Recuperación andando",
+          durationSec: 2 * 60,
+          bpm: 120, // objetivo suave. puedes poner null si no quieres mostrar
+          type: "rest",
+          intervalIndex: i,
+          intervalTotal: reps
+        });
+      }
+
+      // 3. Enfriamiento 4 min a 120
+      plan.push({
+        label: "Enfriamiento",
+        durationSec: 4 * 60,
+        bpm: 120,
+        type: "cooldown",
+        intervalIndex: null,
+        intervalTotal: null
+      });
+
+      return plan;
+    }
+
+    const workoutPlan = buildWorkoutPlan();
+
+    // Estado
+    let currentSegment = 0;        // índice en workoutPlan
+    let remaining = workoutPlan[0].durationSec; // segundos restantes del segmento actual
+    let isRunning = false;
+    let started = false;
+    let timerId = null;
+    let audioCtx = null;
+
+    // DOM refs
+    const timeDisplayEl = document.getElementById("timeDisplay");
+    const currentPhaseLabelEl = document.getElementById("currentPhaseLabel");
+    const bpmTargetEl = document.getElementById("bpmTarget");
+    const subStatusEl = document.getElementById("subStatus");
+    const intervalCountEl = document.getElementById("intervalCount");
+    const progressBarEl = document.getElementById("progressBar");
+    const startPauseBtnEl = document.getElementById("startPauseBtn");
+    const resetBtnEl = document.getElementById("resetBtn");
+    const skipBtnEl = document.getElementById("skipBtn");
+    const skip10BtnEl = document.getElementById("skip10Btn");
+    const fullscreenToggleBtnEl = document.getElementById("fullscreenToggleBtn");
+
+    // Utils
+    function fmtTime(totalSec) {
+      const m = Math.floor(totalSec / 60);
+      const s = totalSec % 60;
+      const mm = m.toString().padStart(2,"0");
+      const ss = s.toString().padStart(2,"0");
+      return mm + ":" + ss;
+    }
+
+    function updateUI() {
+      const seg = workoutPlan[currentSegment];
+      timeDisplayEl.textContent = fmtTime(remaining);
+      currentPhaseLabelEl.textContent = seg.label;
+
+      // bpm target
+      bpmTargetEl.textContent = seg.bpm ? seg.bpm + " bpm" : "-- bpm";
+
+      // sub status
+      if (!isRunning && !started && currentSegment >= workoutPlan.length - 1 && remaining === 0) {
+        subStatusEl.textContent = "Sesión terminada";
+      } else if (seg.type === "warmup") {
+        subStatusEl.textContent = "Calentamiento suave";
+      } else if (seg.type === "fast") {
+        subStatusEl.textContent = "Ritmo alto";
+      } else if (seg.type === "rest") {
+        subStatusEl.textContent = "Recupera andando";
+      } else if (seg.type === "cooldown") {
+        subStatusEl.textContent = "Baja pulsaciones";
+      } else {
+        subStatusEl.textContent = "";
+      }
+
+      // intervalo X/Y
+      if (seg.intervalIndex != null) {
+        intervalCountEl.textContent = "Bloque " + seg.intervalIndex + " / " + seg.intervalTotal;
+      } else {
+        intervalCountEl.textContent = "";
+      }
+
+      // barra de progreso dentro del segmento
+      const elapsedInSeg = seg.durationSec - remaining;
+      const pct = (elapsedInSeg / seg.durationSec) * 100;
+      progressBarEl.style.width = pct + "%";
+
+      // botón start/pause
+      startPauseBtnEl.textContent = isRunning ? "Pausa" : (started ? "Reanudar" : "Iniciar");
+    }
+
+    function nextSegment() {
+      if (currentSegment < workoutPlan.length - 1) {
+        currentSegment++;
+        remaining = workoutPlan[currentSegment].durationSec;
+        playPhaseTransitionSound();
+      } else {
+        // fin del entreno
+        stopTimer();
+        subStatusEl.textContent = "Sesión terminada";
+        startPauseBtnEl.textContent = "Iniciar";
+        isRunning = false;
+        started = false;
+        remaining = 0;
+        playPhaseTransitionSound();
+      }
+    }
+
+    function tick() {
+      if (!isRunning) return;
+      remaining--;
+      if (remaining <= 0) {
+        // pasamos al siguiente segmento
+        nextSegment();
+      }
+      updateUI();
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      isRunning = true;
+      started = true;
+      // 1 segundo intervalo
+      timerId = setInterval(tick, 1000);
+      updateUI();
+    }
+
+    function stopTimer() {
+      isRunning = false;
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+      }
+      updateUI();
+    }
+
+    function resetTimer() {
+      stopTimer();
+      currentSegment = 0;
+      remaining = workoutPlan[0].durationSec;
+      started = false;
+      subStatusEl.textContent = "Pulsa Iniciar";
+      intervalCountEl.textContent = "";
+      progressBarEl.style.width = "0%";
+      updateUI();
+    }
+
+    function skipCurrentPhase() {
+      nextSegment();
+      updateUI();
+    }
+
+    function skipSecondsInCurrentPhase(seconds) {
+      if (remaining > seconds) {
+        remaining -= seconds;
+        updateUI();
+      } else {
+        nextSegment();
+        updateUI();
+      }
+    }
+
+    function ensureAudioContext() {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return null;
+      if (!audioCtx) {
+        audioCtx = new AudioCtor();
+      }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(function(){
+          // ignore resume errors
+        });
+      }
+      return audioCtx;
+    }
+
+    function playPhaseTransitionSound() {
+      if (!ensureAudioContext() || !audioCtx || audioCtx.state !== "running") return;
+      try {
+        const now = audioCtx.currentTime;
+        const repetitions = 3;
+        const gap = 0.55; // seconds between beeps
+        const duration = 0.9;
+
+        for (let i = 0; i < repetitions; i++) {
+          const startTime = now + i * gap;
+          const endTime = startTime + duration;
+          const oscillator = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          oscillator.type = "triangle";
+          oscillator.frequency.setValueAtTime(1100, startTime);
+          oscillator.frequency.exponentialRampToValueAtTime(1700, endTime);
+          gain.gain.setValueAtTime(0.001, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.4, startTime + 0.06);
+          gain.gain.setValueAtTime(0.4, endTime - 0.2);
+          gain.gain.exponentialRampToValueAtTime(0.001, endTime);
+          oscillator.connect(gain);
+          gain.connect(audioCtx.destination);
+          oscillator.start(startTime);
+          oscillator.stop(endTime + 0.05);
+        }
+      } catch (err) {
+        // ignore playback errors
+      }
+    }
+
+    function updateFullscreenButton() {
+      if (!document.fullscreenEnabled) {
+        fullscreenToggleBtnEl.disabled = true;
+        fullscreenToggleBtnEl.textContent = "Pantalla completa no disponible";
+        return;
+      }
+
+      const isFullscreen = document.fullscreenElement != null;
+      fullscreenToggleBtnEl.textContent = isFullscreen ? "Salir de pantalla completa" : "Pantalla completa";
+      fullscreenToggleBtnEl.disabled = false;
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenEnabled) return;
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(function(){
+          // ignore errors exiting fullscreen
+        });
+      } else {
+        document.documentElement.requestFullscreen().catch(function(){
+          // ignore errors entering fullscreen
+        });
+      }
+    }
+
+    // listeners
+    startPauseBtnEl.addEventListener("click", function(){
+      ensureAudioContext();
+      if (isRunning) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
+    });
+
+    resetBtnEl.addEventListener("click", function(){
+      ensureAudioContext();
+      resetTimer();
+    });
+
+    skipBtnEl.addEventListener("click", function(){
+      ensureAudioContext();
+      skipCurrentPhase();
+    });
+
+    skip10BtnEl.addEventListener("click", function(){
+      ensureAudioContext();
+      skipSecondsInCurrentPhase(10);
+    });
+
+    fullscreenToggleBtnEl.addEventListener("click", function(){
+      toggleFullscreen();
+    });
+
+    document.addEventListener("fullscreenchange", updateFullscreenButton);
+    document.addEventListener("fullscreenerror", updateFullscreenButton);
+
+    // init
+    updateFullscreenButton();
+    resetTimer();
+  </script>
+</body>
+</html>
