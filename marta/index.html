@@ -359,6 +359,7 @@
     let started = false;
     let timerId = null;
     let audioCtx = null;
+    let wakeLockSentinel = null;
 
     // DOM refs
     const timeDisplayEl = document.getElementById("timeDisplay");
@@ -455,6 +456,7 @@
       // 1 segundo intervalo
       timerId = setInterval(tick, 1000);
       updateUI();
+      requestWakeLock();
     }
 
     function stopTimer() {
@@ -464,6 +466,7 @@
         timerId = null;
       }
       updateUI();
+      releaseWakeLock();
     }
 
     function resetTimer() {
@@ -536,6 +539,31 @@
       }
     }
 
+    async function requestWakeLock() {
+      if (!('wakeLock' in navigator)) return;
+      if (wakeLockSentinel) return;
+      try {
+        wakeLockSentinel = await navigator.wakeLock.request('screen');
+        wakeLockSentinel.addEventListener('release', function(){
+          wakeLockSentinel = null;
+          if (isRunning) {
+            requestWakeLock();
+          }
+        });
+      } catch (err) {
+        wakeLockSentinel = null;
+      }
+    }
+
+    function releaseWakeLock() {
+      if (!wakeLockSentinel) return;
+      wakeLockSentinel.release().catch(function(){
+        // ignore release errors
+      }).finally(function(){
+        wakeLockSentinel = null;
+      });
+    }
+
     function updateFullscreenButton() {
       if (!document.fullscreenEnabled) {
         fullscreenToggleBtnEl.disabled = true;
@@ -593,6 +621,11 @@
 
     document.addEventListener("fullscreenchange", updateFullscreenButton);
     document.addEventListener("fullscreenerror", updateFullscreenButton);
+    document.addEventListener("visibilitychange", function(){
+      if (!document.hidden && isRunning) {
+        requestWakeLock();
+      }
+    });
 
     // init
     updateFullscreenButton();
