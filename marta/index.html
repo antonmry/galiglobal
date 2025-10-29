@@ -492,6 +492,42 @@
       margin-left:.5rem;
     }
 
+    #hrmBpmValue span:first-child {
+      font-size:2.75rem;
+      margin-left:0;
+      color:inherit;
+    }
+
+    #hrmBpmValue.in-range {
+      color:var(--good);
+    }
+
+    #hrmBpmValue.low-range {
+      color:var(--hard);
+    }
+
+    #hrmBpmValue.high-range {
+      color:#f87171;
+    }
+
+    .hrm-range-status {
+      font-size:.8rem;
+      color:var(--sub);
+      min-height:1.2rem;
+    }
+
+    .hrm-range-status.in-range {
+      color:var(--good);
+    }
+
+    .hrm-range-status.low-range {
+      color:var(--hard);
+    }
+
+    .hrm-range-status.high-range {
+      color:#f87171;
+    }
+
     #hrmChart {
       width:100%;
       height:140px;
@@ -566,7 +602,8 @@
 
     <section class="hrm-panel" aria-labelledby="hrmPanelTitle">
       <h2 class="hrm-title" id="hrmPanelTitle">Sesión HR</h2>
-      <div id="hrmBpmValue">--<span>bpm</span></div>
+      <div id="hrmBpmValue"><span id="hrmBpmNumber">--</span><span>bpm</span></div>
+      <div class="hrm-range-status" id="hrmRangeStatus" aria-live="polite"></div>
       <canvas id="hrmChart" role="img" aria-label="Historial de ritmo cardíaco"></canvas>
       <button id="hrmToggleBtn" class="disconnected">Conectar banda</button>
       <div id="hrmStatus" aria-live="polite">Listo para conectar.</div>
@@ -1081,6 +1118,7 @@
       renderPlanSummary();
       updateUI();
       persistActiveStages();
+      updateHrmRangeFeedback(null);
       if (!settings.silent) {
         setConfigFeedback("success", "Configuración aplicada.");
       } else {
@@ -1247,6 +1285,8 @@
       progressBarEl.style.width = `${pct}%`;
 
       startPauseBtnEl.textContent = isRunning ? "Pausa" : (started ? "Reanudar" : "Iniciar");
+
+      updateHrmRangeFeedback();
     }
 
     function nextSegment() {
@@ -1255,12 +1295,14 @@
         currentSegment++;
         remaining = workoutPlan[currentSegment].durationSec;
         playPhaseTransitionSound();
+        updateHrmRangeFeedback();
       } else {
         started = false;
         remaining = 0;
         stopTimer();
         subStatusEl.textContent = "Sesión terminada";
         playPhaseTransitionSound();
+        updateHrmRangeFeedback();
       }
     }
 
@@ -1271,6 +1313,7 @@
         nextSegment();
       }
       updateUI();
+      updateHrmRangeFeedback(null);
     }
 
     function startTimer() {
@@ -1531,7 +1574,10 @@
 
     const hrmToggleBtnEl = document.getElementById("hrmToggleBtn");
     const hrmBpmEl = document.getElementById("hrmBpmValue");
+    const hrmBpmNumberEl = document.getElementById("hrmBpmNumber");
     const hrmStatusEl = document.getElementById("hrmStatus");
+    const hrmRangeStatusEl = document.getElementById("hrmRangeStatus");
+    let hrmLastValue = null;
 
     function hrmSetStatus(message) {
       if (!hrmStatusEl) return;
@@ -1544,24 +1590,99 @@
       if (isConnected) {
         hrmToggleBtnEl.textContent = "Desconectar";
         hrmToggleBtnEl.classList.remove("disconnected");
+        updateHrmRangeFeedback();
       } else {
         hrmToggleBtnEl.textContent = "Conectar banda";
         hrmToggleBtnEl.classList.add("disconnected");
-        if (hrmBpmEl && hrmBpmEl.firstChild) {
-          hrmBpmEl.firstChild.textContent = "--";
+        if (hrmBpmNumberEl) {
+          hrmBpmNumberEl.textContent = "--";
         }
+        updateHrmRangeFeedback(null);
       }
     }
 
+    function getCurrentTargetRange() {
+      if (!workoutPlan.length) return null;
+      const index = Math.min(Math.max(currentSegment, 0), workoutPlan.length - 1);
+      const segment = workoutPlan[index];
+      if (!segment) return null;
+      return {
+        min: segment.bpmMin,
+        max: segment.bpmMax,
+        label: segment.bpmLabel
+      };
+    }
+
+    function updateHrmRangeFeedback(currentHr) {
+      if (typeof currentHr === "undefined") {
+        currentHr = hrmLastValue;
+      } else if (currentHr === null) {
+        hrmLastValue = null;
+        currentHr = null;
+      } else {
+        hrmLastValue = currentHr;
+      }
+
+      if (!hrmRangeStatusEl || !hrmBpmEl) return;
+
+      hrmBpmEl.classList.remove("in-range", "low-range", "high-range");
+      hrmRangeStatusEl.classList.remove("in-range", "low-range", "high-range");
+
+      const range = getCurrentTargetRange();
+      if (!range) {
+        hrmRangeStatusEl.textContent = "Configura tus etapas.";
+        return;
+      }
+
+      const hasMin = range.min != null && !Number.isNaN(range.min);
+      const hasMax = range.max != null && !Number.isNaN(range.max);
+      const label = range.label || (hasMin || hasMax ? formatBpmRange(range.min, range.max) : "-- bpm");
+
+      if (!hasMin && !hasMax) {
+        hrmRangeStatusEl.textContent = `Objetivo: ${label}`;
+        return;
+      }
+
+      if (currentHr == null) {
+        hrmRangeStatusEl.textContent = `Objetivo: ${label}`;
+        return;
+      }
+
+      let state = "in-range";
+      let message = `Dentro del objetivo (${label})`;
+
+      if (hasMin && currentHr < range.min) {
+        state = "low-range";
+        message = `Por debajo del objetivo (${label})`;
+      } else if (hasMax && currentHr > range.max) {
+        state = "high-range";
+        message = `Por encima del objetivo (${label})`;
+      }
+
+      if (state === "in-range") {
+        hrmBpmEl.classList.add("in-range");
+        hrmRangeStatusEl.classList.add("in-range");
+      } else if (state === "low-range") {
+        hrmBpmEl.classList.add("low-range");
+        hrmRangeStatusEl.classList.add("low-range");
+      } else if (state === "high-range") {
+        hrmBpmEl.classList.add("high-range");
+        hrmRangeStatusEl.classList.add("high-range");
+      }
+
+      hrmRangeStatusEl.textContent = message;
+    }
+
     function hrmUpdateBpm(hr) {
-      if (hrmBpmEl && hrmBpmEl.firstChild) {
-        hrmBpmEl.firstChild.textContent = hr.toString();
+      if (hrmBpmNumberEl) {
+        hrmBpmNumberEl.textContent = hr.toString();
       }
       hrmSamples.push(hr);
       if (hrmSamples.length > HRM_MAX_POINTS) {
         hrmSamples.shift();
       }
       queueHrmDraw();
+      updateHrmRangeFeedback(hr);
     }
 
     function setupHrmCanvas() {
