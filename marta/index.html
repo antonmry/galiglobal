@@ -191,44 +191,269 @@
       background:#0f172a;
       border-radius:.75rem;
       padding:1rem;
-      font-size:.875rem;
-      line-height:1.4;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+    }
+
+    .plan-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:.5rem;
+    }
+
+    .plan-title {
+      font-size:.95rem;
+      font-weight:600;
+      color:var(--text);
+    }
+
+    .plan-total {
+      font-size:.8rem;
       color:var(--sub);
     }
 
-    .plan-row {
+    .plan-list {
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+    }
+
+    .plan-item {
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      margin-bottom:.5rem;
+      gap:.75rem;
+      padding:.85rem;
+      background:#111a2e;
+      border-radius:.75rem;
+      border:1px solid rgba(148,163,184,.15);
     }
-    .plan-left {
+
+    .plan-item-main {
       display:flex;
       flex-direction:column;
+      gap:.25rem;
     }
-    .plan-phase {
+
+    .plan-item-label {
       font-weight:500;
       color:var(--text);
       font-size:.9rem;
       line-height:1.3;
     }
-    .plan-desc {
+
+    .plan-item-desc {
       color:var(--sub);
       font-size:.8rem;
       line-height:1.3;
     }
-    .plan-right {
+
+    .plan-item-meta {
       text-align:right;
       min-width:4rem;
       font-size:.8rem;
       line-height:1.3;
       color:var(--sub);
     }
-    .badge-fast{
-      color:var(--hard);
+
+    .config-panel {
+      background:#111a2e;
+      border-radius:.75rem;
+      padding:1rem;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      border:1px solid rgba(148,163,184,.15);
     }
-    .badge-easy{
-      color:var(--good);
+
+    .config-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:.75rem;
+    }
+
+    .config-title {
+      font-size:.95rem;
+      font-weight:600;
+      color:var(--text);
+    }
+
+    .config-add-btn,
+    .config-apply-btn,
+    .stage-remove-btn,
+    .stage-move-btn {
+      background:#334155;
+      color:var(--text);
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:.65rem;
+      padding:.6rem .9rem;
+      font-size:.85rem;
+      font-weight:500;
+      cursor:pointer;
+      transition:background .2s ease, color .2s ease;
+    }
+
+    .config-add-btn:hover,
+    .config-apply-btn:hover,
+    .stage-remove-btn:hover,
+    .stage-move-btn:hover {
+      background:rgba(56,189,248,.15);
+      color:var(--accent);
+    }
+
+    .config-stages {
+      display:flex;
+      flex-direction:column;
+      gap:.9rem;
+    }
+
+    .config-empty {
+      font-size:.85rem;
+      color:var(--sub);
+    }
+
+    .stage-card {
+      background:#0f172a;
+      border-radius:.75rem;
+      border:1px solid rgba(148,163,184,.15);
+      padding:.9rem;
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+    }
+
+    .stage-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:.75rem;
+    }
+
+    .stage-field {
+      flex:1 1 140px;
+      display:flex;
+      flex-direction:column;
+      gap:.35rem;
+    }
+
+    .stage-field label {
+      font-size:.75rem;
+      color:var(--sub);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .stage-field input,
+    .stage-field select {
+      background:#1e253a;
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:.55rem;
+      padding:.55rem .65rem;
+      color:var(--text);
+      font-size:.9rem;
+      width:100%;
+    }
+
+    .stage-field input:focus,
+    .stage-field select:focus {
+      outline:2px solid rgba(56,189,248,.6);
+      outline-offset:2px;
+    }
+
+    .stage-actions {
+      display:flex;
+      justify-content:flex-end;
+      gap:.5rem;
+      flex-wrap:wrap;
+    }
+
+    .config-apply-btn {
+      align-self:flex-end;
+    }
+
+    .stage-move-btn:disabled {
+      opacity:.35;
+      cursor:default;
+    }
+
+    .config-feedback {
+      font-size:.8rem;
+      color:var(--sub);
+      min-height:1.1rem;
+    }
+
+    .config-feedback.error {
+      color:#f87171;
+    }
+
+    .config-feedback.success {
+      color:#4ade80;
+    }
+
+    .config-screen {
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.95);
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:2rem 1.5rem;
+      overflow-y:auto;
+      z-index:10;
+    }
+
+    .config-screen[hidden] {
+      display:none;
+    }
+
+    .config-shell {
+      width:min(640px,92vw);
+      background:#0f172a;
+      border-radius:1rem;
+      border:1px solid rgba(148,163,184,.2);
+      box-shadow:0 40px 120px rgba(0,0,0,.55);
+      padding:1.5rem;
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+    }
+
+    .config-screen-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+    }
+
+    .config-screen-title {
+      font-size:1.05rem;
+      font-weight:600;
+      color:var(--text);
+    }
+
+    .config-close-btn {
+      background:#334155;
+      color:var(--text);
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:.65rem;
+      padding:.55rem .9rem;
+      font-size:.85rem;
+      font-weight:500;
+      cursor:pointer;
+      transition:background .2s ease, color .2s ease;
+    }
+
+    .config-close-btn:hover {
+      background:rgba(56,189,248,.2);
+      color:var(--accent);
+    }
+
+    body.modal-open {
+      overflow:hidden;
     }
 
     .hrm-panel {
@@ -329,33 +554,8 @@
       </div>
     </section>
 
-    <section class="plan">
-      <div class="plan-row">
-        <div class="plan-left">
-          <div class="plan-phase">Calentamiento</div>
-          <div class="plan-desc">4 min a 120 bpm</div>
-        </div>
-        <div class="plan-right">1×4:00</div>
-      </div>
-
-      <div class="plan-row">
-        <div class="plan-left">
-          <div class="plan-phase">Trabajo rápido <span class="badge-fast">(160 bpm)</span></div>
-          <div class="plan-desc">2 min rápido + 2 min andar lento</div>
-        </div>
-        <div class="plan-right">5×4:00</div>
-      </div>
-
-      <div class="plan-row">
-        <div class="plan-left">
-          <div class="plan-phase">Enfriamiento <span class="badge-easy">(120 bpm)</span></div>
-          <div class="plan-desc">4 min suaves</div>
-        </div>
-        <div class="plan-right">1×4:00</div>
-      </div>
-    </section>
-
     <footer class="footer-actions">
+      <button class="footer-btn" id="configOpenBtn">Configurar</button>
       <button class="footer-btn" id="resetBtn">Reiniciar</button>
       <button class="footer-btn primary" id="fullscreenToggleBtn">Pantalla completa</button>
     </footer>
@@ -369,69 +569,90 @@
     </section>
   </main>
 
+  <section class="config-screen" id="configScreen" hidden role="dialog" aria-modal="true" aria-labelledby="configScreenTitle" aria-hidden="true" tabindex="-1">
+    <div class="config-shell">
+      <header class="config-screen-header">
+        <h2 class="config-screen-title" id="configScreenTitle">Configurar sesión</h2>
+        <button class="config-close-btn" id="configCloseBtn" type="button">Cerrar</button>
+      </header>
+
+      <section class="config-panel" aria-labelledby="configTitle">
+        <div class="config-header">
+          <h3 class="config-title" id="configTitle">Intervalos</h3>
+          <button class="config-add-btn" id="configAddStageBtn" type="button">Añadir etapa</button>
+        </div>
+        <div class="config-stages" id="configStagesContainer"></div>
+        <div class="config-feedback" id="configFeedback" aria-live="polite"></div>
+        <button class="config-apply-btn" id="configApplyBtn" type="button">Aplicar configuración</button>
+      </section>
+
+      <section class="plan" aria-labelledby="planTitle">
+        <div class="plan-header">
+          <h3 class="plan-title" id="planTitle">Resumen de etapas</h3>
+          <div class="plan-total" id="planTotalDuration"></div>
+        </div>
+        <div class="plan-list" id="planList"></div>
+      </section>
+    </div>
+  </section>
+
   <script>
-    // Definimos el plan como una lista de segmentos secuenciales.
-    // Cada segmento tiene:
-    // - label: texto para mostrar
-    // - durationSec: duración en segundos
-    // - bpm: objetivo de pulsaciones
-    // - type: "warmup" | "fast" | "rest" | "cooldown"
-    // - intervalIndex y intervalTotal para los bloques rápido/descanso
+    // --- Configuración de etapas ---
+    let stageIdCounter = 0;
 
-    function buildWorkoutPlan() {
-      const plan = [];
-
-      // 1. Calentamiento 4 min a 120
-      plan.push({
-        label: "Calentamiento",
-        durationSec: 4 * 60,
-        bpm: 120,
-        type: "warmup",
-        intervalIndex: null,
-        intervalTotal: null
-      });
-
-      // 2. 5 repeticiones de (2 min rápido 160 bpm + 2 min descanso andar lento)
-      const reps = 5;
-      for (let i = 1; i <= reps; i++) {
-        // rápido
-        plan.push({
-          label: "Intervalo rápido",
-          durationSec: 2 * 60,
-          bpm: 160,
-          type: "fast",
-          intervalIndex: i,
-          intervalTotal: reps
-        });
-        // descanso
-        plan.push({
-          label: "Recuperación andando",
-          durationSec: 2 * 60,
-          bpm: 120, // objetivo suave. puedes poner null si no quieres mostrar
-          type: "rest",
-          intervalIndex: i,
-          intervalTotal: reps
-        });
+    function sanitizePositiveInt(value, fallback, { min = 0, max = Infinity } = {}) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) {
+        return fallback;
       }
-
-      // 3. Enfriamiento 4 min a 120
-      plan.push({
-        label: "Enfriamiento",
-        durationSec: 4 * 60,
-        bpm: 120,
-        type: "cooldown",
-        intervalIndex: null,
-        intervalTotal: null
-      });
-
-      return plan;
+      const clamped = Math.min(Math.max(Math.floor(numeric), min), max);
+      return clamped;
     }
 
-    const workoutPlan = buildWorkoutPlan();
+    function createStage({ name, repeats, minutes, seconds, bpmMin, bpmMax, type }) {
+      const repeatValue = sanitizePositiveInt(repeats, 1, { min: 1 });
+      const minuteValue = sanitizePositiveInt(minutes, 0, { min: 0 });
+      const secondValue = sanitizePositiveInt(seconds, 0, { min: 0, max: 59 });
+      return {
+        id: `stage-${++stageIdCounter}`,
+        name: name || "",
+        repeats: repeatValue,
+        minutes: minuteValue,
+        seconds: secondValue,
+        bpmMin: bpmMin === "" || bpmMin == null ? "" : Number(bpmMin),
+        bpmMax: bpmMax === "" || bpmMax == null ? "" : Number(bpmMax),
+        type: type || "custom"
+      };
+    }
+
+    function cloneStage(stage) {
+      return {
+        id: stage.id,
+        name: stage.name,
+        repeats: stage.repeats,
+        minutes: stage.minutes,
+        seconds: stage.seconds,
+        bpmMin: stage.bpmMin === "" ? "" : Number(stage.bpmMin),
+        bpmMax: stage.bpmMax === "" ? "" : Number(stage.bpmMax),
+        type: stage.type
+      };
+    }
+
+    const defaultStages = [
+      createStage({ name: "Calentamiento", repeats: 1, minutes: 4, seconds: 0, bpmMin: 110, bpmMax: 130, type: "warmup" }),
+      createStage({ name: "Intervalo rápido", repeats: 5, minutes: 2, seconds: 0, bpmMin: 155, bpmMax: 170, type: "fast" }),
+      createStage({ name: "Recuperación andando", repeats: 5, minutes: 2, seconds: 0, bpmMin: 100, bpmMax: 125, type: "rest" }),
+      createStage({ name: "Enfriamiento", repeats: 1, minutes: 4, seconds: 0, bpmMin: 110, bpmMax: 130, type: "cooldown" })
+    ];
+
+    let stageDrafts = defaultStages.map(cloneStage);
+    let activeStages = defaultStages.map(cloneStage);
+
+    const workoutPlan = [];
 
     // Estado
     let currentSegment = 0;        // índice en workoutPlan
-    let remaining = workoutPlan[0].durationSec; // segundos restantes del segmento actual
+    let remaining = 0;             // segundos restantes del segmento actual
     let isRunning = false;
     let started = false;
     let timerId = null;
@@ -450,87 +671,526 @@
     const skipBtnEl = document.getElementById("skipBtn");
     const skip10BtnEl = document.getElementById("skip10Btn");
     const fullscreenToggleBtnEl = document.getElementById("fullscreenToggleBtn");
+    const configStagesContainer = document.getElementById("configStagesContainer");
+    const configAddStageBtn = document.getElementById("configAddStageBtn");
+    const configApplyBtn = document.getElementById("configApplyBtn");
+    const configFeedbackEl = document.getElementById("configFeedback");
+    const planListEl = document.getElementById("planList");
+    const planTotalDurationEl = document.getElementById("planTotalDuration");
+    const configOpenBtn = document.getElementById("configOpenBtn");
+    const configCloseBtn = document.getElementById("configCloseBtn");
+    const configScreenEl = document.getElementById("configScreen");
+
+    const stageTypeOptions = [
+      { value: "warmup", label: "Calentamiento" },
+      { value: "fast", label: "Trabajo intenso" },
+      { value: "rest", label: "Recuperación" },
+      { value: "cooldown", label: "Enfriamiento" },
+      { value: "custom", label: "Personalizado" }
+    ];
 
     // Utils
     function fmtTime(totalSec) {
-      const m = Math.floor(totalSec / 60);
-      const s = totalSec % 60;
+      const safe = Math.max(0, Math.floor(totalSec));
+      const m = Math.floor(safe / 60);
+      const s = safe % 60;
       const mm = m.toString().padStart(2,"0");
       const ss = s.toString().padStart(2,"0");
       return mm + ":" + ss;
     }
 
-    function updateUI() {
-      const seg = workoutPlan[currentSegment];
-      timeDisplayEl.textContent = fmtTime(remaining);
-      currentPhaseLabelEl.textContent = seg.label;
+    function secondsFromStage(stage) {
+      const minutes = sanitizePositiveInt(stage.minutes, 0, { min: 0 });
+      const seconds = sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 });
+      return minutes * 60 + seconds;
+    }
 
-      // bpm target
-      bpmTargetEl.textContent = seg.bpm ? seg.bpm + " bpm" : "-- bpm";
+    function totalDurationFromStages(stages) {
+      let total = 0;
+      for (const stage of stages) {
+        const duration = secondsFromStage(stage);
+        const repeats = sanitizePositiveInt(stage.repeats, 1, { min: 1 });
+        total += duration * repeats;
+      }
+      return total;
+    }
 
-      // sub status
-      if (!isRunning && !started && currentSegment >= workoutPlan.length - 1 && remaining === 0) {
-        subStatusEl.textContent = "Sesión terminada";
-      } else if (seg.type === "warmup") {
-        subStatusEl.textContent = "Calentamiento suave";
-      } else if (seg.type === "fast") {
-        subStatusEl.textContent = "Ritmo alto";
-      } else if (seg.type === "rest") {
-        subStatusEl.textContent = "Recupera andando";
-      } else if (seg.type === "cooldown") {
-        subStatusEl.textContent = "Baja pulsaciones";
+    function formatBpmRange(min, max) {
+      const hasMin = min != null && min !== "" && !Number.isNaN(min);
+      const hasMax = max != null && max !== "" && !Number.isNaN(max);
+      if (hasMin && hasMax) {
+        return `${min} - ${max} bpm`;
+      }
+      if (hasMin) {
+        return `≥ ${min} bpm`;
+      }
+      if (hasMax) {
+        return `≤ ${max} bpm`;
+      }
+      return "-- bpm";
+    }
+
+    function setConfigFeedback(kind, message) {
+      if (!configFeedbackEl) return;
+      configFeedbackEl.textContent = message || "";
+      configFeedbackEl.classList.remove("error", "success");
+      if (!message) return;
+      if (kind === "error") {
+        configFeedbackEl.classList.add("error");
+      } else if (kind === "success") {
+        configFeedbackEl.classList.add("success");
+      }
+    }
+
+    function openConfigScreen() {
+      if (!configScreenEl) return;
+      configScreenEl.hidden = false;
+      configScreenEl.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+      setConfigFeedback(null, "");
+      configScreenEl.focus({ preventScroll: true });
+    }
+
+    function closeConfigScreen(options) {
+      if (!configScreenEl) return;
+      const settings = options || {};
+      configScreenEl.hidden = true;
+      configScreenEl.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+      setConfigFeedback(null, "");
+      if (settings.restoreFocus !== false && configOpenBtn) {
+        configOpenBtn.focus({ preventScroll: true });
+      }
+    }
+
+    function createControlField(stage, fieldConfig) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "stage-field";
+
+      const labelEl = document.createElement("label");
+      labelEl.setAttribute("for", `${stage.id}-${fieldConfig.field}`);
+      labelEl.textContent = fieldConfig.label;
+      wrapper.appendChild(labelEl);
+
+      let control;
+      if (fieldConfig.type === "select") {
+        control = document.createElement("select");
+        control.dataset.field = fieldConfig.field;
+        fieldConfig.options.forEach(function(option){
+          const opt = document.createElement("option");
+          opt.value = option.value;
+          opt.textContent = option.label;
+          control.appendChild(opt);
+        });
+        control.value = stage[fieldConfig.field];
       } else {
-        subStatusEl.textContent = "";
+        control = document.createElement("input");
+        control.type = fieldConfig.inputType || "text";
+        if (fieldConfig.min != null) control.min = fieldConfig.min;
+        if (fieldConfig.max != null) control.max = fieldConfig.max;
+        if (fieldConfig.step != null) control.step = fieldConfig.step;
+        if (fieldConfig.placeholder) control.placeholder = fieldConfig.placeholder;
+        const currentValue = stage[fieldConfig.field];
+        control.value = currentValue === "" ? "" : currentValue;
       }
 
-      // intervalo X/Y
-      if (seg.intervalIndex != null) {
-        intervalCountEl.textContent = "Bloque " + seg.intervalIndex + " / " + seg.intervalTotal;
+      control.id = `${stage.id}-${fieldConfig.field}`;
+      control.dataset.stageId = stage.id;
+      control.dataset.field = fieldConfig.field;
+      wrapper.appendChild(control);
+
+      return wrapper;
+    }
+
+    function renderStagesForm() {
+      if (!configStagesContainer) return;
+      configStagesContainer.innerHTML = "";
+
+      if (stageDrafts.length === 0) {
+        const emptyState = document.createElement("div");
+        emptyState.className = "config-empty";
+        emptyState.textContent = "Añade etapas para generar el plan.";
+        configStagesContainer.appendChild(emptyState);
+        return;
+      }
+
+      stageDrafts.forEach(function(stage, index){
+        const card = document.createElement("div");
+        card.className = "stage-card";
+        card.dataset.stageId = stage.id;
+
+        const rowOne = document.createElement("div");
+        rowOne.className = "stage-row";
+        rowOne.appendChild(createControlField(stage, { field: "name", label: "Nombre", placeholder: "Ej. Calentamiento" }));
+        rowOne.appendChild(createControlField(stage, { field: "type", label: "Tipo", type: "select", options: stageTypeOptions }));
+
+        const rowTwo = document.createElement("div");
+        rowTwo.className = "stage-row";
+        rowTwo.appendChild(createControlField(stage, { field: "repeats", label: "Repeticiones", inputType: "number", min: "1" }));
+        rowTwo.appendChild(createControlField(stage, { field: "minutes", label: "Duración (min)", inputType: "number", min: "0" }));
+        rowTwo.appendChild(createControlField(stage, { field: "seconds", label: "Duración (s)", inputType: "number", min: "0", max: "59" }));
+
+        const rowThree = document.createElement("div");
+        rowThree.className = "stage-row";
+        rowThree.appendChild(createControlField(stage, { field: "bpmMin", label: "BPM mínimo", inputType: "number", min: "0" }));
+        rowThree.appendChild(createControlField(stage, { field: "bpmMax", label: "BPM máximo", inputType: "number", min: "0" }));
+
+        const actions = document.createElement("div");
+        actions.className = "stage-actions";
+
+        const moveUpBtn = document.createElement("button");
+        moveUpBtn.type = "button";
+        moveUpBtn.className = "stage-move-btn";
+        moveUpBtn.dataset.stageId = stage.id;
+        moveUpBtn.dataset.direction = "up";
+        moveUpBtn.textContent = "Subir";
+        if (index === 0) {
+          moveUpBtn.disabled = true;
+        }
+        actions.appendChild(moveUpBtn);
+
+        const moveDownBtn = document.createElement("button");
+        moveDownBtn.type = "button";
+        moveDownBtn.className = "stage-move-btn";
+        moveDownBtn.dataset.stageId = stage.id;
+        moveDownBtn.dataset.direction = "down";
+        moveDownBtn.textContent = "Bajar";
+        if (index === stageDrafts.length - 1) {
+          moveDownBtn.disabled = true;
+        }
+        actions.appendChild(moveDownBtn);
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "stage-remove-btn";
+        removeBtn.dataset.stageId = stage.id;
+        removeBtn.textContent = "Eliminar";
+        actions.appendChild(removeBtn);
+
+        card.appendChild(rowOne);
+        card.appendChild(rowTwo);
+        card.appendChild(rowThree);
+        card.appendChild(actions);
+        configStagesContainer.appendChild(card);
+      });
+    }
+
+    function renderPlanSummary() {
+      if (!planListEl || !planTotalDurationEl) return;
+
+      if (activeStages.length === 0) {
+        planListEl.innerHTML = '<div class="config-empty">Aplica una configuración para generar el plan.</div>';
+        planTotalDurationEl.textContent = "";
+        return;
+      }
+
+      const fragments = document.createDocumentFragment();
+      activeStages.forEach(function(stage){
+        const item = document.createElement("div");
+        item.className = "plan-item";
+
+        const main = document.createElement("div");
+        main.className = "plan-item-main";
+        const label = document.createElement("div");
+        label.className = "plan-item-label";
+        label.textContent = stage.name || "Etapa";
+        const desc = document.createElement("div");
+        desc.className = "plan-item-desc";
+        const durationLabel = fmtTime(secondsFromStage(stage));
+        const bpmLabel = formatBpmRange(stage.bpmMin === "" ? null : stage.bpmMin, stage.bpmMax === "" ? null : stage.bpmMax);
+        desc.textContent = `${durationLabel} • ${bpmLabel}`;
+        main.appendChild(label);
+        main.appendChild(desc);
+
+        const meta = document.createElement("div");
+        meta.className = "plan-item-meta";
+        meta.textContent = `${sanitizePositiveInt(stage.repeats, 1, { min: 1 })}×`;
+
+        item.appendChild(main);
+        item.appendChild(meta);
+        fragments.appendChild(item);
+      });
+
+      planListEl.innerHTML = "";
+      planListEl.appendChild(fragments);
+
+      const totalSeconds = totalDurationFromStages(activeStages);
+      planTotalDurationEl.textContent = totalSeconds > 0 ? `Total ${fmtTime(totalSeconds)}` : "";
+    }
+
+    function rebuildWorkoutPlan() {
+      workoutPlan.length = 0;
+      activeStages.forEach(function(stage){
+        const durationSec = secondsFromStage(stage);
+        const repeats = sanitizePositiveInt(stage.repeats, 1, { min: 1 });
+        if (durationSec <= 0 || repeats <= 0) {
+          return;
+        }
+        const bpmMin = stage.bpmMin === "" ? null : Number(stage.bpmMin);
+        const bpmMax = stage.bpmMax === "" ? null : Number(stage.bpmMax);
+        const bpmLabel = formatBpmRange(bpmMin, bpmMax);
+        for (let i = 1; i <= repeats; i++) {
+          workoutPlan.push({
+            label: stage.name || `Etapa ${workoutPlan.length + 1}`,
+            durationSec,
+            type: stage.type || "custom",
+            repeatIndex: repeats > 1 ? i : null,
+            repeatTotal: repeats > 1 ? repeats : null,
+            bpmMin,
+            bpmMax,
+            bpmLabel
+          });
+        }
+      });
+    }
+
+    function validateStages(stages) {
+      const errors = [];
+      if (!stages.length) {
+        errors.push("Añade al menos una etapa antes de aplicar.");
+        return errors;
+      }
+      stages.forEach(function(stage){
+        const duration = secondsFromStage(stage);
+        if (duration <= 0) {
+          errors.push(`La etapa "${stage.name || "Sin nombre"}" debe durar al menos 1 segundo.`);
+        }
+        const repeats = sanitizePositiveInt(stage.repeats, 1, { min: 1 });
+        if (repeats <= 0) {
+          errors.push(`La etapa "${stage.name || "Sin nombre"}" debe repetirse al menos una vez.`);
+        }
+        const min = stage.bpmMin === "" ? null : Number(stage.bpmMin);
+        const max = stage.bpmMax === "" ? null : Number(stage.bpmMax);
+        if (min != null && max != null && min > max) {
+          errors.push(`El mínimo de bpm debe ser menor o igual al máximo en "${stage.name || "Sin nombre"}".`);
+        }
+      });
+      return errors;
+    }
+
+    function applyConfig(options) {
+      const settings = options || {};
+      const errors = validateStages(stageDrafts);
+      if (errors.length) {
+        setConfigFeedback("error", errors[0]);
+        return false;
+      }
+      activeStages = stageDrafts.map(cloneStage);
+      rebuildWorkoutPlan();
+      stopTimer();
+      currentSegment = 0;
+      started = false;
+      if (workoutPlan.length > 0) {
+        remaining = workoutPlan[0].durationSec;
+        subStatusEl.textContent = "Pulsa Iniciar";
+        intervalCountEl.textContent = "";
+        progressBarEl.style.width = "0%";
+      } else {
+        remaining = 0;
+        subStatusEl.textContent = "Configura tus etapas y aplica.";
+        intervalCountEl.textContent = "";
+        progressBarEl.style.width = "0%";
+      }
+      renderPlanSummary();
+      updateUI();
+      if (!settings.silent) {
+        setConfigFeedback("success", "Configuración aplicada.");
+      } else {
+        setConfigFeedback(null, "");
+      }
+      return true;
+    }
+
+    function handleStageInput(event) {
+      const target = event.target;
+      if (!target || !target.dataset) return;
+      const stageId = target.dataset.stageId;
+      const field = target.dataset.field;
+      if (!stageId || !field) return;
+      const stage = stageDrafts.find(function(item){
+        return item.id === stageId;
+      });
+      if (!stage) return;
+
+      const rawValue = target.value;
+      switch (field) {
+        case "name":
+          stage.name = rawValue;
+          break;
+        case "type":
+          stage.type = rawValue;
+          break;
+        case "repeats": {
+          const sanitized = sanitizePositiveInt(rawValue, 1, { min: 1 });
+          stage.repeats = sanitized;
+          target.value = sanitized;
+          break;
+        }
+        case "minutes": {
+          const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0 });
+          stage.minutes = sanitized;
+          target.value = sanitized;
+          break;
+        }
+        case "seconds": {
+          const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0, max: 59 });
+          stage.seconds = sanitized;
+          target.value = sanitized;
+          break;
+        }
+        case "bpmMin": {
+          if (rawValue === "") {
+            stage.bpmMin = "";
+          } else {
+            const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0 });
+            stage.bpmMin = sanitized;
+            target.value = sanitized;
+          }
+          break;
+        }
+        case "bpmMax": {
+          if (rawValue === "") {
+            stage.bpmMax = "";
+          } else {
+            const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0 });
+            stage.bpmMax = sanitized;
+            target.value = sanitized;
+          }
+          break;
+        }
+        default:
+          break;
+      }
+
+      setConfigFeedback(null, "");
+    }
+
+    function handleStageListClick(event) {
+      const removeBtn = event.target.closest && event.target.closest(".stage-remove-btn");
+      if (removeBtn) {
+        const stageId = removeBtn.dataset.stageId;
+        if (!stageId) return;
+        const removeIndex = stageDrafts.findIndex(function(stage){
+          return stage.id === stageId;
+        });
+        if (removeIndex === -1) return;
+        stageDrafts.splice(removeIndex, 1);
+        renderStagesForm();
+        setConfigFeedback(null, "");
+        return;
+      }
+
+      const moveBtn = event.target.closest && event.target.closest(".stage-move-btn");
+      if (!moveBtn) return;
+      const stageId = moveBtn.dataset.stageId;
+      const direction = moveBtn.dataset.direction;
+      if (!stageId || !direction) return;
+      const currentIndex = stageDrafts.findIndex(function(stage){
+        return stage.id === stageId;
+      });
+      if (currentIndex === -1) return;
+      const offset = direction === "up" ? -1 : 1;
+      const newIndex = currentIndex + offset;
+      if (newIndex < 0 || newIndex >= stageDrafts.length) return;
+      const [stage] = stageDrafts.splice(currentIndex, 1);
+      stageDrafts.splice(newIndex, 0, stage);
+      renderStagesForm();
+      setConfigFeedback(null, "");
+    }
+
+    function updateUI() {
+      if (!startPauseBtnEl) return;
+
+      if (workoutPlan.length === 0) {
+        timeDisplayEl.textContent = "00:00";
+        currentPhaseLabelEl.textContent = "Sin etapas";
+        bpmTargetEl.textContent = "-- bpm";
+        if (!isRunning) {
+          const message = stageDrafts.length === 0 ? "Añade etapas para generar el plan." : "Aplica la configuración para actualizar el plan.";
+          subStatusEl.textContent = message;
+        }
+        intervalCountEl.textContent = "";
+        progressBarEl.style.width = "0%";
+        startPauseBtnEl.textContent = "Iniciar";
+        startPauseBtnEl.disabled = true;
+        skipBtnEl.disabled = true;
+        skip10BtnEl.disabled = true;
+        return;
+      }
+
+      startPauseBtnEl.disabled = false;
+      skipBtnEl.disabled = false;
+      skip10BtnEl.disabled = false;
+
+      if (currentSegment >= workoutPlan.length) {
+        currentSegment = workoutPlan.length - 1;
+      }
+
+      const seg = workoutPlan[currentSegment];
+      if (!seg) return;
+
+      remaining = Math.max(0, Math.min(remaining, seg.durationSec));
+      timeDisplayEl.textContent = fmtTime(remaining);
+      currentPhaseLabelEl.textContent = seg.label;
+      bpmTargetEl.textContent = seg.bpmLabel;
+
+      if (!isRunning && !started && currentSegment === workoutPlan.length - 1 && remaining === 0) {
+        subStatusEl.textContent = "Sesión terminada";
+      } else if (!isRunning && !started && remaining === seg.durationSec) {
+        subStatusEl.textContent = "Pulsa Iniciar";
+      } else {
+        const typeHints = {
+          warmup: "Calentamiento suave",
+          fast: "Ritmo alto",
+          rest: "Recupera andando",
+          cooldown: "Baja pulsaciones"
+        };
+        subStatusEl.textContent = typeHints[seg.type] || "";
+      }
+
+      if (seg.repeatIndex != null && seg.repeatTotal != null) {
+        intervalCountEl.textContent = `Repetición ${seg.repeatIndex} / ${seg.repeatTotal}`;
       } else {
         intervalCountEl.textContent = "";
       }
 
-      // barra de progreso dentro del segmento
       const elapsedInSeg = seg.durationSec - remaining;
-      const pct = (elapsedInSeg / seg.durationSec) * 100;
-      progressBarEl.style.width = pct + "%";
+      const pct = seg.durationSec > 0 ? (elapsedInSeg / seg.durationSec) * 100 : 0;
+      progressBarEl.style.width = `${pct}%`;
 
-      // botón start/pause
       startPauseBtnEl.textContent = isRunning ? "Pausa" : (started ? "Reanudar" : "Iniciar");
     }
 
     function nextSegment() {
+      if (workoutPlan.length === 0) return;
       if (currentSegment < workoutPlan.length - 1) {
         currentSegment++;
         remaining = workoutPlan[currentSegment].durationSec;
         playPhaseTransitionSound();
       } else {
-        // fin del entreno
-        stopTimer();
-        subStatusEl.textContent = "Sesión terminada";
-        startPauseBtnEl.textContent = "Iniciar";
-        isRunning = false;
         started = false;
         remaining = 0;
+        stopTimer();
+        subStatusEl.textContent = "Sesión terminada";
         playPhaseTransitionSound();
       }
     }
 
     function tick() {
-      if (!isRunning) return;
+      if (!isRunning || workoutPlan.length === 0) return;
       remaining--;
       if (remaining <= 0) {
-        // pasamos al siguiente segmento
         nextSegment();
       }
       updateUI();
     }
 
     function startTimer() {
-      if (isRunning) return;
+      if (isRunning || workoutPlan.length === 0) {
+        return;
+      }
       isRunning = true;
       started = true;
-      // 1 segundo intervalo
       timerId = setInterval(tick, 1000);
       updateUI();
       requestWakeLock();
@@ -549,20 +1209,29 @@
     function resetTimer() {
       stopTimer();
       currentSegment = 0;
-      remaining = workoutPlan[0].durationSec;
       started = false;
-      subStatusEl.textContent = "Pulsa Iniciar";
-      intervalCountEl.textContent = "";
-      progressBarEl.style.width = "0%";
+      if (workoutPlan.length > 0) {
+        remaining = workoutPlan[0].durationSec;
+        subStatusEl.textContent = "Pulsa Iniciar";
+        intervalCountEl.textContent = "";
+        progressBarEl.style.width = "0%";
+      } else {
+        remaining = 0;
+        subStatusEl.textContent = "Configura tus etapas y aplica.";
+        intervalCountEl.textContent = "";
+        progressBarEl.style.width = "0%";
+      }
       updateUI();
     }
 
     function skipCurrentPhase() {
+      if (workoutPlan.length === 0) return;
       nextSegment();
       updateUI();
     }
 
     function skipSecondsInCurrentPhase(seconds) {
+      if (workoutPlan.length === 0) return;
       if (remaining > seconds) {
         remaining -= seconds;
         updateUI();
@@ -668,6 +1337,60 @@
     }
 
     // listeners
+    if (configAddStageBtn) {
+      configAddStageBtn.addEventListener("click", function(){
+        stageDrafts.push(createStage({
+          name: "Nueva etapa",
+          repeats: 1,
+          minutes: 1,
+          seconds: 0,
+          bpmMin: "",
+          bpmMax: "",
+          type: "custom"
+        }));
+        renderStagesForm();
+        setConfigFeedback(null, "");
+      });
+    }
+
+    if (configApplyBtn) {
+      configApplyBtn.addEventListener("click", function(){
+        applyConfig();
+      });
+    }
+
+    if (configStagesContainer) {
+      configStagesContainer.addEventListener("input", handleStageInput);
+      configStagesContainer.addEventListener("change", handleStageInput);
+      configStagesContainer.addEventListener("click", handleStageListClick);
+    }
+
+    if (configOpenBtn && configScreenEl) {
+      configOpenBtn.addEventListener("click", function(){
+        openConfigScreen();
+      });
+    }
+
+    if (configCloseBtn) {
+      configCloseBtn.addEventListener("click", function(){
+        closeConfigScreen();
+      });
+    }
+
+    if (configScreenEl) {
+      configScreenEl.addEventListener("click", function(event){
+        if (event.target === configScreenEl) {
+          closeConfigScreen();
+        }
+      });
+    }
+
+    document.addEventListener("keydown", function(event){
+      if (event.key === "Escape" && configScreenEl && !configScreenEl.hidden) {
+        closeConfigScreen();
+      }
+    });
+
     startPauseBtnEl.addEventListener("click", function(){
       ensureAudioContext();
       if (isRunning) {
@@ -932,6 +1655,8 @@
     });
 
     // init
+    renderStagesForm();
+    applyConfig({ silent: true });
     updateFullscreenButton();
     resetTimer();
     hrmSetConnectedUI(false);
