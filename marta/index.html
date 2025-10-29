@@ -213,6 +213,11 @@
       color:var(--sub);
     }
 
+    .plan-workout-name {
+      font-size:.8rem;
+      color:var(--sub);
+    }
+
     .plan-list {
       display:flex;
       flex-direction:column;
@@ -265,6 +270,82 @@
       flex-direction:column;
       gap:1rem;
       border:1px solid rgba(148,163,184,.15);
+    }
+
+    .workout-panel {
+      background:#111a2e;
+      border-radius:.75rem;
+      padding:1rem;
+      border:1px solid rgba(148,163,184,.15);
+      display:flex;
+      flex-direction:column;
+      gap:.85rem;
+    }
+
+    .workout-row {
+      display:flex;
+      gap:.75rem;
+      flex-wrap:wrap;
+      align-items:flex-end;
+    }
+
+    .workout-field {
+      flex:1 1 160px;
+      display:flex;
+      flex-direction:column;
+      gap:.35rem;
+    }
+
+    .workout-field label {
+      font-size:.75rem;
+      color:var(--sub);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    #workoutSelect,
+    #workoutNameInput {
+      background:#1e253a;
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:.55rem;
+      padding:.55rem .65rem;
+      color:var(--text);
+      font-size:.9rem;
+      width:100%;
+    }
+
+    #workoutSelect:focus,
+    #workoutNameInput:focus {
+      outline:2px solid rgba(56,189,248,.6);
+      outline-offset:2px;
+    }
+
+    .workout-actions {
+      display:flex;
+      gap:.5rem;
+      flex-wrap:wrap;
+    }
+
+    .workout-btn {
+      background:#334155;
+      color:var(--text);
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:.65rem;
+      padding:.55rem .85rem;
+      font-size:.85rem;
+      font-weight:500;
+      cursor:pointer;
+      transition:background .2s ease, color .2s ease;
+    }
+
+    .workout-btn:hover {
+      background:rgba(56,189,248,.2);
+      color:var(--accent);
+    }
+
+    .workout-btn:disabled {
+      opacity:.4;
+      cursor:default;
     }
 
     .config-header {
@@ -370,7 +451,7 @@
     }
 
     .config-apply-btn {
-      align-self:flex-end;
+      align-self:auto;
     }
 
     .stage-move-btn:disabled {
@@ -425,6 +506,12 @@
       justify-content:space-between;
       align-items:center;
       gap:1rem;
+    }
+
+    .config-screen-actions {
+      display:flex;
+      gap:.5rem;
+      flex-wrap:wrap;
     }
 
     .config-screen-title {
@@ -618,8 +705,29 @@
     <div class="config-shell">
       <header class="config-screen-header">
         <h2 class="config-screen-title" id="configScreenTitle">Configurar sesión</h2>
-        <button class="config-close-btn" id="configCloseBtn" type="button">Cerrar</button>
+        <div class="config-screen-actions">
+          <button class="config-apply-btn" id="configApplyBtn" type="button">Aplicar configuración</button>
+          <button class="config-close-btn" id="configCloseBtn" type="button">Cerrar</button>
+        </div>
       </header>
+
+      <section class="workout-panel" aria-labelledby="workoutPickerTitle">
+        <div class="workout-row">
+          <div class="workout-field">
+            <label for="workoutSelect" id="workoutPickerTitle">Entrenamiento</label>
+            <select id="workoutSelect"></select>
+          </div>
+          <div class="workout-actions">
+            <button class="workout-btn" id="workoutAddBtn" type="button">Nuevo</button>
+            <button class="workout-btn" id="workoutDuplicateBtn" type="button">Duplicar</button>
+            <button class="workout-btn" id="workoutDeleteBtn" type="button">Eliminar</button>
+          </div>
+        </div>
+        <div class="workout-field">
+          <label for="workoutNameInput">Nombre del entrenamiento</label>
+          <input id="workoutNameInput" type="text" maxlength="60" placeholder="Ej. Series tempo" />
+        </div>
+      </section>
 
       <section class="config-panel" aria-labelledby="configTitle">
         <div class="config-header">
@@ -628,7 +736,6 @@
         </div>
         <div class="config-stages" id="configStagesContainer"></div>
         <div class="config-feedback" id="configFeedback" aria-live="polite"></div>
-        <button class="config-apply-btn" id="configApplyBtn" type="button">Aplicar configuración</button>
       </section>
 
       <section class="plan" aria-labelledby="planTitle">
@@ -636,6 +743,7 @@
           <h3 class="plan-title" id="planTitle">Resumen de etapas</h3>
           <div class="plan-total" id="planTotalDuration"></div>
         </div>
+        <div class="plan-workout-name" id="planWorkoutName"></div>
         <div class="plan-list" id="planList"></div>
       </section>
     </div>
@@ -644,6 +752,7 @@
   <script>
     // --- Configuración de etapas ---
     let stageIdCounter = 0;
+    let workoutIdCounter = 0;
 
     function sanitizePositiveInt(value, fallback, { min = 0, max = Infinity } = {}) {
       const numeric = Number(value);
@@ -683,7 +792,34 @@
       };
     }
 
-    const STORAGE_KEY = "workoutStages.v1";
+    function generateWorkoutId() {
+      workoutIdCounter += 1;
+      return `workout-${Date.now()}-${workoutIdCounter}`;
+    }
+
+    function cloneWorkout(workout) {
+      return {
+        id: workout.id || generateWorkoutId(),
+        name: workout.name || "Entrenamiento",
+        stages: workout.stages.map(cloneStage),
+        drafts: workout.drafts ? workout.drafts.map(cloneStage) : null
+      };
+    }
+
+    function generateWorkoutName(base) {
+      const used = new Set(workouts.map(function(item){ return item.name; }));
+      let candidate = (base && base.trim()) || `Entrenamiento ${workouts.length + 1}`;
+      if (!used.has(candidate)) {
+        return candidate;
+      }
+      let suffix = 2;
+      while (used.has(`${candidate} (${suffix})`)) {
+        suffix += 1;
+      }
+      return `${candidate} (${suffix})`;
+    }
+
+    const STORAGE_KEY = "workoutConfigs.v1";
     let storageAvailableMemo = null;
 
     function isStorageAvailable() {
@@ -705,60 +841,134 @@
       return storageAvailableMemo;
     }
 
-    function persistActiveStages() {
+    function persistWorkouts() {
       if (!isStorageAvailable()) return;
       try {
-        const payload = activeStages.map(function(stage){
-          return {
-            name: stage.name,
-            repeats: sanitizePositiveInt(stage.repeats, 1, { min: 1 }),
-            minutes: sanitizePositiveInt(stage.minutes, 0, { min: 0 }),
-            seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
-            bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
-            bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
-            type: stage.type || "custom"
-          };
-        });
+        const payload = {
+          workouts: workouts.map(function(workout){
+            return {
+              id: workout.id,
+              name: workout.name,
+              stages: workout.stages.map(function(stage){
+                return {
+                  name: stage.name,
+                  repeats: sanitizePositiveInt(stage.repeats, 1, { min: 1 }),
+                  minutes: sanitizePositiveInt(stage.minutes, 0, { min: 0 }),
+                  seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
+                  bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
+                  bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
+                  type: stage.type || "custom"
+                };
+              }),
+              drafts: workout.drafts ? workout.drafts.map(function(stage){
+                return {
+                  name: stage.name,
+                  repeats: sanitizePositiveInt(stage.repeats, 1, { min: 1 }),
+                  minutes: sanitizePositiveInt(stage.minutes, 0, { min: 0 }),
+                  seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
+                  bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
+                  bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
+                  type: stage.type || "custom"
+                };
+              }) : null
+            };
+          }),
+          currentId: currentWorkout ? currentWorkout.id : null,
+          activeId: activeWorkout ? activeWorkout.id : null
+        };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
       } catch (err) {
         console.warn("No se pudo guardar la configuración", err);
       }
     }
 
-    function loadPersistedStages() {
+    function loadPersistedWorkouts() {
       if (!isStorageAvailable()) return null;
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return null;
         const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed) || parsed.length === 0) {
+        if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.workouts)) {
           return null;
         }
-        const restored = [];
-        parsed.forEach(function(entry){
-          if (!entry || typeof entry !== "object") return;
-          restored.push(createStage({
-            name: entry.name,
-            repeats: entry.repeats,
-            minutes: entry.minutes,
-            seconds: entry.seconds,
-            bpmMin: entry.bpmMin == null ? "" : entry.bpmMin,
-            bpmMax: entry.bpmMax == null ? "" : entry.bpmMax,
-            type: entry.type
-          }));
+        const restoredWorkouts = [];
+        parsed.workouts.forEach(function(entry){
+          if (!entry || typeof entry !== "object" || !Array.isArray(entry.stages)) return;
+          restoredWorkouts.push({
+            id: entry.id || `workout-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            name: entry.name || "Entrenamiento",
+            stages: entry.stages.map(function(stage){
+              return createStage({
+                name: stage.name,
+                repeats: stage.repeats,
+                minutes: stage.minutes,
+                seconds: stage.seconds,
+                bpmMin: stage.bpmMin == null ? "" : stage.bpmMin,
+                bpmMax: stage.bpmMax == null ? "" : stage.bpmMax,
+                type: stage.type
+              });
+            }),
+            drafts: Array.isArray(entry.drafts) ? entry.drafts.map(function(stage){
+              return createStage({
+                name: stage.name,
+                repeats: stage.repeats,
+                minutes: stage.minutes,
+                seconds: stage.seconds,
+                bpmMin: stage.bpmMin == null ? "" : stage.bpmMin,
+                bpmMax: stage.bpmMax == null ? "" : stage.bpmMax,
+                type: stage.type
+              });
+            }) : null
+          });
         });
-        return restored.length ? restored : null;
+        return {
+          workouts: restoredWorkouts,
+          currentId: parsed.currentId || null,
+          activeId: parsed.activeId || null
+        };
       } catch (err) {
         console.warn("No se pudo cargar la configuración", err);
         return null;
       }
     }
 
-    function bootstrapStages() {
-      const stored = loadPersistedStages();
-      if (stored && stored.length) {
-        stageDrafts = stored.map(cloneStage);
-        activeStages = stored.map(cloneStage);
+    function bootstrapWorkouts() {
+      const stored = loadPersistedWorkouts();
+      if (stored && Array.isArray(stored.workouts) && stored.workouts.length) {
+        workouts = stored.workouts.map(cloneWorkout);
+        const selected = stored.currentId ? workouts.find(function(item){
+          return item.id === stored.currentId;
+        }) : null;
+        const active = stored.activeId ? workouts.find(function(item){
+          return item.id === stored.activeId;
+        }) : null;
+        currentWorkout = selected || active || workouts[0];
+        activeWorkout = active || currentWorkout;
+      } else {
+        const defaultWorkout = {
+          id: "default-workout",
+          name: "Sesión base",
+          stages: defaultStages.map(cloneStage),
+          drafts: defaultStages.map(cloneStage)
+        };
+        workouts = [defaultWorkout];
+        currentWorkout = defaultWorkout;
+        activeWorkout = defaultWorkout;
+      }
+
+      workoutIdCounter = workouts.length;
+
+      const draftSource = currentWorkout && currentWorkout.drafts && currentWorkout.drafts.length
+        ? currentWorkout.drafts
+        : (currentWorkout ? currentWorkout.stages : defaultStages);
+
+      stageDrafts = draftSource.map(cloneStage);
+      activeStages = (activeWorkout ? activeWorkout.stages : defaultStages).map(cloneStage);
+      if (!currentWorkout) {
+        currentWorkout = workouts[0];
+      }
+      if (!activeWorkout) {
+        activeWorkout = currentWorkout;
       }
     }
 
@@ -769,8 +979,11 @@
       createStage({ name: "Enfriamiento", repeats: 1, minutes: 4, seconds: 0, bpmMin: 110, bpmMax: 130, type: "cooldown" })
     ];
 
-    let stageDrafts = defaultStages.map(cloneStage);
-    let activeStages = defaultStages.map(cloneStage);
+    let workouts = [];
+    let currentWorkout = null;
+    let activeWorkout = null;
+    let stageDrafts = [];
+    let activeStages = [];
 
     const workoutPlan = [];
 
@@ -784,6 +997,7 @@
     let wakeLockSentinel = null;
 
     // DOM refs
+    const sessionTitleEl = document.getElementById("sessionTitle");
     const timeDisplayEl = document.getElementById("timeDisplay");
     const currentPhaseLabelEl = document.getElementById("currentPhaseLabel");
     const bpmTargetEl = document.getElementById("bpmTarget");
@@ -801,9 +1015,15 @@
     const configFeedbackEl = document.getElementById("configFeedback");
     const planListEl = document.getElementById("planList");
     const planTotalDurationEl = document.getElementById("planTotalDuration");
+    const planWorkoutNameEl = document.getElementById("planWorkoutName");
     const configOpenBtn = document.getElementById("configOpenBtn");
     const configCloseBtn = document.getElementById("configCloseBtn");
     const configScreenEl = document.getElementById("configScreen");
+    const workoutSelectEl = document.getElementById("workoutSelect");
+    const workoutNameInputEl = document.getElementById("workoutNameInput");
+    const workoutAddBtn = document.getElementById("workoutAddBtn");
+    const workoutDuplicateBtn = document.getElementById("workoutDuplicateBtn");
+    const workoutDeleteBtn = document.getElementById("workoutDeleteBtn");
 
     const stageTypeOptions = [
       { value: "warmup", label: "Calentamiento" },
@@ -868,6 +1088,8 @@
 
     function openConfigScreen() {
       if (!configScreenEl) return;
+      renderWorkoutSelector();
+      updateWorkoutNameInputField();
       configScreenEl.hidden = false;
       configScreenEl.setAttribute("aria-hidden", "false");
       document.body.classList.add("modal-open");
@@ -1005,6 +1227,9 @@
       if (activeStages.length === 0) {
         planListEl.innerHTML = '<div class="config-empty">Aplica una configuración para generar el plan.</div>';
         planTotalDurationEl.textContent = "";
+        if (planWorkoutNameEl) {
+          planWorkoutNameEl.textContent = activeWorkout ? activeWorkout.name : "";
+        }
         return;
       }
 
@@ -1040,6 +1265,46 @@
 
       const totalSeconds = totalDurationFromStages(activeStages);
       planTotalDurationEl.textContent = totalSeconds > 0 ? `Total ${fmtTime(totalSeconds)}` : "";
+      if (planWorkoutNameEl) {
+        planWorkoutNameEl.textContent = activeWorkout ? activeWorkout.name : "";
+      }
+    }
+
+    function renderWorkoutSelector() {
+      if (!workoutSelectEl) return;
+      workoutSelectEl.innerHTML = "";
+      workouts.forEach(function(workout){
+        const option = document.createElement("option");
+        option.value = workout.id;
+        option.textContent = workout.name || "Entrenamiento";
+        workoutSelectEl.appendChild(option);
+      });
+      if (currentWorkout) {
+        workoutSelectEl.value = currentWorkout.id;
+      }
+      updateWorkoutButtonsState();
+    }
+
+    function updateWorkoutNameInputField() {
+      if (!workoutNameInputEl) return;
+      workoutNameInputEl.value = currentWorkout ? (currentWorkout.name || "") : "";
+      workoutNameInputEl.disabled = !currentWorkout;
+    }
+
+    function updateWorkoutButtonsState() {
+      const moreThanOne = workouts.length > 1;
+      if (workoutDeleteBtn) {
+        workoutDeleteBtn.disabled = !moreThanOne;
+      }
+      if (workoutDuplicateBtn) {
+        workoutDuplicateBtn.disabled = !currentWorkout;
+      }
+    }
+
+    function snapshotWorkoutDraft() {
+      if (!currentWorkout) return;
+      currentWorkout.drafts = stageDrafts.map(cloneStage);
+      persistWorkouts();
     }
 
     function rebuildWorkoutPlan() {
@@ -1100,6 +1365,11 @@
         return false;
       }
       activeStages = stageDrafts.map(cloneStage);
+      if (currentWorkout) {
+        currentWorkout.stages = activeStages.map(cloneStage);
+        currentWorkout.drafts = activeStages.map(cloneStage);
+      }
+      activeWorkout = currentWorkout;
       rebuildWorkoutPlan();
       stopTimer();
       currentSegment = 0;
@@ -1117,7 +1387,9 @@
       }
       renderPlanSummary();
       updateUI();
-      persistActiveStages();
+      renderWorkoutSelector();
+      updateWorkoutNameInputField();
+      persistWorkouts();
       updateHrmRangeFeedback(null);
       if (!settings.silent) {
         setConfigFeedback("success", "Configuración aplicada.");
@@ -1189,6 +1461,7 @@
       }
 
       setConfigFeedback(null, "");
+      snapshotWorkoutDraft();
     }
 
     function handleStageListClick(event) {
@@ -1203,6 +1476,7 @@
         stageDrafts.splice(removeIndex, 1);
         renderStagesForm();
         setConfigFeedback(null, "");
+        snapshotWorkoutDraft();
         return;
       }
 
@@ -1222,10 +1496,117 @@
       stageDrafts.splice(newIndex, 0, stage);
       renderStagesForm();
       setConfigFeedback(null, "");
+      snapshotWorkoutDraft();
+    }
+
+    function switchToWorkout(workoutId) {
+      if (!workoutId) return;
+      if (currentWorkout && currentWorkout.id === workoutId) {
+        return;
+      }
+      if (currentWorkout) {
+        snapshotWorkoutDraft();
+      }
+      const target = workouts.find(function(workout){
+        return workout.id === workoutId;
+      });
+      if (!target) return;
+      currentWorkout = target;
+      const draftSource = target.drafts && target.drafts.length ? target.drafts : target.stages;
+      stageDrafts = draftSource.map(cloneStage);
+      renderStagesForm();
+      renderWorkoutSelector();
+      updateWorkoutNameInputField();
+      setConfigFeedback("success", "Entrenamiento seleccionado. Ajusta y aplica para activarlo.");
+      renderPlanSummary();
+      snapshotWorkoutDraft();
+      persistWorkouts();
+    }
+
+    function handleWorkoutSelectChange(event) {
+      const selectedId = event.target.value;
+      switchToWorkout(selectedId);
+    }
+
+    function handleWorkoutNameInput(event) {
+      if (!currentWorkout) return;
+      const raw = event.target.value;
+      const trimmed = raw.trim();
+      currentWorkout.name = trimmed || "Entrenamiento";
+      if (trimmed === "") {
+        event.target.value = currentWorkout.name;
+      }
+      renderWorkoutSelector();
+      persistWorkouts();
+    }
+
+    function createNewWorkout(options) {
+      const settings = options || {};
+      const source = settings.sourceStages || defaultStages;
+      const nameBase = settings.name || (settings.duplicate ? `${currentWorkout ? currentWorkout.name : "Entrenamiento"} copia` : null);
+      const workout = {
+        id: generateWorkoutId(),
+        name: generateWorkoutName(nameBase),
+        stages: source.map(cloneStage),
+        drafts: source.map(cloneStage)
+      };
+      workouts.push(workout);
+      switchToWorkout(workout.id);
+      renderWorkoutSelector();
+      updateWorkoutNameInputField();
+      setConfigFeedback("success", settings.duplicate ? "Entrenamiento duplicado." : "Entrenamiento creado. Ajusta las etapas y aplica.");
+      persistWorkouts();
+    }
+
+    function handleWorkoutAdd() {
+      createNewWorkout({});
+    }
+
+    function handleWorkoutDuplicate() {
+      if (!currentWorkout) return;
+      createNewWorkout({
+        duplicate: true,
+        sourceStages: stageDrafts
+      });
+    }
+
+    function handleWorkoutDelete() {
+      if (workouts.length <= 1 || !currentWorkout) {
+        return;
+      }
+      const deletedId = currentWorkout.id;
+      const index = workouts.findIndex(function(workout){
+        return workout.id === deletedId;
+      });
+      if (index === -1) return;
+      workouts.splice(index, 1);
+      const nextIndex = Math.min(index, workouts.length - 1);
+      currentWorkout = workouts[nextIndex];
+      const draftSource = currentWorkout.drafts && currentWorkout.drafts.length ? currentWorkout.drafts : currentWorkout.stages;
+      stageDrafts = draftSource.map(cloneStage);
+      if (activeWorkout && activeWorkout.id === deletedId) {
+        activeWorkout = currentWorkout;
+        activeStages = currentWorkout.stages.map(cloneStage);
+        rebuildWorkoutPlan();
+        updateUI();
+        updateHrmRangeFeedback(null);
+        renderPlanSummary();
+      }
+      renderStagesForm();
+      renderWorkoutSelector();
+      updateWorkoutNameInputField();
+      renderPlanSummary();
+      setConfigFeedback("success", "Entrenamiento eliminado.");
+      snapshotWorkoutDraft();
+      persistWorkouts();
     }
 
     function updateUI() {
       if (!startPauseBtnEl) return;
+
+      if (sessionTitleEl) {
+        sessionTitleEl.textContent = activeWorkout ? activeWorkout.name : "Sesión";
+      }
 
       if (workoutPlan.length === 0) {
         timeDisplayEl.textContent = "00:00";
@@ -1481,6 +1862,7 @@
         }));
         renderStagesForm();
         setConfigFeedback(null, "");
+        snapshotWorkoutDraft();
       });
     }
 
@@ -1494,6 +1876,29 @@
       configStagesContainer.addEventListener("input", handleStageInput);
       configStagesContainer.addEventListener("change", handleStageInput);
       configStagesContainer.addEventListener("click", handleStageListClick);
+    }
+
+    if (workoutSelectEl) {
+      workoutSelectEl.addEventListener("change", handleWorkoutSelectChange);
+    }
+
+    if (workoutNameInputEl) {
+      workoutNameInputEl.addEventListener("input", handleWorkoutNameInput);
+      workoutNameInputEl.addEventListener("blur", function(){
+        handleWorkoutNameInput({ target: workoutNameInputEl });
+      });
+    }
+
+    if (workoutAddBtn) {
+      workoutAddBtn.addEventListener("click", handleWorkoutAdd);
+    }
+
+    if (workoutDuplicateBtn) {
+      workoutDuplicateBtn.addEventListener("click", handleWorkoutDuplicate);
+    }
+
+    if (workoutDeleteBtn) {
+      workoutDeleteBtn.addEventListener("click", handleWorkoutDelete);
     }
 
     if (configOpenBtn && configScreenEl) {
@@ -1864,7 +2269,7 @@
     });
 
     // init
-    bootstrapStages();
+    bootstrapWorkouts();
     renderStagesForm();
     applyConfig({ silent: true });
     updateFullscreenButton();
