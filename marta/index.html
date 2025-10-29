@@ -230,6 +230,75 @@
     .badge-easy{
       color:var(--good);
     }
+
+    .hrm-panel {
+      background:rgba(15,23,42,.65);
+      border-radius:.85rem;
+      padding:1.25rem;
+      display:grid;
+      gap:1rem;
+      text-align:center;
+      border:1px solid rgba(148,163,184,.15);
+    }
+
+    .hrm-title {
+      font-size:.85rem;
+      font-weight:600;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      color:var(--sub);
+      margin:0;
+    }
+
+    #hrmBpmValue {
+      font-size:2.75rem;
+      font-weight:700;
+    }
+
+    #hrmBpmValue span {
+      font-size:1rem;
+      color:var(--sub);
+      margin-left:.5rem;
+    }
+
+    #hrmChart {
+      width:100%;
+      height:140px;
+      border-radius:.75rem;
+      background:rgba(15,23,42,0.7);
+      border:1px solid rgba(148,163,184,0.15);
+    }
+
+    #hrmToggleBtn {
+      background:var(--accent);
+      border:none;
+      border-radius:.75rem;
+      padding:.85rem 1rem;
+      color:#0b1120;
+      font-size:1rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease;
+      box-shadow:0 18px 40px rgba(56,189,248,.45);
+    }
+
+    #hrmToggleBtn:active {
+      transform:translateY(1px);
+      box-shadow:0 12px 24px rgba(56,189,248,.35);
+    }
+
+    #hrmToggleBtn.disconnected {
+      background:transparent;
+      color:var(--text);
+      border:1px solid rgba(148,163,184,0.25);
+      box-shadow:none;
+    }
+
+    #hrmStatus {
+      font-size:.85rem;
+      color:var(--sub);
+      min-height:1.5rem;
+    }
   </style>
 </head>
 <body>
@@ -290,6 +359,14 @@
       <button class="footer-btn" id="resetBtn">Reiniciar</button>
       <button class="footer-btn primary" id="fullscreenToggleBtn">Pantalla completa</button>
     </footer>
+
+    <section class="hrm-panel" aria-labelledby="hrmPanelTitle">
+      <h2 class="hrm-title" id="hrmPanelTitle">Sesión HR</h2>
+      <div id="hrmBpmValue">--<span>bpm</span></div>
+      <canvas id="hrmChart" role="img" aria-label="Historial de ritmo cardíaco"></canvas>
+      <button id="hrmToggleBtn" class="disconnected">Conectar banda</button>
+      <div id="hrmStatus" aria-live="polite">Listo para conectar.</div>
+    </section>
   </main>
 
   <script>
@@ -627,9 +704,239 @@
       }
     });
 
+    // --- Monitor de frecuencia cardíaca ---
+    const hrmSamples = [];
+    const HRM_MAX_POINTS = 120;
+
+    let hrmDevice = null;
+    let hrmServer = null;
+    let hrmCharacteristic = null;
+    let hrmListener = null;
+    let hrmCanvas = null;
+    let hrmCtx = null;
+    let hrmCanvasWidth = 0;
+    let hrmCanvasHeight = 0;
+    let hrmDrawQueued = false;
+
+    const hrmToggleBtnEl = document.getElementById("hrmToggleBtn");
+    const hrmBpmEl = document.getElementById("hrmBpmValue");
+    const hrmStatusEl = document.getElementById("hrmStatus");
+
+    function hrmSetStatus(message) {
+      if (!hrmStatusEl) return;
+      hrmStatusEl.textContent = message;
+      console.log(message);
+    }
+
+    function hrmSetConnectedUI(isConnected) {
+      if (!hrmToggleBtnEl) return;
+      if (isConnected) {
+        hrmToggleBtnEl.textContent = "Desconectar";
+        hrmToggleBtnEl.classList.remove("disconnected");
+      } else {
+        hrmToggleBtnEl.textContent = "Conectar banda";
+        hrmToggleBtnEl.classList.add("disconnected");
+        if (hrmBpmEl && hrmBpmEl.firstChild) {
+          hrmBpmEl.firstChild.textContent = "--";
+        }
+      }
+    }
+
+    function hrmUpdateBpm(hr) {
+      if (hrmBpmEl && hrmBpmEl.firstChild) {
+        hrmBpmEl.firstChild.textContent = hr.toString();
+      }
+      hrmSamples.push(hr);
+      if (hrmSamples.length > HRM_MAX_POINTS) {
+        hrmSamples.shift();
+      }
+      queueHrmDraw();
+    }
+
+    function setupHrmCanvas() {
+      hrmCanvas = document.getElementById("hrmChart");
+      if (!hrmCanvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = hrmCanvas.getBoundingClientRect();
+      hrmCanvasWidth = Math.max(rect.width, 1);
+      hrmCanvasHeight = Math.max(rect.height, 1);
+      hrmCanvas.width = hrmCanvasWidth * dpr;
+      hrmCanvas.height = hrmCanvasHeight * dpr;
+      hrmCtx = hrmCanvas.getContext("2d");
+      if (!hrmCtx) return;
+      hrmCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawHrmGraph(true);
+    }
+
+    function queueHrmDraw(force) {
+      if (force) {
+        drawHrmGraph(true);
+        return;
+      }
+      if (hrmDrawQueued) return;
+      hrmDrawQueued = true;
+      requestAnimationFrame(function(){
+        hrmDrawQueued = false;
+        drawHrmGraph();
+      });
+    }
+
+    function drawHrmGraph(force) {
+      if (!hrmCtx || !hrmCanvasWidth || !hrmCanvasHeight) return;
+      hrmCtx.clearRect(0, 0, hrmCanvasWidth, hrmCanvasHeight);
+      if (hrmSamples.length === 0) {
+        if (force) {
+          hrmCtx.strokeStyle = "rgba(148,163,184,0.35)";
+          hrmCtx.setLineDash([4, 4]);
+          hrmCtx.beginPath();
+          hrmCtx.moveTo(0, hrmCanvasHeight / 2);
+          hrmCtx.lineTo(hrmCanvasWidth, hrmCanvasHeight / 2);
+          hrmCtx.stroke();
+          hrmCtx.setLineDash([]);
+        }
+        return;
+      }
+
+      let min = Infinity;
+      let max = -Infinity;
+      for (const value of hrmSamples) {
+        if (value < min) min = value;
+        if (value > max) max = value;
+      }
+      if (min === max) {
+        min -= 1;
+        max += 1;
+      }
+      const range = max - min;
+      const count = hrmSamples.length;
+      const step = count > 1 ? hrmCanvasWidth / (count - 1) : 0;
+      const points = [];
+      for (let i = 0; i < count; i++) {
+        points.push({
+          x: step * i,
+          y: hrmCanvasHeight - ((hrmSamples[i] - min) / range) * hrmCanvasHeight
+        });
+      }
+
+      hrmCtx.lineWidth = 2;
+      hrmCtx.strokeStyle = "rgba(56,189,248,0.9)";
+      hrmCtx.beginPath();
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        if (i === 0) {
+          hrmCtx.moveTo(point.x, point.y);
+        } else {
+          hrmCtx.lineTo(point.x, point.y);
+        }
+      }
+      hrmCtx.stroke();
+
+      hrmCtx.beginPath();
+      hrmCtx.moveTo(points[0].x, hrmCanvasHeight);
+      for (const point of points) {
+        hrmCtx.lineTo(point.x, point.y);
+      }
+      hrmCtx.lineTo(points[points.length - 1].x, hrmCanvasHeight);
+      hrmCtx.closePath();
+      hrmCtx.fillStyle = "rgba(56,189,248,0.15)";
+      hrmCtx.fill();
+    }
+
+    async function ensureHrmSecureContext() {
+      if (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+        return true;
+      }
+      hrmSetStatus("Necesitas HTTPS o localhost para usar Web Bluetooth.");
+      return false;
+    }
+
+    async function hrmHandleDisconnect(message) {
+      if (hrmCharacteristic && hrmListener) {
+        hrmCharacteristic.removeEventListener("characteristicvaluechanged", hrmListener);
+        try {
+          await hrmCharacteristic.stopNotifications();
+        } catch (err) {
+          console.warn("stopNotifications", err);
+        }
+      }
+      if (hrmDevice && hrmDevice.gatt && hrmDevice.gatt.connected) {
+        hrmDevice.gatt.disconnect();
+      }
+      hrmDevice = null;
+      hrmServer = null;
+      hrmCharacteristic = null;
+      hrmListener = null;
+      hrmSamples.length = 0;
+      queueHrmDraw(true);
+      hrmSetConnectedUI(false);
+      hrmSetStatus(message || "Listo para conectar.");
+    }
+
+    async function onHrmToggle() {
+      if (!navigator.bluetooth) {
+        hrmSetStatus("navigator.bluetooth no disponible. Usa Chrome.");
+        return;
+      }
+
+      if (hrmDevice && hrmDevice.gatt && hrmDevice.gatt.connected) {
+        await hrmHandleDisconnect("Dispositivo desconectado.");
+        return;
+      }
+
+      if (!(await ensureHrmSecureContext())) {
+        return;
+      }
+
+      try {
+        hrmSetStatus("Buscando dispositivo...");
+        hrmDevice = await navigator.bluetooth.requestDevice({
+          filters: [{ services: ["heart_rate"] }]
+        });
+
+        hrmDevice.addEventListener("gattserverdisconnected", function(){
+          hrmHandleDisconnect("Conexión perdida.");
+        });
+
+        hrmSetStatus("Conectando...");
+        hrmServer = await hrmDevice.gatt.connect();
+
+        const hrService = await hrmServer.getPrimaryService("heart_rate");
+        hrmCharacteristic = await hrService.getCharacteristic("heart_rate_measurement");
+
+        hrmListener = function(event) {
+          const data = event.target.value;
+          const flags = data.getUint8(0);
+          const hr = (flags & 1) ? data.getUint16(1, true) : data.getUint8(1);
+          hrmUpdateBpm(hr);
+          hrmSetStatus(`HR recibido: ${hr} bpm`);
+        };
+
+        hrmCharacteristic.addEventListener("characteristicvaluechanged", hrmListener);
+        await hrmCharacteristic.startNotifications();
+
+        hrmSetConnectedUI(true);
+        hrmSetStatus("Conectado. Recibiendo datos...");
+      } catch (error) {
+        console.error(error);
+        await hrmHandleDisconnect("Error: " + error);
+      }
+    }
+
+    if (hrmToggleBtnEl) {
+      hrmToggleBtnEl.addEventListener("click", onHrmToggle);
+    }
+
+    window.addEventListener("resize", function(){
+      setupHrmCanvas();
+      queueHrmDraw(true);
+    });
+
     // init
     updateFullscreenButton();
     resetTimer();
+    hrmSetConnectedUI(false);
+    hrmSetStatus("Listo para conectar.");
+    setupHrmCanvas();
   </script>
 </body>
 </html>
