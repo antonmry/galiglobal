@@ -127,11 +127,9 @@
       margin-top:.5rem;
     }
 
-    .footer-actions {
+    .card-footer {
       margin-top:auto;
       display:flex;
-      gap:.75rem;
-      flex-wrap:wrap;
       justify-content:center;
     }
 
@@ -456,6 +454,14 @@
       overflow:hidden;
     }
 
+    .bottom-controls {
+      margin-top:1.5rem;
+      display:flex;
+      gap:.75rem;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
     .hrm-panel {
       background:rgba(15,23,42,.65);
       border-radius:.85rem;
@@ -554,9 +560,7 @@
       </div>
     </section>
 
-    <footer class="footer-actions">
-      <button class="footer-btn" id="configOpenBtn">Configurar</button>
-      <button class="footer-btn" id="resetBtn">Reiniciar</button>
+    <footer class="card-footer">
       <button class="footer-btn primary" id="fullscreenToggleBtn">Pantalla completa</button>
     </footer>
 
@@ -567,6 +571,10 @@
       <button id="hrmToggleBtn" class="disconnected">Conectar banda</button>
       <div id="hrmStatus" aria-live="polite">Listo para conectar.</div>
     </section>
+    <div class="bottom-controls" role="region" aria-label="Controles de sesión">
+      <button class="footer-btn" id="configOpenBtn">Configurar</button>
+      <button class="footer-btn" id="resetBtn">Reiniciar</button>
+    </div>
   </main>
 
   <section class="config-screen" id="configScreen" hidden role="dialog" aria-modal="true" aria-labelledby="configScreenTitle" aria-hidden="true" tabindex="-1">
@@ -636,6 +644,85 @@
         bpmMax: stage.bpmMax === "" ? "" : Number(stage.bpmMax),
         type: stage.type
       };
+    }
+
+    const STORAGE_KEY = "workoutStages.v1";
+    let storageAvailableMemo = null;
+
+    function isStorageAvailable() {
+      if (storageAvailableMemo != null) {
+        return storageAvailableMemo;
+      }
+      if (typeof window === "undefined" || typeof window.localStorage === "undefined") {
+        storageAvailableMemo = false;
+        return storageAvailableMemo;
+      }
+      try {
+        const testKey = "__workout_cfg_test__";
+        localStorage.setItem(testKey, "1");
+        localStorage.removeItem(testKey);
+        storageAvailableMemo = true;
+      } catch (err) {
+        storageAvailableMemo = false;
+      }
+      return storageAvailableMemo;
+    }
+
+    function persistActiveStages() {
+      if (!isStorageAvailable()) return;
+      try {
+        const payload = activeStages.map(function(stage){
+          return {
+            name: stage.name,
+            repeats: sanitizePositiveInt(stage.repeats, 1, { min: 1 }),
+            minutes: sanitizePositiveInt(stage.minutes, 0, { min: 0 }),
+            seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
+            bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
+            bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
+            type: stage.type || "custom"
+          };
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      } catch (err) {
+        console.warn("No se pudo guardar la configuración", err);
+      }
+    }
+
+    function loadPersistedStages() {
+      if (!isStorageAvailable()) return null;
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          return null;
+        }
+        const restored = [];
+        parsed.forEach(function(entry){
+          if (!entry || typeof entry !== "object") return;
+          restored.push(createStage({
+            name: entry.name,
+            repeats: entry.repeats,
+            minutes: entry.minutes,
+            seconds: entry.seconds,
+            bpmMin: entry.bpmMin == null ? "" : entry.bpmMin,
+            bpmMax: entry.bpmMax == null ? "" : entry.bpmMax,
+            type: entry.type
+          }));
+        });
+        return restored.length ? restored : null;
+      } catch (err) {
+        console.warn("No se pudo cargar la configuración", err);
+        return null;
+      }
+    }
+
+    function bootstrapStages() {
+      const stored = loadPersistedStages();
+      if (stored && stored.length) {
+        stageDrafts = stored.map(cloneStage);
+        activeStages = stored.map(cloneStage);
+      }
     }
 
     const defaultStages = [
@@ -993,6 +1080,7 @@
       }
       renderPlanSummary();
       updateUI();
+      persistActiveStages();
       if (!settings.silent) {
         setConfigFeedback("success", "Configuración aplicada.");
       } else {
@@ -1655,6 +1743,7 @@
     });
 
     // init
+    bootstrapStages();
     renderStagesForm();
     applyConfig({ silent: true });
     updateFullscreenButton();
