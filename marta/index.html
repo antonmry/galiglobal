@@ -890,10 +890,10 @@
       <header class="config-screen-header">
         <h2 class="config-screen-title" id="configScreenTitle">Configurar sesión</h2>
         <div class="config-screen-actions">
-          <button class="config-export-btn" id="configExportBtn" type="button">Descargar JSON</button>
-          <button class="config-import-btn" id="configImportBtn" type="button">Subir JSON</button>
           <button class="config-apply-btn" id="configApplyBtn" type="button">Guardar</button>
           <button class="config-close-btn" id="configCloseBtn" type="button">Cerrar</button>
+          <button class="config-export-btn" id="configExportBtn" type="button">Descargar</button>
+          <button class="config-import-btn" id="configImportBtn" type="button">Subir</button>
         </div>
       </header>
 
@@ -1326,8 +1326,8 @@
 
       const configScreenTitleEl = document.getElementById("configScreenTitle");
       if (configScreenTitleEl) configScreenTitleEl.textContent = t("Configurar sesión", "Configure session");
-      if (configExportBtn) configExportBtn.textContent = t("Descargar JSON", "Download JSON");
-      if (configImportBtn) configImportBtn.textContent = t("Subir JSON", "Upload JSON");
+      if (configExportBtn) configExportBtn.textContent = t("Descargar", "Download");
+      if (configImportBtn) configImportBtn.textContent = t("Subir", "Upload");
       if (configApplyBtn) configApplyBtn.textContent = t("Guardar", "Save");
       if (configCloseBtn) configCloseBtn.textContent = t("Cerrar", "Close");
 
