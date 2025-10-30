@@ -390,6 +390,8 @@
 
     .config-add-btn,
     .config-apply-btn,
+    .config-export-btn,
+    .config-import-btn,
     .stage-remove-btn,
     .stage-move-btn {
       background:#334155;
@@ -405,6 +407,8 @@
 
     .config-add-btn:hover,
     .config-apply-btn:hover,
+    .config-export-btn:hover,
+    .config-import-btn:hover,
     .stage-remove-btn:hover,
     .stage-move-btn:hover {
       background:rgba(56,189,248,.15);
@@ -886,6 +890,8 @@
       <header class="config-screen-header">
         <h2 class="config-screen-title" id="configScreenTitle">Configurar sesión</h2>
         <div class="config-screen-actions">
+          <button class="config-export-btn" id="configExportBtn" type="button">Descargar JSON</button>
+          <button class="config-import-btn" id="configImportBtn" type="button">Subir JSON</button>
           <button class="config-apply-btn" id="configApplyBtn" type="button">Guardar</button>
           <button class="config-close-btn" id="configCloseBtn" type="button">Cerrar</button>
         </div>
@@ -918,6 +924,8 @@
         </div>
         <div class="config-stages" id="configStagesContainer"></div>
       </section>
+
+      <input type="file" id="configImportInput" accept="application/json" hidden />
 
       <section class="plan" aria-labelledby="planTitle">
         <div class="plan-header">
@@ -1238,6 +1246,9 @@
     const configStagesContainer = document.getElementById("configStagesContainer");
     const configAddStageBtn = document.getElementById("configAddStageBtn");
     const configApplyBtn = document.getElementById("configApplyBtn");
+    const configExportBtn = document.getElementById("configExportBtn");
+    const configImportBtn = document.getElementById("configImportBtn");
+    const configImportInput = document.getElementById("configImportInput");
     const configFeedbackEl = document.getElementById("configFeedback");
     const planListEl = document.getElementById("planList");
     const planTotalDurationEl = document.getElementById("planTotalDuration");
@@ -1292,6 +1303,25 @@
         total += duration * repeats;
       }
       return total;
+    }
+
+    function serializeStageForConfig(stage) {
+      return {
+        name: stage.name || "",
+        repeats: sanitizePositiveInt(stage.repeats, 1, { min: 1 }),
+        minutes: sanitizePositiveInt(stage.minutes, 0, { min: 0 }),
+        seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
+        bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
+        bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
+        type: stage.type || "custom",
+        split: Boolean(stage.split),
+        secondaryName: stage.secondaryName || "",
+        secondaryType: stage.secondaryType || "rest",
+        secondaryMinutes: sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 }),
+        secondarySeconds: sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 }),
+        secondaryBpmMin: stage.secondaryBpmMin == null || stage.secondaryBpmMin === "" ? null : Number(stage.secondaryBpmMin),
+        secondaryBpmMax: stage.secondaryBpmMax == null || stage.secondaryBpmMax === "" ? null : Number(stage.secondaryBpmMax)
+      };
     }
 
     function formatBpmRange(min, max) {
@@ -1607,6 +1637,142 @@
       });
 
       sessionPickerListEl.appendChild(fragment);
+    }
+
+    function serializeWorkoutForConfig(workout) {
+      return {
+        name: workout.name || "Entrenamiento",
+        stages: workout.stages.map(serializeStageForConfig)
+      };
+    }
+
+    function exportConfigToJson() {
+      try {
+        const payload = {
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          workouts: workouts.map(serializeWorkoutForConfig),
+          activeName: activeWorkout ? activeWorkout.name : null,
+          currentName: currentWorkout ? currentWorkout.name : null
+        };
+        const json = JSON.stringify(payload, null, 2);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        const timestamp = new Date().toISOString().replace(/[:]/g, "-");
+        anchor.href = url;
+        anchor.download = `config-sesiones-${timestamp}.json`;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+        setConfigFeedback("success", payload.workouts.length ? "Sesiones descargadas." : "No había sesiones para exportar.");
+      } catch (err) {
+        console.error("Export error", err);
+        setConfigFeedback("error", "No se pudo descargar la configuración.");
+      }
+    }
+
+    function importConfigFromData(data) {
+      if (!data || typeof data !== "object") {
+        throw new Error("Formato inválido");
+      }
+      let rawWorkouts = null;
+      if (Array.isArray(data.workouts)) {
+        rawWorkouts = data.workouts;
+      } else if (Array.isArray(data)) {
+        rawWorkouts = data;
+      }
+      if (!rawWorkouts) {
+        throw new Error("No hay sesiones en el archivo");
+      }
+
+      const rebuiltWorkouts = rawWorkouts.map(function(entry, index){
+        const name = entry && typeof entry.name === "string" && entry.name.trim() ? entry.name.trim() : `Entrenamiento ${index + 1}`;
+        const rawStages = Array.isArray(entry.stages) ? entry.stages : [];
+        const stageObjects = rawStages.map(function(stage){
+          return createStage({
+            name: stage && stage.name,
+            repeats: stage && stage.repeats,
+            minutes: stage && stage.minutes,
+            seconds: stage && stage.seconds,
+            bpmMin: stage && (stage.bpmMin == null ? "" : stage.bpmMin),
+            bpmMax: stage && (stage.bpmMax == null ? "" : stage.bpmMax),
+            type: stage && stage.type,
+            split: stage && stage.split,
+            secondaryName: stage && stage.secondaryName,
+            secondaryType: stage && stage.secondaryType,
+            secondaryMinutes: stage && stage.secondaryMinutes,
+            secondarySeconds: stage && stage.secondarySeconds,
+            secondaryBpmMin: stage && (stage.secondaryBpmMin == null ? "" : stage.secondaryBpmMin),
+            secondaryBpmMax: stage && (stage.secondaryBpmMax == null ? "" : stage.secondaryBpmMax)
+          });
+        });
+        return {
+          id: generateWorkoutId(),
+          name,
+          stages: stageObjects.map(cloneStage),
+          drafts: stageObjects.map(cloneStage)
+        };
+      });
+
+      workouts = rebuiltWorkouts;
+
+      const desiredCurrentName = typeof data.currentName === "string" ? data.currentName : null;
+      const desiredActiveName = typeof data.activeName === "string" ? data.activeName : null;
+
+      currentWorkout = desiredCurrentName ? workouts.find(function(item){ return item.name === desiredCurrentName; }) : null;
+      activeWorkout = desiredActiveName ? workouts.find(function(item){ return item.name === desiredActiveName; }) : null;
+
+      if (!currentWorkout) {
+        currentWorkout = workouts.length ? workouts[0] : null;
+      }
+      if (!activeWorkout) {
+        activeWorkout = currentWorkout;
+      }
+
+      stageDrafts = currentWorkout ? (currentWorkout.drafts && currentWorkout.drafts.length ? currentWorkout.drafts.map(cloneStage) : currentWorkout.stages.map(cloneStage)) : [];
+      activeStages = activeWorkout ? activeWorkout.stages.map(cloneStage) : [];
+
+      renderStagesForm();
+      renderWorkoutSelector();
+      updateWorkoutNameInputField();
+      rebuildWorkoutPlan();
+      renderPlanSummary();
+      updateUI();
+      snapshotWorkoutDraft();
+      persistWorkouts();
+      setConfigFeedback("success", "Sesiones importadas. Revisa y guarda si es necesario.");
+    }
+
+    function handleConfigImportFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const text = event.target && typeof event.target.result === "string" ? event.target.result : "";
+          if (!text) {
+            throw new Error("Archivo vacío");
+          }
+          const parsed = JSON.parse(text);
+          importConfigFromData(parsed);
+        } catch (err) {
+          console.error("Import error", err);
+          setConfigFeedback("error", "El archivo no contiene una configuración válida.");
+        } finally {
+          if (configImportInput) {
+            configImportInput.value = "";
+          }
+        }
+      };
+      reader.onerror = function(){
+        console.error("Lectura de archivo fallida", reader.error);
+        setConfigFeedback("error", "No se pudo leer el archivo seleccionado.");
+        if (configImportInput) {
+          configImportInput.value = "";
+        }
+      };
+      reader.readAsText(file);
     }
 
     function openSessionPicker() {
@@ -2396,6 +2562,27 @@
     }
 
     // listeners
+    if (configExportBtn) {
+      configExportBtn.addEventListener("click", function(){
+        exportConfigToJson();
+      });
+    }
+
+    if (configImportBtn && configImportInput) {
+      configImportBtn.addEventListener("click", function(){
+        configImportInput.click();
+      });
+      configImportInput.addEventListener("change", function(event){
+        const input = event.target;
+        const file = input && input.files ? input.files[0] : null;
+        if (file) {
+          handleConfigImportFile(file);
+        } else {
+          configImportInput.value = "";
+        }
+      });
+    }
+
     if (configAddStageBtn) {
       configAddStageBtn.addEventListener("click", function(){
         stageDrafts.push(createStage({
