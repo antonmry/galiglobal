@@ -2332,12 +2332,18 @@
 
     function handleWorkoutNameInput(event) {
       if (!currentWorkout) return;
-      const raw = event.target.value;
-      const trimmed = raw.trim();
-      currentWorkout.name = trimmed || fallbackWorkoutName;
-      if (trimmed === "") {
-        event.target.value = currentWorkout.name;
-      }
+      const value = event.target.value;
+      currentWorkout.name = value;
+      renderWorkoutSelector();
+      persistWorkouts();
+    }
+
+    function handleWorkoutNameCommit() {
+      if (!currentWorkout || !workoutNameInputEl) return;
+      const trimmed = workoutNameInputEl.value.trim();
+      const nextName = trimmed || fallbackWorkoutName;
+      currentWorkout.name = nextName;
+      workoutNameInputEl.value = nextName;
       renderWorkoutSelector();
       persistWorkouts();
     }
@@ -2708,9 +2714,7 @@
 
     if (workoutNameInputEl) {
       workoutNameInputEl.addEventListener("input", handleWorkoutNameInput);
-      workoutNameInputEl.addEventListener("blur", function(){
-        handleWorkoutNameInput({ target: workoutNameInputEl });
-      });
+      workoutNameInputEl.addEventListener("blur", handleWorkoutNameCommit);
     }
 
     if (workoutAddBtn) {
