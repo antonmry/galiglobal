@@ -2086,19 +2086,22 @@
 
     function createNewWorkout(options) {
       const settings = options || {};
-      const source = settings.sourceStages || defaultStages;
-      const nameBase = settings.name || (settings.duplicate ? `${currentWorkout ? currentWorkout.name : "Entrenamiento"} copia` : null);
+      const isDuplicate = Boolean(settings.duplicate);
+      const sourceStages = Array.isArray(settings.sourceStages)
+        ? settings.sourceStages
+        : (isDuplicate ? stageDrafts : []);
+      const nameBase = settings.name || (isDuplicate ? `${currentWorkout ? currentWorkout.name : "Entrenamiento"} copia` : null);
       const workout = {
         id: generateWorkoutId(),
         name: generateWorkoutName(nameBase),
-        stages: source.map(cloneStage),
-        drafts: source.map(cloneStage)
+        stages: sourceStages.map(cloneStage),
+        drafts: sourceStages.map(cloneStage)
       };
       workouts.push(workout);
       switchToWorkout(workout.id);
       renderWorkoutSelector();
       updateWorkoutNameInputField();
-      setConfigFeedback("success", settings.duplicate ? "Entrenamiento duplicado." : "Entrenamiento creado. Ajusta las etapas y aplica.");
+      setConfigFeedback("success", settings.duplicate ? "Entrenamiento duplicado." : "Entrenamiento creado. Añade etapas y guarda.");
       persistWorkouts();
     }
 
