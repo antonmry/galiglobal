@@ -521,6 +521,9 @@
       font-size:.8rem;
       color:var(--sub);
       min-height:1.1rem;
+      text-align:right;
+      padding-right:.1rem;
+      margin-bottom:.5rem;
     }
 
     .config-feedback.error {
@@ -883,10 +886,12 @@
       <header class="config-screen-header">
         <h2 class="config-screen-title" id="configScreenTitle">Configurar sesión</h2>
         <div class="config-screen-actions">
-          <button class="config-apply-btn" id="configApplyBtn" type="button">Aplicar configuración</button>
+          <button class="config-apply-btn" id="configApplyBtn" type="button">Guardar</button>
           <button class="config-close-btn" id="configCloseBtn" type="button">Cerrar</button>
         </div>
       </header>
+
+      <div class="config-feedback" id="configFeedback" aria-live="polite"></div>
 
       <section class="workout-panel" aria-labelledby="workoutPickerTitle">
         <div class="workout-row">
@@ -912,7 +917,6 @@
           <button class="config-add-btn" id="configAddStageBtn" type="button">Añadir etapa</button>
         </div>
         <div class="config-stages" id="configStagesContainer"></div>
-        <div class="config-feedback" id="configFeedback" aria-live="polite"></div>
       </section>
 
       <section class="plan" aria-labelledby="planTitle">
