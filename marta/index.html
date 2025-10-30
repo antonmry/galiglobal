@@ -874,6 +874,7 @@
     <div class="bottom-controls" role="region" aria-label="Controles de sesión">
       <button class="footer-btn" id="configOpenBtn">Configurar</button>
       <button class="footer-btn" id="resetBtn">Reiniciar</button>
+      <button class="footer-btn" id="installBtn" hidden>Instalar app</button>
     </div>
   </main>
 
@@ -1240,6 +1241,7 @@
     let audioCtx = null;
     let wakeLockSentinel = null;
     let sessionPickerReturnFocus = null;
+    let deferredInstallPrompt = null;
 
     // DOM refs
     const sessionTitleEl = document.getElementById("sessionTitle");
@@ -1254,6 +1256,7 @@
     const skipBtnEl = document.getElementById("skipBtn");
     const skip10BtnEl = document.getElementById("skip10Btn");
     const fullscreenToggleBtnEl = document.getElementById("fullscreenToggleBtn");
+    const installBtnEl = document.getElementById("installBtn");
     const configStagesContainer = document.getElementById("configStagesContainer");
     const configAddStageBtn = document.getElementById("configAddStageBtn");
     const configApplyBtn = document.getElementById("configApplyBtn");
@@ -1348,6 +1351,7 @@
 
       const planTitleEl = document.getElementById("planTitle");
       if (planTitleEl) planTitleEl.textContent = t("Resumen de etapas", "Stage summary");
+      if (installBtnEl) installBtnEl.textContent = t("Instalar app", "Install app");
     }
 
     // Utils
@@ -2719,6 +2723,25 @@
       workoutNameInputEl.addEventListener("blur", handleWorkoutNameCommit);
     }
 
+    if (installBtnEl) {
+      installBtnEl.addEventListener("click", async function(){
+        if (!deferredInstallPrompt) {
+          installBtnEl.hidden = true;
+          return;
+        }
+        installBtnEl.disabled = true;
+        try {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+        } catch (err) {
+          console.warn("Install prompt failed", err);
+        }
+        deferredInstallPrompt = null;
+        installBtnEl.disabled = false;
+        installBtnEl.hidden = true;
+      });
+    }
+
     if (workoutAddBtn) {
       workoutAddBtn.addEventListener("click", handleWorkoutAdd);
     }
@@ -2838,6 +2861,21 @@
     document.addEventListener("visibilitychange", function(){
       if (!document.hidden && isRunning) {
         requestWakeLock();
+      }
+    });
+
+    window.addEventListener("beforeinstallprompt", function(event){
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (installBtnEl) {
+        installBtnEl.hidden = false;
+      }
+    });
+
+    window.addEventListener("appinstalled", function(){
+      deferredInstallPrompt = null;
+      if (installBtnEl) {
+        installBtnEl.hidden = true;
       }
     });
 
