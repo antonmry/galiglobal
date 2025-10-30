@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0f172a" />
   <title>Intervalos de carrera</title>
+  <link rel="manifest" href="manifest.webmanifest" />
   <style>
     :root {
       --bg:#0f172a;
@@ -3155,6 +3157,12 @@
     hrmSetConnectedUI(false);
     hrmSetStatus(t("Listo para conectar.", "Ready to connect."));
     setupHrmCanvas();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(function(err){
+        console.warn('Service worker registration failed', err);
+      });
+    }
   </script>
 </body>
 </html>
