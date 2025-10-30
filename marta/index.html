@@ -443,6 +443,38 @@
       outline-offset:2px;
     }
 
+    .stage-split-toggle {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      font-size:.8rem;
+      color:var(--sub);
+      margin-top:.25rem;
+    }
+
+    .stage-split-toggle input {
+      width:auto;
+      accent-color:var(--accent);
+    }
+
+    .stage-subphase {
+      padding:.75rem;
+      border-radius:.65rem;
+      background:#111a2e;
+      border:1px solid rgba(148,163,184,.15);
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+      margin-top:.35rem;
+    }
+
+    .stage-subphase-heading {
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--sub);
+    }
+
     .stage-actions {
       display:flex;
       justify-content:flex-end;
@@ -763,10 +795,12 @@
       return clamped;
     }
 
-    function createStage({ name, repeats, minutes, seconds, bpmMin, bpmMax, type }) {
+    function createStage({ name, repeats, minutes, seconds, bpmMin, bpmMax, type, split, secondaryName, secondaryType, secondaryMinutes, secondarySeconds, secondaryBpmMin, secondaryBpmMax }) {
       const repeatValue = sanitizePositiveInt(repeats, 1, { min: 1 });
       const minuteValue = sanitizePositiveInt(minutes, 0, { min: 0 });
       const secondValue = sanitizePositiveInt(seconds, 0, { min: 0, max: 59 });
+      const secondaryMinuteValue = sanitizePositiveInt(secondaryMinutes, 0, { min: 0 });
+      const secondarySecondValue = sanitizePositiveInt(secondarySeconds, 0, { min: 0, max: 59 });
       return {
         id: `stage-${++stageIdCounter}`,
         name: name || "",
@@ -775,7 +809,14 @@
         seconds: secondValue,
         bpmMin: bpmMin === "" || bpmMin == null ? "" : Number(bpmMin),
         bpmMax: bpmMax === "" || bpmMax == null ? "" : Number(bpmMax),
-        type: type || "custom"
+        type: type || "custom",
+        split: Boolean(split),
+        secondaryName: secondaryName || "",
+        secondaryType: secondaryType || "rest",
+        secondaryMinutes: secondaryMinuteValue,
+        secondarySeconds: secondarySecondValue,
+        secondaryBpmMin: secondaryBpmMin === "" || secondaryBpmMin == null ? "" : Number(secondaryBpmMin),
+        secondaryBpmMax: secondaryBpmMax === "" || secondaryBpmMax == null ? "" : Number(secondaryBpmMax)
       };
     }
 
@@ -788,7 +829,14 @@
         seconds: stage.seconds,
         bpmMin: stage.bpmMin === "" ? "" : Number(stage.bpmMin),
         bpmMax: stage.bpmMax === "" ? "" : Number(stage.bpmMax),
-        type: stage.type
+        type: stage.type,
+        split: Boolean(stage.split),
+        secondaryName: stage.secondaryName || "",
+        secondaryType: stage.secondaryType || "rest",
+        secondaryMinutes: sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 }),
+        secondarySeconds: sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 }),
+        secondaryBpmMin: stage.secondaryBpmMin === "" ? "" : Number(stage.secondaryBpmMin),
+        secondaryBpmMax: stage.secondaryBpmMax === "" ? "" : Number(stage.secondaryBpmMax)
       };
     }
 
@@ -857,7 +905,14 @@
                   seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
                   bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
                   bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
-                  type: stage.type || "custom"
+                  type: stage.type || "custom",
+                  split: Boolean(stage.split),
+                  secondaryName: stage.secondaryName || "",
+                  secondaryType: stage.secondaryType || "rest",
+                  secondaryMinutes: sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 }),
+                  secondarySeconds: sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 }),
+                  secondaryBpmMin: stage.secondaryBpmMin == null || stage.secondaryBpmMin === "" ? null : Number(stage.secondaryBpmMin),
+                  secondaryBpmMax: stage.secondaryBpmMax == null || stage.secondaryBpmMax === "" ? null : Number(stage.secondaryBpmMax)
                 };
               }),
               drafts: workout.drafts ? workout.drafts.map(function(stage){
@@ -868,7 +923,14 @@
                   seconds: sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 }),
                   bpmMin: stage.bpmMin == null || stage.bpmMin === "" ? null : Number(stage.bpmMin),
                   bpmMax: stage.bpmMax == null || stage.bpmMax === "" ? null : Number(stage.bpmMax),
-                  type: stage.type || "custom"
+                  type: stage.type || "custom",
+                  split: Boolean(stage.split),
+                  secondaryName: stage.secondaryName || "",
+                  secondaryType: stage.secondaryType || "rest",
+                  secondaryMinutes: sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 }),
+                  secondarySeconds: sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 }),
+                  secondaryBpmMin: stage.secondaryBpmMin == null || stage.secondaryBpmMin === "" ? null : Number(stage.secondaryBpmMin),
+                  secondaryBpmMax: stage.secondaryBpmMax == null || stage.secondaryBpmMax === "" ? null : Number(stage.secondaryBpmMax)
                 };
               }) : null
             };
@@ -905,7 +967,14 @@
                 seconds: stage.seconds,
                 bpmMin: stage.bpmMin == null ? "" : stage.bpmMin,
                 bpmMax: stage.bpmMax == null ? "" : stage.bpmMax,
-                type: stage.type
+                type: stage.type,
+                split: stage.split,
+                secondaryName: stage.secondaryName,
+                secondaryType: stage.secondaryType,
+                secondaryMinutes: stage.secondaryMinutes,
+                secondarySeconds: stage.secondarySeconds,
+                secondaryBpmMin: stage.secondaryBpmMin == null ? "" : stage.secondaryBpmMin,
+                secondaryBpmMax: stage.secondaryBpmMax == null ? "" : stage.secondaryBpmMax
               });
             }),
             drafts: Array.isArray(entry.drafts) ? entry.drafts.map(function(stage){
@@ -916,7 +985,14 @@
                 seconds: stage.seconds,
                 bpmMin: stage.bpmMin == null ? "" : stage.bpmMin,
                 bpmMax: stage.bpmMax == null ? "" : stage.bpmMax,
-                type: stage.type
+                type: stage.type,
+                split: stage.split,
+                secondaryName: stage.secondaryName,
+                secondaryType: stage.secondaryType,
+                secondaryMinutes: stage.secondaryMinutes,
+                secondarySeconds: stage.secondarySeconds,
+                secondaryBpmMin: stage.secondaryBpmMin == null ? "" : stage.secondaryBpmMin,
+                secondaryBpmMax: stage.secondaryBpmMax == null ? "" : stage.secondaryBpmMax
               });
             }) : null
           });
@@ -1046,7 +1122,13 @@
     function secondsFromStage(stage) {
       const minutes = sanitizePositiveInt(stage.minutes, 0, { min: 0 });
       const seconds = sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 });
-      return minutes * 60 + seconds;
+      let total = minutes * 60 + seconds;
+      if (stage.split) {
+        const secondaryMinutes = sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 });
+        const secondarySeconds = sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 });
+        total += secondaryMinutes * 60 + secondarySeconds;
+      }
+      return total;
     }
 
     function totalDurationFromStages(stages) {
@@ -1181,6 +1263,50 @@
         rowThree.appendChild(createControlField(stage, { field: "bpmMin", label: "BPM mínimo", inputType: "number", min: "0" }));
         rowThree.appendChild(createControlField(stage, { field: "bpmMax", label: "BPM máximo", inputType: "number", min: "0" }));
 
+        const splitToggle = document.createElement("label");
+        splitToggle.className = "stage-split-toggle";
+        splitToggle.setAttribute("for", `${stage.id}-split`);
+        const splitCheckbox = document.createElement("input");
+        splitCheckbox.type = "checkbox";
+        splitCheckbox.id = `${stage.id}-split`;
+        splitCheckbox.dataset.stageId = stage.id;
+        splitCheckbox.dataset.field = "split";
+        splitCheckbox.checked = Boolean(stage.split);
+        const splitText = document.createElement("span");
+        splitText.textContent = "Añadir segunda subfase (ej. descanso)";
+        splitToggle.appendChild(splitCheckbox);
+        splitToggle.appendChild(splitText);
+
+        let secondaryBlock = null;
+        if (stage.split) {
+          secondaryBlock = document.createElement("div");
+          secondaryBlock.className = "stage-subphase";
+
+          const secondaryHeading = document.createElement("div");
+          secondaryHeading.className = "stage-subphase-heading";
+          secondaryHeading.textContent = "Subfase 2";
+          secondaryBlock.appendChild(secondaryHeading);
+
+          const secondaryRowOne = document.createElement("div");
+          secondaryRowOne.className = "stage-row";
+          secondaryRowOne.appendChild(createControlField(stage, { field: "secondaryName", label: "Nombre", placeholder: "Ej. Recuperación" }));
+          secondaryRowOne.appendChild(createControlField(stage, { field: "secondaryType", label: "Tipo", type: "select", options: stageTypeOptions }));
+
+          const secondaryRowTwo = document.createElement("div");
+          secondaryRowTwo.className = "stage-row";
+          secondaryRowTwo.appendChild(createControlField(stage, { field: "secondaryMinutes", label: "Duración (min)", inputType: "number", min: "0" }));
+          secondaryRowTwo.appendChild(createControlField(stage, { field: "secondarySeconds", label: "Duración (s)", inputType: "number", min: "0", max: "59" }));
+
+          const secondaryRowThree = document.createElement("div");
+          secondaryRowThree.className = "stage-row";
+          secondaryRowThree.appendChild(createControlField(stage, { field: "secondaryBpmMin", label: "BPM mínimo", inputType: "number", min: "0" }));
+          secondaryRowThree.appendChild(createControlField(stage, { field: "secondaryBpmMax", label: "BPM máximo", inputType: "number", min: "0" }));
+
+          secondaryBlock.appendChild(secondaryRowOne);
+          secondaryBlock.appendChild(secondaryRowTwo);
+          secondaryBlock.appendChild(secondaryRowThree);
+        }
+
         const actions = document.createElement("div");
         actions.className = "stage-actions";
 
@@ -1216,6 +1342,10 @@
         card.appendChild(rowOne);
         card.appendChild(rowTwo);
         card.appendChild(rowThree);
+        card.appendChild(splitToggle);
+        if (secondaryBlock) {
+          card.appendChild(secondaryBlock);
+        }
         card.appendChild(actions);
         configStagesContainer.appendChild(card);
       });
@@ -1234,7 +1364,7 @@
       }
 
       const fragments = document.createDocumentFragment();
-      activeStages.forEach(function(stage){
+      activeStages.forEach(function(stage, index){
         const item = document.createElement("div");
         item.className = "plan-item";
 
@@ -1242,12 +1372,32 @@
         main.className = "plan-item-main";
         const label = document.createElement("div");
         label.className = "plan-item-label";
-        label.textContent = stage.name || "Etapa";
+        label.textContent = stage.name || `Etapa ${index + 1}`;
         const desc = document.createElement("div");
         desc.className = "plan-item-desc";
-        const durationLabel = fmtTime(secondsFromStage(stage));
-        const bpmLabel = formatBpmRange(stage.bpmMin === "" ? null : stage.bpmMin, stage.bpmMax === "" ? null : stage.bpmMax);
-        desc.textContent = `${durationLabel} • ${bpmLabel}`;
+        const primaryMinutes = sanitizePositiveInt(stage.minutes, 0, { min: 0 });
+        const primarySeconds = sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 });
+        const primaryDuration = primaryMinutes * 60 + primarySeconds;
+        const primaryBpmLabel = formatBpmRange(
+          stage.bpmMin === "" ? null : stage.bpmMin,
+          stage.bpmMax === "" ? null : stage.bpmMax
+        );
+
+        if (stage.split) {
+          const secondaryMinutes = sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 });
+          const secondarySeconds = sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 });
+          const secondaryDuration = secondaryMinutes * 60 + secondarySeconds;
+          const secondaryBpmLabel = formatBpmRange(
+            stage.secondaryBpmMin === "" ? null : stage.secondaryBpmMin,
+            stage.secondaryBpmMax === "" ? null : stage.secondaryBpmMax
+          );
+          const segments = [];
+          segments.push(`${fmtTime(primaryDuration)} • ${primaryBpmLabel}`);
+          segments.push(`${fmtTime(secondaryDuration)} • ${secondaryBpmLabel}`);
+          desc.textContent = segments.join(" + ");
+        } else {
+          desc.textContent = `${fmtTime(primaryDuration)} • ${primaryBpmLabel}`;
+        }
         main.appendChild(label);
         main.appendChild(desc);
 
@@ -1309,26 +1459,63 @@
 
     function rebuildWorkoutPlan() {
       workoutPlan.length = 0;
-      activeStages.forEach(function(stage){
-        const durationSec = secondsFromStage(stage);
+      activeStages.forEach(function(stage, stageIndex){
         const repeats = sanitizePositiveInt(stage.repeats, 1, { min: 1 });
-        if (durationSec <= 0 || repeats <= 0) {
+        if (repeats <= 0) {
           return;
         }
-        const bpmMin = stage.bpmMin === "" ? null : Number(stage.bpmMin);
-        const bpmMax = stage.bpmMax === "" ? null : Number(stage.bpmMax);
-        const bpmLabel = formatBpmRange(bpmMin, bpmMax);
+
+        const primaryMinutes = sanitizePositiveInt(stage.minutes, 0, { min: 0 });
+        const primarySeconds = sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 });
+        const primaryDurationSec = primaryMinutes * 60 + primarySeconds;
+        if (primaryDurationSec <= 0) {
+          return;
+        }
+
+        const primaryBpmMin = stage.bpmMin === "" ? null : Number(stage.bpmMin);
+        const primaryBpmMax = stage.bpmMax === "" ? null : Number(stage.bpmMax);
+        const primaryBpmLabel = formatBpmRange(primaryBpmMin, primaryBpmMax);
+
+        const hasSecondary = Boolean(stage.split);
+        const secondaryMinutes = sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 });
+        const secondarySeconds = sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 });
+        const secondaryDurationSec = hasSecondary ? (secondaryMinutes * 60 + secondarySeconds) : 0;
+        const secondaryBpmMin = stage.secondaryBpmMin === "" ? null : Number(stage.secondaryBpmMin);
+        const secondaryBpmMax = stage.secondaryBpmMax === "" ? null : Number(stage.secondaryBpmMax);
+        const secondaryBpmLabel = formatBpmRange(secondaryBpmMin, secondaryBpmMax);
+
+        const baseLabel = stage.name || `Etapa ${stageIndex + 1}`;
+        const repeatTotal = repeats > 1 ? repeats : null;
+
         for (let i = 1; i <= repeats; i++) {
           workoutPlan.push({
-            label: stage.name || `Etapa ${workoutPlan.length + 1}`,
-            durationSec,
+            label: baseLabel,
+            durationSec: primaryDurationSec,
             type: stage.type || "custom",
-            repeatIndex: repeats > 1 ? i : null,
-            repeatTotal: repeats > 1 ? repeats : null,
-            bpmMin,
-            bpmMax,
-            bpmLabel
+            repeatIndex: repeatTotal ? i : null,
+            repeatTotal,
+            bpmMin: primaryBpmMin,
+            bpmMax: primaryBpmMax,
+            bpmLabel: primaryBpmLabel,
+            subPhase: hasSecondary ? 1 : null
           });
+
+          if (hasSecondary && secondaryDurationSec > 0) {
+            const secondaryLabel = (stage.secondaryName && stage.secondaryName.trim())
+              ? stage.secondaryName.trim()
+              : `${baseLabel} (Subfase 2)`;
+            workoutPlan.push({
+              label: secondaryLabel,
+              durationSec: secondaryDurationSec,
+              type: stage.secondaryType || "rest",
+              repeatIndex: repeatTotal ? i : null,
+              repeatTotal,
+              bpmMin: secondaryBpmMin,
+              bpmMax: secondaryBpmMax,
+              bpmLabel: secondaryBpmLabel,
+              subPhase: 2
+            });
+          }
         }
       });
     }
@@ -1340,9 +1527,11 @@
         return errors;
       }
       stages.forEach(function(stage){
-        const duration = secondsFromStage(stage);
-        if (duration <= 0) {
-          errors.push(`La etapa "${stage.name || "Sin nombre"}" debe durar al menos 1 segundo.`);
+        const primaryMinutes = sanitizePositiveInt(stage.minutes, 0, { min: 0 });
+        const primarySeconds = sanitizePositiveInt(stage.seconds, 0, { min: 0, max: 59 });
+        const primaryDuration = primaryMinutes * 60 + primarySeconds;
+        if (primaryDuration <= 0) {
+          errors.push(`La subfase principal de "${stage.name || "Sin nombre"}" debe durar al menos 1 segundo.`);
         }
         const repeats = sanitizePositiveInt(stage.repeats, 1, { min: 1 });
         if (repeats <= 0) {
@@ -1352,6 +1541,19 @@
         const max = stage.bpmMax === "" ? null : Number(stage.bpmMax);
         if (min != null && max != null && min > max) {
           errors.push(`El mínimo de bpm debe ser menor o igual al máximo en "${stage.name || "Sin nombre"}".`);
+        }
+        if (stage.split) {
+          const secondaryMinutes = sanitizePositiveInt(stage.secondaryMinutes, 0, { min: 0 });
+          const secondarySeconds = sanitizePositiveInt(stage.secondarySeconds, 0, { min: 0, max: 59 });
+          const secondaryDuration = secondaryMinutes * 60 + secondarySeconds;
+          if (secondaryDuration <= 0) {
+            errors.push(`La subfase 2 de "${stage.name || "Sin nombre"}" debe durar al menos 1 segundo.`);
+          }
+          const secondaryMin = stage.secondaryBpmMin === "" ? null : Number(stage.secondaryBpmMin);
+          const secondaryMax = stage.secondaryBpmMax === "" ? null : Number(stage.secondaryBpmMax);
+          if (secondaryMin != null && secondaryMax != null && secondaryMin > secondaryMax) {
+            errors.push(`El mínimo de bpm debe ser menor o igual al máximo en la subfase 2 de "${stage.name || "Sin nombre"}".`);
+          }
         }
       });
       return errors;
@@ -1410,7 +1612,9 @@
       });
       if (!stage) return;
 
-      const rawValue = target.value;
+      const isCheckbox = target.type === "checkbox";
+      const rawValue = isCheckbox ? target.checked : target.value;
+      let shouldRerender = false;
       switch (field) {
         case "name":
           stage.name = rawValue;
@@ -1418,6 +1622,21 @@
         case "type":
           stage.type = rawValue;
           break;
+        case "split": {
+          const wasSplit = Boolean(stage.split);
+          const nextValue = Boolean(rawValue);
+          stage.split = nextValue;
+          if (nextValue && !wasSplit) {
+            if (stage.secondaryName == null) stage.secondaryName = "";
+            if (!stage.secondaryType) stage.secondaryType = "rest";
+            if (stage.secondaryMinutes === 0) stage.secondaryMinutes = "";
+            if (stage.secondarySeconds === 0) stage.secondarySeconds = "";
+            if (stage.secondaryBpmMin == null || stage.secondaryBpmMin === 0) stage.secondaryBpmMin = "";
+            if (stage.secondaryBpmMax == null || stage.secondaryBpmMax === 0) stage.secondaryBpmMax = "";
+          }
+          shouldRerender = true;
+          break;
+        }
         case "repeats": {
           const sanitized = sanitizePositiveInt(rawValue, 1, { min: 1 });
           stage.repeats = sanitized;
@@ -1456,8 +1675,50 @@
           }
           break;
         }
+        case "secondaryName":
+          stage.secondaryName = rawValue;
+          break;
+        case "secondaryType":
+          stage.secondaryType = rawValue;
+          break;
+        case "secondaryMinutes": {
+          const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0 });
+          stage.secondaryMinutes = sanitized;
+          target.value = sanitized;
+          break;
+        }
+        case "secondarySeconds": {
+          const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0, max: 59 });
+          stage.secondarySeconds = sanitized;
+          target.value = sanitized;
+          break;
+        }
+        case "secondaryBpmMin": {
+          if (rawValue === "") {
+            stage.secondaryBpmMin = "";
+          } else {
+            const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0 });
+            stage.secondaryBpmMin = sanitized;
+            target.value = sanitized;
+          }
+          break;
+        }
+        case "secondaryBpmMax": {
+          if (rawValue === "") {
+            stage.secondaryBpmMax = "";
+          } else {
+            const sanitized = sanitizePositiveInt(rawValue, 0, { min: 0 });
+            stage.secondaryBpmMax = sanitized;
+            target.value = sanitized;
+          }
+          break;
+        }
         default:
           break;
+      }
+
+      if (shouldRerender) {
+        renderStagesForm();
       }
 
       setConfigFeedback(null, "");
