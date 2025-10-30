@@ -1205,6 +1205,15 @@
       }
     }
 
+    const userLocale = (typeof navigator !== "undefined" && navigator.languages && navigator.languages.length)
+      ? navigator.languages[0]
+      : (typeof navigator !== "undefined" ? navigator.language : "es");
+    const isSpanish = /^es([-_]|$)/i.test(userLocale || "");
+    document.documentElement.lang = isSpanish ? "es" : "en";
+    function t(esText, enText) {
+      return isSpanish ? esText : enText;
+    }
+
     const defaultStages = [
       createStage({ name: t("Calentamiento", "Warm up"), repeats: 1, minutes: 4, seconds: 0, bpmMin: 110, bpmMax: 130, type: "warmup" }),
       createStage({ name: t("Intervalo rápido", "Hard interval"), repeats: 5, minutes: 2, seconds: 0, bpmMin: 155, bpmMax: 170, type: "fast" }),
@@ -1264,15 +1273,6 @@
     const sessionPickerEl = document.getElementById("sessionPicker");
     const sessionPickerListEl = document.getElementById("sessionPickerList");
     const sessionPickerCloseBtn = document.getElementById("sessionPickerCloseBtn");
-
-    const userLocale = (typeof navigator !== "undefined" && navigator.languages && navigator.languages.length)
-      ? navigator.languages[0]
-      : (typeof navigator !== "undefined" ? navigator.language : "es");
-    const isSpanish = /^es([-_]|$)/i.test(userLocale || "");
-    document.documentElement.lang = isSpanish ? "es" : "en";
-    function t(esText, enText) {
-      return isSpanish ? esText : enText;
-    }
 
     const stageTypeOptions = [
       { value: "warmup", label: t("Calentamiento", "Warm up") },
