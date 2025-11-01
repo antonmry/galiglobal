@@ -2,6 +2,7 @@
 
 ## 2025
 
+- ESF - [A nosa experiencias con Anki](https://bancoreciclaxeelectronica.fala.gal/2025/10/05/nova-edicion-da-escola-de-inverno-de-enxeneria-sen-fronteiras/): [slides](https://archive.org/details/2025-10-24-escola-de-inverno)
 - Kafka Summit/Current - The Latency-Cost equation for Disaggregated Architectures: [video and slides](https://current.confluent.io/post-conference-videos-2025/the-latency-cost-equation-for-disaggregated-architectures-lnd25)
 
 ## 2024
