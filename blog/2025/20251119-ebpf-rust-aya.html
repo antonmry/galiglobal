@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>eBPF with Rust using Aya (and working on M2/M3/M4 mac devices!)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="antonmry">
+    <meta name="keywords" content="">
+
+    <!-- Le styles -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/asciidoctor.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="../../favicon.ico">
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="navbar-container"></div>
+      <div class="container">
+        <div id="content"></div>
+      </div>
+      <div id="push"></div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <!-- Required scripts -->
+    <script src="../../js/jquery-1.11.1.min.js"></script>
+    <script src="../../js/bootstrap.min.js" defer></script>
+    <script src="../../js/prettify.js" defer></script>
+
+    <script type="module">
+      import { marked } from '../../js/marked.esm.js';
+      window.marked = marked;
+    </script>
+
+    <script>
+      // Function to load HTML content
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          document.getElementById(elementId).innerHTML = html;
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      // Load all content when DOM is ready
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Load components
+          await loadContent('/navbar.html', 'navbar-container');
+          await loadContent('/footer.html', 'footer-container');
+
+          // Load markdown content
+          const response = await fetch('20251119-ebpf-rust-aya.md');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+
+          // Initialize prettify after content is loaded
+          if (typeof prettyPrint === 'function') {
+            prettyPrint();
+          } else {
+            console.error('prettyPrint function not available');
+          }
+        } catch (error) {
+          console.error('Error loading content:', error);
+          document.getElementById('content').innerHTML = 'Error loading content';
+        }
+      });
+    </script>
+  </body>
+</html>
