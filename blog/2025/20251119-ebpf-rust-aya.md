@@ -42,16 +42,21 @@ The next step is to check that eBPF can be used:
 
 ```sh
 limactl shell aya-ci sudo bpftrace -l
-limactl shell aya-ci sudo sudo bpftool feature probe
+limactl shell aya-ci sudo bpftool feature probe
 ```
 
 ## Create a new Aya project
 
 Let's create the Aya project that detects when a SSL invocation happens. We can
-test it first with the following command:
+test it first with one of the following command depending on the architecture
+of the host:
 
 ```sh
 limactl shell aya-ci sudo bpftrace -e 'uprobe:/usr/lib/aarch64-linux-gnu/libssl.so.3:SSL_write { printf("SSL_write PID=%d\n", pid); }'
+```
+
+```sh
+limactl shell aya-ci sudo bpftrace -e 'uprobe:/usr/lib/x86_64-linux-gnu/libssl.so.3:SSL_write { printf("SSL_write PID=%d\n", pid); }'
 ```
 
 and in a different terminal:
@@ -67,12 +72,27 @@ The output should be something like this:
 > SSL_write PID=4304
 > SSL_write PID=4304
 
-Now let's create the project with the following command:
+Now let's create the project with one of the following commands depending on
+your architecture:
 
 ```sh
-limactl shell cargo generate --git https://github.com/aya-rs/aya-template --branch main \
-  --name ssl-write \
-  --define uprobe_fn_name=SSL_write
+ limactl shell aya-ci cargo generate \
+    --git https://github.com/aya-rs/aya-template \
+    --branch main \
+    --name ssl-write \
+    --define program_type=uprobe \
+    --define uprobe_fn_name=SSL_write \
+    --define uprobe_target=/usr/lib/x86_64-linux-gnu/libssl.so.3
+```
+
+```sh
+ limactl shell aya-ci cargo generate \
+    --git https://github.com/aya-rs/aya-template \
+    --branch main \
+    --name ssl-write \
+    --define program_type=uprobe \
+    --define uprobe_fn_name=SSL_write \
+    --define uprobe_target=/usr/lib/aarch64-linux-gnu/libssl.so.3
 ```
 
 
