@@ -2,7 +2,7 @@
 
 ## 2025
 
-- [eBPF with Rust using Aya (from macOS, Windows, or Linux)](blog/2025/20251119-ebpf-rust-aya.md)
+- [eBPF with Rust using Aya (from macOS, Windows, or Linux)](blog/2025/20251119-ebpf-rust-aya.html)
 - [Building LocalFirstPacer: a small running tool for someone you care about](blog/2025/20251101-local-first-pacer.html)
 - [Monitoring MinIO requests with the OpenTelemetry Collector](blog/2025/20250204-monitoring-requests-with-minio.html)
 
