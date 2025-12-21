@@ -58,8 +58,8 @@ def had_leaflet_comments(existing_html: Path) -> bool:
 def build_html(title: str, body_content: str, include_comments: bool) -> str:
     comments_block = '<div id="leaflet-comments" class="mt-4"></div>' if include_comments else ""
     # Escape for JS template literal
-    navbar_js = NAVBAR_HTML.replace("\\", "\\\\").replace("`", "\\`")
-    footer_js = FOOTER_HTML.replace("\\", "\\\\").replace("`", "\\`")
+    navbar_js = sanitize_for_js_literal(NAVBAR_HTML)
+    footer_js = sanitize_for_js_literal(FOOTER_HTML)
     return f"""<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -155,6 +155,15 @@ def indent_html(html: str, spaces: int) -> str:
     indent = " " * spaces
     # Ensure each line is indented for readable output
     return "\n".join(f"{indent}{line}" if line.strip() else "" for line in html.splitlines())
+
+
+def sanitize_for_js_literal(html: str) -> str:
+    """Escape content so it can live safely inside a JS template literal."""
+    return (
+        html.replace("\\", "\\\\")
+        .replace("`", "\\`")
+        .replace("</script", "<\\/script")
+    )
 
 
 def main() -> int:
