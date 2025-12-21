@@ -134,6 +134,6 @@ should I improve next?”_ And she said: **“Nothing. It’s perfect. Thank you
 
 That was the entire payoff.
 
-Comments? You can find me in [BlueSky](https://bsky.app/profile/galiglobal.com).
+Comments? You can find me in [BlueSky](https://bsky.app/profile/anton.galiglobal.com).
 
 ![Local First Pacer screenshot](lfp.png)

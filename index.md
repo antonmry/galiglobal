@@ -46,6 +46,6 @@ technology and career development.
 [1x engineer]: https://1x.engineer/
 [Java Champion]: https://javachampions.org/members.html
 [Google Developer Expert]: https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste
-[BlueSky]: https://bsky.app/profile/galiglobal.com
+[BlueSky]: https://bsky.app/profile/anton.galiglobal.com
 [GitHub]: https://github.com/antonmry
 [my blog]: https://www.galiglobal.com/blog-posts.html
