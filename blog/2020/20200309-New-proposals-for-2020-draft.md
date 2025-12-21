@@ -68,5 +68,6 @@ my goal is to continue with them in the same way.
 
 I know some personal challenges will come in the middle of the summer including
 resume the rebuilding of our future house... so I don't have more goals for
+
 2020. This year goal is to survive, build the basis and wait for better times to
 start new projects.

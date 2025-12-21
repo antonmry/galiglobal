@@ -82,8 +82,10 @@ After that I jumped to the most interesting demo for me: the whole NFV solution.
 I didn't have luck this time because the main analyst (someone I had previous
 meeting with) was busy all the time and I didn't have the opportunity to have
 all my questions answered. Anyway, I found out some interesting points:
+
 * The solutions look good, very complete and mature, using a mix of Oracle technologies including virtualization, Oracle OSS (an old friend of mine, UIM) and Oracle ACME products. Oracle has a huge portfolio so it makes sense to use them instead of reinvent the wheel. *
 It's very flexible and powerful but it has a cost: it's complex because it
+
 involves some big products. Very good for carriers but no so good for small
 companies.* Openstack as cloud computing platform software but it's not
 mandatory, you can choose Oracle VM Server, for example.
