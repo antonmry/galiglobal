@@ -83,7 +83,10 @@ I didn't have luck this time because the main analyst (someone I had previous
 meeting with) was busy all the time and I didn't have the opportunity to have
 all my questions answered. Anyway, I found out some interesting points:
 
-* The solutions look good, very complete and mature, using a mix of Oracle technologies including virtualization, Oracle OSS (an old friend of mine, UIM) and Oracle ACME products. Oracle has a huge portfolio so it makes sense to use them instead of reinvent the wheel. *
+* The solutions look good, very complete and mature, using a mix of Oracle
+  technologies including virtualization, Oracle OSS (an old friend of mine, UIM)
+  and Oracle ACME products. Oracle has a huge portfolio so it makes sense to use
+  them instead of reinvent the wheel.*
 It's very flexible and powerful but it has a cost: it's complex because it
 
 involves some big products. Very good for carriers but no so good for small

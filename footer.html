@@ -96,25 +96,21 @@
               record.collection
             )}&repo=${encodeURIComponent(record.did)}`;
 
-          const recordRes = await fetch(recordUrl, { headers: { Accept: 'application/json' } });
-          if (!recordRes.ok) continue;
-          const recordData = await recordRes.json();
-          const value = recordData.value || {};
+         const recordRes = await fetch(recordUrl, { headers: { Accept: 'application/json' } });
+         if (!recordRes.ok) continue;
+         const recordData = await recordRes.json();
+         const value = recordData.value || {};
 
           // Resolve handle
           let handle = record.did;
-          try {
-            const handleRes = await fetch(
-              `https://slingshot.microcosm.blue/xrpc/com.bad-example.identity.resolveMiniDoc?identifier=${encodeURIComponent(
-                record.did
-              )}`
-            );
-            if (handleRes.ok) {
-              const handleData = await handleRes.json();
-              if (handleData.handle) handle = handleData.handle;
-            }
-          } catch (err) {
-            console.warn('Handle lookup failed', err);
+          const handleRes = await fetch(
+            `https://slingshot.microcosm.blue/xrpc/com.bad-example.identity.resolveMiniDoc?identifier=${encodeURIComponent(
+              record.did
+            )}`
+          );
+          if (handleRes.ok) {
+            const handleData = await handleRes.json();
+            if (handleData.handle) handle = handleData.handle;
           }
 
           comments.push({
