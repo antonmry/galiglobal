@@ -28,6 +28,7 @@
       <div id="navbar-container"></div>
       <div class="container">
         <div id="content"></div>
+        <div id="leaflet-comments" class="mt-4"></div>
       </div>
       <div id="push"></div>
     </div>
@@ -51,7 +52,21 @@
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) {
+            console.error(`Target ${elementId} not found`);
+            return;
+          }
+          target.innerHTML = html;
+
+          // Execute any scripts inside the loaded snippet by cloning them
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
@@ -68,7 +83,13 @@
           const response = await fetch('20251101-local-first-pacer.md');
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
+          const contentEl = document.getElementById('content');
+          if (contentEl) {
+            contentEl.innerHTML = window.marked.parse(markdown);
+          } else {
+            console.error('Content element not found');
+            return;
+          }
 
           // Initialize prettify after content is loaded
           if (typeof prettyPrint === 'function') {
