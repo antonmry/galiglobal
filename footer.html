@@ -47,13 +47,13 @@
       .then(async (map) => {
         const mapping = map[pathKey] || map[`/${pathKey}`];
         if (!mapping) {
-          setStatus('Comments not configured for this page.');
+          container.innerHTML = '';
           return;
         }
 
         const leafLetUrl = typeof mapping === 'string' ? mapping : mapping.leafLetUrl;
         if (!leafLetUrl) {
-          setStatus('Comments not configured for this page.');
+          container.innerHTML = '';
           return;
         }
 
@@ -126,7 +126,7 @@
       })
       .catch((err) => {
         console.error('Failed to load Leaflet comments', err);
-        setStatus('Could not load comments right now.');
+        container.innerHTML = '';
       });
 
     function renderComments(containerEl, comments, leafLetUrl) {
