@@ -7,78 +7,111 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="access-ocsg-edr-jms-topic-with-talend-open-studio">Access OCSG EDR JMS Topic with Talend Open Studio</h1>
+        <p><em>13 February 2015</em></p>
+        <p>I've been using
+        <a href="https://www.talendforge.org/tutorials/tutorial.php?idTuto=14">Talend Open Studio</a>
+        for a long time. It's an impressive software to do automated tasks, it works
+        well and the development is quite fast. Furthermore, the TtHW (Time to Hello
+        World) is really short. As you can see, I like it.</p>
+        <p>In this tutorial, I am going to show how to use it Talend Open Studio to access
+        the JMS Topic where OCSG shows all the runtime information: the Event Data
+        Records (EDRs). This is the main place for debugging so it's really important.
+        The article is based in the offical documentation
+        <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50771/pds_edrlistener.htm#SGPDS627">Creating EDR Listeners</a>
+        but adapted to TOS.</p>
+        <h2 id="pre-requisites">Pre-requisites</h2>
+        <p>You will need an OCSG 6 or 5.1 running and also the
+        <a href="http://www.talend.com/download/talend-open-studio?qt-product_tos_download=3#qt-product_tos_download">TOS Data Integration</a>
+        installed in your computer.</p>
+        <h2 id="talend-open-studio-development">Talend Open Studio development</h2>
+        <p>Drop a tJMSInput component in the canvas and double click over it.</p>
+        <p><img alt="tJMSInput component" src="/blog/2015/Talend-Open-Studio-images/tJMSInput.png"></p>
+        <p>Configure all the fields as you can see in the following picture:</p>
+        <p><img alt="tJMSInput fields" src="/blog/2015/Talend-Open-Studio-images/tJMSInput_form.png"></p>
+        <p>Some important notes:</p>
+        <ul>
+        <li>You have to import the library <em>wlthint3client.jar</em> before to use the
+          component. You can find it in
+          <em><OCSG Installation folder>/wlserver/server/lib/wlthint3client.jar</em>. To import
+          it, there are several ways, for instance, the tLibraryLoad component.</li>
+        <li>Change the <strong>Server URL</strong> to your environment configuration. It must be a
+          Node, not an Admin. In this case it's an standalone configuration with Admin
+          and Node in the same Weblogic instance.</li>
+        <li>Change the <strong>Message from</strong> to your environment configuration. If you don't
+          know it, go to the Console,in the Domain Structure,
+          <strong>Services -&gt; Messaging -&gt; JMS Servers</strong>.</li>
+        </ul>
+        <h2 id="weblogic-configuration">Weblogic configuration</h2>
+        <p>There is a missing point, and it's the key. In the Weblogic console:</p>
+        <ol>
+        <li>Go to the Domain Structure and Select
+           <strong>Services -&gt; Messaging -&gt; JMS-Modules</strong>.</li>
+        <li>Click on <strong>WLNGJMSResource -&gt; EdrTopic -&gt; Advanced</strong>.</li>
+        <li>Find <strong>Create Destination Identifier</strong> and introduce
+           <em>com.bea.wlcp.wlng.edr.EdrTopic</em> and Save.</li>
+        <li>Reboot the Weblogic.</li>
+        </ol>
+        <p><img alt="Weblogic JMS Configuration" src="/blog/2015/Talend-Open-Studio-images/WeblogicJMSConfiguration.png"></p>
+        <p>This step is mandatory because of the tJMSInput component but it can be avoided
+        if you are accessing the JMS Topic in another way.</p>
+        <h2 id="the-end">The end</h2>
+        <p>That's all. Click on Run in the Talend Open Studio and you should be subscribed
+        to the Topic. Send an SMS from the PTE and you should start to generate EDRs.
+        The next step would be create the Java classes to access the EDR information and
+        start to work with it.</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('Access-OCSG-EDR-JMS-Topic-with-Talend-Open-Studio.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

@@ -7,78 +7,191 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="services-gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-part-2">Services Gatekeeper 6 installed in fifteen minutes, is it possible? - Part 2</h1>
+        <p><em>30 August 2015</em></p>
+        <p>This is the continuation of how to install and test OCSG, you can find the part
+        1
+        <a href="/blog/2015/Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-1.html">here</a>.</p>
+        <h2 id="platform-test-environment-pte-installation">Platform Test Environment (PTE) Installation</h2>
+        <ol>
+        <li>
+        <p>Login to <a href="https://edelivery.oracle.com/">Oracle Software Delivery Cloud</a>,
+           choose <em>Oracle Communications</em> in <strong>Select a Product Pack</strong> and
+           <em>Linux x86-64</em> and click on <strong>Go</strong>. Click on
+           <em>Oracle Communications Services Gatekeeper 6.0</em>.</p>
+        </li>
+        <li>
+        <p>Download Oracle Communications Services Gatekeeper 6.0 Platform Test
+           Environment, V73999-01.zip and copy it into the VM.</p>
+        </li>
+        <li>
+        <p>Unzip the file and execute the installer:</p>
+        </li>
+        </ol>
+        <pre class="codehilite"><code class="language-sh">unzip V73999-01.zip
+        java -jar ocsg_pte_generic.jar
+        </code></pre>
+
+        <ol>
+        <li>
+        <p>In the first window, accept the default Inventory Directory pressing <strong>OK</strong>.</p>
+        </li>
+        <li>
+        <p>The Welcome screen appears, press <strong>Next</strong>.</p>
+        </li>
+        <li>
+        <p>Introduce <em>/opt/ocsg6</em> in the Oracle Home field and press <strong>Next</strong>.</p>
+        </li>
+        <li>
+        <p>Let <strong>PTE Installation</strong> selected and press <strong>Next</strong>.</p>
+        </li>
+        </ol>
+        <p><img alt="PTE Installation" src="/blog/2015/Services-Gatekeeper-6-images/installationPTE.png"></p>
+        <ol>
+        <li>Review the Installation Summary and press <strong>Install</strong>. It may take a while.
+           Press <strong>Next</strong> when available and <strong>Finish</strong>.</li>
+        </ol>
+        <p><img alt="PTE Installation Done" src="/blog/2015/Services-Gatekeeper-6-images/installationPTEDone.png"></p>
+        <h2 id="start-the-pte">Start the PTE</h2>
+        <ol>
+        <li>Open a new Terminal and execute the following commands.</li>
+        </ol>
+        <pre class="codehilite"><code class="language-sh">cd /opt/ocsg6/ocsg_pte/
+        ./run.sh
+        </code></pre>
+
+        <ol>
+        <li>The PTE should appear:</li>
+        </ol>
+        <p><img alt="The PTE" src="/blog/2015/Services-Gatekeeper-6-images/PTE.png"></p>
+        <ol>
+        <li>Go to <strong>Tools -&gt; Variables Manager</strong> or press <strong>Ctrl+3</strong>.</li>
+        </ol>
+        <p><img alt="Variables Manager Menu" src="/blog/2015/Services-Gatekeeper-6-images/VariablesManagerMenu.png"></p>
+        <ol>
+        <li>Change the following fields and press <strong>OK</strong>:</li>
+        </ol>
+        <ul>
+        <li><strong>at.host:</strong> <em>ocsg</em></li>
+        <li><strong>nt.host:</strong> <em>ocsg</em></li>
+        </ul>
+        <p><img alt="Variables Manager Screen" src="/blog/2015/Services-Gatekeeper-6-images/VariablesManager.png"></p>
+        <ol>
+        <li>Click on <strong>Server</strong> and change the following fields:</li>
+        </ol>
+        <ul>
+        <li><strong>Hostname:</strong> <em>ocsg</em></li>
+        <li><strong>Port:</strong> <em>8001</em></li>
+        <li><strong>Username:</strong> <em>weblogic</em></li>
+        <li><strong>Password:</strong> <em>welcome1</em></li>
+        </ul>
+        <p><img alt="Server Credentials" src="/blog/2015/Services-Gatekeeper-6-images/ServerCredentials.png"></p>
+        <ol>
+        <li>Go to <strong>Tools -&gt; SLA Manager</strong> or press <strong>Ctrl+1</strong>.</li>
+        </ol>
+        <p><img alt="SLA Manager Menu" src="/blog/2015/Services-Gatekeeper-6-images/SLAManagerMenu.png"></p>
+        <ol>
+        <li>Select <strong>default_app_group</strong> and click on the pencil icon.</li>
+        </ol>
+        <p><img alt="Default App Group SLA" src="/blog/2015/Services-Gatekeeper-6-images/default_app_group.png"></p>
+        <ol>
+        <li>Click on the globe icon with a green arrow pointing up and press <strong>Local</strong>.
+           The message <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press
+           <strong>OK</strong> twice.</li>
+        </ol>
+        <p><img alt="Default App Group SLA Done" src="/blog/2015/Services-Gatekeeper-6-images/default_app_group_done.png"></p>
+        <ol>
+        <li>
+        <p>Select <strong>default_sp_group</strong> and click on the pencil icon. Click on the globe
+           icon with a up arrow and press <strong>Local</strong>. The message
+           <em>The SLA was succesfully uploaded to OCSG</em> should appear. Press <strong>OK</strong> twice.</p>
+        </li>
+        <li>
+        <p>Go to <strong>Simulators -&gt; SMPP</strong> and click on <strong>Start</strong>. The button will change
+            to <strong>Stop</strong>.</p>
+        </li>
+        </ol>
+        <p><img alt="SMPP Simulator" src="/blog/2015/Services-Gatekeeper-6-images/SMPPSimulator.png"></p>
+        <h2 id="final-test-send-sms">Final test: send SMS</h2>
+        <ol>
+        <li>In the PTE, go to <strong>Clients -&gt; Login</strong> and press <strong>Login</strong> (green arrow). The
+           button should change to <strong>Logout</strong> (red square).</li>
+        </ol>
+        <p><img alt="Client Login" src="/blog/2015/Services-Gatekeeper-6-images/login.png"></p>
+        <ol>
+        <li>Go to <strong>Messaging -&gt; Short Messaging -&gt; Application-initiated</strong> and change
+           the message to <em>Hello SaNE!</em>. Click on <strong>Send</strong> (green arrow).</li>
+        </ol>
+        <p><img alt="Send SMS" src="/blog/2015/Services-Gatekeeper-6-images/sendSMS.png"></p>
+        <ol>
+        <li>Go to the <strong>Map</strong>, click on the second button over the phone <strong>1234</strong> and
+           choose <em>Read messages</em>. Here it is!!</li>
+        </ol>
+        <p><img alt="SMS Sent" src="/blog/2015/Services-Gatekeeper-6-images/SMS.png"></p>
+        <h2 id="conclusion">Conclusion</h2>
+        <p>Probably you have spent more than fifteen minutes to arrive here... but it's
+        also true most of the actions are part of the configuration, not the
+        installation. The process is straightforward and it can be easily explained.
+        Even if you don't have advanced knowledge of Weblogic or Linux, it's possible to
+        do it. So, as we can see in this article, OCSG is very easy to install now and
+        it has a lot of features deployed out-of-the-box. Because it's a so extensive
+        application supporting a huge number of business possibilities (Service API
+        Exposure, Direct Carrier Billing, Policy Gateway, etc.), a basic fresh
+        installation is a very powerful way to focus in the functionality and forget
+        problems with databases, OS and other technical questions and now we can have it
+        in only 15 minutes!</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('Services-Gatekeeper-6-installed-in-fifteen-minutes-is-it-possible-Part-2.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

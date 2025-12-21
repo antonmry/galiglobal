@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>My setup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="antonmry">
+    <meta name="keywords" content="">
+    <meta name="generator" content="generated-from-markdown">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="navbar-container"></div>
+      <div class="container">
+        <div id="content">
+        <h1 id="my-setup">My setup</h1>
+        <p>I've always spent a lot of time setting up my development environment. When I
+        was 10 years old, I spent one year setting linux in my home computer. We didn't
+        have internet, so I had to learn everything by myself. I remember that the X
+        server setup was particularly hard. After that, I spent way too much recompiling
+        the Linux kernet to make my laptop more performant. It was a lot of fun and,
+        somehow, I still enjoy doing it.</p>
+        <p>My current setup isn't particularly good, and I'm pretty sure it's not
+        particularly reusable for others. But I wanted to document it anyway. Maybe it's
+        inspiring for someone.</p>
+        <h2 id="aesthetics">Aesthetics</h2>
+        <ul>
+        <li>Always use a light theme for everything. I can't stand dark themes.</li>
+        <li>I like to use a monospace font for everything. I use
+          <a href="https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/ComicShannsMono">ComicShannsMono</a>.
+          It's based in Comic Sans, weird, I know, but I find it very readable and
+          that's what matter to me.</li>
+        <li>Simplicity is key. I don't like cluttered interfaces. I don't use menus,
+          toolbars, or anything that takes space on the screen.</li>
+        <li>Shortcuts are mandatory. I try to use the keyboard as much as possible. I
+          don't like to use the mouse.</li>
+        <li>I disable notifications for almost everything, both in my phone and in my
+          computer.</li>
+        </ul>
+        <p>As you can see, my website follows the same principles.</p>
+        <h2 id="hardware">Hardware</h2>
+        <p>Nothing special here. I have a M1 macbook because that's what my employer gave
+        me. I would prefer to use a linux laptop. I had a pretty good experience in the
+        past with a Slimbook and a Dell XPS Developer Edition. I only use a screen, a
+        Dell UltraSharp 34. I'm still trying to get used to such a big screen. I like
+        mechanical keyboards, but I don't use anything special: a Logitech Pop with the
+        Spanish layout.</p>
+        <p>TODO: webcam, mic and light.</p>
+        <h2 id="operating-system">Operating System</h2>
+        <p>My favourite operating system is Fedora with the i3 window manager. I've been
+        using it for years. Unfortunately, I can't use it in my work laptop. I spent way
+        too much time trying to use MacOs in a way that is similar and, in some aspects,
+        I think I've succeeded. Animations are disabled, the bar is hidden, etc.</p>
+        <p>I spend the 98% of my time in 5 different applications: the browser, the
+        terminal, the IDE, Slack and Zoom. That's all. So those applications are always
+        open in full screen mode and I switch between them using the keyboard. For
+        example, Command+1 takes me to the browser, Command+2 to the terminal, etc. I'm
+        so used to this that I can't use a computer without this setup.</p>
+        <p>I use <a href="https://raycast.com/">Raycast</a> to launch applications. I don't even know
+        how launch an application in the Mac without Raycast. I like to have some
+        scripts to manage hardware, like the screen brightness, volume, lights, etc.</p>
+        <p>TODO: brew, nix</p>
+        <h2 id="browser">Browser</h2>
+        <p>I'm using <a href="https://zen-browser.app/">Zen browser</a> these days. It's based on
+        Firefox. It allows me to use a couple of extensions that are mandatory for me:
+        <a href="https://vimium.github.io/">Vimium</a> and uBlock Origin. I don't have a strong
+        preference for a browser.</p>
+        <h2 id="terminal-and-shell">Terminal and shell</h2>
+        <p>In the past I used Alacritty, but I'm using WezTerm now and I love it. There are
+        three important things for me:</p>
+        <ul>
+        <li>I don't want to see anything except the $.</li>
+        <li>I want to configure everything with a single file.</li>
+        <li>I need to be able to switch the command and the control keys only for the
+          terminal (MacOS is configured to do it for all the other apps but that change
+          breaks the shortcuts in the terminal).</li>
+        </ul>
+        <p>In addition, WezTerm will allow me to remove Tmux from my setup, that's still in
+        my TODO list, though. I use Tmux a lot with a particular workflow: I usually
+        have multiple windows and I rename them (Ctrl+b+,). Then, when I want to switch
+        to a window, I use Ctrl+b+' and type the first letters of the name. This works
+        very well for me because I never use tabs, so I can easily switch between
+        windows and I don't care about the order of them.</p>
+        <p>I use the same workflow everywhere: I don't use tabs, I don't reorder windows,
+        etc. I just switch between windows, files, webpages, conversations, etc. using
+        shortcuts and Fuzzy Search.</p>
+        <p>TODO: chezmoi, fzf</p>
+        <h2 id="editor-and-ide">Editor and IDE</h2>
+        <h2 id="other-software">Other software</h2>
+        <h2 id="genai">GenAI</h2>
+        </div>
+        
+      </div>
+      <div id="push"></div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
+
+    <script>
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
+
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
+        }
+      });
+    </script>
+  </body>
+</html>

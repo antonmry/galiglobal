@@ -7,78 +7,85 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="oracle-tadhack-webinar">Oracle TADHack Webinar</h1>
+        <p><em>15 May 2014</em></p>
+        <p>In May 2014, Oracle propose us to deploy and manage its
+        <a href="http://www.oracle.com/us/products/applications/communications/service-network-evolution/index.html">SANE solution</a>
+        for the <a href="http://tadhack.com/2014/">TADHack event</a> and support the developers
+        community. With only a few weeks, it was a big challenge. I've participated as
+        technical responsible and it was a great experience because it was a very
+        different type of project: any operator was involved so we were free to choose
+        the platform. Also the requirements were very different: the main goal was
+        engage the developers.</p>
+        <p>This is the list of activities we did: 1. Create
+        <a href="http://tadhack.optaresolutions.com/">a website</a> with all the information needed
+        by the developers. 2. Create a <a href="https://github.com/OTADHack">Github community</a>
+        to provide source code samples, a ticketing system and so on. 3. We've deployed
+        <a href="http://www.oracle.com/us/products/applications/communications/connected-digital-lifestyle/services-gatekeeper/overview/index.html">Oracle Communications Services Gatekeeper</a>
+        and
+        <a href="http://www.oracle.com/us/products/applications/communications/web-rtc-session-controller/overview/index.html">Oracle Communications WebRTC Session Controller</a>
+        in Amazon Web Services to give access to the developers.* We run some webinars,
+        as for example this one with <a href="http://www.alanquayle.com/">Alan Quayle</a>, Oracle
+        Comms and <a href="http://www.alerant.com/">Alerant</a>:</p>
+        <iframe width="560" height="315" src="//www.youtube.com/embed/0NXr68zvGrA" frameborder="0" allowfullscreen></iframe>
+
+        <p>It was a great experience and I hope to repeat the next year!.</p>
+        <blockquote class="twitter-tweet" lang="en"><p>Optare Solutions consultant <a href="https://twitter.com/antonmry">@antonmry</a> explains how to setup <a href="https://twitter.com/OracleComms">@OracleComms</a> environments for <a href="https://twitter.com/hashtag/TelcoAPI?src=hash">#TelcoAPI</a> and <a href="https://twitter.com/hashtag/webrtc?src=hash">#webrtc</a> <a href="http://t.co/rDtmlxitxB">pic.twitter.com/rDtmlxitxB</a></p>&mdash; Optare Solutions (@optaresolutions) <a href="https://twitter.com/optaresolutions/status/474938349778903040">June 6, 2014</a></blockquote>
+        <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        <p>More info can be found in the <a href="http://blog.tadhack.com/2014/05/05/oracle-webinar/">TADHack blog</a>.</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('Oracle-TADHack-Webinar.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

@@ -7,96 +7,313 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="junit4-junit5-and-spock-framework-comparison">JUnit4, JUnit5 and Spock framework comparison</h1>
+        <p><em>11 January 2018</em></p>
+        <p>This article has been published on
+        <a href="https://dzone.com/articles/junit4-junit5-and-spock-framework-comparison">DZone</a>
+        with editor revision so I recommend you to read it there.</p>
+        <h2 id="introduction-and-motivation">Introduction and motivation</h2>
+        <p>Recently I gave a talk in my local Java User Group about unit testing. Some of
+        the content of the talk was about some popular libraries you can use in your
+        Java project. I've reviewed <a href="http://junit.org/junit4/">JUnit4</a>,
+        <a href="http://junit.org/junit5/">JUnit5</a> and
+        <a href="http://spockframework.org/">Spock framework</a>. Many of the attendees were quite
+        surprised with the differences. In this post, I will summarize the most
+        commented: assert, parametrized tests and mocking.</p>
+        <p>I always like to demonstrate the concepts with examples and live coding so I
+        chose a simple algorithm:
+        <a href="https://en.wikipedia.org/wiki/Fibonacci">Fibonacci number calculator</a>. If you
+        don't know it, it's just to generate numbers which are the sum of the two
+        previous ones in the series:
+        <code>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377</code>.</p>
+        <p>I used the typical (and with very bad performance) implementation:</p>
+        <pre class="codehilite"><code class="language-java">    private static int fibonacci(int n) {
+                if (n &lt;= 1) return n; else
+                    return fibonacci(n-1) + fibonacci(n-2);
+            }
+        </code></pre>
+
+        <h2 id="junit4">JUnit4</h2>
+        <p>I started explaining JUnit4. It makes sense because it's the most popular
+        library and the base for many others. I started explaining <code>assertTrue</code> and
+        then, more advances usages, including <code>assertEquals</code>.</p>
+        <pre class="codehilite"><code class="language-java">    @Test
+            public void improvedFibonacciTestSimple() {
+                FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
+                assertEquals(f.fibonacci(4), 3);
+            }
+        </code></pre>
+
+        <p>If it's false, it would give you an error like:</p>
+        <pre class="codehilite"><code class="language-text">java.lang.AssertionError:
+        Expected :3
+        Actual   :2
+        </code></pre>
+
+        <p>Not very spectacular but quite useful.</p>
+        <p>The next thing was to show how to write a parametrized test, a nice feature very
+        useful for test algorithms. In JUnit4 is quite tricky. You need to create a
+        Collection with the annotation <code>@Parameters</code>.</p>
+        <pre class="codehilite"><code class="language-java">    @Parameters
+            public static Collection&lt;Object[]&gt; data() {
+                return Arrays.asList(new Object[][]{
+                        {0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}, {6, 8}
+                });
+            }
+        </code></pre>
+
+        <p>Then we create some local variables and a constructor:</p>
+        <pre class="codehilite"><code class="language-java">    private int fInput;
+            private int fExpected;
+
+            public ParametrizedFibonacciJUnit4(int input, int expected) {
+                fInput = input;
+                fExpected = expected;
+            }
+        </code></pre>
+
+        <p>and finally, we can use the <code>assertEquals</code>:</p>
+        <pre class="codehilite"><code class="language-java">    @Test
+            public void test() {
+                FibonacciWithJUnit4 f = new FibonacciWithJUnit4();
+                assertEquals(fExpected, f.fibonacci(fInput));
+            }
+        </code></pre>
+
+        <p>It's quite verbose and if the test fails, you would obtain a message which
+        doesn't indicate clearly the order or the parameters used (but your IDE probably
+        will help on that):</p>
+        <pre class="codehilite"><code class="language-text">java.lang.AssertionError:
+        Expected :0
+        Actual   :1
+        </code></pre>
+
+        <p>I didn't explain mocking here because an external library as
+        <a href="http://site.mockito.org/">Mockito</a> is usually required when you want to use
+        mocking with JUnit4. Mockito is great but I didn't have enough time to explain
+        it.</p>
+        <h2 id="junit5">JUnit5</h2>
+        <p>Since September 2017, JUnit5 is considered stable and it should be your choice
+        over JUnit4 for several reasons. It has better support for Java 8 and Lambdas,
+        it's compatible with JUnit4 (you can have both which it's great to migrate in a
+        progressive way) and it provides new runners and better integrations.</p>
+        <p>I repeated the same process. First, show an <code>assertEquals</code>:</p>
+        <pre class="codehilite"><code class="language-java">    @Test
+            public void bestFibonacciTestSimple() {
+                FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+                Assertions.assertEquals(f.fibonacci(4), 3);
+            }
+        </code></pre>
+
+        <p>There are important advances in other <code>assert</code>, for instance the timeout, but
+        for <code>assertEqual</code> with integers, it's practically the same. Also the message is
+        similar if there is an error:</p>
+        <pre class="codehilite"><code class="language-text">org.opentest4j.AssertionFailedError:
+        Expected :3
+        Actual   :2
+        </code></pre>
+
+        <p>Where we can find important changes is in the parametrized test. First, we need
+        to use the <code>@ParametrizedTest</code> annotation and we can specify a name using <code>{</code>
+        and <code>}</code> to indicate important parameters as <code>index</code> as <code>arguments</code>.</p>
+        <pre class="codehilite"><code class="language-java">    @ParameterizedTest(name = &quot;run #{index} with [{arguments}]&quot;)
+            @CsvSource({&quot;1, 1&quot;, &quot;4, 3&quot;})
+            public void test2(int input , int expected) {
+                FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+                Assertions.assertEquals(f.fibonacci(input), expected);
+            }
+        </code></pre>
+
+        <p>Now we can define our test. We start defining the entries to test function with
+        the annotation <code>@CsvSource</code>. Each item will replace the parameters in the test
+        function, in this case, <code>input</code> and <code>expected</code>.</p>
+        <pre class="codehilite"><code class="language-java">    @CsvSource({&quot;1, 1&quot;, &quot;4, 3&quot;})
+            public void test2(int input , int expected) {
+                FibonacciWithJUnit5 f = new FibonacciWithJUnit5();
+                Assertions.assertEquals(f.fibonacci(input), expected);
+            }
+        </code></pre>
+
+        <p>This is lot better than the JUnit4 implementation. Also, if there is a fail in
+        the test, we obtain a better message indicating the difference, the index
+        causing the fail and the used parameters.</p>
+        <p>Finally, it's the same for mocking as JUnit4: you normally use an external
+        library so I didn't explained it.</p>
+        <h2 id="spock-framework">Spock framework</h2>
+        <p>The last one was the Spock framework. It's based in
+        <a href="http://groovy-lang.org/">Apache Groovy</a>. If you don't know Groovy, it's a
+        language which you can use with the JVM and it interact very well with Java. It
+        allows write less code in a more clear way. It's very powerful. Some years ago
+        we started to use it for "non critical" development: tests, dependency
+        management, Continuous Integration, load testing and in any place where we need
+        some configuration file avoiding XML, JSON or any format like that. We continue
+        to develop in Java the core of our software and it isn't a problem because both
+        languages play very well together. If you know Java, you know Groovy... so we
+        have the best of both worlds.</p>
+        <p>Write a test in Spock is quite different, it would be like this:</p>
+        <pre class="codehilite"><code class="language-groovy">    def &quot;Simple test&quot;() {
+                setup:
+                BadFibonacci f = new BadFibonacci()
+
+                expect:
+                f.fibonacci(1) == 1
+                assert f.fibonacci(4) == 3
+            }
+        </code></pre>
+
+        <p>Basically, we can use <code>def</code> where we don't care about the type. The name of the
+        function can be defined between quotation marks, which allow us to use better
+        naming for our tests. We have some special words as <code>setup</code>, <code>when</code>, <code>expect</code>,
+        <code>and</code>, etc. to define our test in a more descriptive and structured way. And we
+        have a power assert, which is part of the language itself, proving nice
+        messages:</p>
+        <pre class="codehilite"><code class="language-text">Condition not satisfied:
+
+        f.fibonacci(4) == 2
+        | |            |
+        | 3            false
+        BadFibonacci@23c30a20
+
+        Expected :2
+
+        Actual   :3
+        </code></pre>
+
+        <p>It provides all the information: the returned value (actual), the expected
+        value, the function, the parameter, etc. <code>assert</code> is Groovy is really handy.</p>
+        <p>Now it's the turn for the parametrized test. It would be something like this:</p>
+        <pre class="codehilite"><code class="language-groovy">    def &quot;parametrized test&quot;() {
+                setup:
+                BadFibonacci f = new BadFibonacci()
+
+                expect:
+                f.fibonacci(index) == fibonacciNumber
+
+                where:
+                index | fibonacciNumber
+                1     | 1
+                2     | 1
+                3     | 2
+            }
+        </code></pre>
+
+        <p>After show this I heard some 'oooh' in the audience. The magic of this code is:
+        you don't need to explain it! There is a table in the <code>where:</code> section and the
+        values in <code>expect:</code> are automagically replace it in each iteration. If there is
+        a fail, the message is crystal clear:</p>
+        <pre class="codehilite"><code class="language-text">Condition not satisfied:
+
+        f.fibonacci(index) == fibonacciNumber
+        | |         |      |  |
+        | 2         3      |  4
+        |                  false
+        BadFibonacci@437da279
+
+        Expected :4
+
+        Actual   :2
+        </code></pre>
+
+        <p>Then I've introduced very shortly mocks and stubs.
+        <a href="https://en.wikipedia.org/wiki/Mock_object">A mock</a> is a object you create in
+        your test to avoid to use a real object. For example, you don't want to do real
+        web requests or print a page in your tests, so you can use a mock from an
+        interface or another object.</p>
+        <pre class="codehilite"><code class="language-groovy">    Subscriber subscriber = Mock()
+
+            def &quot;mock example&quot;() {
+                when:
+                publisher.send(&quot;hello&quot;)
+
+                then:
+                1 * subscriber.receive(&quot;hello&quot;)
+            }
+        </code></pre>
+
+        <p>Basically, you create the <code>subscriber</code> interface as Mock and then you can invoke
+        the methods. The <code>1 *</code> is another nice feature of Spock, it specify how many
+        messages you should receive. Cool, right?.</p>
+        <p>In some occasions, you need to define what return the methods of your mocks. For
+        that, you can create <a href="https://en.wikipedia.org/wiki/Method_stub">a stub</a>.</p>
+        <pre class="codehilite"><code class="language-groovy">    def &quot;stub example&quot;() {
+                setup:
+                subscriber.receive(_) &gt;&gt; &quot;ok&quot;
+
+                when:
+                publisher.send(&quot;message1&quot;)
+
+                then:
+                subscriber.receive(&quot;message1&quot;) == 'ok'
+            }
+        </code></pre>
+
+        <p>In this case, with the <code>&gt;&gt;</code> notation we are defining the method <code>receive</code> should
+        return <code>ok</code> independently of the parameter (<code>_</code> means any value). The test pass
+        without any problem.</p>
+        <h2 id="conclusions">Conclusions</h2>
+        <p>I don't like to recommend one library or another: all of the them have their use
+        cases. It's pretty clear we have great options in Java and I just give some
+        examples. Now it's your turn to decide which it's better for you. The only thing
+        I can say: write test and master your library of choice, it would make you a
+        better developer!</p>
+        <p>If you want to take a deeper look to the examples, you will find them in
+        <a href="https://github.com/vigojug/developer-vago-1-unit-testing">this GitHub repository</a>.
+        Enjoy!</p>
+        <p><a href="https://github.com/antonmry/galiglobal/pull/28">Comments</a></p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20180111-JUnit4-JUnit5-Spock-Comparisson.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
-    </script>
-
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
     </script>
   </body>
 </html>

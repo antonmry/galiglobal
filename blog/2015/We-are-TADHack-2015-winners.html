@@ -7,78 +7,102 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="we-are-tadhack-2015-winners-">We are TADHack 2015 winners :-)</h1>
+        <p><em>31 July 2015</em></p>
+        <p>Without any type of doubt, <a href="http://www.tadhack.com">TADHack</a> is my favourite
+        event in the year. Mainly because of three reasons:</p>
+        <ul>
+        <li>Excellent collaborative atmosphere and lots of friends. I love to have the
+          opportunity to share some time with people involved in the same topics I'm
+          working with. And not only that, it's full of techies :-)</li>
+        <li>Event is well managed by Alan Quayle and his team. Everything goes smoothly
+          and you are always busy speaking, developing, visiting other vendors or
+          watching other hacks.</li>
+        <li>It's not too big, so you have the chance to have a chat with almost
+          everybody... this seems weird but when I'm participating in bigger events,
+          I've the feeling I don't have time enough to speak with all people I would
+          like to speak with. That doesn't happen in TADHack.</li>
+        </ul>
+        <p>My participation in this event is mainly because we are running and providing
+        support for the Oracle Comms environment, there is a web with information about
+        all the resources in case you are interested:
+        <a href="http://tadhack.optaresolutions.com">http://tadhack.optaresolutions.com</a>. Even
+        if it's the second year we are doing it, the installation of the three Oracle
+        SDP products it's not straightforward. We had to update to the last versions of
+        the products and we are always looking for ways to improve it. It's not a secret
+        we are using <a href="https://aws.amazon.com/about-aws/">Amazon Web Services</a> to support
+        this infrastructure. Some day I have to write a post about the whole
+        infrastructure and how we are using AWS to support the service. The part about
+        how we upload the VMs to AWS EC2 is quite awesome and tricky because some of
+        them are based in customized Linux versions.</p>
+        <p>One of the most interesting things this year was the opportunity to participate
+        as developers. Obviously we cannot be winners of the Oracle prize, it wouldn't
+        be fair, but we can combine the Oracle environment with other sponsors, in this
+        case we chose Intel providing an embedded board. Also we have a new member in
+        the NetApps team, <a href="https://twitter.com/jonathrodriguez">Jonathan</a>, who is a
+        great Java and Android developer.
+        <a href="https://www.youtube.com/embed/LgYdT9Q7OWw">Here</a> it's the video where he's
+        showing the hack in Lisbon:</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/LgYdT9Q7OWw" frameborder="0" allowfullscreen></iframe>
+
+        <p>And now the big news... we won!</p>
+        <blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">Heart Rate Monitor team, winners of <a href="https://twitter.com/Inteliot">@Inteliot</a> prize at <a href="https://twitter.com/TADHack">@TADHack</a> <a href="https://twitter.com/antonmry">@antonmry</a> <a href="http://t.co/iPbWtemQ25">pic.twitter.com/iPbWtemQ25</a></p>&mdash; Alan Quayle (@Alan_Quayle) <a href="https://twitter.com/Alan_Quayle/status/610618140918157313">June 16, 2015</a></blockquote>
+        <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        <p>You can see my big smile in the photo. I'm more than happy being one of the winners. I guess I always have been a bit jealous of the others developers :-)</p>
+        <p>In short, TADHack 2015 has been great and bigger than the 2014 edition. The TAD ecosystem is evolving very quick and I'm really excited to see how this evolves in the following years.</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('We-are-TADHack-2015-winners.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

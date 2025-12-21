@@ -7,96 +7,100 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="speaking-about-jython-in-python-vigo">Speaking about Jython in Python Vigo</h1>
+        <p><em>01 April 2017</em></p>
+        <p>Some weeks ago I had the opportunity to speak in
+        <a href="https://www.python-vigo.es/posts/reunion-del-grupo-el-16032017/">the Python Vigo meetup</a>.
+        It was just a lightning talk, 5 minutes. Why?. I really enjoy Python Vigo
+        meetups, they are useful, fun and I always learn something new. So, when I read
+        an email asking for speakers, I proposed the only Python related subject I know
+        something about: <a href="http://www.jython.org/">Jython</a>.</p>
+        <p>I have been using Jython for years to manage Weblogic servers. Being honest, I
+        don't like it, without any doubt I would prefer to use Groovy, in fact, that's
+        what we usually do. But I thought it may be interesting for someone in the
+        Python community.</p>
+        <p>It was my first time doing a talk so short. Also I'm more used to do them in
+        English. It was clear to me how hard it's to do a 5 minutes talk, even for an
+        easy subject like this.</p>
+        <p>I just wanted to say three things, if possible, without slides:</p>
+        <ul>
+        <li>Don't use Jython if you are looking for Python performance improvement.</li>
+        <li>Use Jython to explore Java classes or change them dinamically using Python
+          syntax.</li>
+        <li>Use Jython to combine it with Java programs, to load configuration
+          dinamically, something like a DSL (Domain Specific Language) but using Python
+          as language.</li>
+        </ul>
+        <p>Probably, the talk wasn't clear for most people... Also I miss 15 seconds more
+        to finish my example. Yet, some people asked me some things later related to
+        it... so I'm not completely sad with the result and I learnt how hard it's to do
+        a good lightning talk.</p>
+        <p>In case you are insterested, in
+        <a href="https://github.com/antonmry/talk-pythonvigo-2017-introduction-to-jython">this GitHub repo</a>
+        you can find the things I did and also a Readme with the explanation. The talk
+        is recorded so you can watch it here:</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/FwgpPsiYg_o" frameborder="0" allowfullscreen></iframe>
+
+        <p>Notes for the future:</p>
+        <ul>
+        <li>Be careful with short talks, they are harder than the long ones.</li>
+        <li>Use introductory slides, at least one.</li>
+        <li>It's better to say less and clear than more and hard to understand.</li>
+        </ul>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20170401-Speaking-about-jython-in-Python-Vigo.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
-    </script>
-
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
     </script>
   </body>
 </html>

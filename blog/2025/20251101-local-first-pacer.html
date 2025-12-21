@@ -7,27 +7,140 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="building-localfirstpacer-a-small-running-tool-for-someone-you-care-about">Building LocalFirstPacer: a small running tool for someone you care about</h1>
+        <p><em>11 November 2025</em></p>
+        <hr>
+        <p>One unexpectedly joyful category of software: making tiny useful apps for people
+        you personally know intimately. Not a startup. Not a “platform opportunity”.
+        Just shipping a thing that actually moves the needle for exactly one real human.</p>
+        <p>In my case: my wife started running recently. And she is getting serious about
+        Zone 2. Heart rate guided, low intensity, aerobic base building. She needed
+        something simple to help her pace and structure interval sessions.</p>
+        <p><a href="https://blog.6nok.org/my-most-popular-application/">This post about a calendar application</a>
+        inspired me. The idea that your most meaningful software can be something
+        extremely narrow, but deeply useful for exactly one person.</p>
+        <p>That unlocked the project:
+        <strong><a href="https://github.com/antonmry/LocalFirstPacer">LocalFirstPacer</a></strong>.</p>
+        <h2 id="why-local-first-pwa-was-perfect-here">Why Local First + PWA was perfect here</h2>
+        <p>When you build for someone you love, something becomes extremely obvious: you
+        don’t want their physiological telemetry drifting through random servers.</p>
+        <p><strong>Local-first</strong> means everything runs locally on the browser. Data lives on the
+        device. Not in a cloud backend. Not indexed by someone else. Not sent to third
+        parties you never approved.</p>
+        <p>A <strong>PWA (Progressive Web App)</strong> means:</p>
+        <ul>
+        <li>it installs on the phone like a regular app</li>
+        <li>it works offline</li>
+        <li>it can run on the track without connectivity</li>
+        <li>it updates automatically, without App Store ceremonies</li>
+        </ul>
+        <p>So the intersection is powerful:</p>
+        <table>
+        <thead>
+        <tr>
+        <th>Local First</th>
+        <th>PWA</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>privacy friendly</td>
+        <td>simple install</td>
+        </tr>
+        <tr>
+        <td>no servers needed</td>
+        <td>offline</td>
+        </tr>
+        <tr>
+        <td>zero infra</td>
+        <td>feels native</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>This combination is much more powerful than most devs assume. Especially for
+        single-purpose personal tools.</p>
+        <h2 id="using-code-agents-to-build-this-fast">Using code agents to build this fast</h2>
+        <p>This project is also a real case study in agent based coding. Not “auto dev for
+        a startup”. Very targeted. Very scoped.</p>
+        <p>And if you use them correctly, you can go faster than hand coding from scratch,
+        even if you are fully capable of coding by hand.</p>
+        <p>I am not a frontend engineer. I am backend / data. Historically this kind of
+        project felt intimidating to me. I always assumed I needed a JS framework,
+        build tooling, boilerplate, large architecture. This project broke that
+        assumption completely. Here are the specific workflow patterns that actually
+        worked.</p>
+        <h3 id="1-start-with-chat-not-code">1) Start with chat, not code</h3>
+        <p>I first talked through the idea with the model conversationally. I validated the
+        scope. Then I asked the model to generate a minimal <code>index.html</code> just to test
+        the timer and see if the UX direction was right.</p>
+        <p>Only when this micro prototype felt coherent, I asked the model to create:</p>
+        <ul>
+        <li>README.md</li>
+        <li>AGENTS.md</li>
+        </ul>
+        <p>These two files became the contract for the dev loop.</p>
+        <p>I asked the agent to use only vanilla HTML/JS/CSS. In my experience, they work
+        much better avoiding frameworks and libraries.</p>
+        <h3 id="2-cli-agents-outperform-gui-builders-during-iteration">2) CLI agents outperform GUI “builders” during iteration</h3>
+        <p>I ran the agent inside a terminal environment. This matters because terminals
+        today allow pasting screenshots and structured error logs easily. This ended up
+        being the fastest possible loop: prompt → run → screenshot → adjust prompt →
+        run again.</p>
+        <h3 id="3-isolate-complex-features-into-separate-pages">3) Isolate complex features into separate pages</h3>
+        <p>Heart rate via Web Bluetooth is notoriously annoying to debug. So I created a
+        separate <code>hrm.html</code> just to validate:</p>
+        <ul>
+        <li>device discovery</li>
+        <li>service + characteristic mapping</li>
+        <li>streaming notifications</li>
+        </ul>
+        <p>Only when it worked in isolation did I ask the agent to merge into the main app
+        UI. This reduced hallucination risk dramatically.</p>
+        <h3 id="4-when-an-agent-stalls-or-derails-abandon-the-thread">4) When an agent stalls or derails, abandon the thread</h3>
+        <p>Adding English/Spanish support, I hit a dead end. The agent started insisting
+        on structures that didn’t exist. I stopped. Deleted the attempt. New session.
+        Clean framing. It worked.</p>
+        <p>Agents are extremely sensitive to local context pollution. Don’t be romantic
+        about sunk work.</p>
+        <h3 id="5-git-github-infra-is-force-multiplication">5) Git + GitHub + infra is force multiplication</h3>
+        <p>This is the boring truth: infra makes agent workflows real.</p>
+        <ul>
+        <li>GitHub Pages to deploy instantly</li>
+        <li>GitHub Actions to auto build</li>
+        <li>Docker container as the safe sandbox</li>
+        <li>Codespaces for portable dev environment</li>
+        </ul>
+        <p>If I give an agent write access to the full project folder inside Docker, I am
+        not afraid of the blast radius. Everything is isolated.</p>
+        <h2 id="closing-reflection">Closing reflection</h2>
+        <p>This project is tiny. But it has very high personal ROI. A person I care about
+        benefited from it immediately. And I learned a repeatable pattern:</p>
+        <ul>
+        <li>small scoped problem</li>
+        <li>PWA</li>
+        <li>Local First</li>
+        <li>iterative agent coding</li>
+        <li>infra guardrails</li>
+        </ul>
+        <p>This pattern scales surprisingly well for “one person tools”.</p>
+        <p>The best feeling moment of the whole project was when I asked my wife: <em>“What
+        should I improve next?”</em> And she said: <strong>“Nothing. It’s perfect. Thank you.”</strong></p>
+        <p>That was the entire payoff.</p>
+        <p>Comments? You can find me in <a href="https://bsky.app/profile/anton.galiglobal.com">BlueSky</a>.</p>
+        <p><img alt="Local First Pacer screenshot" src="lfp.png"></p>
+        </div>
         <div id="leaflet-comments" class="mt-4"></div>
       </div>
       <div id="push"></div>
@@ -35,31 +148,20 @@
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
           const target = document.getElementById(elementId);
-          if (!target) {
-            console.error(`Target ${elementId} not found`);
-            return;
-          }
+          if (!target) return;
           target.innerHTML = html;
 
-          // Execute any scripts inside the loaded snippet by cloning them
           const scripts = target.querySelectorAll('script[data-execute="true"]');
           scripts.forEach((oldScript) => {
             const newScript = document.createElement('script');
@@ -72,34 +174,12 @@
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20251101-local-first-pacer.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          const contentEl = document.getElementById('content');
-          if (contentEl) {
-            contentEl.innerHTML = window.marked.parse(markdown);
-          } else {
-            console.error('Content element not found');
-            return;
-          }
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

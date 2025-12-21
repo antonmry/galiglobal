@@ -7,96 +7,187 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="how-to-persist-your-configuration-in-gke">How to persist your configuration in GKE</h1>
+        <p><em>09 January 2017</em></p>
+        <p>In my previous post,
+        <a href="https://antonmry.github.io/post/deploy-on-kubernetes-gke-with-terraform/">Deploy on Kubernetes GKE with Terraform</a>,
+        we've seen how to start to use kubernetes but in a very simple way. The next
+        thing we would like to do is persist the configuration, so we don't need to
+        reconfigure our bot each time we start the cluster. This post explain how to do
+        it from the configuration created in the previous one.</p>
+        <p>Again we'll use <a href="https://github.com/antonmry/leanmanager">Leanmanager bot</a> but
+        everything applies to any other system which needs to store configuration or
+        data in a database. In the case of
+        <a href="https://github.com/antonmry/leanmanager">Leanmanager</a> we are using
+        <a href="https://github.com/boltdb/bolt">Boltdb</a>, a pure Go key/value store.
+        <a href="https://github.com/boltdb/bolt">Boltdb</a> is great for development but it doesn't
+        support to have more than one process opening the same database file, so it may
+        be problematic if we want to have more than one Docker instance at the same
+        time. Yet it's enough for our purposes and the process is similar for
+        <a href="https://www.consul.io/">Consul</a> which it's already in the Roadmap.</p>
+        <h2 id="create-your-persistent-disks">Create your persistent disks</h2>
+        <p>If we want to persist data, we are going to need a disk, that's common sense. In
+        GCE we can do it very easily:</p>
+        <pre class="codehilite"><code class="language-sh">gcloud compute disks create --size 1GB leanmanager-disk
+        </code></pre>
+
+        <p>But again, we want to do it in an automated way with Terraform. Use the
+        following file <code>leanmanager-disk.tf</code>:</p>
+        <pre class="codehilite"><code class="language-text">variable &quot;disk_name&quot; {
+          default = &quot;leanmanager-disk&quot;
+        }
+
+        resource &quot;google_compute_disk&quot; &quot;default&quot; {
+        name  = &quot;${var.disk_name}&quot;
+          type  = &quot;pd-ssd&quot;
+          zone = &quot;${var.region}&quot;
+          size  = &quot;1&quot;
+        }
+        </code></pre>
+
+        <p>If you want to know more about it, visit the
+        <a href="https://www.terraform.io/docs/providers/google/r/compute_disk.html">Terraform Google_Compute_Disk reference documentation</a>.</p>
+        <h2 id="tell-the-container-about-the-disk">Tell the container about the disk</h2>
+        <p>In our previous post, we've launched the bot using <code>kubectl run</code>. This is OK for
+        simple configuration but if we need to have something more complex, it doesn't
+        scale. We can create a <a href="http://kubernetes.io/docs/user-guide/pods/">pod</a>, a
+        group of one or more containers, using a YAML file like this:</p>
+        <pre class="codehilite"><code class="language-text">apiVersion: v1
+        kind: Pod
+        metadata:
+          name: leanmanager
+          labels:
+            name: leanmanager
+        spec:
+          containers:
+            - image: antonmry/leanmanager:latest
+              name: leanmanager
+              env:
+                - name: LEANMANAGER_TOKEN
+                  value: LEANMANAGER_TOKEN_TEMPLATE
+                - name: LEANMANAGER_PATHDB
+                  value: /mnt
+              volumeMounts:
+                  # This name must match the volumes.name below.
+                - name: leanmanager-persistent-storage
+                  mountPath: /mnt
+          volumes:
+            - name: leanmanager-persistent-storage
+              gcePersistentDisk:
+                # This disk must already exist.
+                pdName: leanmanager-disk
+                fsType: ext4
+        </code></pre>
+
+        <p>The file is auto-explanatory except the value <code>LEANMANAGER_TOKEN_TEMPLATE</code>. I
+        don't want to hardcode the Token here because the file will be uploaded to
+        Github. Instead of that, I want to use my local environment variable
+        LEANMANAGER_TOKEN but this isn't supported yet in K8s, see
+        <a href="http://stackoverflow.com/questions/33478555/kubernetes-equivalent-of-env-file-in-docker">Kubernetes equivalent of env-file in Docker</a>.</p>
+        <p>So I've created a YAML template and in the Terraform file changed the last
+        <code>local-exec</code> to:</p>
+        <pre class="codehilite"><code class="language-text">  provisioner &quot;local-exec&quot; {
+            command = &quot;cp leanmanager-pod-template.yaml leanmanager.tmp.yaml &amp;&amp; sed -i -- 's/LEANMANAGER_TOKEN_TEMPLATE/${var.LEANMANAGER_TOKEN}/g' leanmanager.tmp.yaml&quot;
+          }
+
+          provisioner &quot;local-exec&quot; {
+            command = &quot;kubectl create -f leanmanager.tmp.yaml&quot;
+          }
+
+          provisioner &quot;local-exec&quot; {
+            command = &quot;rm -f leanmanager.tmp.yaml&quot;
+          }
+        </code></pre>
+
+        <p>Basically, I'm replacing strings with <code>sed</code>. Other more sophisticate approaches
+        are possible as K8s secrets or Ansible, but this is simple and enough for the
+        task we want to do.</p>
+        <h2 id="create-the-pod-and-test">Create the pod and test</h2>
+        <p>Time to create the cluster and the pod:</p>
+        <pre class="codehilite"><code class="language-sh">terraform plan
+        terraform apply -var LEANMANAGER_TOKEN=$LEANMANAGER_TOKEN
+        </code></pre>
+
+        <p>The bot should connect. Now we can do some changes in the configuration, delete
+        the pod:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl delete pod leanmanager
+        </code></pre>
+
+        <p>Create it again:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl create -f leanmanager.yaml
+        </code></pre>
+
+        <p>And check the status with the following commands and, once it's in <em>Running</em>
+        state, see if everything has been persisted:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl get pod leanmanager
+        kubectl logs leanmanager
+        </code></pre>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>Persist data in Kubernetes is quite easy, even if you are going to do it
+        automatically.</p>
+        <p>If you want to check all the files, the full project and the associated PR are
+        in
+        <a href="https://github.com/antonmry/leanmanager/pull/27/commits/ffea981b5deca5376b7bb8de1ed797da9aa282b0">Github</a>.</p>
+        <h2 id="not-already-linked-but-useful-resources">Not already linked but useful resources</h2>
+        <ul>
+        <li><a href="http://kubernetes.io/docs/user-guide/persistent-volumes/">Kubernetes persistent volumes</a></li>
+        <li><a href="https://cloud.google.com/container-engine/docs/tutorials/persistent-disk/">Using Persistent Disks with WordPress and MySQL</a></li>
+        </ul>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20170109-how-to-persist-your-configuration-in-gke.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
-    </script>
-
-    <script>if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-        + ':35729/livereload.js"></'
-        + 'script>')</script>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-57796882-1', 'auto');
-      ga('send', 'pageview');
     </script>
   </body>
 </html>

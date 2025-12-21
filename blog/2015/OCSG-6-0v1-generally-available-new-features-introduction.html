@@ -7,78 +7,105 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="ocsg-60v1-generally-available-new-features-introduction">OCSG 6.0v1 generally available: new features introduction</h1>
+        <p><em>23 January 2015</em></p>
+        <p>The new OCSG version is available and there are a lot of new interesting things,
+        starting with a Documentation reorganization.</p>
+        <p><img alt="OCSG v6 documentation" src="OCSG-doc-v6.png"></p>
+        <p>This is the press note (source <a href="https://community.oracle.com/docs/DOC-894950?sr=stream#comment-897214">Oracle Community</a>):</p>
+        <blockquote>
+        <p>Oracle Communications is pleased to announce that as of Thursday, 22 January 2015, we ntroduced the most comprehensive API exposure platform in the industry with the release of Oracle Communications Services Gatekeeper 6.0 (OCSG 6.0).</p>
+        <p>OCSG 6.0 introduces expansive API Management capabilities to manage the entire API lifecycle enabling enterprises and CSPs to accelerate internal development, engage with partners and monetize assets. OCSG 6.0 delivers this alongside industry leading SLA management, analytics and an extensive array of built-in communications services.</p>
+        <p>As part of the OCSG 6.0 release, a new OCSG-based solution, called "Network Policy as a Service" (NPaaS), was launched by integrating the Oracle Communications Policy Management (OCPM) PCRF to provide out-of-the-box exposure of network policy for both telephony and cable networks. This allows CSPs and partners to align the data bandwidth with the digital service being delivered, ensuring a higher rate of customer satisfaction. OCSG 6.0's API Management, simplified configuration and lightweight deployment features enable new API exposure use cases for enterprise IT integration, including: <em>Contact center application enablement</em> API exposure for Communications Enabled Business Processes (CEBP) and Unified Communications (UC)</p>
+        <p><strong>KEY FEATURES OF THE OCSG 6.0 RELEASE</strong> <em>API Management made powerful and simple</em> Web Service API generation in the Portal allows APIs to be built in minutes <em>API catalog and versioning</em> Onboard and manage partners <em>API Monitoring, analytics, metering and charging</em> Management and partner portals <em>Simplified configuration and deployment with installation in 15 minutes</em> Lightweight single tier deployment option <em>Integration with the Oracle Communications Policy Management (OCPM) PCRF to safely and securely expose network policy through the Parlay X and Restful QoS APIs</em> Enhanced Oauth integration simplifies integration with SSO and IDM <em>Enterprise Manager Cloud Control integration facilitates cloud-based deployments</em> Advanced API firewall provides protection against a multitude of security threats * Integration with OCCAS Service Controller provides a broad array of SS7 interface options</p>
+        <p>Product releases are available for download from the <a href="https://edelivery.oracle.com/">Oracle Software Delivery Cloud</a>.</p>
+        <p>More documentation can be found via Services <a href="http://docs.oracle.com/cd/E50778_01/index.htm">Gatekeeper 6.0 Documentation</a></p>
+        </blockquote>
+        <p>It's soon yet to write a detailed analysis but I would like to highlight some
+        takeaways. This is not the typical release.. in fact, there isn't an official
+        announcement as we've seen previously. There are a lot of small improvements to
+        help operators and system integrators to work with OCSG which it's great. Some
+        of them:</p>
+        <ol>
+        <li><strong><a href="http://docs.oracle.com/cd/E50778_01/doc.60/e54151/toc.htm">New Default Single-system Installation Option and Getting Started Guide</a>:</strong>
+           everything in a single package (database included), it's going to save us a
+           lot of time and PoCs will be easier. Great point.</li>
+        <li><strong><a href="http://docs.oracle.com/cd/E50778_01/index.htm">Documentation Improvements</a>:</strong>
+           I've to check them yet but the new structure looks better and, for sure, some
+           sections in the 5.1 documentation could be improved/corrected.</li>
+        <li><strong><a href="http://docs.oracle.com/cd/E50778_01/doc.60/e55395/ipl_pcrf.htm#SGIPL700">PCRF Integration Example</a>:</strong>
+           This is something I really appreciate because I was working on that and it's
+           really hard because of the lack of information and references to the Tekelec
+           product. I will do it very soon but after a first look, it lacks a bit more
+           of detail in the Tekelec PCRF setup.</li>
+        <li><strong><a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50764/prm_intro.htm#SGPRM106">Extending the Portal User Interfaces and Portal Developer's Guide</a>:</strong>
+           I know there are a lot of improvements in this part. An easier installation
+           and customization, for sure, one of the points everybody asked with the
+           previous version.</li>
+        <li><strong><a href="http://docs.oracle.com/cd/E50778_01/doc.60/e54898/toc.htm">New API Management Features</a>:</strong>
+           OCSG competes some times (but not always) with more general products as API
+           gateways. Improvements in this part are warmly welcomed.</li>
+        </ol>
+        <p>I miss some things as more Geographic redundancy improvements and more debugging
+        options but it's soon yet to know if they're or not in this release. Anyway,
+        there are more interesting improvements, consult the
+        <a href="http://docs.oracle.com/cd/E50778_01/doc.60/e50775/toc.htm">Release Note</a> for
+        detailed information.</p>
+        <p>I will try to write some specific articles showing the new features. Just
+        <a href="http://www.serviceandnetworkevolution.com/">subscribe to the blog</a> to keep
+        yourself informed.</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('OCSG-6-0v1-generally-available-new-features-introduction.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

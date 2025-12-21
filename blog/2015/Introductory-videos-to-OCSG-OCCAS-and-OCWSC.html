@@ -7,78 +7,89 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="introductory-videos-to-ocsg-occas-and-ocwsc">Introductory videos to OCSG, OCCAS and OCWSC</h1>
+        <p><em>11 June 2015</em></p>
+        <p>Tomorrow I will be travelling to <a href="http://tadhack.com/2015/">TADHack</a> in Lisbon
+        and I am so excited! It's going to be great! As part of the initiatives we've
+        done to promote <a href="http://tadhack.optaresolutions.com/">the Oracle sandbox</a> and
+        help the developers, I've recorded three videos to introduce the three Oracle
+        SDP applications. Even if they are oriented to the TADHack, they are a good
+        resource for anyone interested in the products.</p>
+        <h2 id="oracle-communications-webrtc-session-controller">Oracle Communications WebRTC Session Controller</h2>
+        <p>In this video, we are going to introduce Oracle Communications WebRTC Session
+        Controller and how to use it to add audio, video and data communications to web
+        and mobile applications. It provides an introduction to a sample application, a
+        good starting point to develop more complex services. It ends explaining how to
+        add a widget which allows developers to add Real-time communication in a very
+        easy way.</p>
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/PBUyris2GUA" frameborder="0" allowfullscreen></iframe>
+
+        <h2 id="oracle-communications-service-gatekeeper">Oracle Communications Service Gatekeeper</h2>
+        <p>In this video, we are going to introduce the Telecom APIs available in the
+        Oracle Communications sandbox: Messaging, Payment and Location. Developers will
+        learn how to start to work with those APIs and how to add them to their own
+        applications and hacks.</p>
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/e6W3Dpx4Rsc" frameborder="0" allowfullscreen></iframe>
+
+        <h2 id="oracle-communications-converged-application-server">Oracle Communications Converged Application Server</h2>
+        <p>In this video, we are going to introduce Oracle Communications Converged
+        Application Server and how to design and build applications able to manage HTTP
+        and SIP protocols at the same time. We'll review also the new SIP Servlet 2.0
+        specification and the JSR-359 recently approved. We'll end the video reviewing a
+        B2BUA application and learning to modify it to build more complex applications.</p>
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/50fZ1-3dpnE" frameborder="0" allowfullscreen></iframe>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('Introductory-videos-to-OCSG-OCCAS-and-OCWSC.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

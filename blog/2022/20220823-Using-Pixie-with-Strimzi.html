@@ -7,78 +7,250 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="using-pixie-to-monitor-a-strimzi-kafka-cluster">Using Pixie to monitor a Strimzi kafka cluster</h1>
+        <p><em>23 August 2022</em></p>
+        <h2 id="introduction">Introduction</h2>
+        <p>In this article, we are going to see how to deploy a Kafka cluster in Kubernetes
+        using <a href="https://strimzi.io">Strimzi</a> and how to easily monitor it with
+        <a href="https://pixielabs.ai">Pixie</a>.</p>
+        <h2 id="kubernetes-setup">Kubernetes setup</h2>
+        <p>We are going to use Google Cloud but you can use any cloud provider or on-prem
+        solution.</p>
+        <p>Let's create the k8s cluster:</p>
+        <pre class="codehilite"><code class="language-bash">gcloud container clusters create antonmry-pixie-cluster  --num-nodes=2 --machine-type=e2-standard-8 --disk-size 300
+        </code></pre>
+
+        <p>And make sure we can connect to it:</p>
+        <pre class="codehilite"><code class="language-sh">gcloud container clusters get-credentials antonmry-pixie-cluster
+        kubectl get nodes
+        </code></pre>
+
+        <p>Note: kubectl doesn't work in some public WiFi when they are replacing TLS
+        certificates.</p>
+        <p>See <a href="https://docs.pixielabs.ai/installing-pixie/setting-up-k8s/gke-setup/">Pixie's GKE setup</a> official documentation for more info.</p>
+        <h2 id="pixie-deployment">Pixie deployment</h2>
+        <p>Let's deploy Pixie now! The first step is to install the CLI tool. There are
+        several ways to do it (see the
+        <a href="https://docs.pixielabs.ai/installing-pixie/install-schemes/cli/">CLI documentation</a>
+        for more info). The easiest way is:</p>
+        <pre class="codehilite"><code class="language-sh">bash -c &quot;$(curl -fsSL https://withpixie.ai/install.sh)&quot;
+        </code></pre>
+
+        <p>Deploy Pixie in the Kubernetes cluster:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl config current-context
+        px deploy
+        </code></pre>
+
+        <p>It takes some time. Once it's completed, check all pods are running:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl get pods --all-namespaces
+        px debug pods
+        </code></pre>
+
+        <p>See the <a href="https://docs.pixielabs.ai/installing-pixie/install-guides/">Pixie Install Guides</a> for more info.</p>
+        <p>We should be able to see the cluster monitoring in the Pixie UI now:</p>
+        <p><img alt="Pixie Cluster Overview" src="pixie/pixie-cluster-overview.png"></p>
+        <h2 id="strimzi-deployment">Strimzi deployment</h2>
+        <p>The first step is to deploy the operator in their own namespace:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl create namespace kafka
+        kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka 
+        kubectl get pods -n kafka
+        </code></pre>
+
+        <p>Wait until the pod is healthy and then, let's create the cluster:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/0.30.0/examples/kafka/kafka-persistent-single.yaml -n kafka
+        kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
+        kubectl get pods -n kafka
+        </code></pre>
+
+        <p>We should be able to list, create and describe topics:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092  --list
+
+        kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --create --topic pixie --replication-factor 1 --partitions 2
+
+        kubectl -n kafka run kafka-topics -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-topics.sh --bootstrap-server my-cluster-kafka-bootstrap:9092  --describe pixie
+        </code></pre>
+
+        <p>It's possible to launch a consumer:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl -n kafka run kafka-producer-perf-3 -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-producer-perf-test.sh --topic pixie --throughput 1 --num-records 300000 --record-size 1024 --producer-props acks=all bootstrap.servers=my-cluster-kafka-bootstrap:9092
+        </code></pre>
+
+        <p>And in a different terminal, a producer:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl -n kafka run kafka-consumer1 -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic pixie  --consumer-property group.id=test #con1
+        </code></pre>
+
+        <p>Now we can see all Kafka resources in the UI selecting the Kafka Overview
+        script:</p>
+        <p><img alt="Pixie Scripts selector" src="pixie/pixie-scripts.png"></p>
+        <p>It gives us the ability to identify consumers, producers, topics and the
+        throughput between them:</p>
+        <p><img alt="Pixie Kafka Overview script" src="pixie/pixie-kafka-overview.jpg"></p>
+        <p>How Pixie is able to obtain that information without instrumenting the broker or
+        the apps? Using <a href="https://docs.px.dev/about-pixie/pixie-ebpf/">eBPF</a> to parse the
+        Kafka protocol between brokers and clients. This is more clear in the script
+        <code>kafka data</code>:</p>
+        <p><img alt="Pixie Kafka Data script" src="pixie/pixie-kafka-data.jpg"></p>
+        <p>We can even access the messages: the request, the response and the time between
+        them (latency).</p>
+        <pre class="codehilite"><code class="language-json">{
+           &quot;time_&quot;:1661284918212,
+           &quot;source&quot;:{
+              &quot;label&quot;:&quot;kafka/kafka-producer-perf-3&quot;,
+              &quot;script&quot;:&quot;px/pod&quot;,
+              &quot;args&quot;:{
+                 &quot;start_time&quot;:&quot;-15m&quot;,
+                 &quot;pod&quot;:&quot;kafka/kafka-producer-perf-3&quot;
+              }
+           },
+           &quot;destination&quot;:{
+              &quot;label&quot;:&quot;kafka/my-cluster-kafka-0&quot;,
+              &quot;script&quot;:&quot;px/pod&quot;,
+              &quot;args&quot;:{
+                 &quot;start_time&quot;:&quot;-15m&quot;,
+                 &quot;pod&quot;:&quot;kafka/my-cluster-kafka-0&quot;
+              }
+           },
+           &quot;remote_port&quot;:33960,
+           &quot;req_cmd&quot;:&quot;Produce&quot;,
+           &quot;req_body&quot;:{
+              &quot;transactional_id&quot;:&quot;(empty string)&quot;,
+              &quot;acks&quot;:-1,
+              &quot;timeout_ms&quot;:30000,
+              &quot;topics&quot;:[
+                 {
+                    &quot;name&quot;:&quot;pixie&quot;,
+                    &quot;partitions&quot;:[
+                       {
+                          &quot;index&quot;:1,
+                          &quot;message_set&quot;:{
+                             &quot;size&quot;:2128
+                          }
+                       }
+                    ]
+                 }
+              ]
+           },
+           &quot;resp&quot;:{
+              &quot;topics&quot;:[
+                 {
+                    &quot;name&quot;:&quot;pixie&quot;,
+                    &quot;partitions&quot;:[
+                       {
+                          &quot;index&quot;:1,
+                          &quot;error_code&quot;:&quot;kNone&quot;,
+                          &quot;base_offset&quot;:0,
+                          &quot;log_append_time_ms&quot;:-1,
+                          &quot;log_start_offset&quot;:0,
+                          &quot;record_errors&quot;:[
+                          ],
+                          &quot;error_message&quot;:&quot;(empty string)&quot;
+                       }
+                    ]
+                 }
+              ],
+              &quot;throttle_time_ms&quot;:0
+           },
+           &quot;latency&quot;:3102207
+        }
+        </code></pre>
+
+        <h2 id="consumer-lag">Consumer Lag</h2>
+        <p>Consumer Lag is one of the most important metrics for Kafka because it's a great
+        indicator of problems. We can see it with the Kafka CLI tools:</p>
+        <pre class="codehilite"><code class="language-sh">kubectl -n kafka run kafka-consumer-lag -ti --image=quay.io/strimzi/kafka:0.25.0-kafka-2.8.0 --rm=true --restart=Never -- bin/kafka-consumer-groups.sh --bootstrap-server  my-cluster-kafka-bootstrap:9092 --describe --group test1
+        </code></pre>
+
+        <blockquote>
+        <p>GROUP TOPIC PARTITION CURRENT-OFFSET LOG-END-OFFSET LAG CONSUMER-ID HOST CLIENT-ID</p>
+        <p>test pixie 0 653 654 1 consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23 consumer-test-1</p>
+        <p>test pixie 1 653 654 1 consumer-test-1-58e7aa2f-8015-4195-9ca0-db61307bbc29 /10.48.0.23 consumer-test-1</p>
+        </blockquote>
+        <p>Consumer Lag is the difference between LOG-END-OFFSET and CURRENT-OFFSET.
+        Consumer Lag in offsets is hard to understand, it's easier if we measure it in
+        time. Pixie is able to do this with the script <code>kafka_producer_consumer_latency</code>:</p>
+        <p><img alt="Pixie Kafka ConsumerLag script" src="pixie/pixie-consumer-lag.jpg"></p>
+        <p>This is very different compared to other ways to calculate Consumer Lag (
+        [Introducing uGroup: Uber's Consumer Management Framework] is a great article
+        covering most of them). Pixie is tracking the Kafka protocol messages and
+        calculating the lag as the difference between a Produce request and a Fetch
+        request. It's possible to see the code in the UI (or even modify it!) opening
+        the editor or directly in GitHub:
+        <a href="https://github.com/pixie-io/pixie/blob/db0ad3a9b3c7229f8e3dd57d9eea5a372e4670f2/src/pxl_scripts/px/kafka_producer_consumer_latency/kafka_producer_consumer_latency.pxl#L130">kafka_producer_consumer_latency.pxl</a>.</p>
+        <h2 id="kafka-consumer-rebalances">Kafka consumer rebalances</h2>
+        <p>Kafka Consumer rebalances can be quite tricky. Kafka brokers and consumer
+        instaces need to agree on the assignation of partitions and the throughput is
+        affected during that process. Pixie provides a great way to identify rebalances
+        with the
+        <a href="https://github.com/pixie-io/pixie/blob/main/src/pxl_scripts/px/kafka_consumer_rebalancing/kafka_consumer_rebalancing.pxl">kafka_consumer_rebalancing.pxl</a>:</p>
+        <p><img alt="Pixie Kafka Rebalancing script" src="pixie/pixie-kafka-rebalancing.jpg"></p>
+        <p>Again, it's using the Kafka protocol parsing to identify the rebalances and
+        measure the duration. In this case, the difference between JoinGroup and
+        SyncGroup messages. If you would like to know more about Kafka Rebalances,
+        <a href="https://medium.com/streamthoughts/apache-kafka-rebalance-protocol-or-the-magic-behind-your-streams-applications-e94baf68e4f2">Apache Kafka Rebalance Protocol, or the magic behind your streams applications</a>
+        is a great source of information.</p>
+        <h2 id="summary">Summary</h2>
+        <p>In this article, we have covered how to use eBPF and Pixie to monitor Kafka in a
+        different way. It's easy and it doesn't require redeployment of the
+        applications. It uses a different approach (Kafka Protocol parsing) and it could
+        be a great addition to your toolset if you are using Kubernetes.</p>
+        <p>There are more information in the
+        <a href="https://docs.pixielabs.ai/tutorials/pixie-101/kafka-monitoring/">Pixie Kafka Monitoring</a>
+        tutorial and in this
+        <a href="https://www.confluent.io/events/kafka-summit-london-2022/monitoring-kafka-without-instrumentation-using-ebpf/">Kafka Summit session</a>.</p>
+        <p>Did I miss something? You can comment on
+        <a href="https://github.com/antonmry/galiglobal/pull/41">GitHub</a> or just drop me a note
+        on <a href="https://bsky.app/profile/galiglobal.com">BlueSky</a>!</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20220823-Using-Pixie-with-Strimzi.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

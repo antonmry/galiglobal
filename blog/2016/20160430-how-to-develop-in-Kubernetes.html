@@ -7,78 +7,183 @@
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="how-to-setup-your-environment-for-kubernetes-development">How to setup your environment for Kubernetes development</h1>
+        <p><em>30 April 2016</em></p>
+        <p>In this post I'm going to show how to create a Kubernetes Development
+        Environment and deploy RestComm (a quite complex software) on it for testing. If
+        you want just deploy RestComm, it's better for you use the
+        <a href="http://kubernetes.io/docs/getting-started-guides/docker/">Kubernetes Docker option</a>,
+        instead of doing all this process.</p>
+        <h2 id="install-go-development-environment">Install Go Development Environment</h2>
+        <pre class="codehilite"><code class="language-sh">curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+        tar -zxvf go1.6.linux-amd64.tar.gz
+        mv go ~/Software/
+        echo &quot;GOROOT=~/Software/go&quot; &gt;&gt; .bash_profile 
+        echo &quot;export GOROOT&quot; &gt;&gt; .bash_profile 
+        echo &quot;PATH=\$GOROOT/bin:\$PATH&quot; &gt;&gt; ~/.bash_profile
+        echo &quot;export PATH&quot; &gt;&gt; ~/.bash_profile
+        echo &quot;GOPATH=~/Workspace/Telestax/go_kubernetes&quot; &gt;&gt; ~/.bash_profile
+        echo &quot;export GOPATH&quot; &gt;&gt; ~/.bash_profile
+        source ~/.bash_profile
+        mkdir -p $GOPATH
+        </code></pre>
+
+        <h2 id="basic-kubernetes-installation">Basic Kubernetes installation</h2>
+        <h2 id="clone-and-download">Clone and download</h2>
+        <pre class="codehilite"><code class="language-sh">mkdir -p $GOPATH/src/k8s.io
+        cd $GOPATH/src/k8s.io
+        git clone https://github.com/antonmry/kubernetes.git
+        cd kubernetes
+        git remote add upstream 'https://github.com/kubernetes/kubernetes.git'
+        </code></pre>
+
+        <h2 id="build-and-unit-test">Build and unit test</h2>
+        <pre class="codehilite"><code class="language-sh">./hack/build-go.sh &amp;&amp; notify-send &quot;Compilation done&quot;
+        </code></pre>
+
+        <p>Note! Integration test take a long time.</p>
+        <pre class="codehilite"><code class="language-sh">./hack/test-go.sh &amp;&amp; notify-send &quot;Test done&quot;
+        </code></pre>
+
+        <h2 id="integration-test">Integration test</h2>
+        <p>We need etcd to run the integration test, Docker to the rescue?</p>
+        <pre class="codehilite"><code class="language-sh">docker run -d --name etcd quay.io/coreos/etcd:v2.3.3
+        alias etcdctl=&quot;docker exec etcd /etcdctl&quot;
+        alias etcd=&quot;docker exec etcd /etcd&quot;
+        </code></pre>
+
+        <p>Nop, it fails because kubernetes look for it in the PATH :-(</p>
+        <p>So,</p>
+        <pre class="codehilite"><code class="language-sh">curl -O  https://github.com/coreos/etcd/releases/download/v2.3.3/etcd-v2.3.3-linux-amd64.tar.gz 
+        tar xzvf etcd-v2.3.3-linux-amd64.tar.gz
+        mv etcd-v2.3.3-linux-amd64/ ~/Software/
+        echo &quot;PATH=~/Software/etcd-v2.3.3-linux-amd64:\$PATH&quot; &gt;&gt; ~/.bash_profile
+        echo &quot;export PATH&quot; &gt;&gt; ~./bash_profile
+        source ~./bash_profile
+        </code></pre>
+
+        <p>And now, time to test. Be careful, I think it uses your Google Cloud account :-S</p>
+        <pre class="codehilite"><code class="language-sh">go run hack/e2e.go -v --build --up --test --down &amp;&amp; notify-send &quot;Integration test done&quot;
+        </code></pre>
+
+        <h2 id="running-the-restcomm-image">Running the Restcomm image</h2>
+        <h2 id="creating-and-launching-the-cluster">Creating and launching the cluster</h2>
+        <p>It will ask for sudo permission, you have to be quick, or relaunch.</p>
+        <pre class="codehilite"><code class="language-sh">hack/local-up-cluster.sh
+        </code></pre>
+
+        <p>Let this terminal open and create a new one (tmux's time?)</p>
+        <h2 id="running-the-container">Running the container</h2>
+        <p>We don't have any container running:</p>
+        <pre class="codehilite"><code class="language-sh">cluster/kubectl.sh get pods
+        cluster/kubectl.sh get services
+        cluster/kubectl.sh get deployments
+        </code></pre>
+
+        <p>Time to launch RestComm:</p>
+        <pre class="codehilite"><code class="language-sh">curl -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/c5c2979be63297571968f7db88c27e714e557fca/restcomm_rc.yml
+        vim restcomm_rc.yml 
+        </code></pre>
+
+        <p>Change STATIC_ADDRESS to your own IP address.</p>
+        <pre class="codehilite"><code class="language-sh">cluster/kubectl.sh create -f restcomm_rc.yml
+        </code></pre>
+
+        <p>Now we should be able to see our docker instance working, pods and so on.</p>
+        <pre class="codehilite"><code class="language-sh">cluster/kubectl.sh get services
+        cluster/kubectl.sh get deployments
+        cluster/kubectl.sh get pods
+        </code></pre>
+
+        <p>We have to wait the STATUS pod become running instead of ContainerCreating.</p>
+        <p>After that, we can see our RestComm containers running:</p>
+        <pre class="codehilite"><code class="language-sh">docker images
+        docker ps
+        </code></pre>
+
+        <p>Once it's running, we can expose the ports to access our instance:</p>
+        <pre class="codehilite"><code class="language-sh">wget -O https://gist.githubusercontent.com/antonmry/0ab69e95e61617eb957a79beb25ba30b/raw/77c4eea558fcba9a1ad09d9b89221fdbe3a263fe/restcomm_service.yml
+        vim restcomm_service.yml
+        </code></pre>
+
+        <p>Change externalIPs to your own IP address.</p>
+        <pre class="codehilite"><code class="language-sh">cluster/kubectl.sh create -f restcomm_service.yml
+        </code></pre>
+
+        <p>With the following command we can check the status:</p>
+        <pre class="codehilite"><code class="language-sh">./cluster/kubectl.sh get svc
+        </code></pre>
+
+        <h2 id="test-restcomm">Test Restcomm</h2>
+        <pre class="codehilite"><code class="language-sh">chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
+        </code></pre>
+
+        <p>Login as alice, call +1234 and you should listen the message ;-)</p>
+        <h2 id="stop-all">Stop all</h2>
+        <pre class="codehilite"><code class="language-sh">./cluster/kubectl.sh delete service restcomm-service
+        ./cluster/kubectl.sh delete rc restcomm-core-controller
+        </code></pre>
+
+        <p>And Ctrl+C in the terminal running the cluster.</p>
+        <h2 id="reference-documentation">Reference documentation</h2>
+        <ul>
+        <li><a href="http://kubernetes.io/docs/getting-started-guides/scratch/">Creating a Custom Cluster from Scratch</a></li>
+        <li><a href="https://github.com/kubernetes/kubernetes/blob/master/docs/devel/development.md">Kubernetes Development Guide</a></li>
+        <li><a href="http://kubernetes.io/docs/getting-started-guides/locally/">Running Kubernetes Locally with No VM</a></li>
+        <li><a href="https://github.com/adimania/Restcomm-Docker/blob/master/kubernetes/README.md">Kubernetes and RestComm by adimania</a></li>
+        </ul>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20160430-how-to-develop-in-Kubernetes.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

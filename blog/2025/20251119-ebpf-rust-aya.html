@@ -2,31 +2,126 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>eBPF with Rust using Aya (and working on M2/M3/M4 mac devices!)</title>
+    <title>eBPF with Rust using Aya (from macOS, Windows, or Linux)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../css/asciidoctor.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../../favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <h1 id="ebpf-with-rust-using-aya-from-macos-windows-or-linux">eBPF with Rust using Aya (from macOS, Windows, or Linux)</h1>
+        <p><em>19 November 2025</em></p>
+        <hr>
+        <p><a href="https://ebpf.io">eBPF</a> is one of those technologies that immediately feels powerful but rarely
+        feels friendly at the start. I wanted to experiment with user‑space probes using
+        Rust and <a href="https://aya-rs.dev">Aya</a>, but the setup itself was solid, but the combination of ARM
+        processors, Podman security constraints, and Aya’s toolchain requirements made
+        the early steps unexpectedly tricky: a Mac Studio M3 Ultra as the primary
+        machine and a Linux laptop where container‑based attempts (Podman) were
+        unreliable. Aya itself pulls in a non‑trivial toolchain, and I initially ended
+        up on nightly Rust with a scattered set of workarounds.</p>
+        <p>This post documents the setup that finally worked cleanly. It is reproducible,
+        fast to iterate on, and avoids most of the early‑stage pain.</p>
+        <p><img alt="Aya setup" src="aya.jpg"></p>
+        <h2 id="environment-setup">Environment setup</h2>
+        <p>Using a VM turned out to be far simpler than running everything inside
+        containers. <a href="https://lima-vm.io/">Lima</a> provides lightweight Linux VMs on macOS
+        with minimal friction and predictable networking.</p>
+        <p>I started by adapting the CI configuration from the Aya template repository. You
+        can find my Lima template here:</p>
+        <p><a href="https://github.com/antonmry/rust-playground/blob/main/ebpf-aya/lima-aya.yaml">https://github.com/antonmry/rust-playground/blob/main/ebpf-aya/lima-aya.yaml</a></p>
+        <p>If you read this in the future, consider regenerating the template from the
+        latest upstream CI file.</p>
+        <p>Start the VM:</p>
+        <pre class="codehilite"><code class="language-sh">limactl start --name aya-vm --mount-only .:w lima-aya.yaml
+        </code></pre>
+
+        <p>Enter the VM:</p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm
+        </code></pre>
+
+        <p>Verify eBPF support:</p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm sudo bpftrace -l
+        limactl shell aya-vm sudo bpftool feature probe
+        </code></pre>
+
+        <h2 id="probing-ssl_write-with-bpftrace">Probing SSL_write with bpftrace</h2>
+        <p>Before writing any Rust code, I validated the target probe using <code>bpftrace</code>.
+        Depending on architecture:</p>
+        <p><strong>ARM:</strong></p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm sudo bpftrace -e 'uprobe:/usr/lib/aarch64-linux-gnu/libssl.so.3:SSL_write { printf(&quot;SSL_write PID=%d
+        &quot;, pid); }'
+        </code></pre>
+
+        <p><strong>x86_64:</strong></p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm sudo bpftrace -e 'uprobe:/usr/lib/x86_64-linux-gnu/libssl.so.3:SSL_write { printf(&quot;SSL_write PID=%d
+        &quot;, pid); }'
+        </code></pre>
+
+        <p>In another terminal:</p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm curl -v https://www.galiglobal.com
+        </code></pre>
+
+        <p>You should see repeated <code>SSL_write</code> events.</p>
+        <h2 id="generating-the-aya-project">Generating the Aya project</h2>
+        <p>Aya provides a project template via <code>cargo-generate</code>. Create a new uprobe‑based
+        program targeting <code>SSL_write</code>:</p>
+        <p><strong>ARM:</strong></p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm cargo generate \
+          --git https://github.com/aya-rs/aya-template \
+          --branch main \
+          --name ssl-write \
+          --define program_type=uprobe \
+          --define uprobe_fn_name=SSL_write \
+          --define uprobe_target=/usr/lib/aarch64-linux-gnu/libssl.so.3
+        </code></pre>
+
+        <p><strong>x86_64:</strong></p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm cargo generate \
+          --git https://github.com/aya-rs/aya-template \
+          --branch main \
+          --name ssl-write \
+          --define program_type=uprobe \
+          --define uprobe_fn_name=SSL_write \
+          --define uprobe_target=/usr/lib/x86_64-linux-gnu/libssl.so.3
+        </code></pre>
+
+        <p>Build:</p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm bash -lc 'cd ssl-write &amp;&amp; cargo build'
+        </code></pre>
+
+        <p>Run the program:</p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm sudo RUST_LOG=info ssl-write/target/debug/ssl-write
+        </code></pre>
+
+        <p>Trigger SSL activity again:</p>
+        <pre class="codehilite"><code class="language-sh">limactl shell aya-vm curl -v https://www.galiglobal.com
+        </code></pre>
+
+        <p>Output should resemble:</p>
+        <pre class="codehilite"><code class="language-text">Waiting for Ctrl-C...
+        [INFO ssl_write] function SSL_write called by /usr/lib/x86_64-linux-gnu/libssl.so.3
+        ...
+        </code></pre>
+
+        <h2 id="closing-notes">Closing notes</h2>
+        <p>This setup makes Aya development on Apple Silicon straightforward and
+        predictable. VM boot is fast, the toolchain stays contained, and the feedback
+        loop is tight. If you're experimenting with eBPF from macOS, Lima plus the Aya
+        template is a practical baseline.</p>
+        <p>Comments? You can find me on BlueSky:
+        <a href="https://bsky.app/profile/anton.galiglobal.com">https://bsky.app/profile/anton.galiglobal.com</a></p>
+        </div>
         <div id="leaflet-comments" class="mt-4"></div>
       </div>
       <div id="push"></div>
@@ -34,31 +129,20 @@
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="../../js/jquery-1.11.1.min.js"></script>
-    <script src="../../js/bootstrap.min.js" defer></script>
-    <script src="../../js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from '../../js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
           const target = document.getElementById(elementId);
-          if (!target) {
-            console.error(`Target ${elementId} not found`);
-            return;
-          }
+          if (!target) return;
           target.innerHTML = html;
 
-          // Execute any scripts inside the loaded snippet by cloning them
           const scripts = target.querySelectorAll('script[data-execute="true"]');
           scripts.forEach((oldScript) => {
             const newScript = document.createElement('script');
@@ -71,34 +155,12 @@
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('20251119-ebpf-rust-aya.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          const contentEl = document.getElementById('content');
-          if (contentEl) {
-            contentEl.innerHTML = window.marked.parse(markdown);
-          } else {
-            console.error('Content element not found');
-            return;
-          }
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

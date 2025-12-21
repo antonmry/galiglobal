@@ -2,83 +2,97 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>GaliGlobal</title>
+    <title>About me</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="antonmry">
     <meta name="keywords" content="">
-    <meta name="generator" content="JBake">
+    <meta name="generator" content="generated-from-markdown">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/asciidoctor.css" rel="stylesheet">
-    <link href="css/base.css" rel="stylesheet">
-    <link href="css/prettify.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="js/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
   </head>
   <body>
     <div id="wrap">
       <div id="navbar-container"></div>
       <div class="container">
-        <div id="content"></div>
+        <div id="content">
+        <p><img align="right" style="max-width: 30%; height: auto; padding: 0px 10px;" src="/images/antonmry.jpg"></p>
+        <h1 id="about-me">About me</h1>
+        <p>My name is Anton Rodriguez. I live in the middle of the <a href="https://en.wikipedia.org/wiki/Costa_da_Morte">Coast of Death</a> in the
+        north-west corner of Spain surrounded by greenhouses and cow farms. The
+        <a href="https://en.wikipedia.org/wiki/Fisterra">end of the world</a> is literally less than 1 hour away from my house. I live in
+        such a unusual place because my kids love it, and I love my kids. When I'm not
+        with them (or working), I enjoy practicing sports (mostly, running and strength
+        training these days) and reading books.</p>
+        <p>I'm a Senior Software Engineer specializing in building and operating robust,
+        scalable data systems. My current focus is on performance optimization using the
+        Rust ecosystem (Apache Arrow, Datafusion and Ballista), algorithm optimization
+        and continuous profiling with eBPF.</p>
+        <p>For over seven years, I've specialized in Apache Kafka and Apache Flink within
+        multi-cloud (AWS, GCP) environments, managing data flows upwards of 150GB/s and
+        3 million messages/sec. This experience has given me deep insights into
+        designing, deploying, and debugging distributed systems in production,
+        emphasizing reliability, observability, and security best practices.</p>
+        <p>I thrive on:</p>
+        <ul>
+        <li>Owning the tooling for data pipeline lifecycle management, system
+          orchestration, performance and diagnostics.</li>
+        <li>Collaborating across teams (compiler, engine, connectors) to bridge product
+          features into usable, resilient deployments.</li>
+        <li>Hardening Kubernetes-based deployments (Docker, Helm) for enterprise-grade
+          reliability.</li>
+        <li>Designing and implementing interfaces (CLI, APIs, Helm charts) that simplify
+          deployment and scaling.</li>
+        </ul>
+        <p>A <a href="https://javachampions.org/members.html">Java Champion</a> and <a href="https://developers.google.com/community/experts/directory/profile/profile-anton-maria-rodriguez-yuste">Google Developer Expert</a> (Cloud), I'm focused on Rust now
+        and bring extensive experience with the JVM ecosystem (Java, Scala, Groovy). You
+        can find more about me in <a href="https://www.galiglobal.com/blog-posts.html">my blog</a>.</p>
+        <p>My social media activity is limited to <a href="https://bsky.app/profile/anton.galiglobal.com">BlueSky</a> and <a href="https://github.com/antonmry">GitHub</a>. Feel free to ping
+        me there; I'm always happy to engage in meaningful conversations about
+        technology and career development.</p>
+        </div>
+        
       </div>
       <div id="push"></div>
     </div>
 
     <div id="footer-container"></div>
 
-    <!-- Required scripts -->
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <script src="js/bootstrap.min.js" defer></script>
-    <script src="js/prettify.js" defer></script>
-
-    <script type="module">
-      import { marked } from './js/marked.esm.js';
-      window.marked = marked;
-    </script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
 
     <script>
-      // Function to load HTML content
       async function loadContent(url, elementId) {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const html = await response.text();
-          document.getElementById(elementId).innerHTML = html;
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
         } catch (error) {
           console.error(`Error loading ${url}:`, error);
         }
       }
 
-      // Load all content when DOM is ready
       document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          // Load components
-          await loadContent('/navbar.html', 'navbar-container');
-          await loadContent('/footer.html', 'footer-container');
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
 
-          // Load markdown content
-          const response = await fetch('index.md');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const markdown = await response.text();
-          document.getElementById('content').innerHTML = window.marked.parse(markdown);
-
-          // Initialize prettify after content is loaded
-          if (typeof prettyPrint === 'function') {
-            prettyPrint();
-          } else {
-            console.error('prettyPrint function not available');
-          }
-        } catch (error) {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = 'Error loading content';
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
         }
       });
     </script>

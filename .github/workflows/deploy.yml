@@ -1,4 +1,4 @@
-name: Format Markdown
+name: Format & Generate
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  format:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,6 +29,9 @@ jobs:
       - name: Format Markdown with rumdl
         run: uv run scripts/format_markdown.py
 
+      - name: Generate HTML from Markdown
+        run: uv run --with markdown scripts/generate_html_from_md.py
+
       - name: Detect changes
         id: git_status
         run: |
@@ -44,7 +47,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "chore: format markdown"
+          git commit -m "chore: format markdown and regenerate html"
 
       - name: Push changes
         if: steps.git_status.outputs.changed == 'true'

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Accessing Weblogic Runtime Information with WLST</title>
+    <title>GaliGlobal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="antonmry">
@@ -19,30 +19,7 @@
       <div id="navbar-container"></div>
       <div class="container">
         <div id="content">
-        <h1 id="accessing-weblogic-runtime-information-with-wlst">Accessing Weblogic Runtime Information with WLST</h1>
-        <p><em>19 January 2015</em></p>
-        <p>Deal with java.lang.OutOfMemoryError: PermGen space errors is always tricky.
-        Most of the times it's something related to the chosen JVM, probably not
-        supported for the hosting OS (for example, using a 32bits JVM in a 64bits OS is
-        a typical issue).</p>
-        <p>Here I provide two interesting ways to check the JVM configuration:</p>
-        <script src="https://gist.github.com/antonmry/efe307a587388c3ecdfb.js"></script>
-
-        <p>For example, perhaps we could want to increase the PermSize, so we edit the  &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:</p>
-        <pre class="codehilite"><code class="language-text"># USER_MEM_ARGS   - The variable to override the standard memory arguments
-        #                   passed to java.
-
-        USER_MEM_ARGS=&quot;-Xms1024m -Xmx1024m -XX:CompileThreshold=8000 -XX:PermSize=256m&quot;
-        export USER_MEM_ARGS
-        </code></pre>
-
-        <p>Now it's time to reboot the weblogic and check everything again using the same commands I showed previously.</p>
-        <p>More info:</p>
-        <ul>
-        <li><a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/using_WLST.html#wp1093952">Invoking WLST</a></li>
-        <li><a href="http://docs.oracle.com/cd/E13222_01/wls/docs100/config_scripting/monitoring.html">Getting Runtime Information</a></li>
-        <li><a href="https://blogs.oracle.com/practicalbpm/entry/wlst_scripting_to_get_weblogic">WLST Scripting Introduction</a></li>
-        </ul>
+        <p>This is the source for my <a href="http://www.galiglobal.com/">blog</a>.</p>
         </div>
         
       </div>
