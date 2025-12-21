@@ -1,6 +1,6 @@
 # Building LocalFirstPacer: a small running tool for someone you care about
 
-_11 November 2025_
+*11 November 2025*
 
 ---
 

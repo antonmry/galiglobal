@@ -2,9 +2,13 @@
 
 *30 April 2016*
 
-In this post I'm going to show how to create a Kubernetes Development Environment and deploy RestComm (a quite complex software) on it for testing. If you want just deploy RestComm, it's better for you use the [Kubernetes Docker option](http://kubernetes.io/docs/getting-started-guides/docker/), instead of doing all this process.
+In this post I'm going to show how to create a Kubernetes Development
+Environment and deploy RestComm (a quite complex software) on it for testing. If
+you want just deploy RestComm, it's better for you use the
+[Kubernetes Docker option](http://kubernetes.io/docs/getting-started-guides/docker/),
+instead of doing all this process.
 
-# Install Go Development Environment
+## Install Go Development Environment
 
 ```sh
 curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
@@ -20,7 +24,7 @@ source ~/.bash_profile
 mkdir -p $GOPATH
 ```
 
-# Basic Kubernetes installation
+## Basic Kubernetes installation
 
 ## Clone and download
 
@@ -73,7 +77,7 @@ And now, time to test. Be careful, I think it uses your Google Cloud account :-S
 go run hack/e2e.go -v --build --up --test --down && notify-send "Integration test done"
 ```
 
-# Running the Restcomm image
+## Running the Restcomm image
 
 ## Creating and launching the cluster
 
@@ -144,7 +148,7 @@ With the following command we can check the status:
 ./cluster/kubectl.sh get svc
 ```
 
-# Test Restcomm!
+## Test Restcomm
 
 ```sh
 chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
@@ -152,7 +156,7 @@ chromium-browser https://CHANGE_WITH_YOUR_IP/olympus
 
 Login as alice, call +1234 and you should listen the message ;-)
 
-# Stop all
+## Stop all
 
 ```sh
 ./cluster/kubectl.sh delete service restcomm-service
@@ -161,7 +165,7 @@ Login as alice, call +1234 and you should listen the message ;-)
 
 And Ctrl+C in the terminal running the cluster.
 
-# Reference documentation
+## Reference documentation
 
 - [Creating a Custom Cluster from Scratch](http://kubernetes.io/docs/getting-started-guides/scratch/)
 - [Kubernetes Development Guide](https://github.com/kubernetes/kubernetes/blob/master/docs/devel/development.md)

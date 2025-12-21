@@ -2,9 +2,13 @@
 
 *08 May 2016*
 
-I'm not a RestComm expert but I like to document the steps when I do something. It's quite schematic but yet, it may help someone. Start to contribute to RestComm is really hard because the lack of documentation and all the team very busy. But it's a interesting project and a nice community.
+I'm not a RestComm expert but I like to document the steps when I do something.
+It's quite schematic but yet, it may help someone. Start to contribute to
+RestComm is really hard because the lack of documentation and all the team very
+busy. But it's a interesting project and a nice community.
 
-The idea is quite simple: show how how create two PRs: one for Restcomm-Docker, another for Restcomm-Connect.
+The idea is quite simple: show how how create two PRs: one for Restcomm-Docker,
+another for Restcomm-Connect.
 
 ## What do you need?
 
@@ -27,7 +31,8 @@ cd ../Restcomm-Connect/
 git remote add upstream git@github.com:RestComm/Restcomm-Connect.git
 ```
 
-If you've done it previously, it's a good moment to sync with the official respository:
+If you've done it previously, it's a good moment to sync with the official
+respository:
 
 ```sh
 git fetch upstream
@@ -86,7 +91,8 @@ docker stop bfed9c0195f51c089b5edc001e48c31f4fb374a90a781f02f9c514a691fa6933
 docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY="xxx" -e S3_ACCESS_KEY="xxx" -e S3_SECURITY_KEY="xxx" -e S3_BUCKET_NAME="xxx" -e STATIC_ADDRESS="your eth0 IP?" -e ENVCONFURL="https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh" -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
 ```
 
-Time to make your changes in the Dockerfile. Once they are done, build the image and test. To upload it to github, first upload to your repository:
+Time to make your changes in the Dockerfile. Once they are done, build the image
+and test. To upload it to github, first upload to your repository:
 
 ```sh
 git add file1 file2
@@ -94,11 +100,16 @@ git commit -m "Descriptive message please"
 git push
 ```
 
-In github, open a Request using as Base the official repository and as a Head Fork your branch. Usually I add a "Closes #xx" to the end of the title, where xx is the number of the issue you are solving. It helps if you are using [Waffle](http://www.waffle.io), a great service to organize your issues following agile methodologies.
+In github, open a Request using as Base the official repository and as a Head
+Fork your branch. Usually I add a "Closes #xx" to the end of the title, where xx
+is the number of the issue you are solving. It helps if you are using
+[Waffle](http://www.waffle.io), a great service to organize your issues
+following agile methodologies.
 
 ## RestComm-Connect
 
-Ok, we have our Restcomm-docker PR, let's got with ResComm-Connect. First you need to create a file:
+Ok, we have our Restcomm-docker PR, let's got with ResComm-Connect. First you
+need to create a file:
 
 ```sh
 cd ../Restcomm-Connect/
@@ -107,7 +118,7 @@ vim restcomm-connect-build.sh
 
 with the following content (change to your own values):
 
-```
+```text
 #!/bin/bash
 export RESTCOMM_HOME=/home/antonmry/Workspace/Telestax/Restcomm-Connect
 export MAJOR_VERSION_NUMBER=7.6
@@ -130,7 +141,8 @@ chmod +x restcomm-connect-build.sh
 ./restcomm-connect-build.sh
 ```
 
-Time to wait 5 minutes in a good laptop... after that, we should have our customozied JBoss ready to be launched:
+Time to wait 5 minutes in a good laptop... after that, we should have our
+customozied JBoss ready to be launched:
 
 ```sh
 ls ./release/Restcomm-JBoss-AS7-7.6.0.zip
@@ -138,7 +150,9 @@ ls ./release/Restcomm-JBoss-AS7-7.6.0.zip
 
 Now you can unzip it and start to play with it... but how to start to develop?
 
-In the Intellij Idea, you can import the project as a Maven project. I've imported the route **Restcomm-Connect/restcomm** which has the root pom.xml and created a local branch as usual:
+In the Intellij Idea, you can import the project as a Maven project. I've
+imported the route **Restcomm-Connect/restcomm** which has the root pom.xml and
+created a local branch as usual:
 
 ```sh
 git checkout -b initTimeRVD#1
@@ -152,7 +166,9 @@ cd restcomm
 mvn install
 ```
 
-Here you can do it with the different modules, you don't need to build everything each time but the specific module you've changed. To deploy it and test it:
+Here you can do it with the different modules, you don't need to build
+everything each time but the specific module you've changed. To deploy it and
+test it:
 
 ```sh
 docker ps
@@ -167,7 +183,9 @@ cp -r restcomm.application/target/restcomm.rvd/ ~/Workspace/Telestax/deployments
 docker run -i -d -v /var/log/restcomm/:/var/log/restcomm/ -v /home/antonmry/Workspace/Telestax/deployments:/opt/Restcomm-JBoss-AS7/standalone/deployments -e VOICERSS_KEY="xxx" -e S3_ACCESS_KEY="xxx" -e S3_SECURITY_KEY="xxx" -e S3_BUCKET_NAME="xxx" -e STATIC_ADDRESS="YOUR ETH0 IP?" -e ENVCONFURL="https://raw.githubusercontent.com/RestComm/Restcomm-Docker/master/scripts/restcomm_env_locally.sh" -p 80:80 -p 443:443 -p 9990:9990 -p 5060:5060 -p 5061:5061 -p 5062:5062 -p 5063:5063 -p 5060:5060/udp -p 65000-65050:65000-65050/udp restcomm/yourname:latest
 ```
 
-Know, just open RestComm as usual in [https://eth0-ip](https://eth0-ip) or [https://eth0-ip/olympus](https://eth0-ip/olympus) and test. Once you have finished your changes, upload them to Github:
+Know, just open RestComm as usual in [https://eth0-ip](https://eth0-ip) or
+[https://eth0-ip/olympus](https://eth0-ip/olympus) and test. Once you have
+finished your changes, upload them to Github:
 
 ```sh
 git add file1 file2
@@ -177,7 +195,7 @@ git push
 
 Create the PR in github and wait for the approbation ;-)
 
-# Reference documentation
+## Reference documentation
 
 - [How to build Restcomm-Connect from source](http://documentation.telestax.com/connect/configuration/How%20to%20build%20Restcomm-Connect%20from%20source.html#build-from-source)
 - [Restcomm – Docker Adding a Jar File to an Exiting Container](http://docs.telestax.com/restcomm-docker-adding-a-jar-file-to-an-exiting-container/)

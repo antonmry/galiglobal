@@ -2,9 +2,21 @@
 
 *17 November 2014*
 
-I was invited recently to participate in the Pre-conference Oracle WebRTC Workshop of the [TADSummit 2014](http://tadsummit.com/2014/) (Istanbul). I should speak about the implementation and architecture details of a WebRTC deployment in a Communication Service Provider. It was a real challenge, I had a lot of work in the previous weeks and I know about the excellent quality of the other speakers: [Doug](https://twitter.com/Doug_Tait), [Elias](https://twitter.com/EPCarrera) from Quobis or Stephano Gioia (who made a highly recommended presentation about [What is (and isn't WebRTC)](http://www.slideshare.net/gioste/webrtc-workshop-what-i) ).
+I was invited recently to participate in the Pre-conference Oracle WebRTC
+Workshop of the [TADSummit 2014](http://tadsummit.com/2014/) (Istanbul). I
+should speak about the implementation and architecture details of a WebRTC
+deployment in a Communication Service Provider. It was a real challenge, I had a
+lot of work in the previous weeks and I know about the excellent quality of the
+other speakers: [Doug](https://twitter.com/Doug_Tait),
+[Elias](https://twitter.com/EPCarrera) from Quobis or Stephano Gioia (who made a
+highly recommended presentation about
+[What is (and isn't WebRTC)](http://www.slideshare.net/gioste/webrtc-workshop-what-i)).
 
-Even without time and being a technical guy, I've tried to do something different, speaking about our experience in the TADHack 2014 (where we've deployed and supported the Oracle platform) and a combination of some previous experiences from the deployment in some LATAM operators. Here you can see the slides:
+Even without time and being a technical guy, I've tried to do something
+different, speaking about our experience in the TADHack 2014 (where we've
+deployed and supported the Oracle platform) and a combination of some previous
+experiences from the deployment in some LATAM operators. Here you can see the
+slides:
 
 <iframe src="//www.slideshare.net/slideshow/embed_code/41656265" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/antonry/webrtc-preconference-oracle-workshop-v3" title="Oracle - WebRTC Pre-conference TADSummit Workshop" target="_blank">Oracle - WebRTC Pre-conference TADSummit Workshop</a> </strong> from <strong><a href="//www.slideshare.net/antonry" target="_blank">antonry</a></strong> </div>
 

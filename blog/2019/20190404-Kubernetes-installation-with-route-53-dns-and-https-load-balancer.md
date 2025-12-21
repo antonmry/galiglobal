@@ -4,13 +4,19 @@
 
 ## Introduction
 
-This post explains how to deploy a Kubernetes cluster in Amazon. We want to automatically update Route 53 to use our own domain and use [AWS ELB](https://aws.amazon.com/elasticloadbalancing/) to have Load Balancing to our pods. We'll use also [AWS Certificate Manager (ACM)](https://aws.amazon.com/certificate-manager/) so our pods open internally HTTP endpoints but externally they expose HTTPS with a proper certificate.
+This post explains how to deploy a Kubernetes cluster in Amazon. We want to
+automatically update Route 53 to use our own domain and use
+[AWS ELB](https://aws.amazon.com/elasticloadbalancing/) to have Load Balancing
+to our pods. We'll use also
+[AWS Certificate Manager (ACM)](https://aws.amazon.com/certificate-manager/) so
+our pods open internally HTTP endpoints but externally they expose HTTPS with a
+proper certificate.
 
 ## Installation
 
 Install awscli and [kops](https://github.com/kubernetes/kops#installing).
 
-```
+```text
 export bucket_name=test-kops
 export KOPS_CLUSTER_NAME=k8s.test.net
 export KOPS_STATE_STORE=s3://${bucket_name}
@@ -55,7 +61,7 @@ Add to the end:
 
 and create the cluster executing:
 
-```
+```text
 kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
 kops rolling-update cluster
 ```
@@ -64,13 +70,14 @@ It takes some time. Use `kops validate cluster` to validate it. More options:
 
 - validate cluster: kops validate cluster
 - list nodes: kubectl get nodes --show-labels
-- ssh to the master: ssh -i ~/.ssh/id_rsa admin@api.k8s.test.net
-- the admin user is specific to Debian. If not using Debian please use the appropriate user based on your OS.
-- read about installing addons at: https://github.com/kubernetes/kops/blob/master/docs/addons.md.
+- ssh to the master: ssh -i ~/.ssh/id_rsa <admin@api.k8s.test.net>
+- the admin user is specific to Debian. If not using Debian please use the
+  appropriate user based on your OS.
+- read about installing addons at: <https://github.com/kubernetes/kops/blob/master/docs/addons.md>.
 
 ### Deploy the dashboard
 
-```
+```text
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
 kubectl proxy &
 kops get secrets kube --type secret -oplaintext
@@ -80,7 +87,7 @@ Open [http://localhost:8001/api/v1/namespaces/kube-system/services/https:kuberne
 
 Click on Token and introduce the following output:
 
-```
+```text
 kops get secrets admin --type secret -oplaintext
 ```
 
@@ -88,9 +95,12 @@ kops get secrets admin --type secret -oplaintext
 
 Note: avoid route53-mapper, it's deprecated. The kops documentation is outdated.
 
-Obtain the zone ID for your Hosted Zone (you should create a new one if you don't have one, consult [here](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone) how to do it):
+Obtain the zone ID for your Hosted Zone (you should create a new one if you
+don't have one, consult
+[here](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone)
+how to do it):
 
-```
+```text
 aws route53 list-hosted-zones-by-name --output json --dns-name "test.net." | jq -r '.HostedZones[0].Id'
 ```
 
@@ -164,15 +174,15 @@ spec:
 
 and deploy it:
 
-```
+```text
 kubectl apply -f external-dns.yml
 ```
 
-## Test your configuration with an example:
+## Test your configuration with an example
 
 Create an AWS certificate for the service:
 
-```
+```text
 aws acm request-certificate \
 --domain-name nginx.test.net \
 --validation-method DNS \
@@ -181,7 +191,9 @@ aws acm request-certificate \
 
 and save the `CertificateArn`. We'll use it later.
 
-You will need to validate it. The easier way it's from the AWS web console as explained [in the official documentation](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html).
+You will need to validate it. The easier way it's from the AWS web console as
+explained
+[in the official documentation](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html).
 
 Create `nginx-d.yml`:
 
@@ -204,7 +216,8 @@ spec:
           name: http
 ```
 
-and `nginx-svc.yml` with the domain you would like to use and the ACM certificate.
+and `nginx-svc.yml` with the domain you would like to use and the ACM
+certificate.
 
 ```yaml
 apiVersion: v1
@@ -231,17 +244,19 @@ spec:
 
 and deploy them:
 
-```
+```text
 kubectl apply -f nginx-d.yml -d nginx-svc-yml
 ```
 
-It would take some minutes. Once the pods are ready, you should be able to open in your browser on `http://nginx.test.net` and `https://nginx.test.net` and see the nginx welcome page.
+It would take some minutes. Once the pods are ready, you should be able to open
+in your browser on `http://nginx.test.net` and `https://nginx.test.net` and see
+the nginx welcome page.
 
 ## Clean everything
 
 Delete the ACM certificate and execute:
 
-```
+```text
 kops delete cluster --name k8s.test.net --yes
 ```
 

@@ -1,6 +1,6 @@
 # eBPF with Rust using Aya (from macOS, Windows, or Linux)
 
-_19 November 2025_
+*19 November 2025*
 
 ---
 
@@ -127,7 +127,7 @@ limactl shell aya-vm curl -v https://www.galiglobal.com
 
 Output should resemble:
 
-```
+```text
 Waiting for Ctrl-C...
 [INFO ssl_write] function SSL_write called by /usr/lib/x86_64-linux-gnu/libssl.so.3
 ...
