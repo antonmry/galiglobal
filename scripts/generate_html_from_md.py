@@ -113,15 +113,6 @@ def build_html(title: str, body_content: str, include_comments: bool) -> str:
           }});
         }} catch (error) {{
           console.error(`Error loading ${{url}}:`, error);
-          // Fallback to embedded versions if available
-          if (elementId === 'navbar-container' && `{navbar_js}`) {{
-            const target = document.getElementById(elementId);
-            if (target) target.innerHTML = `{navbar_js}`;
-          }}
-          if (elementId === 'footer-container' && `{footer_js}`) {{
-            const target = document.getElementById(elementId);
-            if (target) target.innerHTML = `{footer_js}`;
-          }}
         }}
       }}
 
