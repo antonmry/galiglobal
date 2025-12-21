@@ -26,6 +26,10 @@
         <li><code>uv run scripts/format_markdown.py</code></li>
         <li>Regenerate all HTML files from their markdown counterparts:</li>
         <li><code>uv run --with markdown scripts/generate_html_from_md.py</code></li>
+        <li>Scaffold a new blog post (creates md, updates leaflet map and blog list):</li>
+        <li><code>uv run scripts/create_post.py</code></li>
+        <li>Optimize images in-place (resize + recompress):</li>
+        <li><code>uv run --with pillow scripts/optimize_images.py</code></li>
         </ul>
         <p>CI: <code>.github/workflows/deploy.yml</code> runs both steps on every push (and can be
         dispatched manually). It commits and pushes changes when formatting alters

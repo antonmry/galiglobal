@@ -1,6 +1,7 @@
 # Blog Posts
 
 ## 2025
+- [Git and Markdown are all you need](blog/2025/20251221-git-and-markdown-are-all-you-need.html)
 
 - [eBPF with Rust using Aya (from macOS, Windows, or Linux)](blog/2025/20251119-ebpf-rust-aya.html)
 - [Building LocalFirstPacer: a small running tool for someone you care about](blog/2025/20251101-local-first-pacer.html)
