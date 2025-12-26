@@ -25,20 +25,21 @@ expected.
 I checked with an LLM this approach and confirmed it was the way go with one
 caveat. We would need an "adapter crate" in the public crate so the dependency
 wasn't direct and the crate wasn't needed when building without the feature
-enabled. Something about this felt wrong but the cost of trying it was low, so I
-did.
+enabled. Something about this felt wrong but the cost of trying it was low, so
+I did.
 
-## Constraints you must respect
-
-Turns out that this option didn't work at all. Cargo always try to resolve the
-dependency. There's [a GitHub
+Turns out that this option didn't work at all. The core problem is that Cargo
+may still resolve and fetch Git dependencies even when they are behind disabled
+features, which breaks public builds that don’t have access to private
+repositories. There's [a GitHub
 issue](https://github.com/rust-lang/cargo/issues/15834) about it and it seems
 pretty popular.
 
 When consulting options, the LLM insisted on modifying Cargo.toml in the CI
 system or when an internal user wanted to build with the feature, but that
 options seems a quite ugly workaround. Another option would be to have two
-different Cargo.toml but that's also pretty ugly and keeping both files in sync a pain.
+different Cargo.toml but that's also pretty ugly and keeping both files in sync
+a pain.
 
 ## The workable solution: runtime plugin with a C ABI
 
@@ -69,12 +70,123 @@ would learn about C ABI in Rust.
 
 ## Implementation walkthrough
 
-TODO
+I created a demo implementation in [my rust-playground git repo](TODO). There
+are two crates:
+
+- `public-cli`: a public CLI that loads a plugin if a shared library exists.
+- `private-plugin`: a private crate compiled as a `cdylib` exposing a C-ABI
+  function.
+
+The CLI looks for the plugin next to the executable by default (e.g.
+`target/debug/libprivate_plugin.so` on Linux,
+`target/debug/libprivate_plugin.dylib` on macOS,
+`target/debug/private_plugin.dll` on Windows).
+
+If you compile and run the CLI:
+
+```bash 
+cargo build -p public-cli 
+cargo run -p public-cli
+```
+
+It will print:
+
+> running without private feature
+
+If you compile the plugin and because it search for it in the same folder where
+the CLI tool is executed:
+
+```bash 
+cargo build -p private-plugin 
+cargo run -p public-cli
+```
+
+It will print:
+
+> plugin says: hello from the private plugin
+
+That's it: adding new functionality to the CLI tool without recompiling it.
+
+### The private plugin (`cdylib`)
+
+`private-plugin/Cargo.toml` declares a `cdylib` crate type so Rust produces a
+shared library suitable for dynamic loading:
+
+```toml 
+[lib]
+crate-type = ["cdylib"]
+```
+
+`private-plugin/src/lib.rs` exposes a single C-ABI symbol:
+
+```rust
+use std::os::raw::c_char;
+
+#[no_mangle] 
+pub extern "C" fn plugin_message() -> *const c_char { 
+    b"hello from the private plugin\0".as_ptr() as *const c_char 
+}
+```
+
+Notes:
+
+- `#[no_mangle]` keeps the symbol name stable for dynamic loading.
+- `extern "C"` gives the C ABI.
+- The returned string is a static, NUL-terminated byte string so the CLI can
+  read it safely as a `CStr`.
+
+### The public CLI (runtime loading)
+
+`public-cli/src/main.rs` looks for the plugin and loads the symbol if found:
+
+```rust
+fn plugin_filename() -> String {
+    let base = "private_plugin";
+    let prefix = env::consts::DLL_PREFIX;
+    let ext = env::consts::DLL_EXTENSION;
+    format!("{prefix}{base}.{ext}")
+}
+```
+
+This picks the correct shared library name for the current OS.
+
+```rust
+unsafe {
+    let lib = libloading::Library::new(path).map_err(|e| e.to_string())?;
+    let func: libloading::Symbol<unsafe extern "C" fn() -> *const c_char> =
+        lib.get(b"plugin_message").map_err(|e| e.to_string())?;
+    let ptr = func();
+    if ptr.is_null() {
+        return Err("plugin returned null".to_string());
+    }
+    let c_str = CStr::from_ptr(ptr);
+    let message = c_str.to_string_lossy().into_owned();
+
+    Ok(message)
+}
+```
+
+If the plugin is missing, the CLI prints a fallback message and continues.
 
 ## Developer experience
 
-## Testing and CI
+The code in my tool is far more complicated. Plugins are published in Object
+Storage and downloaded by the CLI tool. But there's a solid contract between
+the CLI tool and the plugins and that makes things easier. Also, I've created a
+wrapper over the private crates, so they can be imported internally as
+dependencies or externally as plugins. This is convenient to make sure the
+external use doesn't cause any issue.
 
-## Tradeoffs and alternatives
+What's even better is that now users can easily create their own plugins and
+share them. This isn't a small thing. Modularity is an important piece of
+open-source projects and I'm glad it was so easy and quick to add it to the
+project so soon.
 
 ## Conclusion
+
+I glad I've implemented this pattern. I'm aware this may be overkill and that
+there are issues because Rust types and ABI are unstable across compiler
+versions. But it's perfect for my CLI tool: solved my problem of how to add
+private features to public software and enabled new use cases allowing users to
+extend the functionality without having to build the whole project. Let's see
+how this evolves with time and if I don't regret this approach.
