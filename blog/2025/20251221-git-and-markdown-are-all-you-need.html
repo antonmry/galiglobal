@@ -26,74 +26,91 @@
         it has become a pattern: Git to store and sync, Markdown to write, and a few
         tiny scripts to glue everything together. No frameworks, no databases, no
         vendors. Writing it down might help anyone who wants a simple, portable setup
-        they fully own.</p>
+        they fully own, so here we go!</p>
         <h2 id="how-it-started">How it started</h2>
-        <p>It all started with Obsidian, my notes system. It isn't anything fancy: just a
-        private repo on GitHub. I still use the mobile app, but after a while I dropped
-        the desktop app and switched to Neovim with
-        <a href="https://github.com/antonmry/dotfiles/blob/main/config/nvim/ftplugin/markdown.lua#L23">moxide LSP</a>.</p>
-        <p>This has been working well for me. Using git to sync between machines is pretty
-        natural, even on the phone using <a href="https://termux.dev/en/">Termux</a> and a simple
-        Bash script launched from a homescreen shortcut.</p>
-        <p>Every day the app on the phone generates a new entry from a
-        template with the tasks I do and the sections I like to keep updated.</p>
-        <p>I wanted the entries from my calendars too, so I vibe-coded a simple Python
+        <p>It all started with <a href="https://obsidian.md">Obsidian</a>, my note system. It isn't
+        anything fancy: just a private repo on GitHub. I still use the mobile app, but
+        after a while I dropped the desktop app and switched to Neovim with <a href="https://github.com/antonmry/dotfiles/blob/main/config/nvim/ftplugin/markdown.lua#L23">this
+        community Obsidian
+        LSP</a>.</p>
+        <p>Having the same setup to manage my notes and write code makes my life easier.
+        Using Git to sync between machines is pretty natural, even on the phone using
+        <a href="https://termux.dev/en/">Termux</a> and a simple Bash script launched from a
+        homescreen shortcut.</p>
+        <p>Every day the app on the phone generated a new entry from a template with the
+        tasks I do and the sections I like to keep updated.</p>
+        <p>But I wanted entries from my calendars too, so I vibe-coded a simple Python
         script that reads from Google Calendar and creates the file. Every day a GitHub
-        Actions workflow generates the file at 4:00AM and commits to GitHub. This could
+        Actions workflow generates the file at 4:00 AM and commits to GitHub. This could
         be done in a million ways, but this one was particularly easy and works well.</p>
         <h2 id="that-project-i-never-had-time-for">That project I never had time for</h2>
         <p>After that, I decided I also wanted a daily report of the news I follow:
-        BlueSky, blogs, releases in GitHub, etc. I still miss Google Reader. Again, I
-        created <a href="https://github.com/antonmry/news">a repo on GitHub</a>, vibe-coded a
-        couple of Python scripts, a daily GitHub Actions workflow and an HTML page, and
-        I have now
-        <a href="https://news.anton.galiglobal.com">my own site of news curated for me</a>. I'm
-        even using GitHub AI models to summarize the longer entries. It couldn't be
-        easier!</p>
+        BlueSky, blogs, releases on GitHub, etc. I guess I still miss Google Reader.
+        Again, I created <a href="https://github.com/antonmry/news">a repo on GitHub</a>,
+        vibe-coded a couple of Python scripts, a daily GitHub Actions workflow, and an
+        HTML page, and I have now <a href="https://news.anton.galiglobal.com">my own site of news curated for
+        me</a>. I'm even using <a href="https://github.com/antonmry/news/blob/main/.github/workflows/daily-news.yml#L38">GitHub AI models to
+        summarize the longer
+        entries</a>.
+        It couldn't be easier!</p>
         <p><img alt="Anton news" src="anton-news.jpg"></p>
         <p>Finally, I did the same with my blog. Dealing with Hugo (and don't ask me about
-        JBake) was frustrating and time consuming. Now it's just a couple of vibe-coded
-        Python scripts with <a href="https://github.com/astral-sh/uv">uv</a> and it's done. I also
+        JBake) was frustrating and time-consuming. Now it's just a couple of vibe-coded
+        Python scripts with <a href="https://github.com/astral-sh/uv">uv</a>, and it's done. I also
         added RSS and comments from Leaflet (big thanks to
         <a href="https://sharpmars.nekoweb.org/blog/hooking-into-leaflet">SharpMars</a> for the
         idea!). Combining this approach with <a href="https://atproto.com">at-proto</a> services
         like <a href="https://bsky.app/profile/anton.galiglobal.com">BlueSky</a> or
-        <a href="https://blog.anton.galiglobal.com">Leaflet</a> works really well for me.</p>
-        <p>Git keeps me portable: I can move easily to any Git host (GitHub,
+        <a href="https://blog.anton.galiglobal.com">Leaflet</a> is great. At-proto gives me
+        ownership of the data I share with others. Git keeps me portable: I can move
+        easily to any Git host (GitHub,
         <a href="https://tangled.org/">Tangled</a>, whatever comes next) and I can host it with
-        GitHub Pages or Cloudflare Pages on my own domain. It also works great with the
-        GitHub app. I use it to navigate the repo, search, make changes, or explore my
-        notes with an AI agent in the app. I can evolve the setup with the functionality
-        that matters to me and I'm the owner of the whole thing. I don't depend on a
-        company and I'm not exposed to ads in the process. The stack is boring by
-        design: text files, Git history, and a browser. That keeps the surface small,
-        the backups easy, and the odds of future breakage low.</p>
+        GitHub Pages or Cloudflare Pages on my own domain. I can
+        evolve the setup with the functionality that matters to me and I'm the owner of
+        the whole thing. I don't depend on a company and I'm not exposed to ads in the
+        process. The stack is boring by design: text files, Git history, and a browser.
+        That keeps the surface small, the backups easy, and the odds of future breakage
+        low.</p>
+        <p>This setup also works great with the GitHub app. I use it to navigate the repo,
+        search, make changes, or explore my notes with an AI agent in the GitHub mobile
+        app. I can launch a GitHub Actions workflow to publish the blog or reload
+        articles in my news. I can also easily launch AI agents to do minor tasks like
+        add new sources or correct typos in the blog. All from my phone!</p>
         <h2 id="ai-is-changing-how-we-consume-software">AI is changing how we consume software</h2>
-        <p>None of this is rocket science. It breaks, but it's easy to fix: a quick prompt
-        and a code agent usually solve it. When something fails, I paste the error into
-        an AI prompt, get a patch, and move on. Most issues are wiring problems, not
-        architecture problems, so the fixes are fast.</p>
+        <p>None of this is rocket science. It breaks fairly often, but it's easy to fix: a
+        quick prompt and a code agent usually solve it. When something fails, I paste
+        the error into an AI prompt, get a patch, and move on. Most issues are wiring
+        problems, not architecture problems, so the fixes are fast.</p>
         <p>The same pattern shows up on my workstation. I tried several apps to lower the
-        burden of reviewing PRs. I even used
-        <a href="https://github.com/danobi/prr">prr</a>, but having to create a personal token was
-        a problem. Nowadays I use a
-        <a href="https://github.com/antonmry/dotfiles/blob/main/bin/review.sh">Bash script</a> with
-        the GitHub CLI to review PRs and it works really well. It allows me to review
-        PRs quickly and properly from the terminal. I can't live without it!</p>
+        burden of reviewing PRs. I even used <a href="https://github.com/danobi/prr">prr</a>, but
+        having to create a personal token was a problem. Nowadays I use a <a href="https://github.com/antonmry/dotfiles/blob/main/bin/review.sh">Bash
+        script</a> with the
+        GitHub CLI to review PRs. It allows me to review PRs quickly and properly from
+        the terminal. I can't live without it!</p>
         <p>With more software than ever, my bar to install something new is ridiculously
         high. Most of what a fancy app offers I can get with the tools I've always used
-        (Neovim, Alacritty, ZelliJ and Firefox) plus a handful of vibe-coded scripts.
+        (Neovim, Alacritty, Zellij, and Firefox) plus a handful of vibe-coded scripts.
         It's easier for me because I don't have to learn another tool, and easier for
         the agent because it already knows how to work with these boring, well-known
-        ones. It's almost 2026 and I spend more time in the terminal than ever. The
-        only app I keep open all day is Slack, and thanks to Recap I spend less time in
-        it than ever.</p>
+        ones. It's almost 2026 and I spend the majority of my time in the terminal. The
+        only app I keep open all day is Slack, and thanks to
+        <a href="https://slack.com/help/articles/25076892548883-Guide-to-AI-features-in-Slack">Recap</a>
+        (summary of muted channels) I spend less time in it than ever.</p>
         <p>These simple utilities shape how I see the future of software: solid building
         blocks, open source, highly adaptable to the user, and easy to wire together
         with Git and Markdown. It is often faster to vibe-code a 30-line script than to
         bend a complex app like Hugo or a full IDE into doing what you want. Owning the
         small pieces keeps you in control and keeps the stack understandable years
         later.</p>
+        <p>I'm not the only one noticing this: devs
+        <a href="https://commaok.xyz/ai/just-in-time-software/">creating a shopping list app in the grocery store</a>
+        or a
+        <a href="https://simonwillison.net/2025/Dec/23/cooking-with-claude/">timing app to cook two recipes at once</a>
+        in the kitchen are good examples of this trend. We are entering a new era in
+        terms of productivity that requires a totally different mindset. Things in the
+        past looked impossible, like
+        <a href="https://steveklabnik.com/writing/thirteen-years-of-rust-and-the-birth-of-rue/">writing your own language</a>,
+        are doable now. It's exciting and, at the same time, a bit scary.</p>
         </div>
         
       </div>
