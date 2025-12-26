@@ -2,6 +2,8 @@
 
 ## 2025
 
+- UDC DB LAB - [Cloud databases at scale](https://app.advocu.com/members/65c097ea159c3d05fd4ef4e1): [slides](https://docs.google.com/presentation/d/1va3qInxxy0Yd-yxLsKLrOXmetewKiQPMmlSTjYi1WJo/edit?slide=id.g37015599c66_0_297#slide=id.g37015599c66_0_297)
+- CoruñaJUG - [Novedades en Java 24 y 25](https://www.eventbrite.es/e/entradas-novedades-java-24-y-java-25-1925805509119): [code](https://github.com/antonmry/java-playground/tree/master/java24-25)
 - ESF - [A nosa experiencias con Anki](https://bancoreciclaxeelectronica.fala.gal/2025/10/05/nova-edicion-da-escola-de-inverno-de-enxeneria-sen-fronteiras/): [slides](https://archive.org/details/2025-10-24-escola-de-inverno)
 - Kafka Summit/Current - The Latency-Cost equation for Disaggregated
   Architectures:
@@ -28,7 +30,7 @@
 
 ## 2023
 
-- Codely - Novedades en GraalVM: ¿La JVM definitiva para Java?:
+- Codely - Novedades en GraalVM: La JVM definitiva para Java?:
   [video](https://www.youtube.com/watch?v=23VMoxYWXlM) and
   [code](https://github.com/antonmry/java-playground/blob/master/graalvm/Notes.md)
 - Codely - TOP 5 Novedades de JAVA 21: Unnamed Pattern, Instance Main Method,
