@@ -14,3 +14,10 @@ This is the source for my [blog](https://www.galiglobal.com/).
 CI: `.github/workflows/deploy.yml` runs both steps on every push (and can be
 dispatched manually). It commits and pushes changes when formatting alters
 files.
+
+## Publish with GitHub Pages
+
+- Manually trigger the Pages workflow:
+  - `gh workflow run publish-pages.yml`
+- Check recent runs for that workflow:
+  - `gh run list --workflow="publish-pages.yml"`
