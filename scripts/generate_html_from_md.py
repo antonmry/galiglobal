@@ -13,6 +13,7 @@ Run with: uv run --with markdown scripts/generate_html_from_md.py
 from __future__ import annotations
 
 from pathlib import Path
+import json
 import sys
 
 import markdown
@@ -126,16 +127,34 @@ def build_html(title: str, body_content: str, include_comments: bool) -> str:
       }});
     </script>
   </body>
-</html>
+    </html>
 """
 
 
-def process_markdown(md_file: Path) -> None:
+def load_leaflet_map() -> dict[str, str]:
+    map_path = ROOT / "leaflet-comments-map.json"
+    if not map_path.exists():
+        return {}
+    try:
+        return json.loads(map_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def has_leaflet_map_entry(html_file: Path, leaflet_map: dict[str, str]) -> bool:
+    try:
+        relpath = html_file.relative_to(ROOT).as_posix()
+    except ValueError:
+        return False
+    return relpath in leaflet_map or f"/{relpath}" in leaflet_map
+
+
+def process_markdown(md_file: Path, leaflet_map: dict[str, str]) -> None:
     html_file = md_file.with_suffix(".html")
     md_text = md_file.read_text(encoding="utf-8")
     title = extract_title(md_text)
     html_body = render_markdown(md_text)
-    comments_flag = had_leaflet_comments(html_file)
+    comments_flag = had_leaflet_comments(html_file) or has_leaflet_map_entry(html_file, leaflet_map)
 
     html_output = build_html(title=title, body_content=indent_html(html_body, 8), include_comments=comments_flag)
     html_file.write_text(html_output, encoding="utf-8")
@@ -163,8 +182,9 @@ def main() -> int:
         print("No markdown files found.")
         return 0
 
+    leaflet_map = load_leaflet_map()
     for md in md_files:
-        process_markdown(md)
+        process_markdown(md, leaflet_map)
 
     return 0
 
