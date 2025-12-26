@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>When Cargo fetches “optional” Git deps: solving it with a C-ABI plugin interface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="antonmry">
+    <meta name="keywords" content="">
+    <meta name="generator" content="generated-from-markdown">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/asciidoctor.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/prettify.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="navbar-container"></div>
+      <div class="container">
+        <div id="content">
+        <h1 id="when-cargo-fetches-optional-git-deps-solving-it-with-a-c-abi-plugin-interface">When Cargo fetches “optional” Git deps: solving it with a C-ABI plugin interface</h1>
+        <p><em>26 December 2025</em></p>
+        <hr>
+        <h2 id="the-problem">The problem</h2>
+        <p>I've been working on a new public CLI tool. Fascinating project that I can't
+        wait to publish. One of things I needed was to reuse some of our backend code
+        in the tool itself, but I can't to publish that code at the moment. So what can
+        we do?</p>
+        <h2 id="naive-approach-and-why-it-fails">Naïve approach and why it fails</h2>
+        <p>My first approach was to use a <a href="https://doc.rust-lang.org/cargo/reference/features.html">Cargo
+        feature</a> with a
+        dependency to <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">a private git
+        repository</a>
+        with the crate. We could build internally the tool with that feature, and
+        external users could do the same without it. With this approach, I would need
+        to add some secrets to our CI systems to download the crate. Not great but
+        expected.</p>
+        <p>I checked with an LLM this approach and confirmed it was the way go with one
+        caveat. We would need an "adapter crate" in the public crate so the dependency
+        wasn't direct and the crate wasn't needed when building without the feature
+        enabled. Something about this felt wrong but the cost of trying it was low, so I
+        did.</p>
+        <h2 id="constraints-you-must-respect">Constraints you must respect</h2>
+        <p>Turns out that this option didn't work at all. Cargo always try to resolve the
+        dependency. There's <a href="https://github.com/rust-lang/cargo/issues/15834">a GitHub
+        issue</a> about it and it seems
+        pretty popular.</p>
+        <p>When consulting options, the LLM insisted on modifying Cargo.toml in the CI
+        system or when an internal user wanted to build with the feature, but that
+        options seems a quite ugly workaround. Another option would be to have two
+        different Cargo.toml but that's also pretty ugly and keeping both files in sync a pain.</p>
+        <h2 id="the-workable-solution-runtime-plugin-with-a-c-abi">The workable solution: runtime plugin with a C ABI</h2>
+        <p>After a bit of research, I ended evaluating to use a C Application Binary
+        Interface (C ABI). This is a pretty interesting Rust feature:</p>
+        <p>The private crate is compiled as a runtime plugin
+        (<a href="https://doc.rust-lang.org/reference/linkage.html#r-link.cdylib">cdylib</a>) with
+        libloading in runtime. With this approach, the CLI will shows the feature only
+        if the plugin has been downloaded and it's placed in predefined path.</p>
+        <p>This allows users to build the tool without the private dependencies, but also
+        have control of what features use. I just added a subcommand <code>plugin</code> to allow
+        the user to discover, download and enable plugins. It has also simplified the
+        setup: there's no dependency in the CI system except for distribution (if you
+        install the CLI via a package mangers, the plugins are also included).</p>
+        <p>As usual, it's a trade-off. This approach is less performant (but that's ok for
+        this CLI tool) and there are some limitation about what you can pass through
+        the ylib boundary safely.</p>
+        <p>During the planning phase, the code agent was summarizing the pros and cons and
+        I remember myself thinking if this would be a huge rabbit hole on its own. I
+        used similar approaches with Java modules in the past, and it was a very useful
+        pattern but I wasn't sure how mature would this in Rust Again, I decided to
+        give it a try. Any of the alternatives were appealing at all and, at least, I
+        would learn about C ABI in Rust.</p>
+        <h2 id="implementation-walkthrough">Implementation walkthrough</h2>
+        <p>TODO</p>
+        <h2 id="developer-experience">Developer experience</h2>
+        <h2 id="testing-and-ci">Testing and CI</h2>
+        <h2 id="tradeoffs-and-alternatives">Tradeoffs and alternatives</h2>
+        <h2 id="conclusion">Conclusion</h2>
+        </div>
+        <div id="leaflet-comments" class="mt-4"></div>
+      </div>
+      <div id="push"></div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" defer></script>
+    <script src="/js/prettify.js" defer></script>
+
+    <script>
+      async function loadContent(url, elementId) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          const target = document.getElementById(elementId);
+          if (!target) return;
+          target.innerHTML = html;
+
+          const scripts = target.querySelectorAll('script[data-execute="true"]');
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            [...oldScript.attributes].forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+            newScript.textContent = oldScript.textContent;
+            target.appendChild(newScript);
+          });
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadContent('/navbar.html', 'navbar-container');
+        await loadContent('/footer.html', 'footer-container');
+
+        if (typeof prettyPrint === 'function') {
+          prettyPrint();
+        }
+      });
+    </script>
+  </body>
+    </html>

@@ -1,6 +1,7 @@
 # Blog Posts
 
 ## 2025
+
 - [When Cargo Fetches Optional Git Deps Solving It With a C-ABI Plugin Interface](blog/2025/20251226-when-cargo-fetches-optional-git-deps-solving-it-with-a-c-abi-plugin-interface.html)
 
 - [Git and Markdown are all you need](blog/2025/20251221-git-and-markdown-are-all-you-need.html)

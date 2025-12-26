@@ -58,7 +58,7 @@ install the CLI via a package mangers, the plugins are also included).
 
 As usual, it's a trade-off. This approach is less performant (but that's ok for
 this CLI tool) and there are some limitation about what you can pass through
-the ylib boundary safely. 
+the ylib boundary safely.
 
 During the planning phase, the code agent was summarizing the pros and cons and
 I remember myself thinking if this would be a huge rabbit hole on its own. I
@@ -78,4 +78,3 @@ TODO
 ## Tradeoffs and alternatives
 
 ## Conclusion
-
