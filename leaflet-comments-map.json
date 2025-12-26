@@ -1,5 +1,6 @@
 {
   "blog/2025/20251101-local-first-pacer.html": "https://blog.anton.galiglobal.com/3m537653g4c2l",
   "blog/2025/20251119-ebpf-rust-aya.html": "https://blog.anton.galiglobal.com/3m65xdrxy7c2z",
-  "blog/2025/20251221-git-and-markdown-are-all-you-need.html": "https://blog.anton.galiglobal.com/3mavoo5wrwc2q"
+  "blog/2025/20251221-git-and-markdown-are-all-you-need.html": "https://blog.anton.galiglobal.com/3mavoo5wrwc2q",
+  "blog/2025/20251226-when-cargo-fetches-optional-git-deps-solving-it-with-a-c-abi-plugin-interface.html": ""
 }
