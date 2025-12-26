@@ -34,6 +34,13 @@
         <p>CI: <code>.github/workflows/deploy.yml</code> runs both steps on every push (and can be
         dispatched manually). It commits and pushes changes when formatting alters
         files.</p>
+        <h2 id="publish-with-github-pages">Publish with GitHub Pages</h2>
+        <ul>
+        <li>Manually trigger the Pages workflow:</li>
+        <li><code>gh workflow run publish-pages.yml</code></li>
+        <li>Check recent runs for that workflow:</li>
+        <li><code>gh run list --workflow="publish-pages.yml"</code></li>
+        </ul>
         </div>
         <div id="leaflet-comments" class="mt-4"></div>
       </div>
