@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# /// script
+# dependencies = ["markdown"]
+# ///
 """
 Generate HTML files from Markdown, preserving existing HTML filenames.
 
@@ -7,7 +10,7 @@ Generate HTML files from Markdown, preserving existing HTML filenames.
 - Keeps the navbar/footer loading pattern and optionally preserves the
   Leaflet comments container if the existing HTML had one.
 
-Run with: uv run --with markdown scripts/generate_html_from_md.py
+Run with: uv run scripts/generate_html_from_md.py
 """
 
 from __future__ import annotations

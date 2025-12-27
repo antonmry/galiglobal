@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
+# /// script
+# dependencies = ["pillow"]
+# ///
+
 Optimize images in-place for web use:
   - Resize down to a max dimension (default 2560px) while preserving aspect ratio.
   - Re-encode with sensible compression per format.
+  - PNGs are converted to WebP by default to shrink large assets.
   - Prints savings per file.
 
 Run from repo root:
-  uv run --with pillow scripts/optimize_images.py
+  uv run scripts/optimize_images.py
 """
 
 from __future__ import annotations
@@ -20,6 +25,7 @@ from PIL import Image, ImageOps
 ROOT = Path(__file__).resolve().parent.parent
 EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 MAX_DIM = 2560  # px
+CONVERT_PNG_TO_WEBP = False
 
 
 @dataclass
@@ -46,9 +52,24 @@ def optimize_image(path: Path) -> OptimizeResult:
                 img.thumbnail((MAX_DIM, MAX_DIM))
                 resized = True
 
-            fmt = img.format or path.suffix.replace(".", "").upper()
+            fmt = (img.format or path.suffix.replace(".", "").upper()).upper()
+            target_path = path
+
+            # Convert PNGs to WebP when enabled
+            if fmt == "PNG" and CONVERT_PNG_TO_WEBP:
+                target_path = path.with_suffix(".webp")
+                fmt = "WEBP"
+                # remove the original later if conversion succeeds
+                remove_original = True
+            else:
+                remove_original = False
+
             save_kwargs = build_save_kwargs(fmt)
-            img.save(path, **save_kwargs)
+            img.save(target_path, **save_kwargs)
+
+            if remove_original and target_path != path:
+                path.unlink()
+                path = target_path
     except Exception as e:
         return OptimizeResult(path, before_size, before_size, False, "error", str(e))
 
