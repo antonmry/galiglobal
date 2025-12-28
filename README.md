@@ -1,5 +1,5 @@
 This is the source for my [blog](https://www.galiglobal.com/).
- 
+
 ## Formatting and HTML generation
 
 - Format all markdown files with rumdl:
@@ -21,4 +21,3 @@ This is the source for my [blog](https://www.galiglobal.com/).
 CI: `.github/workflows/deploy.yml` runs all steps on every push (and can be
 dispatched manually). It commits and pushes changes when formatting alters
 files.
-

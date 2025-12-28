@@ -49,9 +49,9 @@ them as a batch. You can configure batch size independently of message size
 
 Another problem with big messages is that if you want to migrate to a managed
 service at some point, they may not support them. It's the case of
-[Confluent Cloud](https://docs.confluent.io/5.2.0/cloud/limits.html)(6 Mb),
+[Confluent Cloud](<https://docs.confluent.io/5.2.0/cloud/limits.html)(6> Mb),
 [Azure EventHub](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-faq#:~:text=The%20maximum%20message%20size%20allowed%20for%20Event%20Hubs%20is%201%20MB)
-(1 Mb) or [Google PubSub](https://cloud.google.com/pubsub/quotas)(10 Mb).
+(1 Mb) or [Google PubSub](<https://cloud.google.com/pubsub/quotas)(10> Mb).
 
 I had to announce this bad news many times and deal with the developer's sad
 faces. Luckily, after some discussion, we always found a way to solve this

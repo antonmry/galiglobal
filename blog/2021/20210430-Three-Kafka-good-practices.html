@@ -62,9 +62,9 @@
         (trading latency for throughput) so small messages are ok, big messages aren't.</p>
         <p>Another problem with big messages is that if you want to migrate to a managed
         service at some point, they may not support them. It's the case of
-        <a href="https://docs.confluent.io/5.2.0/cloud/limits.html">Confluent Cloud</a>(6 Mb),
+        <a href="&lt;https://docs.confluent.io/5.2.0/cloud/limits.html">Confluent Cloud</a>(6&gt; Mb),
         <a href="https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-faq#:~:text=The%20maximum%20message%20size%20allowed%20for%20Event%20Hubs%20is%201%20MB">Azure EventHub</a>
-        (1 Mb) or <a href="https://cloud.google.com/pubsub/quotas">Google PubSub</a>(10 Mb).</p>
+        (1 Mb) or <a href="&lt;https://cloud.google.com/pubsub/quotas">Google PubSub</a>(10&gt; Mb).</p>
         <p>I had to announce this bad news many times and deal with the developer's sad
         faces. Luckily, after some discussion, we always found a way to solve this
         without modifying
