@@ -10,8 +10,6 @@ tiny scripts to glue everything together. No frameworks, no databases, no
 vendors. Writing it down might help anyone who wants a simple, portable setup
 they fully own, so here we go!
 
-![Infographic](git-info.jpg)
-
 ## How it started
 
 It all started with [Obsidian](https://obsidian.md), my note system. It isn't
@@ -30,8 +28,9 @@ tasks I do and the sections I like to keep updated.
 
 But I wanted entries from my calendars too, so I vibe-coded a simple Python
 script that reads from Google Calendar and creates the file. Every day a GitHub
-Actions workflow generates the file at 4:00 AM and commits to GitHub. This could
-be done in a million ways, but this one was particularly easy and works well.
+Actions workflow generates the file at 4:00 AM and commits to GitHub. This
+could be done in a million ways, but this one was particularly easy and works
+well.
 
 ## That project I never had time for
 
@@ -39,7 +38,9 @@ After that, I decided I also wanted a daily report of the news I follow:
 BlueSky, blogs, releases on GitHub, etc. I guess I still miss Google Reader.
 Again, I created [a repo on GitHub](https://github.com/antonmry/news),
 vibe-coded a couple of Python scripts, a daily GitHub Actions workflow, and an
-HTML page, and I have now [my own site of news curated for
+HTML page ([I wrote about PWAs
+recently](https://www.galiglobal.com/blog/2025/20251101-local-first-pacer.html)),
+and I have now [my own site of news curated for
 me](https://news.anton.galiglobal.com). I'm even using [GitHub AI models to
 summarize the longer
 entries](https://github.com/antonmry/news/blob/main/.github/workflows/daily-news.yml#L38).
@@ -49,27 +50,45 @@ It couldn't be easier!
 
 Finally, I did the same with my blog. Dealing with Hugo (and don't ask me about
 JBake) was frustrating and time-consuming. Now it's just a couple of vibe-coded
-Python scripts with [uv](https://github.com/astral-sh/uv), and it's done. I also
-added RSS and comments from Leaflet (big thanks to
+Python scripts with [uv](https://github.com/astral-sh/uv), and it's done. I
+also added RSS and comments from Leaflet (big thanks to
 [SharpMars](https://sharpmars.nekoweb.org/blog/hooking-into-leaflet) for the
 idea!). Combining this approach with [at-proto](https://atproto.com) services
 like [BlueSky](https://bsky.app/profile/anton.galiglobal.com) or
 [Leaflet](https://blog.anton.galiglobal.com) is great. At-proto gives me
 ownership of the data I share with others. Git keeps me portable: I can move
-easily to any Git host (GitHub,
-[Tangled](https://tangled.org/), whatever comes next) and I can host it with
-GitHub Pages or Cloudflare Pages on my own domain. I can
-evolve the setup with the functionality that matters to me and I'm the owner of
-the whole thing. I don't depend on a company and I'm not exposed to ads in the
-process. The stack is boring by design: text files, Git history, and a browser.
-That keeps the surface small, the backups easy, and the odds of future breakage
-low.
+easily to any Git host (GitHub, [Tangled](https://tangled.org/), whatever comes
+next) and I can host it with GitHub Pages or Cloudflare Pages on my own domain.
+I can evolve the setup with the functionality that matters to me and I'm the
+owner of the whole thing. I don't depend on a company and I'm not exposed to
+ads in the process. The stack is boring by design: text files, Git history, and
+a browser. That keeps the surface small, the backups easy, and the odds of
+future breakage low.
 
 This setup also works great with the GitHub app. I use it to navigate the repo,
 search, make changes, or explore my notes with an AI agent in the GitHub mobile
 app. I can launch a GitHub Actions workflow to publish the blog or reload
 articles in my news. I can also easily launch AI agents to do minor tasks like
 add new sources or correct typos in the blog. All from my phone!
+
+This is another advantage of this setup: it allows me to explore AI tools with
+total freedom. The tasks are simple enough that I can try different approaches
+and switch between tools, which gives me good insights into what LLMs can do
+nowadays. I use them a lot at work, but with my side projects it feels
+different because I allow myself to explore more. I'm not as focused on
+delivering and making sure nothing breaks in the process. If I break my blog or
+my news site, it isn't a big deal. Also, the setup is straightforward and
+simple, so it's easier to understand what the AI agent is doing, why, and how
+it could be done. That's much harder in big projects with many libraries and
+frameworks.
+
+Finally, hosting those pages on Cloudflare works really well. It's very cheap,
+essentially just the cost of the domain. And if you want to keep a page
+private, you can use a private Git repo and configure Cloudflare [to serve it
+with authentication via various identity
+providers](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/).
+This is quite complicated with Google Cloud or GitHub Pages, but Cloudflare
+makes it really easy.
 
 ## AI is changing how we consume software
 
@@ -102,12 +121,14 @@ bend a complex app like Hugo or a full IDE into doing what you want. Owning the
 small pieces keeps you in control and keeps the stack understandable years
 later.
 
-I'm not the only one noticing this: devs
-[creating a shopping list app in the grocery store](https://commaok.xyz/ai/just-in-time-software/)
-or a
-[timing app to cook two recipes at once](https://simonwillison.net/2025/Dec/23/cooking-with-claude/)
-in the kitchen are good examples of this trend. We are entering a new era in
-terms of productivity that requires a totally different mindset. Things in the
-past looked impossible, like
-[writing your own language](https://steveklabnik.com/writing/thirteen-years-of-rust-and-the-birth-of-rue/),
+I'm not the only one noticing this: devs [creating a shopping list app in the
+grocery store](https://commaok.xyz/ai/just-in-time-software/) or a [timing app
+to cook two recipes at
+once](https://simonwillison.net/2025/Dec/23/cooking-with-claude/) in the
+kitchen are good examples of this trend. We are entering a new era in terms of
+productivity that requires a totally different mindset. Things in the past
+looked impossible, like [writing your own
+language](https://steveklabnik.com/writing/thirteen-years-of-rust-and-the-birth-of-rue/),
 are doable now. It's exciting and, at the same time, a bit scary.
+
+![Infographic](git-info.jpg)
