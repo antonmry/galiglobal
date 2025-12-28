@@ -5,17 +5,20 @@
 # ///
 
 Optimize images in-place for web use:
-  - Resize down to a max dimension (default 2560px) while preserving aspect ratio.
-  - Re-encode with sensible compression per format.
-  - PNGs are converted to WebP by default to shrink large assets.
-  - Prints savings per file.
+  - If a path argument is given, optimize that image only to be <= TARGET_SIZE (default 500KB).
+  - Otherwise optimize all repo images larger than TARGET_SIZE.
+  - Resize down to a max dimension (default 1920px) while preserving aspect ratio.
+  - Convert large PNGs without transparency to JPEG for better compression.
+  - Use iterative quality reduction to hit target size.
 
 Run from repo root:
-  uv run scripts/optimize_images.py
+  uv run scripts/optimize_images.py [path/to/image]
 """
 
 from __future__ import annotations
 
+import io
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Tuple
@@ -24,8 +27,9 @@ from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
-MAX_DIM = 2560  # px
-CONVERT_PNG_TO_WEBP = False
+MAX_DIM = 1920  # px - reduced for web
+TARGET_SIZE = 500 * 1024  # 500 KB
+MIN_QUALITY = 60  # Don't go below this quality
 
 
 @dataclass
@@ -34,6 +38,7 @@ class OptimizeResult:
     before: int
     after: int
     resized: bool
+    converted: bool
     status: str
     note: str = ""
 
@@ -42,88 +47,166 @@ def find_images(root: Path) -> List[Path]:
     return [p for p in root.rglob("*") if p.suffix.lower() in EXTENSIONS and p.is_file()]
 
 
+def has_transparency(img: Image.Image) -> bool:
+    """Check if image has actual transparency (not just an alpha channel)."""
+    if img.mode == "RGBA":
+        extrema = img.split()[3].getextrema()
+        return extrema[0] < 255  # Has pixels with alpha < 255
+    if img.mode == "P":
+        return "transparency" in img.info
+    return False
+
+
+def quantize_png(img: Image.Image) -> Image.Image:
+    """Reduce PNG colors using quantization for smaller file size."""
+    if img.mode == "RGBA":
+        # Quantize with transparency support
+        return img.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG).convert("RGBA")
+    elif img.mode == "RGB":
+        return img.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG).convert("RGB")
+    return img
+
+
+def save_with_target_size(img: Image.Image, path: Path, fmt: str, target: int) -> Tuple[int, int]:
+    """Save image, iteratively reducing quality if needed to hit target size."""
+    quality = 85
+
+    while quality >= MIN_QUALITY:
+        buffer = io.BytesIO()
+        save_kwargs = build_save_kwargs(fmt, quality)
+        img.save(buffer, **save_kwargs)
+        size = buffer.tell()
+
+        if size <= target or fmt in {"PNG", "GIF"}:
+            # Write to file
+            with open(path, "wb") as f:
+                f.write(buffer.getvalue())
+            return size, quality
+
+        quality -= 5
+
+    # Still over target, save with min quality
+    buffer = io.BytesIO()
+    save_kwargs = build_save_kwargs(fmt, MIN_QUALITY)
+    img.save(buffer, **save_kwargs)
+    with open(path, "wb") as f:
+        f.write(buffer.getvalue())
+    return buffer.tell(), MIN_QUALITY
+
+
 def optimize_image(path: Path) -> OptimizeResult:
     before_size = path.stat().st_size
+    converted = False
     try:
         with Image.open(path) as img:
             img = ImageOps.exif_transpose(img)
+            original_format = (img.format or path.suffix.replace(".", "").upper()).upper()
+
+            # Load image data before closing
+            img = img.copy()
+
             resized = False
             if max(img.size) > MAX_DIM:
-                img.thumbnail((MAX_DIM, MAX_DIM))
+                img.thumbnail((MAX_DIM, MAX_DIM), Image.Resampling.LANCZOS)
                 resized = True
 
-            fmt = (img.format or path.suffix.replace(".", "").upper()).upper()
-            target_path = path
+            fmt = original_format
+            output_path = path
 
-            # Convert PNGs to WebP when enabled
-            if fmt == "PNG" and CONVERT_PNG_TO_WEBP:
-                target_path = path.with_suffix(".webp")
-                fmt = "WEBP"
-                # remove the original later if conversion succeeds
-                remove_original = True
-            else:
-                remove_original = False
+            # Convert large PNGs without transparency to JPEG
+            if original_format == "PNG" and before_size > TARGET_SIZE:
+                if not has_transparency(img):
+                    fmt = "JPEG"
+                    output_path = path.with_suffix(".jpg")
+                    if img.mode in ("RGBA", "P"):
+                        img = img.convert("RGB")
+                    converted = True
+                else:
+                    # Try quantizing PNG with transparency
+                    img = quantize_png(img)
 
-            save_kwargs = build_save_kwargs(fmt)
-            img.save(target_path, **save_kwargs)
+            # Ensure correct mode for JPEG
+            if fmt == "JPEG" and img.mode != "RGB":
+                img = img.convert("RGB")
 
-            if remove_original and target_path != path:
+            after_size, final_quality = save_with_target_size(img, output_path, fmt, TARGET_SIZE)
+
+            # Remove old file if converted to different format
+            if converted and output_path != path and output_path.exists():
                 path.unlink()
-                path = target_path
-    except Exception as e:
-        return OptimizeResult(path, before_size, before_size, False, "error", str(e))
+                path = output_path
 
-    after_size = path.stat().st_size
+    except Exception as e:
+        return OptimizeResult(path, before_size, before_size, False, False, "error", str(e))
+
     status = "ok"
     note = ""
-    if after_size > before_size:
+    if after_size > TARGET_SIZE:
         status = "warn"
-        note = "grew after re-encode"
-    return OptimizeResult(path, before_size, after_size, resized, status, note)
+        note = f"still over {human_kb(TARGET_SIZE)}"
+    if converted:
+        note = f"converted to JPEG{', ' + note if note else ''}"
+    return OptimizeResult(path, before_size, after_size, resized, converted, status, note)
 
 
-def build_save_kwargs(fmt: str) -> dict:
+def build_save_kwargs(fmt: str, quality: int = 85) -> dict:
     fmt_upper = fmt.upper()
     if fmt_upper in {"JPG", "JPEG"}:
-        return {"format": "JPEG", "quality": 85, "optimize": True, "progressive": True}
+        return {"format": "JPEG", "quality": quality, "optimize": True, "progressive": True}
     if fmt_upper == "PNG":
         return {"format": "PNG", "optimize": True, "compress_level": 9}
     if fmt_upper == "WEBP":
-        return {"format": "WEBP", "quality": 80, "method": 6}
+        return {"format": "WEBP", "quality": quality, "method": 6}
     if fmt_upper == "GIF":
         return {"format": "GIF", "optimize": True, "save_all": True}
     # Fallback to original format
     return {"format": fmt_upper, "optimize": True}
 
 
-def human_mb(num_bytes: int) -> str:
-    return f"{num_bytes/1024/1024:.2f}MB"
+def human_kb(num_bytes: int) -> str:
+    return f"{num_bytes/1024:.0f}KB"
 
 
 def main() -> int:
-    images = find_images(ROOT)
-    if not images:
-        print("No images found.")
+    args = sys.argv[1:]
+    if args:
+        targets = [Path(args[0]).resolve()]
+    else:
+        targets = [p for p in find_images(ROOT) if p.stat().st_size > TARGET_SIZE]
+
+    if not targets:
+        print("No images to optimize.")
         return 0
 
     results: List[OptimizeResult] = []
-    for img in images:
-        res = optimize_image(img)
+    for img_path in targets:
+        if not img_path.exists():
+            print(f"[SKIP] {img_path} (not found)")
+            continue
+        res = optimize_image(img_path)
         results.append(res)
         delta = res.before - res.after
-        action = "resized" if res.resized else "re-encoded"
+        actions = []
+        if res.resized:
+            actions.append("resized")
+        if res.converted:
+            actions.append("converted")
+        actions.append("re-encoded")
+        action = "/".join(actions)
+
         if res.status == "error":
-            print(f"[ERROR] {img}: {res.note}")
+            print(f"[ERROR] {img_path}: {res.note}")
         else:
+            savings = f"saved {human_kb(delta)}" if delta >= 0 else f"grew {human_kb(-delta)}"
             print(
-                f"[{res.status.upper():4}] {img} ({action}) "
-                f"{human_mb(res.before)} -> {human_mb(res.after)} "
-                f"({'saved ' + human_mb(delta) if delta >=0 else 'grew ' + human_mb(-delta)}) {res.note}"
+                f"[{res.status.upper():4}] {res.path} ({action}) "
+                f"{human_kb(res.before)} -> {human_kb(res.after)} ({savings})"
+                f"{' ' + res.note if res.note else ''}"
             )
 
     errors = sum(1 for r in results if r.status == "error")
-    warns = sum(1 for r in results if r.status == "warn")
-    print(f"\nProcessed {len(results)} images (errors={errors}, warnings={warns}).")
+    converted = sum(1 for r in results if r.converted)
+    print(f"\nProcessed {len(results)} images (errors={errors}, converted={converted}).")
     return 1 if errors else 0
 
 

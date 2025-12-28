@@ -10,6 +10,8 @@ tiny scripts to glue everything together. No frameworks, no databases, no
 vendors. Writing it down might help anyone who wants a simple, portable setup
 they fully own, so here we go!
 
+![Infographic](git-info.jpg)
+
 ## How it started
 
 It all started with [Obsidian](https://obsidian.md), my note system. It isn't

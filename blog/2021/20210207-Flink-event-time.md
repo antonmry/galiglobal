@@ -262,7 +262,7 @@ It's similar to `BoundedOutOfOrdernessWatermarks` but we modify the method
 being invoked by the framework, now it emits a new watermark each time it
 receives an event.
 
-![Flink Pipeline with Punctuated Generator](eventtime-pipeline.png "Flink Pipeline with Punctuated Generator")
+![Flink Pipeline with Punctuated Generator](eventtime-pipeline.jpg "Flink Pipeline with Punctuated Generator")
 
 The test produces the following output now:
 
