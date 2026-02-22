@@ -11,7 +11,7 @@ Here I provide two interesting ways to check the JVM configuration:
 
 <script src="https://gist.github.com/antonmry/efe307a587388c3ecdfb.js"></script>
 
-For example, perhaps we could want to increase the PermSize, so we edit the  &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:
+For example, perhaps we could want to increase the PermSize, so we edit the &lt;Domain dir &gt;/ &lt;Server Name &gt;/bin/setDomainEnv.sh to add something like this in the beginning:
 
 ```text
 # USER_MEM_ARGS   - The variable to override the standard memory arguments
