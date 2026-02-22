@@ -1,5 +1,9 @@
 # Blog Posts
 
+## 2026
+
+- [The anti-React Code Agent: stop shipping browsers inside my terminal](blog/2026/20260213-the-anti-react-code-agent-stop-shipping-browsers-inside-my-terminal.html)
+
 ## 2025
 
 - [Git and Markdown are all you need](blog/2025/20251221-git-and-markdown-are-all-you-need.html)
