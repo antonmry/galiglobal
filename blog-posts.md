@@ -2,7 +2,7 @@
 
 ## 2026
 
-- [The anti-React Code Agent: stop shipping browsers inside my terminal](blog/2026/20260213-the-anti-react-code-agent-stop-shipping-browsers-inside-my-terminal.html)
+- [Get React out of my terminal: a case for headless mode](blog/2026/20260213-get-react-out-of-my-terminal-a-case-for-headless-mode.html)
 
 ## 2025
 
