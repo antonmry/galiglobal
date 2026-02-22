@@ -1,5 +1,9 @@
 # Blog Posts
 
+## 2026
+
+- [Get React out of my terminal: a case for headless mode](blog/2026/20260213-get-react-out-of-my-terminal-a-case-for-headless-mode.html)
+
 ## 2025
 
 - [Git and Markdown are all you need](blog/2025/20251221-git-and-markdown-are-all-you-need.html)
